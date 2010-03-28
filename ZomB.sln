@@ -1,0 +1,59 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "trunk", "trunk", "{7D770CB8-9854-4263-8ACF-CF5BAE61840C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ZomB.dll", "ZomB.dll", "{C570AA47-2C31-4301-B7E0-85DB63716545}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCam_Capture", "trunk\ZomBdlls\WebCam_Capture\WebCam_Capture.csproj", "{782C366A-DD3B-4ED3-8A21-71A1F03947ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AviFile", "trunk\ZomBdlls\AviFile\AviFile.csproj", "{ABB32A29-AF50-47FA-B243-5FD75A5ABA54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System451.Communication.Dashboard", "trunk\ZomBdlls\System451.Communication.Dashboard\System451.Communication.Dashboard.csproj", "{B40501FE-DF11-452B-BAD6-30DE836902C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{B1155A5C-D8E9-4FCE-B8FB-D25CD7AAD0B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZomBeye", "trunk\Apps\ZomBeye\ZomBeye.csproj", "{D315A372-3B08-40CE-A91D-7F5E01EE7566}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultDash", "trunk\Apps\DefaultDash\DefaultDash.csproj", "{BC0AD73F-CC8F-4097-818B-7A54AEA1011C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{782C366A-DD3B-4ED3-8A21-71A1F03947ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{782C366A-DD3B-4ED3-8A21-71A1F03947ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{782C366A-DD3B-4ED3-8A21-71A1F03947ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{782C366A-DD3B-4ED3-8A21-71A1F03947ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABB32A29-AF50-47FA-B243-5FD75A5ABA54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABB32A29-AF50-47FA-B243-5FD75A5ABA54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABB32A29-AF50-47FA-B243-5FD75A5ABA54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABB32A29-AF50-47FA-B243-5FD75A5ABA54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B40501FE-DF11-452B-BAD6-30DE836902C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B40501FE-DF11-452B-BAD6-30DE836902C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B40501FE-DF11-452B-BAD6-30DE836902C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B40501FE-DF11-452B-BAD6-30DE836902C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D315A372-3B08-40CE-A91D-7F5E01EE7566}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D315A372-3B08-40CE-A91D-7F5E01EE7566}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D315A372-3B08-40CE-A91D-7F5E01EE7566}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D315A372-3B08-40CE-A91D-7F5E01EE7566}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC0AD73F-CC8F-4097-818B-7A54AEA1011C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC0AD73F-CC8F-4097-818B-7A54AEA1011C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC0AD73F-CC8F-4097-818B-7A54AEA1011C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC0AD73F-CC8F-4097-818B-7A54AEA1011C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C570AA47-2C31-4301-B7E0-85DB63716545} = {7D770CB8-9854-4263-8ACF-CF5BAE61840C}
+		{B1155A5C-D8E9-4FCE-B8FB-D25CD7AAD0B0} = {7D770CB8-9854-4263-8ACF-CF5BAE61840C}
+		{782C366A-DD3B-4ED3-8A21-71A1F03947ED} = {C570AA47-2C31-4301-B7E0-85DB63716545}
+		{ABB32A29-AF50-47FA-B243-5FD75A5ABA54} = {C570AA47-2C31-4301-B7E0-85DB63716545}
+		{B40501FE-DF11-452B-BAD6-30DE836902C6} = {C570AA47-2C31-4301-B7E0-85DB63716545}
+		{D315A372-3B08-40CE-A91D-7F5E01EE7566} = {B1155A5C-D8E9-4FCE-B8FB-D25CD7AAD0B0}
+		{BC0AD73F-CC8F-4097-818B-7A54AEA1011C} = {B1155A5C-D8E9-4FCE-B8FB-D25CD7AAD0B0}
+	EndGlobalSection
+EndGlobal
