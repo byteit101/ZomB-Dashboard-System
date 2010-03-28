@@ -26,41 +26,13 @@ using System451.Communication.Dashboard;
 
 namespace DefaultDash
 {
-    public partial class Form1 : Form
+    public partial class Form1 : DashboardDataHubForm
     {
         public Form1()
         {
             InitializeComponent();
             pictureBox1.Dock = DockStyle.Fill;
-            //register so magic can happen
-            dashboardDataHub1.AddDashboardControl(this.analogMeter1);
-            dashboardDataHub1.AddDashboardControl(this.analogMeter2);
-            dashboardDataHub1.AddDashboardControl(this.analogMeter3);
-            dashboardDataHub1.AddDashboardControl(this.analogMeter4);
-            dashboardDataHub1.AddDashboardControl(this.dataGraph1);
-            dashboardDataHub1.AddDashboardControl(this.dataGraph2);
-            dashboardDataHub1.AddDashboardControl(this.directionMeter1);
-            dashboardDataHub1.AddDashboardControl(this.directionMeter2);
-            dashboardDataHub1.AddDashboardControl(this.distanceMeter1);
-            dashboardDataHub1.AddDashboardControl(this.distanceMeter2);
-            dashboardDataHub1.AddDashboardControl(this.messageDisp1);
-            dashboardDataHub1.AddDashboardControl(this.onOffControl1);
-            dashboardDataHub1.AddDashboardControl(this.onOffControl2);
-            dashboardDataHub1.AddDashboardControl(this.onOffControl3);
-            dashboardDataHub1.AddDashboardControl(this.onOffControl4);
-            dashboardDataHub1.AddDashboardControl(this.roundSpeedMeter1);
-            dashboardDataHub1.AddDashboardControl(this.roundSpeedMeter2);
-            dashboardDataHub1.AddDashboardControl(this.roundSpeedMeter3);
-            dashboardDataHub1.AddDashboardControl(this.spikeControl1);
-            dashboardDataHub1.AddDashboardControl(this.spikeControl2);
-            dashboardDataHub1.AddDashboardControl(this.spikeControl3);
-            dashboardDataHub1.AddDashboardControl(this.tacoMeter1);
-            dashboardDataHub1.AddDashboardControl(this.varValue1);
-            //add a target
-            this.cameraView1.Targets.Add(new TargetInfo("target"));
-            dashboardDataHub1.AddDashboardControl(this.cameraView1.GetTargets());
-            //start the magic
-            dashboardDataHub1.StartRecieving();
+            this.AutoStart = true;
         }
 
         private void button1_Click(object sender, EventArgs e)
