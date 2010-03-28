@@ -232,51 +232,51 @@ namespace System451.Communication.Dashboard
                                 ReplyStatus(strm, BTZomBFingerFactory.BTVerifyMessage, ((byte)(TeamNumber >> 8)), (byte)TeamNumber);
                                 while (true)
                                 {
-                                    //switch (ByteArrayToString(ReadStatus(strm, 8)))
-                                    //{
-                                    //    case ByteArrayToString(BTZomBFingerFactory.BTSendFileMessage):
-                                    //        if (ReadStatus(strm, 8) == BTZomBFingerFactory.BTNameFileMessage)
-                                    //        {
-                                    //            if (ReadStatus(strm) == 0x0)
-                                    //            {
-                                    //                string newfilename = ByteArrayToString(ReadStatus(strm, (int)ReadStatus(strm)));
-                                    //                if (ReadStatus(strm) == 0x0)
-                                    //                {
-                                    //                    ReplyStatus(strm, BTZomBFingerFactory.BTAcceptFileMessage);
-                                    //                    if (ReadStatus(strm, 4) == BTZomBFingerFactory.BTFileSequenceMessage)
-                                    //                    {
-                                    //                        string filelength = "";
-                                    //                        byte last = ReadStatus(strm);
-                                    //                        while (last!=0xFF)
-                                    //                        {
-                                    //                            filelength += (char)last;
-                                    //                            last = ReadStatus(strm);
-                                    //                        }
-                                    //                        if (ReadStatus(strm) == 0x0 && ReadStatus(strm) == 0xff && ReadStatus(strm) == 0x0)
-                                    //                        {
-                                    //                            File.WriteAllBytes(To+newfilename, ReadStatus(strm, int.Parse(filelength)));
-                                    //                            if (ReadStatus(strm, 4) == BTZomBFingerFactory.BTFileSequenceMessage)
-                                    //                                if (ReadStatus(strm, 4) == BTZomBFingerFactory.BTEOFTMessage)
-                                    //                                {
-                                    //                                    ReplyStatus(strm, BTZomBFingerFactory.BTRecievedMessage);
-                                    //                                    break;
-                                    //                                }
-                                    //                        }
-                                    //                    }
-                                    //                }
-                                    //            }
-                                    //        }
-                                    //        break;
-                                    //    case ByteArrayToString(BTZomBFingerFactory.BTSignOffMessage):
-                                    //        ReplyStatus(strm, BTZomBFingerFactory.BTByeMessage);
-                                    //        return;
-                                    //    case ByteArrayToString(BTZomBFingerFactory.BTNoFilesMessage):
-                                    //        //Ok, I don't care, continue
-                                    //        break;
-                                    //    default:
-                                    //        //TODO: AHHH!
-                                    //        break;
-                                    //}
+                                    switch (ByteArrayToString(ReadStatus(strm, 8)))
+                                    {
+                                        case "SendFile":
+                                            if (ReadStatus(strm, 8) == BTZomBFingerFactory.BTNameFileMessage)
+                                            {
+                                                if (ReadStatus(strm) == 0x0)
+                                                {
+                                                    string newfilename = ByteArrayToString(ReadStatus(strm, (int)ReadStatus(strm)));
+                                                    if (ReadStatus(strm) == 0x0)
+                                                    {
+                                                        ReplyStatus(strm, BTZomBFingerFactory.BTAcceptFileMessage);
+                                                        if (ReadStatus(strm, 4) == BTZomBFingerFactory.BTFileSequenceMessage)
+                                                        {
+                                                            string filelength = "";
+                                                            byte last = ReadStatus(strm);
+                                                            while (last != 0xFF)
+                                                            {
+                                                                filelength += (char)last;
+                                                                last = ReadStatus(strm);
+                                                            }
+                                                            if (ReadStatus(strm) == 0x0 && ReadStatus(strm) == 0xff && ReadStatus(strm) == 0x0)
+                                                            {
+                                                                File.WriteAllBytes(To + newfilename, ReadStatus(strm, int.Parse(filelength)));
+                                                                if (ReadStatus(strm, 4) == BTZomBFingerFactory.BTFileSequenceMessage)
+                                                                    if (ReadStatus(strm, 4) == BTZomBFingerFactory.BTEOFTMessage)
+                                                                    {
+                                                                        ReplyStatus(strm, BTZomBFingerFactory.BTRecievedMessage);
+                                                                        break;
+                                                                    }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            break;
+                                        case "Sign Off":
+                                            ReplyStatus(strm, BTZomBFingerFactory.BTByeMessage);
+                                            return;
+                                        case "No Files":
+                                            //Ok, I don't care, continue
+                                            break;
+                                        default:
+                                            //TODO: AHHH!
+                                            break;
+                                    }
                                 }
                             }
                         }
