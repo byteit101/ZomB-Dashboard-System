@@ -252,7 +252,6 @@
     <Content Include="InTheHand.Net.Personal.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="InTheHand.Net.Personal.XML" />
     <Content Include="LICENSE.txt" />
     <None Include="Resources\Apollo451Small.png" />
     <None Include="Resources\brz.bmp" />
