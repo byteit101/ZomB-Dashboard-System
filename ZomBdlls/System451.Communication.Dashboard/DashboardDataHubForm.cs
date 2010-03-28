@@ -21,22 +21,60 @@ namespace System451.Communication.Dashboard
                 this.ControlBox = false;
             }
         }
+        protected override Size DefaultSize
+        {
+            get
+            {
+                return new Size(1024, 400);
+            }
+        }
+        [DefaultValue(typeof(Size),"1024, 400")]
+        public new Size Size
+        {
+            get { return base.Size; }
+            set { base.Size = value; }
+        }
+        /// <summary>
+        /// Gets the internal DashboardDataHub
+        /// </summary>
+        protected DashboardDataHub DashboardDataHub
+        {
+            get
+            {
+                return dashboardDataHub1;
+            }
+        }
+        /// <summary>
+        /// Start the DashboardDataHub when we load the form?
+        /// </summary>
         public bool AutoStart { get; set; }
+        /// <summary>
+        /// Re-iterate and find all controls
+        /// </summary>
         public void ReloadControls()
         {
 
             DashboardDataHubForm_Load(null, null);
         }
+        /// <summary>
+        /// Start the DashboardDataHub
+        /// </summary>
         public void Start()
         {
             if (!DesignMode)
             dashboardDataHub1.StartRecieving();
         }
+        /// <summary>
+        /// Restart the DashboardDataHub
+        /// </summary>
         public void Restart()
         {
             Stop();
             Start();
         }
+        /// <summary>
+        /// Stop the DashboardDataHub
+        /// </summary>
         public void Stop()
         {
             dashboardDataHub1.StopRecieving();
