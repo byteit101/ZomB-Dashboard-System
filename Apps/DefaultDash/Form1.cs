@@ -77,5 +77,11 @@ namespace DefaultDash
         {
             pictureBox1.Visible = false;
         }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            cameraView1.IPAddress = "10." + numericUpDown1.Value.ToString().PadLeft(4, '0').Substring(0, 2) + "." + numericUpDown1.Value.ToString().PadLeft(4, '0').Substring(2) + ".2";
+            cameraView1.Restart();
+        }
     }
 }

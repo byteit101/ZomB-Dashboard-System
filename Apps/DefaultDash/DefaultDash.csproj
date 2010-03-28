@@ -72,9 +72,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ZomBdlls\System451.Communication.Dashboard\System451.Communication.Dashboard.csproj">
+    <ProjectReference Include="..\..\ZomBdlls\System451.Communication.Dashboard\ZomB.csproj">
       <Project>{B40501FE-DF11-452B-BAD6-30DE836902C6}</Project>
-      <Name>ZomBDashboard</Name>
+      <Name>ZomB</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
