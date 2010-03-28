@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B40501FE-DF11-452B-BAD6-30DE836902C6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>System451.Communication.Dashboard</RootNamespace>
+    <AssemblyName>ZomB</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ApplicationIcon>Graph.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;REALCOMP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;REALCOMP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="InTheHand.Net.Personal, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnalogMeter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AnalogMeter.Designer.cs">
+      <DependentUpon>AnalogMeter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BitUtils.cs" />
+    <Compile Include="BTFingerArc.cs">
+    </Compile>
+    <Compile Include="ColorFind.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ColorFind.Designer.cs">
+      <DependentUpon>ColorFind.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DashboardDataHub.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DashboardControl.cs" />
+    <Compile Include="DashboardDataHubForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DashboardDataHubForm.Designer.cs">
+      <DependentUpon>DashboardDataHubForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataGraph.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataGraph.Designer.cs">
+      <DependentUpon>DataGraph.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataSaver.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Default Dashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Default Dashboard.Designer.cs">
+      <DependentUpon>Default Dashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DirectionMeter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DirectionMeter.Designer.cs">
+      <DependentUpon>DirectionMeter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DistanceMeter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DistanceMeter.Designer.cs">
+      <DependentUpon>DistanceMeter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="dragobj.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="dragobj.Designer.cs">
+      <DependentUpon>dragobj.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FTP.cs" />
+    <Compile Include="IDataSave.cs" />
+    <Compile Include="MessageDisp.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MessageDisp.Designer.cs">
+      <DependentUpon>MessageDisp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OnOffControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OnOffControl.Designer.cs">
+      <DependentUpon>OnOffControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="overlayobj.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="overlayobj.Designer.cs">
+      <DependentUpon>overlayobj.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Receiver.cs" />
+    <Compile Include="RoundSpeedMeter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RoundSpeedMeter.Designer.cs">
+      <DependentUpon>RoundSpeedMeter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TacoMeter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TacoMeter.Designer.cs">
+      <DependentUpon>TacoMeter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TcpReceiver.cs" />
+    <Compile Include="CameraView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CameraView.Designer.cs">
+      <DependentUpon>CameraView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VarValue.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="VarValue.Designer.cs">
+      <DependentUpon>VarValue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VideoStreamSaver.cs" />
+    <Compile Include="VirtualdAnalogMeter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WebCam.cs" />
+    <Compile Include="ZomBeye.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ZomBeye.Designer.cs">
+      <DependentUpon>ZomBeye.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Default Dashboard.resx">
+      <DependentUpon>Default Dashboard.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DirectionMeter.resx">
+      <DependentUpon>DirectionMeter.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DistanceMeter.resx">
+      <DependentUpon>DistanceMeter.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OnOffControl.resx">
+      <DependentUpon>OnOffControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RoundSpeedMeter.resx">
+      <DependentUpon>RoundSpeedMeter.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TacoMeter.resx">
+      <DependentUpon>TacoMeter.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DashboardSpeedFull.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DashboardSpeedFlufs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DashboardSpeedBase.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AnalogMeter.resx">
+      <DependentUpon>AnalogMeter.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ColorFind.resx">
+      <DependentUpon>ColorFind.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DashboardDataHubForm.resx">
+      <DependentUpon>DashboardDataHubForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TBB\DashboardSpeed.bmp" />
+    <EmbeddedResource Include="TBB\DashboardDirection.bmp" />
+    <EmbeddedResource Include="DataGraph.resx">
+      <DependentUpon>DataGraph.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dragobj.resx">
+      <DependentUpon>dragobj.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MessageDisp.resx">
+      <DependentUpon>MessageDisp.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="overlayobj.resx">
+      <DependentUpon>overlayobj.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CameraView.resx">
+      <DependentUpon>CameraView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VarValue.resx">
+      <DependentUpon>VarValue.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TBB\DashboardSpeed.ico" />
+    <EmbeddedResource Include="DashboardSpeed.bmp" />
+    <Content Include="32feetWidcomm.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Graph.ico" />
+    <Content Include="InTheHand.Net.Personal.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="InTheHand.Net.Personal.XML" />
+    <Content Include="LICENSE.txt" />
+    <None Include="Resources\Apollo451Small.png" />
+    <None Include="Resources\brz.bmp" />
+    <Content Include="Resources\TacoFull-small2.jpg" />
+    <Content Include="Resources\TacoFull-small2.png" />
+    <EmbeddedResource Include="TBB\ZomBeye.png" />
+    <EmbeddedResource Include="TBB\Analog.ico" />
+    <EmbeddedResource Include="TBB\Analog.png" />
+    <EmbeddedResource Include="TBB\DashboardDirection.ico" />
+    <EmbeddedResource Include="TBB\DashboardDirection.png" />
+    <EmbeddedResource Include="TBB\Distance.ico" />
+    <EmbeddedResource Include="TBB\Distance.png" />
+    <EmbeddedResource Include="TBB\Graph.ico" />
+    <EmbeddedResource Include="TBB\Graph.png" />
+    <None Include="Resources\TacoShell.png" />
+    <None Include="TBB\ZomBeye.svg" />
+    <EmbeddedResource Include="TBB\Analog.svg" />
+    <EmbeddedResource Include="TBB\Distance.svg" />
+    <EmbeddedResource Include="TBB\Graph.svg" />
+    <EmbeddedResource Include="TBB\OnOff.ico" />
+    <EmbeddedResource Include="TBB\OnOff.png" />
+    <EmbeddedResource Include="TBB\OnOff.svg" />
+    <EmbeddedResource Include="TBB\Spike.ico" />
+    <EmbeddedResource Include="TBB\Spike.png" />
+    <EmbeddedResource Include="TBB\Spike.svg" />
+    <EmbeddedResource Include="TBB\Taco.ico" />
+    <EmbeddedResource Include="TBB\Taco.png" />
+    <EmbeddedResource Include="ZomBeye.resx">
+      <DependentUpon>ZomBeye.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AviFile\AviFile.csproj">
+      <Project>{ABB32A29-AF50-47FA-B243-5FD75A5ABA54}</Project>
+      <Name>AviFile</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebCam_Capture\WebCam_Capture.csproj">
+      <Project>{782C366A-DD3B-4ED3-8A21-71A1F03947ED}</Project>
+      <Name>WebCam_Capture</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
