@@ -83,7 +83,7 @@ namespace System451.Communication.Dashboard
             set
             {
                 if (value == "0" || value == "1")
-                    Value = int.Parse(value)==0?false:true;
+                    Value = int.Parse(value) == 0 ? false : true;
                 else
                     Value = bool.Parse(value);
             }
@@ -129,6 +129,102 @@ namespace System451.Communication.Dashboard
                 e.Graphics.FillEllipse(Brushes.DarkRed, 1, 1, 23, 23);
                 e.Graphics.FillEllipse(Brushes.Crimson, 3, 3, 19, 19);
                 e.Graphics.FillEllipse(Brushes.Red, 6, 6, 13, 13);
+            }
+        }
+    }
+    [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.OnOff.png")]
+    public partial class AlertControl : UserControl, IDashboardControl
+    {
+        bool speedval = false;
+        string paramName = "digi1";
+        delegate void UpdaterDelegate();
+
+        public AlertControl()
+        {
+            InitializeComponent();
+
+        }
+        [DefaultValue("0"), Category("ZomB"), Description("The Value of the bool")]
+        public bool Value
+        {
+            get
+            {
+                return speedval;
+            }
+            set
+            {
+                speedval = value;
+                this.Invalidate();
+            }
+        }
+
+
+        #region IDashboardControl Members
+        string[] IDashboardControl.ParamName
+        {
+            get
+            {
+                return new string[] { BindToInput };
+            }
+            set
+            {
+                BindToInput = value[0];
+            }
+        }
+        [DefaultValue("digi1"), Category("ZomB"), Description("What this control will get the value of from the packet Data")]
+        public string BindToInput
+        {
+            get { return paramName; }
+            set { paramName = value; }
+        }
+
+        string IDashboardControl.Value
+        {
+            get
+            {
+                return Value.ToString();
+            }
+            set
+            {
+                if (value == "0" || value == "1")
+                    Value = int.Parse(value) == 0 ? false : true;
+                else
+                    Value = bool.Parse(value);
+            }
+        }
+
+        void IDashboardControl.Update()
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new UpdaterDelegate(Update));
+            }
+            else
+            {
+                this.Invalidate();
+            }
+        }
+
+
+        string IDashboardControl.DefalutValue
+        {
+            get
+            {
+                return Value.ToString();
+            }
+        }
+
+        #endregion
+
+        private void OnOffControl_Paint(object sender, PaintEventArgs e)
+        {
+            if (Value)
+            {
+                e.Graphics.Clear(this.ForeColor);
+            }
+            else
+            {
+                e.Graphics.Clear(this.BackColor);
             }
         }
     }
