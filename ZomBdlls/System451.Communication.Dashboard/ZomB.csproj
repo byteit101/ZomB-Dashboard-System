@@ -120,6 +120,12 @@
     <Compile Include="overlayobj.Designer.cs">
       <DependentUpon>overlayobj.cs</DependentUpon>
     </Compile>
+    <Compile Include="PercentBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PercentBar.Designer.cs">
+      <DependentUpon>PercentBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
