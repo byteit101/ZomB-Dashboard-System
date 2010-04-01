@@ -5,20 +5,52 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Diagnostics;
 
 namespace System451.Communication.Dashboard
 {
     public partial class DashboardDataHubForm : Form
     {
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool SetForegroundWindow(IntPtr hWnd);
+
         public DashboardDataHubForm()
         {
+            //Check Singleton
+            bool createdNew = true;
+            using (Mutex mutex = new Mutex(true, "ZomBSingletonMutex", out createdNew))
+            {
+                if (!createdNew)
+                {
+                    Process current = Process.GetCurrentProcess();
+                    foreach (Process process in Process.GetProcessesByName(current.ProcessName))
+                    {
+                        if (process.Id != current.Id)
+                        {
+                            SetForegroundWindow(process.MainWindowHandle);
+                            break;
+                        }
+                    }
+                    Application.Exit();
+                }
+            }
             AutoStart = !DesignMode;
             InitializeComponent();
-            if (Environment.UserName == "Driver")
+            if (Environment.UserName == "Driver" || DesignMode)
             {
                 this.FormBorderStyle = FormBorderStyle.None;
                 this.StartPosition = FormStartPosition.Manual;
                 this.ControlBox = false;
+                this.Size = DefaultSize;
+            }
+            else
+            {
+                this.FormBorderStyle = FormBorderStyle.Sizable;
+                this.StartPosition = FormStartPosition.WindowsDefaultLocation;
+                this.ControlBox = true;
             }
         }
         protected override Size DefaultSize
@@ -82,11 +114,19 @@ namespace System451.Communication.Dashboard
 
         private void DashboardDataHubForm_Load(object sender, EventArgs e)
         {
-            if (Environment.UserName == "Driver")
+            if (Environment.UserName == "Driver" || DesignMode)
             {
                 this.FormBorderStyle = FormBorderStyle.None;
                 this.StartPosition = FormStartPosition.Manual;
                 this.ControlBox = false;
+
+                this.Size = DefaultSize;
+            }
+            else
+            {
+                this.FormBorderStyle = FormBorderStyle.Sizable;
+                this.StartPosition = FormStartPosition.WindowsDefaultLocation;
+                this.ControlBox = true;
             }
             dashboardDataHub1.GetControls().Clear();
             AddControls(this.Controls);
@@ -110,6 +150,46 @@ namespace System451.Communication.Dashboard
                 }
             }
         }
+
+        private void DashboardDataHubForm_SizeChanged(object sender, EventArgs e)
+        {
+            if (this.Size!=DefaultSize&&DesignMode)
+                this.Size = DefaultSize;
+        }
         
     }
 }
+/* using mutex lock style from http://www.iridescence.no/post/CreatingaSingleInstanceApplicationinC.aspx
+[DllImport("user32.dll")]
+[return: MarshalAs(UnmanagedType.Bool)]
+static extern bool SetForegroundWindow(IntPtr hWnd);
+/// <summary>
+/// The main entry point for the application.
+/// </summary>
+[STAThread]
+static void Main()
+{
+bool createdNew = true;
+using (Mutex mutex = new Mutex(true, "MyApplicationName", out createdNew))
+{
+if (createdNew)
+{
+Application.EnableVisualStyles();
+Application.SetCompatibleTextRenderingDefault(false);
+Application.Run(new MainForm());
+}
+else
+        {
+Process current = Process.GetCurrentProcess();
+foreach (Process process in Process.GetProcessesByName(current.ProcessName))
+{
+if (process.Id != current.Id)
+{
+SetForegroundWindow(process.MainWindowHandle);
+break;
+}
+}
+}
+}
+}
+*/

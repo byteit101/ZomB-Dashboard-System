@@ -39,6 +39,7 @@
             this.Name = "DashboardDataHubForm";
             this.Text = "DashboardDataHub";
             this.Load += new System.EventHandler(this.DashboardDataHubForm_Load);
+            this.SizeChanged += new System.EventHandler(this.DashboardDataHubForm_SizeChanged);
             this.ResumeLayout(false);
 
         }
