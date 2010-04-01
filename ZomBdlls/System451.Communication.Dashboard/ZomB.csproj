@@ -263,6 +263,8 @@
     <None Include="Resources\brz.bmp" />
     <Content Include="Resources\TacoFull-small2.jpg" />
     <Content Include="Resources\TacoFull-small2.png" />
+    <Content Include="TBB\ZomB text t.png" />
+    <Content Include="TBB\ZomB text.png" />
     <EmbeddedResource Include="TBB\ZomBeye.png" />
     <EmbeddedResource Include="TBB\Analog.ico" />
     <EmbeddedResource Include="TBB\Analog.png" />

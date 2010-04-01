@@ -33,6 +33,8 @@
             // 
             // DashboardDataHubForm
             // 
+            this.BackgroundImage = global::System451.Communication.Dashboard.Properties.Resources.ZomB_text;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(1016, 366);
             this.DoubleBuffered = true;
             this.MaximizeBox = false;
