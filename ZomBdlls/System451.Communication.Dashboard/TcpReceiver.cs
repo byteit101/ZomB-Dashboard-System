@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace SmashTcpDashboard
 {
-    class TcpReceiver: Receiver
+    class TcpReceiver : Receiver
     {
         // axis camera sends video in the following order :
         // header { 0x1, 0x0, 0x0, 0x0 } raw bytes - no endianness
@@ -42,6 +42,52 @@ namespace SmashTcpDashboard
             Dispose();
         }
 
+        ManualResetEvent allDone = new ManualResetEvent(false);
+
+        // handles the completion of the prior asynchronous 
+        // connect call. the socket is passed via the objectState 
+        // paramater of BeginConnect().
+        private void ConnectCallback1(IAsyncResult ar)
+        {
+            try
+            {
+
+                allDone.Set();
+                TcpClient s = (TcpClient)ar.AsyncState;
+                s.EndConnect(ar);
+
+            }
+            catch (ArgumentNullException anex)
+            {
+                ProcError("Robot IP is null");
+            }
+            catch (ArgumentOutOfRangeException aoorex)
+            {
+                ProcError("Port " + RobotPort + " is out of range");
+            }
+            catch (SocketException sex)
+            {
+                ProcError("General Socket Exception");
+            }
+            catch (ObjectDisposedException odex)
+            {
+                ProcError("A strange error has occured -- a restart maybe required");
+            }
+            catch (ThreadStateException tsex)
+            {
+                ProcError("Failed to start receiver");
+            }
+            catch (OutOfMemoryException oomex)
+            {
+                ProcError("Failed to start receiver -- out of memory");
+            }
+            catch (Exception ex)
+            {
+                ProcError("An error has occured");
+            }
+        }
+
+
         // turns on the receiver
         public override bool Start()
         {
@@ -55,7 +101,14 @@ namespace SmashTcpDashboard
                 RobotSocket.ReceiveBufferSize = 2048576;
                 RobotSocket.ReceiveTimeout = 128;
                 // connect to the target
-                RobotSocket.Connect(RobotIP, RobotPort);
+                IAsyncResult ar = RobotSocket.BeginConnect(RobotIP, RobotPort, new AsyncCallback(ConnectCallback1), RobotSocket);
+                allDone.WaitOne(3000);
+                if (!ar.IsCompleted)
+                {
+                    RobotSocket.Close();
+                    Running = false;
+                    return Running;
+                }
                 //RobotSocket.Client.Bind(new IPEndPoint(IPAddress.Loopback, RobotPort));
                 // start the method to handle image data
                 if (ReceiverThread != null)
@@ -100,11 +153,14 @@ namespace SmashTcpDashboard
 
         public override bool Stop()
         {
-            Running = false;
-
-            RobotSocket.Close();
-            //RobotSocket.Client.Disconnect(false);
-
+            try
+            {
+                Running = false;
+                if (RobotSocket != null)
+                    RobotSocket.Close();
+                //RobotSocket.Client.Disconnect(false);
+            }
+            catch { }
 
             return !Running;
         }
@@ -114,7 +170,7 @@ namespace SmashTcpDashboard
 
         private void ReceiverHelper()
         {
-            bgn:
+        bgn:
             TpcState state = TpcState.Header;
             int image_size = 0;
             try

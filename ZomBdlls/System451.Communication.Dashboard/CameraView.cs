@@ -42,6 +42,7 @@ namespace System451.Communication.Dashboard
         public CameraView()
         {
             view = new Bitmap(10, 10);
+            EnableAutoReset = false;
             InitializeComponent();
             paramName.Add("target1");
             if (!this.DesignMode)
@@ -49,7 +50,7 @@ namespace System451.Communication.Dashboard
                 Receiver = null;
                 //Receiver.OnImageUpdate += new Receiver.ImageUpdate(Receiver_OnImageUpdate);
                 //Start();// we don't know the IP
-                timer1.Enabled = true;
+                timer1.Enabled = false;
             }
             else
             {
@@ -77,6 +78,8 @@ namespace System451.Communication.Dashboard
                 }
             }
         }
+        [Category("ZomB"), Description("Auto Reset the Camera"), DefaultValue(false)]
+        public bool EnableAutoReset { get; set; }
         public void Restart()
         {
             Stop();
@@ -86,8 +89,11 @@ namespace System451.Communication.Dashboard
 
         public void Start()
         {
-            if (!this.DesignMode && Receiver!=null)
+            if (!this.DesignMode && Receiver != null && this.CanFocus)
+            {
                 Receiver.Start();
+                timer1.Enabled = EnableAutoReset;
+            }
         }
         public void Stop()
         {
@@ -304,6 +310,11 @@ namespace System451.Communication.Dashboard
             remove { dataUpdatedEvent -= value; }
         }
         #endregion
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            timer1.Enabled = EnableAutoReset = checkBox1.Checked;
+        }
     }
     public class TargetInfo : IDashboardControl
     {

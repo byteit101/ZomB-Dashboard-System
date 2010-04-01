@@ -30,15 +30,16 @@ using System.Drawing.Drawing2D;
 namespace System451.Communication.Dashboard
 {
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.Graph.png")]
-    public partial class DataGraph  : UserControl, IDashboardControl
+    public partial class DataGraph : UserControl, IDashboardControl
     {
         float speedval = 0;
         Queue<float> values = new Queue<float>();
         string paramName = "graph1";
         delegate void UpdaterDelegate();
-        
+
         public DataGraph()
         {
+            LineColor = Color.LimeGreen;
             InitializeComponent();
 
         }
@@ -53,7 +54,7 @@ namespace System451.Communication.Dashboard
             {
                 speedval = value;
                 values.Enqueue(value);
-                while (values.Count >=200)
+                while (values.Count >= 200)
                 {
                     values.Dequeue();
                 }
@@ -158,15 +159,31 @@ namespace System451.Communication.Dashboard
             float[] vals = values.ToArray();
             Array.Reverse(vals);
             //Draw background
-            using (Brush mhb = new HatchBrush(HatchStyle.Cross,Color.Green, BackColor))
-            e.Graphics.FillRectangle(mhb, 0,0,200,200);
-            if (vals.Length>2)
-            for (int i = 1; i < vals.Length; i++)
-            {
-                e.Graphics.DrawLine(Pens.LightGreen,
-                    200 - (i - 1), 200-(((vals[i-1]-Min)/(Max-Min)) * 200),
-                    200 - (i), 200-(((vals[i]-Min)/(Max-Min)) * 200));
-            }
+            using (Brush mhb = new HatchBrush(HatchStyle.Cross, ForeColor, BackColor))
+                e.Graphics.FillRectangle(mhb, 0, 0, 200, 200);
+            if (vals.Length > 2)
+                using (Pen pn = new Pen(LineColor))
+                {
+                    for (int i = 1; i < vals.Length; i++)
+                    {
+                        e.Graphics.DrawLine(pn,
+                            200 - (i - 1), 200 - (((vals[i - 1] - Min) / (Max - Min)) * 200),
+                            200 - (i), 200 - (((vals[i] - Min) / (Max - Min)) * 200));
+                    }
+                    if (Arrow)
+                    {
+                        pn.EndCap = LineCap.ArrowAnchor;
+                        pn.Width = 2.5f;
+                        e.Graphics.DrawLine(pn,
+                              199, 200 - (((vals[0] - Min) / (Max - Min)) * 200),
+                              200, 200 - (((vals[0] - Min) / (Max - Min)) * 200));
+                    }
+                }
         }
+
+        [DefaultValue(typeof(Color),"LimeGreen"), Category("ZomB"), Description("The color of the value line")]
+        public Color LineColor { get; set; }
+        [DefaultValue(false), Category("ZomB"), Description("Should we show an arrow at the end of the Graph")]
+        public bool Arrow { get; set; }
     }
 }

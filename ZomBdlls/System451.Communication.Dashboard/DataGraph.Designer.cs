@@ -36,6 +36,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.DoubleBuffered = true;
+            this.ForeColor = System.Drawing.Color.Green;
             this.Name = "DataGraph";
             this.Size = new System.Drawing.Size(200, 200);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.DataGraph_Paint);

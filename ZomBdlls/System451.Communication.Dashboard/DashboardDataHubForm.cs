@@ -33,13 +33,14 @@ namespace System451.Communication.Dashboard
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool SetForegroundWindow(IntPtr hWnd);
+        static Mutex mutex;
 
         public DashboardDataHubForm()
         {
             //Check Singleton
             bool createdNew = true;
-            using (Mutex mutex = new Mutex(true, "ZomBSingletonMutex", out createdNew))
-            {
+            mutex = new Mutex(true, "ZomBSingletonMutex", out createdNew);
+            
                 if (!createdNew)
                 {
                     Process current = Process.GetCurrentProcess();
@@ -51,9 +52,10 @@ namespace System451.Communication.Dashboard
                             break;
                         }
                     }
-                    Application.Exit();
+                    current.Kill();
+                    return;
                 }
-            }
+            
             AutoStart = !DesignMode;
             InitializeComponent();
             if (Environment.UserName == "Driver" || DesignMode)
@@ -69,6 +71,12 @@ namespace System451.Communication.Dashboard
                 this.StartPosition = FormStartPosition.WindowsDefaultLocation;
                 this.ControlBox = true;
             }
+            GC.KeepAlive(mutex);
+        }
+        ~DashboardDataHubForm()
+        {
+            GC.KeepAlive(mutex);
+            mutex.Close();
         }
         protected override Size DefaultSize
         {
