@@ -40,10 +40,13 @@ namespace System451.Communication.Dashboard
             //Check Singleton
             bool createdNew = true;
             mutex = new Mutex(true, "ZomBSingletonMutex", out createdNew);
-            
-                if (!createdNew)
+
+            if ((!createdNew) && (!DesignMode))
+            {
+                Process current = Process.GetCurrentProcess();
+                //Don't kill designer
+                if ((!current.MainModule.FileName.Contains("Microsoft Visual Studio")) && (!current.MainModule.FileName.Contains("devenv")) && (!current.MainModule.FileName.Contains("MonoDevelop")) && (!current.MainModule.FileName.Contains("VCSExpress.exe")))
                 {
-                    Process current = Process.GetCurrentProcess();
                     foreach (Process process in Process.GetProcessesByName(current.ProcessName))
                     {
                         if (process.Id != current.Id)
@@ -52,10 +55,13 @@ namespace System451.Communication.Dashboard
                             break;
                         }
                     }
+
+
                     current.Kill();
                     return;
                 }
-            
+            }
+
             AutoStart = !DesignMode;
             InitializeComponent();
             if (Environment.UserName == "Driver" || DesignMode)
@@ -85,7 +91,7 @@ namespace System451.Communication.Dashboard
                 return new Size(1024, 400);
             }
         }
-        [DefaultValue(typeof(Size),"1024, 400")]
+        [DefaultValue(typeof(Size), "1024, 400")]
         public new Size Size
         {
             get { return base.Size; }
@@ -119,7 +125,7 @@ namespace System451.Communication.Dashboard
         public void Start()
         {
             if (!DesignMode)
-            dashboardDataHub1.StartRecieving();
+                dashboardDataHub1.StartRecieving();
         }
         /// <summary>
         /// Restart the DashboardDataHub
@@ -169,7 +175,7 @@ namespace System451.Communication.Dashboard
                 {
                     dashboardDataHub1.AddDashboardControl((IDashboardControl)item);
                 }
-                if (item.Controls.Count>0)
+                if (item.Controls.Count > 0)
                 {
                     AddControls(item.Controls);
                 }
@@ -178,10 +184,10 @@ namespace System451.Communication.Dashboard
 
         private void DashboardDataHubForm_SizeChanged(object sender, EventArgs e)
         {
-            if (this.Size!=DefaultSize&&DesignMode)
+            if (this.Size != DefaultSize && DesignMode)
                 this.Size = DefaultSize;
         }
-        
+
     }
 }
 /* using mutex lock style from http://www.iridescence.no/post/CreatingaSingleInstanceApplicationinC.aspx

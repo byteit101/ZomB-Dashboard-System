@@ -22,7 +22,7 @@ namespace System451.Communication.Dashboard.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "2.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -122,8 +122,9 @@ namespace System451.Communication.Dashboard.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
-        internal static System.Drawing.Bitmap ZomB_text {
+
+        public static System.Drawing.Bitmap ZomB_text
+        {
             get {
                 object obj = ResourceManager.GetObject("ZomB_text", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
