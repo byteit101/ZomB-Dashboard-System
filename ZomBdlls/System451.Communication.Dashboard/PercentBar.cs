@@ -33,6 +33,7 @@ namespace System451.Communication.Dashboard
         public PercentBar()
         {
             Max = 100;
+            BarWidth = 6f;
             InitializeComponent();
         }
         [DefaultValue(0f), Category("ZomB"), Description("The Value of the PercentPar")]
@@ -61,6 +62,12 @@ namespace System451.Communication.Dashboard
             get;
             set;
         }
+        [DefaultValue(6f), Category("ZomB"), Description("The Width of the Bar")]
+        public float BarWidth
+        {
+            get;
+            set;
+        }
 
         [DefaultValue(false), Category("ZomB"), Description("Create a bar instead of a traditional Progress bar")]
         public bool UseBar
@@ -80,7 +87,7 @@ namespace System451.Communication.Dashboard
             {
                 if (UseBar)
                 {
-                    e.Graphics.FillRectangle(b, ((speedval) / 100.0f * this.Width) - 3.5f, -0.5f, 6.0f, this.Height + 1f);
+                    e.Graphics.FillRectangle(b, ((speedval) / 100.0f * this.Width) - (BarWidth / 2f + .5f), -0.5f, BarWidth, this.Height + 1f);
                 }
                 else
                 {
