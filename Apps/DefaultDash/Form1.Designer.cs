@@ -50,8 +50,10 @@
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.onOffControl3 = new System451.Communication.Dashboard.OnOffControl();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -242,11 +244,12 @@
             this.dataGraph2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGraph2.BackColor = System.Drawing.Color.Black;
             this.dataGraph2.BindToInput = "grph2";
-            this.dataGraph2.Location = new System.Drawing.Point(12, 119);
+            this.dataGraph2.ForeColor = System.Drawing.Color.Green;
+            this.dataGraph2.Location = new System.Drawing.Point(12, 132);
             this.dataGraph2.Max = 1F;
             this.dataGraph2.Min = -1F;
             this.dataGraph2.Name = "dataGraph2";
-            this.dataGraph2.Size = new System.Drawing.Size(312, 122);
+            this.dataGraph2.Size = new System.Drawing.Size(312, 128);
             this.dataGraph2.TabIndex = 0;
             this.dataGraph2.Value = 0F;
             // 
@@ -255,11 +258,12 @@
             this.dataGraph1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGraph1.BackColor = System.Drawing.Color.Black;
             this.dataGraph1.BindToInput = "grph";
-            this.dataGraph1.Location = new System.Drawing.Point(12, 247);
+            this.dataGraph1.ForeColor = System.Drawing.Color.Green;
+            this.dataGraph1.Location = new System.Drawing.Point(12, 266);
             this.dataGraph1.Max = 1F;
             this.dataGraph1.Min = -1F;
             this.dataGraph1.Name = "dataGraph1";
-            this.dataGraph1.Size = new System.Drawing.Size(312, 107);
+            this.dataGraph1.Size = new System.Drawing.Size(312, 122);
             this.dataGraph1.TabIndex = 0;
             this.dataGraph1.Value = 0F;
             // 
@@ -297,11 +301,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(837, 315);
+            this.label1.Location = new System.Drawing.Point(31, 116);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(127, 39);
+            this.label1.Size = new System.Drawing.Size(268, 13);
             this.label1.TabIndex = 18;
-            this.label1.Text = "Default ZomB Dashboard\r\nBy: Team 451\r\nThe Cat Attack";
+            this.label1.Text = "Default ZomB Dashboard By Team 451 The Cat Attack";
             // 
             // onOffControl3
             // 
@@ -312,11 +316,23 @@
             this.onOffControl3.TabIndex = 19;
             this.onOffControl3.Value = false;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Location = new System.Drawing.Point(775, 304);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(237, 84);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 20;
+            this.pictureBox2.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1016, 366);
+            this.BackgroundImage = null;
+            this.ClientSize = new System.Drawing.Size(1024, 400);
+            this.ControlBox = false;
+            this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.onOffControl3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.numericUpDown1);
@@ -339,10 +355,13 @@
             this.Controls.Add(this.dataGraph2);
             this.Controls.Add(this.dataGraph1);
             this.Controls.Add(this.tacoMeter1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Default Dashboard";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -372,6 +391,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Label label1;
         private System451.Communication.Dashboard.OnOffControl onOffControl3;
+        private System.Windows.Forms.PictureBox pictureBox2;
     }
 }
 

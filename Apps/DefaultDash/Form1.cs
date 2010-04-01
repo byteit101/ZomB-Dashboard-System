@@ -32,6 +32,7 @@ namespace DefaultDash
         {
             InitializeComponent();
             pictureBox1.Dock = DockStyle.Fill;
+            pictureBox2.Image = System451.Communication.Dashboard.Properties.Resources.ZomB_text;
             this.AutoStart = true;
         }
 
