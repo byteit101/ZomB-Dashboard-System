@@ -51,6 +51,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.onOffControl3 = new System451.Communication.Dashboard.OnOffControl();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.controlBoxMenuButton1 = new System451.Communication.Dashboard.ControlBoxMenuButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -325,6 +326,15 @@
             this.pictureBox2.TabIndex = 20;
             this.pictureBox2.TabStop = false;
             // 
+            // controlBoxMenuButton1
+            // 
+            this.controlBoxMenuButton1.Location = new System.Drawing.Point(331, 360);
+            this.controlBoxMenuButton1.Name = "controlBoxMenuButton1";
+            this.controlBoxMenuButton1.Size = new System.Drawing.Size(332, 28);
+            this.controlBoxMenuButton1.TabIndex = 21;
+            this.controlBoxMenuButton1.Text = "Exit ZomB, Restart ZomB, or Restart DS";
+            this.controlBoxMenuButton1.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -332,6 +342,7 @@
             this.BackgroundImage = null;
             this.ClientSize = new System.Drawing.Size(1024, 400);
             this.ControlBox = false;
+            this.Controls.Add(this.controlBoxMenuButton1);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.onOffControl3);
             this.Controls.Add(this.label1);
@@ -392,6 +403,7 @@
         private System.Windows.Forms.Label label1;
         private System451.Communication.Dashboard.OnOffControl onOffControl3;
         private System.Windows.Forms.PictureBox pictureBox2;
+        private System451.Communication.Dashboard.ControlBoxMenuButton controlBoxMenuButton1;
     }
 }
 
