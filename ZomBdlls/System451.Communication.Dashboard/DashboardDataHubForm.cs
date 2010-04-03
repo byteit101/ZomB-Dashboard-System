@@ -85,11 +85,25 @@ namespace System451.Communication.Dashboard
             }
             this.ResumeLayout(false);
             GC.KeepAlive(mutex);
+            this.FormClosing += new FormClosingEventHandler(DashboardDataHubForm_FormClosing);
+        }
+
+        void DashboardDataHubForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                GC.KeepAlive(mutex);
+                mutex.Close();
+            }
+            catch { }
         }
         ~DashboardDataHubForm()
         {
-            GC.KeepAlive(mutex);
-            mutex.Close();
+            try
+            {
+                mutex.Close();
+            }
+            catch { }
         }
         protected override Size DefaultSize
         {

@@ -28,6 +28,8 @@ using System.Net.Sockets;
 using System.ComponentModel;
 using System.IO;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Drawing;
 
 namespace System451.Communication.Dashboard
 {
@@ -218,5 +220,117 @@ namespace System451.Communication.Dashboard
         //    }
         //}
 
+        public static void RestartZomB()
+        {
+            Application.Restart();
+        }
+
+        public static void ExitZomB()
+        {
+            Application.Exit();
+        }
+
+        public static void RestartDS()
+        {
+            Process[] dgs = Process.GetProcessesByName("Driver Station");
+            if (dgs.Length != 1)
+            {
+                MessageBox.Show("DS not running, starting");
+            }
+            else
+            {
+                dgs[0].CloseMainWindow();
+                dgs[0].WaitForExit(6000);
+                //If http://www.youtube.com/watch?v=dGFXGwHsD_A, then kill
+                if (!dgs[0].HasExited)
+                {
+                    dgs[0].Kill();
+                }
+            }
+            try
+            {
+                Process.Start(@"C:\Program Files\FRC Driver Station\Driver Station.exe");
+            }
+            catch 
+            {
+                
+            }
+        }
+    }
+    [ToolboxBitmap(typeof(Button))]
+    public class ControlBoxMenuButton : Button
+    {
+
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem restartToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem restartDSToolStripMenuItem;
+
+        public ControlBoxMenuButton()
+        {
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip();
+            this.restartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.restartDSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+
+            this.contextMenuStrip1.SuspendLayout();
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.restartToolStripMenuItem,
+            this.exitToolStripMenuItem,
+            this.restartDSToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(138, 70);
+            // 
+            // restartToolStripMenuItem
+            // 
+            this.restartToolStripMenuItem.Name = "restartToolStripMenuItem";
+            this.restartToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.restartToolStripMenuItem.Text = "&Restart ZomB";
+            this.restartToolStripMenuItem.Click += new EventHandler(restartToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.exitToolStripMenuItem.Text = "E&xit ZomB";
+            this.exitToolStripMenuItem.Click += new EventHandler(exitToolStripMenuItem_Click);
+
+            // 
+            // restartDSToolStripMenuItem
+            // 
+            this.restartDSToolStripMenuItem.Name = "restartDSToolStripMenuItem";
+            this.restartDSToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.restartDSToolStripMenuItem.Text = "Restart DS";
+            this.restartDSToolStripMenuItem.Click += new EventHandler(restartDSToolStripMenuItem_Click);
+
+
+            this.Text = "ZomB";
+            this.MouseDown += new MouseEventHandler(ControlBoxMenuButton_MouseDown);
+
+            this.contextMenuStrip1.ResumeLayout(false);
+        }
+
+        void ControlBoxMenuButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            contextMenuStrip1.Show(Cursor.Position);
+        }
+
+        void restartDSToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DashboardDataHub.RestartDS();
+        }
+
+        void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DashboardDataHub.ExitZomB();
+        }
+
+        void restartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DashboardDataHub.RestartZomB();
+        }
     }
 }
