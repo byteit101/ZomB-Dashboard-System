@@ -24,6 +24,7 @@ using System.Threading;
 using InTheHand.Net;
 using InTheHand.Net.Bluetooth;
 using InTheHand.Net.Sockets;
+using System.Collections.ObjectModel;
 
 namespace System451.Communication.Dashboard
 {
@@ -68,8 +69,8 @@ namespace System451.Communication.Dashboard
                 teamgid = new Guid(teamNumber * teamNumber, (short)teamNumber, (short)teamNumber, new byte[] { 0xa1, 0xfc, 0xf7, 0x95, 0x4a, 0x58, 0x6f, 0x25 });
             radio = InTheHand.Net.Bluetooth.BluetoothRadio.PrimaryRadio;
             listen = new BluetoothListener(teamgid);
-            bserve = new BTZomBServer(listen, pullFrom, teamNumber,this);
-            radio.Mode = RadioMode.Connectable;
+            bserve = new BTZomBServer(listen, pullFrom, teamNumber, this);
+            //radio.Mode = RadioMode.Connectable;
             client = new BluetoothClient();
             bfinger = new BTFinger(client, saveTo, teamNumber, this);
             TeamNumber = teamNumber;
@@ -123,11 +124,11 @@ namespace System451.Communication.Dashboard
         }
         public void DisableBT()
         {
-            radio.Mode = RadioMode.PowerOff;
+            //radio.Mode = RadioMode.PowerOff;
         }
         public void EnableBT()
         {
-            radio.Mode = RadioMode.Connectable;
+            //radio.Mode = RadioMode.Connectable;
         }
         public static string DefaultSaveLocation { get { return @"C:\Program Files\ZomB\Data"; } }
         public static string DefaultLoadLocation { get { return @"C:\Program Files\ZomB\Data\BluArc"; } }
@@ -151,6 +152,8 @@ namespace System451.Communication.Dashboard
             ff = finger;
             sliceThread = new Thread(ZomBworker);
             sliceThread.IsBackground = true;
+            if (!Directory.Exists(To))
+                Directory.CreateDirectory(To);
         }
         ~BTFinger()
         {
@@ -168,7 +171,17 @@ namespace System451.Communication.Dashboard
         public void Start()
         {
             sliceing = true;
+            if (sliceThread.ThreadState != ThreadState.Unstarted)
+            {
+                try
+                {
+                    sliceThread.Abort();
+                }
+                catch { }
+                sliceThread = new Thread(ZomBworker);
+            }
             sliceThread.Start();
+
         }
         public void Stop()
         {
@@ -188,14 +201,14 @@ namespace System451.Communication.Dashboard
 
         protected byte[] ReadStatus(Stream strm, int maxlength)
         {
-            byte[] hlMsg = new byte[10];
+            byte[] hlMsg = new byte[maxlength];
             while (strm.CanRead == false)
             { Thread.Sleep(5); }
             int readcount = strm.Read(hlMsg, 0, maxlength);
             while (readcount < maxlength)
             {
                 Thread.Sleep(40);
-                while (strm.CanRead==false)
+                while (strm.CanRead == false)
                 { Thread.Sleep(5); }
                 readcount += strm.Read(hlMsg, readcount, maxlength - readcount);
             }
@@ -219,63 +232,71 @@ namespace System451.Communication.Dashboard
             {
                 try
                 {
-                    
+
                     blucli.Connect(GetZomBServerAddress(), ff.BTGuid);//finds a server blocking
 
                     using (Stream strm = blucli.GetStream())
                     {
                         ReplyStatus(strm, BTZomBFingerFactory.BTHelloMessage);
-                        if (ReadStatus(strm, 10) == BTZomBFingerFactory.BTHelloMessage)//if good Verify
+                        if (BS(ReadStatus(strm, 10)) == BS(BTZomBFingerFactory.BTHelloMessage))//if good Verify
                         {
                             if (ReadStatus(strm) == ((byte)(TeamNumber >> 8)) && ReadStatus(strm) == (byte)TeamNumber)//team # validate
                             {
                                 ReplyStatus(strm, BTZomBFingerFactory.BTVerifyMessage, ((byte)(TeamNumber >> 8)), (byte)TeamNumber);
-                                while (true)
+                                if (DataRecieving != null)
+                                    DataRecieving(this, new EventArgs());
+                                if (BS(ReadStatus(strm, 8)) == BS(BTZomBFingerFactory.BTGoodVerifyMessage))
                                 {
-                                    switch (ByteArrayToString(ReadStatus(strm, 8)))
+                                    while (true)
                                     {
-                                        case "SendFile":
-                                            if (ReadStatus(strm, 8) == BTZomBFingerFactory.BTNameFileMessage)
-                                            {
-                                                if (ReadStatus(strm) == 0x0)
+                                        switch (ByteArrayToString(ReadStatus(strm, 8)))
+                                        {
+                                            case "SendFile":
+                                                if (BS(ReadStatus(strm, 8)) == BS(BTZomBFingerFactory.BTNameFileMessage))
                                                 {
-                                                    string newfilename = ByteArrayToString(ReadStatus(strm, (int)ReadStatus(strm)));
                                                     if (ReadStatus(strm) == 0x0)
                                                     {
-                                                        ReplyStatus(strm, BTZomBFingerFactory.BTAcceptFileMessage);
-                                                        if (ReadStatus(strm, 4) == BTZomBFingerFactory.BTFileSequenceMessage)
+                                                        string newfilename = ByteArrayToString(ReadStatus(strm, (int)ReadStatus(strm)));
+                                                        if (ReadStatus(strm) == 0x0)
                                                         {
-                                                            string filelength = "";
-                                                            byte last = ReadStatus(strm);
-                                                            while (last != 0xFF)
+                                                            ReplyStatus(strm, BTZomBFingerFactory.BTAcceptFileMessage);
+                                                            if (BS(ReadStatus(strm, 4)) == BS(BTZomBFingerFactory.BTFileSequenceMessage))
                                                             {
-                                                                filelength += (char)last;
-                                                                last = ReadStatus(strm);
-                                                            }
-                                                            if (ReadStatus(strm) == 0x0 && ReadStatus(strm) == 0xff && ReadStatus(strm) == 0x0)
-                                                            {
-                                                                File.WriteAllBytes(To + newfilename, ReadStatus(strm, int.Parse(filelength)));
-                                                                if (ReadStatus(strm, 4) == BTZomBFingerFactory.BTFileSequenceMessage)
-                                                                    if (ReadStatus(strm, 4) == BTZomBFingerFactory.BTEOFTMessage)
-                                                                    {
-                                                                        ReplyStatus(strm, BTZomBFingerFactory.BTRecievedMessage);
-                                                                        break;
-                                                                    }
+                                                                string filelength = "";
+                                                                byte last = ReadStatus(strm);
+                                                                while (last != 0xFF)
+                                                                {
+                                                                    filelength += (char)last;
+                                                                    last = ReadStatus(strm);
+                                                                }
+                                                                if (ReadStatus(strm) == 0x0 && ReadStatus(strm) == 0xff && ReadStatus(strm) == 0x0)
+                                                                {
+
+                                                                    File.WriteAllBytes(To + newfilename, ReadStatus(strm, int.Parse(filelength)));
+                                                                    if (BS(ReadStatus(strm, 4)) == BS(BTZomBFingerFactory.BTFileSequenceMessage))
+                                                                        if (BS(ReadStatus(strm, 4)) == BS(BTZomBFingerFactory.BTEOFTMessage))
+                                                                        {
+                                                                            ReplyStatus(strm, BTZomBFingerFactory.BTRecievedMessage);
+                                                                            break;
+                                                                        }
+                                                                }
                                                             }
                                                         }
                                                     }
                                                 }
-                                            }
-                                            break;
-                                        case "Sign Off":
-                                            ReplyStatus(strm, BTZomBFingerFactory.BTByeMessage);
-                                            return;
-                                        case "No Files":
-                                            //Ok, I don't care, continue
-                                            break;
-                                        default:
-                                            //TODO: AHHH!
-                                            break;
+                                                break;
+                                            case "Sign Off":
+                                                if (DataRecieved != null)
+                                                    DataRecieved(this, new EventArgs());
+                                                ReplyStatus(strm, BTZomBFingerFactory.BTByeMessage);
+                                                goto end;
+                                            case "No Files":
+                                                //Ok, I don't care, continue
+                                                break;
+                                            default:
+                                                //TODO: AHHH!
+                                                break;
+                                        }
                                     }
                                 }
                             }
@@ -285,8 +306,11 @@ namespace System451.Communication.Dashboard
                 }
                 catch
                 {
-                    
+                    continue;
                 }
+            end:
+                if (!blucli.Connected)
+                { blucli = new BluetoothClient(); }
             }
         }
 
@@ -294,20 +318,27 @@ namespace System451.Communication.Dashboard
         {
             while (sliceing)
             {
-                BluetoothDeviceInfo[] bdi =  blucli.DiscoverDevices();
+                BluetoothDeviceInfo[] bdi = blucli.DiscoverDevices();
                 foreach (BluetoothDeviceInfo item in bdi)
                 {
-                    if (item.DeviceName == "ZomBServer" + TeamNumber)
+                    string DN = item.DeviceName;
+                    if (DN == "ZomBServer" + TeamNumber && sliceing)
                         return item.DeviceAddress;
                 }
-                    Thread.Sleep(10);
+                Thread.Sleep(10);
             }
             return null;
         }
 
         private string ByteArrayToString(byte[] pureName)
         {
-            return System.Text.Encoding.ASCII.GetString(pureName);
+            string r = System.Text.Encoding.ASCII.GetString(pureName);
+            return r;
+        }
+        private string BS(byte[] pureName)
+        {
+            string r = System.Text.Encoding.ASCII.GetString(pureName);
+            return r;
         }
     }
     public class BTZomBServer
@@ -341,6 +372,15 @@ namespace System451.Communication.Dashboard
         public void Start()
         {
             severing = true;
+            if (severThread.ThreadState != ThreadState.Unstarted)
+            {
+                try
+                {
+                    severThread.Abort();
+                }
+                catch { }
+                severThread = new Thread(ZomBworker);
+            }
             severThread.Start();
         }
         public void Stop()
@@ -361,14 +401,14 @@ namespace System451.Communication.Dashboard
 
         protected byte[] ReadStatus(Stream strm, int maxlength)
         {
-            byte[] hlMsg = new byte[10];
+            byte[] hlMsg = new byte[maxlength];
             while (strm.CanRead == false)
             { Thread.Sleep(5); }
             int readcount = strm.Read(hlMsg, 0, maxlength);
             while (readcount < maxlength)
             {
                 Thread.Sleep(40);
-                while (strm.CanRead==false)
+                while (strm.CanRead == false)
                 { Thread.Sleep(5); }
                 readcount += strm.Read(hlMsg, readcount, maxlength - readcount);
             }
@@ -392,34 +432,39 @@ namespace System451.Communication.Dashboard
             Thread.Sleep(30);
             listen.Start();
             //while (severing)
-           // {
-                string connectString;
-                using (BluetoothClient bcli = listen.AcceptBluetoothClient())//This blocks
-                {
-                    using (Stream strm = bcli.GetStream())
-                    {
-                        if (ReadStatus(strm, 10) == BTZomBFingerFactory.BTHelloMessage)//if good sign on
-                        {
-                            //Reply with team Verification
-                            ReplyStatus(strm, BTZomBFingerFactory.BTHelloMessage, ((byte)(TeamNumber >> 8)), (byte)TeamNumber);
+            // {
+            string connectString;
+            while (!listen.Pending())
+            {
 
-                            if (ReadStatus(strm, 11) == BTZomBFingerFactory.BTVerifyMessage)//if good Verify
+                Thread.Sleep(30);
+            }
+            using (BluetoothClient bcli = listen.AcceptBluetoothClient())//This blocks
+            {
+                using (Stream strm = bcli.GetStream())
+                {
+                    if (BS(ReadStatus(strm, 10)) == BS(BTZomBFingerFactory.BTHelloMessage))//if good sign on
+                    {
+                        //Reply with team Verification
+                        ReplyStatus(strm, BTZomBFingerFactory.BTHelloMessage, ((byte)(TeamNumber >> 8)), (byte)TeamNumber);
+
+                        if (BS(ReadStatus(strm, 11)) == BS(BTZomBFingerFactory.BTVerifyMessage))//if good Verify
+                        {
+                            if (ReadStatus(strm) == ((byte)(TeamNumber >> 8)) && ReadStatus(strm) == (byte)TeamNumber)//team # validate
                             {
-                                if (ReadStatus(strm) == ((byte)(TeamNumber >> 8)) && ReadStatus(strm) == (byte)TeamNumber)//team # validate
-                                {
-                                    if (DataSending != null)
-                                        DataSending(this, new EventArgs());
-                                    ReplyStatus(strm, BTZomBFingerFactory.BTGoodVerifyMessage);
-                                    SendFiles(strm, GetNewFiles());
-                                    if (DataSent != null)
-                                        DataSent(this, new EventArgs());
-                                    ReplyStatus(strm, BTZomBFingerFactory.BTSignOffMessage);
-                                }
+                                if (DataSending != null)
+                                    DataSending(this, new EventArgs());
+                                ReplyStatus(strm, BTZomBFingerFactory.BTGoodVerifyMessage);
+                                SendFiles(strm, GetNewFiles());
+                                if (DataSent != null)
+                                    DataSent(this, new EventArgs());
+                                ReplyStatus(strm, BTZomBFingerFactory.BTSignOffMessage);
                             }
                         }
                     }
                 }
-            
+            }
+
             listen.Stop();
             ff.DisableBT();
         }
@@ -437,7 +482,7 @@ namespace System451.Communication.Dashboard
                 string pureName = Path.GetFileName(file);
                 ReplyStatus(strm, BTZomBFingerFactory.BTNameFileMessage, 0, (byte)pureName.Length);
                 ReplyStatus(strm, StringToByteArray(pureName), 0);
-                if (ReadStatus(strm, 8) == BTZomBFingerFactory.BTAcceptFileMessage)
+                if (BS(ReadStatus(strm, 8)) == BS(BTZomBFingerFactory.BTAcceptFileMessage))
                 {
                     byte[] tmp = File.ReadAllBytes(file);
                     ReplyStatus(strm, BTZomBFingerFactory.BTFileSequenceMessage);
@@ -446,16 +491,21 @@ namespace System451.Communication.Dashboard
                     ReplyStatus(strm, tmp);//send file
                     ReplyStatus(strm, BTZomBFingerFactory.BTFileSequenceMessage);
                     ReplyStatus(strm, BTZomBFingerFactory.BTEOFTMessage);
-                    if (ReadStatus(strm, 8) == BTZomBFingerFactory.BTRecievedMessage)
+                    if (BS(ReadStatus(strm, 8)) == BS(BTZomBFingerFactory.BTRecievedMessage))
                     {
                         //TODO: implement this
 
-                        File.Move(file, file+".ZomBarchive"+(((short)DateTime.Now.Ticks).ToString("x").PadLeft(4,'0')));
+                        File.Move(file, file + ".ZomBarchive" + (((short)DateTime.Now.Ticks).ToString("x").PadLeft(4, '0')));
                     }
                 }
-                
+
             }
-            
+
+        }
+        private string BS(byte[] pureName)
+        {
+            string r = System.Text.Encoding.ASCII.GetString(pureName);
+            return r;
         }
 
         private byte[] StringToByteArray(string pureName)
@@ -466,7 +516,17 @@ namespace System451.Communication.Dashboard
         private string[] GetNewFiles()
         {
             //TODO: weed out large files
-            return Directory.GetFiles(from, "*.ZomBarchive????");
+            //TODO: ingore previous
+            string[] r = Directory.GetFiles(from);//, "*.ZomBarchive????");
+            Collection<string> c = new Collection<string>();
+            foreach (string item in r)
+            {
+                if (!item.Contains(".ZomBarchive"))
+                    c.Add(item);
+            }
+            r = new string[c.Count];
+            c.CopyTo(r, 0);
+            return r;
         }
 
     }

@@ -52,22 +52,28 @@ namespace System451.Communication.Dashboard
                         if (process.Id != current.Id)
                         {
                             SetForegroundWindow(process.MainWindowHandle);
+                            current.Kill();
+                            return;
                             break;
                         }
                     }
-
-
-                    current.Kill();
-                    return;
                 }
             }
 
             AutoStart = !DesignMode;
             InitializeComponent();
+            this.SuspendLayout();
             if (Environment.UserName == "Driver" || DesignMode)
             {
                 this.FormBorderStyle = FormBorderStyle.None;
-                this.StartPosition = FormStartPosition.Manual;
+                if (!DesignMode)
+                {
+                    this.StartPosition = FormStartPosition.Manual;
+                }
+                else
+                {
+                    this.StartPosition = FormStartPosition.WindowsDefaultLocation;
+                }
                 this.ControlBox = false;
                 this.Size = DefaultSize;
             }
@@ -77,6 +83,7 @@ namespace System451.Communication.Dashboard
                 this.StartPosition = FormStartPosition.WindowsDefaultLocation;
                 this.ControlBox = true;
             }
+            this.ResumeLayout(false);
             GC.KeepAlive(mutex);
         }
         ~DashboardDataHubForm()
@@ -148,9 +155,15 @@ namespace System451.Communication.Dashboard
             if (Environment.UserName == "Driver" || DesignMode)
             {
                 this.FormBorderStyle = FormBorderStyle.None;
-                this.StartPosition = FormStartPosition.Manual;
+                if (!DesignMode)
+                {
+                    this.StartPosition = FormStartPosition.Manual;
+                }
+                else
+                {
+                    this.StartPosition = FormStartPosition.WindowsDefaultLocation;
+                }
                 this.ControlBox = false;
-
                 this.Size = DefaultSize;
             }
             else
