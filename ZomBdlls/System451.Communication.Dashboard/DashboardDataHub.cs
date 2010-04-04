@@ -44,8 +44,7 @@ namespace System451.Communication.Dashboard
          
         public DashboardDataHub()
         {
-            mt = new Thread(new ThreadStart(this.moniter));
-            mt.IsBackground = true;
+            
            
             
             DashboardDataRecieved += new DashboardDataRecievedDelegate(DashboardReciever_DashboardDataRecieved);
@@ -113,6 +112,8 @@ namespace System451.Communication.Dashboard
                 try
                 {
                     cRIOConnection = new UdpClient(1165);
+                    mt = new Thread(new ThreadStart(this.moniter));
+                    mt.IsBackground = true;
                     mt.Start();
                 }
                 catch

@@ -79,7 +79,7 @@ namespace System451.Communication.Dashboard
             }
             else
             {
-                this.FormBorderStyle = FormBorderStyle.Sizable;
+                this.FormBorderStyle = FormBorderStyle.FixedSingle;
                 this.StartPosition = FormStartPosition.WindowsDefaultLocation;
                 this.ControlBox = true;
             }
@@ -145,8 +145,11 @@ namespace System451.Communication.Dashboard
         /// </summary>
         public void Start()
         {
-            if (!DesignMode)
+            if ((!DesignMode) && (!Running))
+            {
                 dashboardDataHub1.StartRecieving();
+                Running = true;
+            }
         }
         /// <summary>
         /// Restart the DashboardDataHub
@@ -161,8 +164,16 @@ namespace System451.Communication.Dashboard
         /// </summary>
         public void Stop()
         {
-            dashboardDataHub1.StopRecieving();
+            if (Running)
+            {
+                dashboardDataHub1.StopRecieving();
+                Running = false;
+            }
         }
+        /// <summary>
+        /// Are we running the dashboard task?
+        /// </summary>
+        public bool Running { get; private set; }
 
         private void DashboardDataHubForm_Load(object sender, EventArgs e)
         {
@@ -182,7 +193,7 @@ namespace System451.Communication.Dashboard
             }
             else
             {
-                this.FormBorderStyle = FormBorderStyle.Sizable;
+                this.FormBorderStyle = FormBorderStyle.FixedSingle;
                 this.StartPosition = FormStartPosition.WindowsDefaultLocation;
                 this.ControlBox = true;
             }
@@ -190,7 +201,7 @@ namespace System451.Communication.Dashboard
             AddControls(this.Controls);
             if (AutoStart && (!DesignMode))
             {
-                dashboardDataHub1.StartRecieving();
+                Start();
             }
         }
 
