@@ -78,16 +78,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ctod.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\varsexp.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\varsexp21.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\varsexp2.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="LICENSE.txt" />

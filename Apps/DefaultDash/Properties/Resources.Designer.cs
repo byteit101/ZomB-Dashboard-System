@@ -60,20 +60,6 @@ namespace DefaultDash.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap ctod {
-            get {
-                object obj = ResourceManager.GetObject("ctod", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap varsexp {
-            get {
-                object obj = ResourceManager.GetObject("varsexp", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap varsexp2 {
             get {
                 object obj = ResourceManager.GetObject("varsexp2", resourceCulture);

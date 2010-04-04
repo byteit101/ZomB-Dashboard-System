@@ -23,38 +23,61 @@ using System.Windows.Forms;
 using DefaultDash.Properties;
 using System.Collections.ObjectModel;
 using System451.Communication.Dashboard;
+using System.IO;
 
 namespace DefaultDash
 {
     public partial class Form1 : DashboardDataHubForm
     {
+        //Create a new Video Saving Object
+        VideoStreamSaver vss;
         public Form1()
         {
+            //Init stuff
             InitializeComponent();
             pictureBox1.Dock = DockStyle.Fill;
             pictureBox2.Image = System451.Communication.Dashboard.Properties.Resources.ZomB_text;
-            this.AutoStart = true;
+            //Get ready to save images
+            Directory.CreateDirectory(BTZomBFingerFactory.DefaultSaveLocation);
+            vss = new VideoStreamSaver(this.cameraView1);
+            vss.FPS = 15;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //Help button
             pictureBox1.Visible = !pictureBox1.Visible;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            //Restart Camera
             cameraView1.Restart();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
+            //Help button
             pictureBox1.Visible = false;
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
+            //Change IP, then reset
             cameraView1.IPAddress = "10." + numericUpDown1.Value.ToString().PadLeft(4, '0').Substring(0, 2) + "." + numericUpDown1.Value.ToString().PadLeft(4, '0').Substring(2) + ".2";
             cameraView1.Restart();
+        }
+
+        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Finish saving
+            vss.EndSave();
+        }
+
+        private void startBothToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Start Saving
+            vss.StartSave(BTZomBFingerFactory.DefaultSaveLocation + "\\Capture" + (DateTime.Now.Ticks.ToString("x")) + ".avi");
         }
     }
 }
