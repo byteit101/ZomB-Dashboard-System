@@ -57,31 +57,31 @@ namespace SmashTcpDashboard
                 s.EndConnect(ar);
 
             }
-            catch (ArgumentNullException anex)
+            catch (ArgumentNullException )
             {
                 ProcError("Robot IP is null");
             }
-            catch (ArgumentOutOfRangeException aoorex)
+            catch (ArgumentOutOfRangeException )
             {
                 ProcError("Port " + RobotPort + " is out of range");
             }
-            catch (SocketException sex)
+            catch (SocketException )
             {
                 ProcError("General Socket Exception");
             }
-            catch (ObjectDisposedException odex)
+            catch (ObjectDisposedException )
             {
                 ProcError("A strange error has occured -- a restart maybe required");
             }
-            catch (ThreadStateException tsex)
+            catch (ThreadStateException )
             {
                 ProcError("Failed to start receiver");
             }
-            catch (OutOfMemoryException oomex)
+            catch (OutOfMemoryException )
             {
                 ProcError("Failed to start receiver -- out of memory");
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 ProcError("An error has occured");
             }
@@ -120,31 +120,31 @@ namespace SmashTcpDashboard
                 ReceiverThread.Start();
                 Running = true;
             }
-            catch (ArgumentNullException anex)
+            catch (ArgumentNullException )
             {
                 ProcError("Robot IP is null");
             }
-            catch (ArgumentOutOfRangeException aoorex)
+            catch (ArgumentOutOfRangeException )
             {
                 ProcError("Port " + RobotPort + " is out of range");
             }
-            catch (SocketException sex)
+            catch (SocketException )
             {
                 ProcError("General Socket Exception");
             }
-            catch (ObjectDisposedException odex)
+            catch (ObjectDisposedException )
             {
                 ProcError("A strange error has occured -- a restart maybe required");
             }
-            catch (ThreadStateException tsex)
+            catch (ThreadStateException )
             {
                 ProcError("Failed to start receiver");
             }
-            catch (OutOfMemoryException oomex)
+            catch (OutOfMemoryException )
             {
                 ProcError("Failed to start receiver -- out of memory");
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 ProcError("An error has occured");
             }
@@ -261,11 +261,11 @@ namespace SmashTcpDashboard
                     }
                 }
             }
-            catch (ThreadAbortException ex)
+            catch (ThreadAbortException )
             {
                 return;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 ProcError("Unknown state");
             }

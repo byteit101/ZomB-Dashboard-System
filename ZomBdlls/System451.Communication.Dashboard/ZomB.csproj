@@ -51,12 +51,6 @@
     <Compile Include="BitUtils.cs" />
     <Compile Include="BTFingerArc.cs">
     </Compile>
-    <Compile Include="ColorFind.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ColorFind.Designer.cs">
-      <DependentUpon>ColorFind.cs</DependentUpon>
-    </Compile>
     <Compile Include="DashboardDataHub.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -213,10 +207,6 @@
   <ItemGroup>
     <EmbeddedResource Include="AnalogMeter.resx">
       <DependentUpon>AnalogMeter.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ColorFind.resx">
-      <DependentUpon>ColorFind.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DashboardDataHubForm.resx">

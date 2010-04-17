@@ -81,7 +81,7 @@ namespace System451.Communication.Dashboard
         {
             get { return ""; }
         }
-        public void Update()
+        new public void Update()
         {
             if (this.InvokeRequired)
             {

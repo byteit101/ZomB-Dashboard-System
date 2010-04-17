@@ -36,7 +36,6 @@ namespace System451.Communication.Dashboard
         Collection<string> paramName = new Collection<string>();
         Image view;
         Receiver Receiver;
-        int calls = 0;
         delegate void UpdaterDelegate();
 
         public CameraView()

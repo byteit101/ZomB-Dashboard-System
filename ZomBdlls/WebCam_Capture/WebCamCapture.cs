@@ -245,7 +245,7 @@ namespace WebCam_Capture
 				SendMessage(mCapHwnd, WM_CAP_DISCONNECT, 0, 0);
 			}
 
-			catch (Exception excep)
+			catch (Exception)
 			{ // don't raise an error here.
 			}
 

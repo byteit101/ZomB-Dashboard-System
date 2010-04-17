@@ -54,7 +54,6 @@ namespace System451.Communication.Dashboard
                             SetForegroundWindow(process.MainWindowHandle);
                             current.Kill();
                             return;
-                            break;
                         }
                     }
                 }

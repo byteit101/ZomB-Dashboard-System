@@ -346,7 +346,6 @@ namespace System451.Communication.Dashboard
         BluetoothListener listen;
         string from;
         Thread severThread;
-        bool severing = false;//Gotta have some ZomB humor
         BTZomBFingerFactory ff;
         internal BTZomBServer(BluetoothListener listener, string from, int tn, BTZomBFingerFactory finger)
         {
@@ -358,11 +357,16 @@ namespace System451.Communication.Dashboard
         }
         ~BTZomBServer()
         {
-            severing = false;
             Thread.Sleep(0);
             Thread.Sleep(1);
             if (severThread.ThreadState != System.Threading.ThreadState.Stopped)
-                severThread.Abort();
+            {
+                try
+                {
+                    severThread.Abort();
+                }
+                catch { }
+            }
         }
         public event EventHandler DataSending;
         public event EventHandler DataSent;
@@ -371,7 +375,6 @@ namespace System451.Communication.Dashboard
 
         public void Start()
         {
-            severing = true;
             if (severThread.ThreadState != ThreadState.Unstarted)
             {
                 try
@@ -385,7 +388,12 @@ namespace System451.Communication.Dashboard
         }
         public void Stop()
         {
-            severing = false;
+            try
+            {
+                severThread.Abort();
+            }
+            catch { }
+            severThread = new Thread(ZomBworker);
         }
         protected byte ReadStatus(Stream strm)
         {
@@ -433,7 +441,6 @@ namespace System451.Communication.Dashboard
             listen.Start();
             //while (severing)
             // {
-            string connectString;
             while (!listen.Pending())
             {
 

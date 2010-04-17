@@ -24,7 +24,7 @@ using System.Text;
 
 namespace System451.Communication.Dashboard
 {
-    public enum BitFlags:byte
+    public enum BitFlags : byte
     {
         Bit0 = 1,
         Bit1 = 2,
@@ -52,7 +52,7 @@ namespace System451.Communication.Dashboard
             get { return mainData; }
             set { mainData = value; }
         }
-        
+
         public bool this[int index]
         {
             get
@@ -60,12 +60,7 @@ namespace System451.Communication.Dashboard
                 if (index > 7)
                     throw new IndexOutOfRangeException(index + " is out of range of a bit (0-7)");
                 byte temp = mainData;
-                for (int i = 7 - index; i > 0; i--)
-                {
-                    temp = (byte)(temp >> 1);
-                }
-                temp = (byte)(temp << 7);
-                return temp == 0 ? false : true;
+                return (temp & (byte)(bitoptions[index])) == ((byte)(bitoptions[index]));
             }
             set
             {
