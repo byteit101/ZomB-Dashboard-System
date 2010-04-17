@@ -154,6 +154,7 @@ namespace System451.Communication.Dashboard
         virtual public string ControlName
         {
             get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         /// <summary>
@@ -195,6 +196,156 @@ namespace System451.Communication.Dashboard
             {
                 return localDDH;
             }
+        }
+    }
+
+    /// <summary>
+    /// Defines a ZomB control with multiple, seperate, and dynamic controls
+    /// </summary>
+    public interface IZomBControlGroup
+    {
+
+        /// <summary>
+        /// Gets the controls in this group
+        /// </summary>
+        /// <returns>The controls as a collection</returns>
+        ZomBControlCollection GetControls();
+    }
+
+    /// <summary>
+    /// EventArgs for the ControlUpdated event in IZomBRemoteControl
+    /// </summary>
+    public class ZomBControlUpdatedEventArgs : EventArgs
+    {
+        string value;
+        byte[] packetData;
+
+        /// <summary>
+        /// Create a new ZomBControlUpdatedEventArgs
+        /// </summary>
+        /// <param name="value">The new value of the control. If IsMultiWatch is true, this is a pipe seperated list of values</param>
+        /// <param name="packetData">If RequiresAllData is true, this contains all the packet data</param>
+        public ZomBControlUpdatedEventArgs(string value, byte[] packetData)
+        {
+            this.value = value;
+            this.packetData = packetData;;
+        }
+
+        /// <summary>
+        /// The new value of the control. If IsMultiWatch is true, this is a pipe seperated list of values
+        /// </summary>
+        public string Value
+        {
+            get
+            {
+                return value;
+            }
+        }
+
+        /// <summary>
+        /// If RequiresAllData is true, this contains all the packet data
+        /// </summary>
+        public byte[] PacketData
+        {
+            get
+            {
+                return packetData;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Used by IZomBRemoteControl.ControlUpdated to notify when a control is updated by the the DashboardDataHub
+    /// </summary>
+    /// <param name="sender">The sender of the event</param>
+    /// <param name="e">The event data</param>
+    public delegate void ControlUpdatedDelegate(object sender, ZomBControlUpdatedEventArgs e);
+
+    /// <summary>
+    /// Defines a remote ZomBControl. Use this for the ZomBControlCollection
+    /// </summary>
+    public interface IZomBRemoteControl : IZomBControl
+    {
+        /// <summary>
+        /// Replaces the UpdateControl Method
+        /// </summary>
+        event ControlUpdatedDelegate ControlUpdated;
+    }
+
+    /// <summary>
+    /// This is used to make simple having multiple ZomB controls on one physical control
+    /// </summary>
+    public class ZomBRemoteControl : ZomBControl, IZomBRemoteControl
+    {
+        /// <summary>
+        /// Creates a new ZomBRemoteControl
+        /// </summary>
+        public ZomBRemoteControl()
+        {
+            
+        }
+
+        /// <summary>
+        /// The name of the control. This is the name you send values to.
+        /// If IsMultiWatch is true, this is a semicolin seperated list of names.
+        /// </summary>
+        public override string ControlName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Updates the control with new data
+        /// </summary>
+        /// <param name="value">The new value of the control. If IsMultiWatch is true, this is a pipe seperated list of values</param>
+        /// <param name="packetData">If RequiresAllData is true, this contains all the packet data</param>
+        public override void UpdateControl(string value, byte[] packetData)
+        {
+            if (ControlUpdated != null)
+                ControlUpdated(this, new ZomBControlUpdatedEventArgs(value, packetData));
+        }
+
+        #region IZomBRemoteControl Members
+
+        /// <summary>
+        /// Fires when the Control is updated via IZomBControl.UpdateControl
+        /// </summary>
+        public event ControlUpdatedDelegate ControlUpdated;
+
+        #endregion
+    }
+
+    /// <summary>
+    /// Easily manage a bunch of virtual or physical IZomBcontrols by name
+    /// </summary>
+    public class ZomBControlCollection : KeyedCollection<string, IZomBControl>
+    {
+        /// <summary>
+        /// Create a new ZomBControlCollection
+        /// </summary>
+        public ZomBControlCollection()
+        {
+
+        }
+        protected override void SetItem(int index, IZomBControl item)
+        {
+            if (item.IsMultiWatch)
+                throw new NotSupportedException("All IZomBControl's must be single watchers. IsMultiWatch is not supported at this point");
+            else
+            base.SetItem(index, item);
+        }
+        protected override void InsertItem(int index, IZomBControl item)
+        {
+            if (item.IsMultiWatch)
+                throw new NotSupportedException("All IZomBControl's must be single watchers. IsMultiWatch is not supported at this point");
+            else
+            base.InsertItem(index, item);
+        }
+
+        protected override string GetKeyForItem(IZomBControl item)
+        {
+            return item.ControlName;
         }
     }
 
