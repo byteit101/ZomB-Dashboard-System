@@ -32,8 +32,6 @@
             // 
             // DistanceMeter
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.DoubleBuffered = true;
             this.Name = "DistanceMeter";
             this.Size = new System.Drawing.Size(100, 150);

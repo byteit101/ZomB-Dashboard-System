@@ -44,7 +44,7 @@ namespace Instruments {
 	/// <summary>
 	/// Awesome analog meter. :) 
 	/// </summary>
-	public class VirtualdAnalogMeter : Control,IDashboardControl {
+	public class VirtualdAnalogMeter : ZomBControl {
 
 		Bitmap bgImage = null;
 		Graphics realGraphics = null;
@@ -58,6 +58,7 @@ namespace Instruments {
 			BackColor = Color.White;
 			SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 			SetStyle(ControlStyles.UserPaint, true);
+            ControlName = "VdAnalog1";
 		}
         /// <summary>
         /// Change the Default Meter Size
@@ -558,59 +559,20 @@ namespace Instruments {
 		}
 
 
-        #region IDashboardControl Members
+        #region IZomBControl Members
 
-        [DefaultValue("VdAnalog1"), Category("ZomB"), Description("What this control will get the value of from the packet Data")]
-        public string BindToInput
+        delegate void UpdaterDelegate(string value);
+        public override void UpdateControl(string value)
         {
-            get
+            if (this.InvokeRequired)
             {
-                return bti;
+                this.Invoke(new UpdaterDelegate(UpdateControl));
             }
-            set { bti = value; }
-        }
-        private string bti = "VdAnalog1";
-        string[] IDashboardControl.ParamName
-        {
-            get{
-                return new string[] { BindToInput };
-            }
-            set{
-                BindToInput = value[0];
-            }
-        }
-
-        string IDashboardControl.Value
-        {
-            get
-            {
-                return this.Value.ToString();
-            }
-            set
+            else
             {
                 this.Value = float.Parse(value);
             }
         }
-
-        string IDashboardControl.DefalutValue
-        {
-            get { return this.Value.ToString(); }
-        }
-
-        delegate void UpdaterDelegate();
-
-        void IDashboardControl.Update()
-        {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(new UpdaterDelegate(Update));
-            }
-            else
-            {
-                this.Invalidate();
-            }
-        }
-
         #endregion
     }
 }

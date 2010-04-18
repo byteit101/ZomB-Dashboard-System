@@ -30,16 +30,16 @@ using System.Drawing.Drawing2D;
 namespace System451.Communication.Dashboard
 {
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.Analog.png")]
-    public partial class AnalogMeter : UserControl, IDashboardControl
+    public partial class AnalogMeter : ZomBControl 
     {
         float speedval = 0;
-        string paramName = "anlg1";
         bool use1to1023 = false;
-        delegate void UpdaterDelegate();
+        delegate void UpdaterDelegate(string value);
         public AnalogMeter()
         {
             InitializeComponent();
             speedval = 0;
+            this.ControlName = "analog1";
         }
         [DefaultValue("0"), Category("ZomB"), Description("The Value of the Analog Meter")]
         public float Value
@@ -70,60 +70,29 @@ namespace System451.Communication.Dashboard
 
 
         #region IDashboardControl Members
-        string[] IDashboardControl.ParamName
-        {
-            get
-            {
-                return new string[] { BindToInput };
-            }
-            set
-            {
-                BindToInput = value[0];
-            }
-        }
-        [DefaultValue("anlg1"), Category("ZomB"), Description("What this control will get the value of from the packet Data")]
+        
+        [Obsolete("Use Control Name"), Category("ZomB"), Description("[OBSOLETE] What this control will get the value of from the packet Data")]
         public string BindToInput
         {
-            get { return paramName; }
-            set { paramName = value; }
+            get { return ControlName; }
+            set { ControlName = value; }
         }
-
-        string IDashboardControl.Value
-        {
-            get
-            {
-                return Value.ToString();
-            }
-            set
-            {
-                Value = float.Parse(value);
-            }
-        }
-
-        void IDashboardControl.Update()
+        public override void UpdateControl(string value)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(Update));
+                this.Invoke(new UpdaterDelegate(UpdateControl));
             }
             else
             {
+                this.Value = float.Parse(value);
                 this.Invalidate();
-            }
-        }
-
-
-        string IDashboardControl.DefalutValue
-        {
-            get
-            {
-                return Value.ToString();
             }
         }
 
         #endregion 
         private Color circleColor = Color.PaleGreen;
-        [DefaultValue("PaleGreen"), Category("ZomB"), Description("Color of the Circle")]
+        [DefaultValue(typeof(Color),"PaleGreen"), Category("ZomB"), Description("Color of the Circle")]
         public Color CircleColor
         {
             get
@@ -141,7 +110,7 @@ namespace System451.Communication.Dashboard
         }
 
         private Color arrowColor = Color.SlateGray;
-        [DefaultValue("SlateGray"), Category("ZomB"), Description("Color of the Arrow")]
+        [DefaultValue(typeof(Color), "SlateGray"), Category("ZomB"), Description("Color of the Arrow")]
         public Color ArrowColor
         {
             get
@@ -175,7 +144,7 @@ namespace System451.Communication.Dashboard
 
         }
         private Color guidesColor = Color.Black;
-        [DefaultValue("Black"), Category("ZomB"), Description("Color of the Guides")]
+        [DefaultValue(typeof(Color), "Black"), Category("ZomB"), Description("Color of the Guides")]
         public Color GuidesColor
         {
             get

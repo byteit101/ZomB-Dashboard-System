@@ -31,9 +31,9 @@ using System.Collections.ObjectModel;
 
 namespace System451.Communication.Dashboard
 {
-    public partial class CameraView : UserControl, ISavableZomBData, IDashboardControl
+    public partial class CameraView : UserControl, ISavableZomBData, IZomBControlGroup
     {
-        Collection<string> paramName = new Collection<string>();
+        ZomBControlCollection targs = new ZomBControlCollection();
         Image view;
         Receiver Receiver;
         delegate void UpdaterDelegate();
@@ -43,7 +43,6 @@ namespace System451.Communication.Dashboard
             view = new Bitmap(10, 10);
             EnableAutoReset = false;
             InitializeComponent();
-            paramName.Add("target1");
             if (!this.DesignMode)
             {
                 Receiver = null;
@@ -137,8 +136,9 @@ namespace System451.Communication.Dashboard
 
                     using (Brush br = new SolidBrush(TargetFillColor))
                     {
-                        foreach (TargetInfo target in Targets)
+                        foreach (KeyValuePair<string,IZomBControl> ttarget in Targets)
                         {
+                            TargetInfo target = (TargetInfo)((object)ttarget);
                             if (!target.Target.IsEmpty)
                             {
                                 PointF[] pts = new PointF[] { new PointF(target.Target.Top, target.Target.Left),
@@ -155,90 +155,6 @@ namespace System451.Communication.Dashboard
                     }
                 }
             }
-        }
-        private Collection<TargetInfo> balls = new Collection<TargetInfo>();
-        [Category("ZomB"), Description("Target Location")]
-        public Collection<TargetInfo> Targets
-        {
-            get { return balls; }
-            //set { balls = value; }
-        }
-        public Collection<IDashboardControl> GetTargets()
-        {
-            Collection<IDashboardControl> retu = new Collection<IDashboardControl>();
-            foreach (TargetInfo targ in Targets)
-            {
-                retu.Add(targ);
-            }
-            return retu;
-        }
-
-        #region IDashboardControl Members
-
-        string[] IDashboardControl.ParamName
-        {
-            get
-            {
-                string[] tmp = new string[BindToInput.Count];
-                BindToInput.CopyTo(tmp, 0);
-                return tmp;
-            }
-            set
-            {
-                //BindToInput = value;
-            }
-        }
-
-        string IDashboardControl.Value
-        {
-            get
-            {
-                return Targets.ToString();
-            }
-            set
-            {
-                //Targets = RectParse(value);
-            }
-        }
-
-        private RectangleF RectParse(string value)
-        {
-            RectangleF rf = new RectangleF();
-            if (value != null && value != "")
-            {
-                //format widthxheigth+xpos,ypos
-                rf.Width = float.Parse(value.Substring(0, value.IndexOf('x')));
-                rf.Height = float.Parse(value.Substring(value.IndexOf('x') + 1, (value.IndexOf('+') - (value.IndexOf('x') + 1))));
-                rf.X = float.Parse(value.Substring(value.IndexOf('+') + 1, (value.IndexOf(',') - (value.IndexOf('+') + 1))));
-                rf.Y = float.Parse(value.Substring(value.IndexOf(',') + 1));
-            }
-            return rf;
-        }
-
-        string IDashboardControl.DefalutValue
-        {
-            get { return ""; }
-        }
-
-        void IDashboardControl.Update()
-        {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(new UpdaterDelegate(Update));
-            }
-            else
-            {
-                this.Invalidate();
-            }
-        }
-
-        #endregion
-
-        [DefaultValue("target1"), Category("ZomB"), Description("What this control will get the value of from the packet Data")]
-        public Collection<string> BindToInput
-        {
-            get { return paramName; }
-            //set { paramName = value; }
         }
         private Color boxColor = Color.Green;
         [DefaultValue(typeof(Color), "Green"), Category("ZomB"), Description("Target bounding box color")]
@@ -262,6 +178,19 @@ namespace System451.Communication.Dashboard
         {
             get { return fillColor; }
             set { fillColor = value; }
+        }
+
+        [DefaultValue(true), Category("ZomB"), Description("Show the Auto-Reset check box?")]
+        public bool ShowAutoReset
+        {
+            get { return checkBox1.Visible; }
+            set { checkBox1.Visible = value; }
+        }
+
+        [Category("ZomB"), Description("The Targets")]
+        public ZomBControlCollection Targets
+        {
+            get { return targs; }
         }
 
         // ticks every 1750ms
@@ -314,8 +243,17 @@ namespace System451.Communication.Dashboard
         {
             timer1.Enabled = EnableAutoReset = checkBox1.Checked;
         }
+
+        #region IZomBControlGroup Members
+
+        ZomBControlCollection IZomBControlGroup.GetControls()
+        {
+            return this.targs;
+        }
+
+        #endregion
     }
-    public class TargetInfo : IDashboardControl
+    public class TargetInfo : IZomBControl
     {
 
         public TargetInfo()
@@ -324,7 +262,7 @@ namespace System451.Communication.Dashboard
         }
         public TargetInfo(string parm)
         {
-            ParamName = new string[] { parm };
+            ControlName = parm;
         }
 
         private RectangleF itarget;
@@ -335,25 +273,7 @@ namespace System451.Communication.Dashboard
         }
 
 
-        #region IDashboardControl Members
 
-        public string[] ParamName
-        {
-            get;
-            set;
-        }
-
-        public string Value
-        {
-            get
-            {
-                return Target.ToString();
-            }
-            set
-            {
-                Target = RectParse(value);
-            }
-        }
 
         private RectangleF RectParse(string value)
         {
@@ -369,13 +289,35 @@ namespace System451.Communication.Dashboard
             return rf;
         }
 
-        public string DefalutValue
-        {
-            get { return ""; }
-        }
-        public void Update()
-        {
 
+
+        #region IZomBControl Members
+
+        public bool RequiresAllData
+        {
+            get { return false; }
+        }
+
+        public bool IsMultiWatch
+        {
+            get { return false; }
+        }
+
+        public string ControlName
+        {
+            get;
+            set;
+        }
+
+        public void UpdateControl(string value, byte[] packetData)
+        {
+            Target = RectParse(value);
+
+        }
+
+        public void ControlAdded(object sender, ZomBControlAddedEventArgs e)
+        {
+            
         }
 
         #endregion

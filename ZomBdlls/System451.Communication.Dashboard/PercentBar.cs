@@ -25,11 +25,11 @@ using System.Windows.Forms;
 
 namespace System451.Communication.Dashboard
 {
-    public partial class PercentBar : Control, IDashboardControl
+    public partial class PercentBar : ZomBControl
     {
         float speedval;
 
-        delegate void UpdaterDelegate();
+        delegate void UpdaterDelegate(string value);
         public PercentBar()
         {
             Max = 100;
@@ -41,7 +41,7 @@ namespace System451.Communication.Dashboard
         {
             get
             {
-                return (float)Math.Round((speedval / 100.0) * (Max - Min) + Min,5);
+                return (float)Math.Round((speedval / 100.0) * (Max - Min) + Min, 5);
             }
             set
             {
@@ -96,59 +96,22 @@ namespace System451.Communication.Dashboard
             }
         }
 
-        #region IDashboardControl Members
-
-        string[] IDashboardControl.ParamName
-        {
-            get
-            {
-                return new string[] { BindToInput };
-            }
-            set
-            {
-                BindToInput = value[0];
-            }
-        }
-        [DefaultValue("digi1"), Category("ZomB"), Description("What this control will get the value of from the packet Data")]
+        [Obsolete("Use Control Name"), Category("ZomB"), Description("[OBSOLETE] What this control will get the value of from the packet Data")]
         public string BindToInput
         {
-            get;
-            set;
+            get { return ControlName; }
+            set { ControlName = value; }
         }
-
-        string IDashboardControl.Value
-        {
-            get
-            {
-                return Value.ToString();
-            }
-            set
-            {
-                Value = float.Parse(value);
-            }
-        }
-
-        void IDashboardControl.Update()
+        public override void UpdateControl(string value)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(Update));
+                this.Invoke(new UpdaterDelegate(UpdateControl));
             }
             else
             {
-                this.Invalidate();
+                this.Value = float.Parse(value);
             }
         }
-
-
-        string IDashboardControl.DefalutValue
-        {
-            get
-            {
-                return Value.ToString();
-            }
-        }
-
-        #endregion
     }
 }

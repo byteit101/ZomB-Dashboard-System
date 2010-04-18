@@ -29,16 +29,16 @@ using System.Windows.Forms;
 namespace System451.Communication.Dashboard
 {
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.OnOff.png")]
-    public partial class OnOffControl : UserControl, IDashboardControl
+    public partial class OnOffControl : ZomBControl
     {
         bool speedval = false;
-        string paramName = "digi1";
-        delegate void UpdaterDelegate();
+        delegate void UpdaterDelegate(string value);
 
         public OnOffControl()
         {
             InitializeComponent();
 
+            ControlName = "digital1";
         }
         [DefaultValue("0"), Category("ZomB"), Description("The Value of the bool")]
         public bool Value
@@ -55,32 +55,19 @@ namespace System451.Communication.Dashboard
         }
 
 
-        #region IDashboardControl Members
-        string[] IDashboardControl.ParamName
-        {
-            get
-            {
-                return new string[] { BindToInput };
-            }
-            set
-            {
-                BindToInput = value[0];
-            }
-        }
-        [DefaultValue("digi1"), Category("ZomB"), Description("What this control will get the value of from the packet Data")]
+        [Obsolete("Use Control Name"), Category("ZomB"), Description("[OBSOLETE] What this control will get the value of from the packet Data")]
         public string BindToInput
         {
-            get { return paramName; }
-            set { paramName = value; }
+            get { return ControlName; }
+            set { ControlName = value; }
         }
-
-        string IDashboardControl.Value
+        public override void UpdateControl(string value)
         {
-            get
+            if (this.InvokeRequired)
             {
-                return Value.ToString();
+                this.Invoke(new UpdaterDelegate(UpdateControl));
             }
-            set
+            else
             {
                 if (value == "0" || value == "1")
                     Value = int.Parse(value) == 0 ? false : true;
@@ -88,29 +75,6 @@ namespace System451.Communication.Dashboard
                     Value = bool.Parse(value);
             }
         }
-
-        void IDashboardControl.Update()
-        {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(new UpdaterDelegate(Update));
-            }
-            else
-            {
-                this.Invalidate();
-            }
-        }
-
-
-        string IDashboardControl.DefalutValue
-        {
-            get
-            {
-                return Value.ToString();
-            }
-        }
-
-        #endregion
 
         private void OnOffControl_Paint(object sender, PaintEventArgs e)
         {
@@ -133,16 +97,15 @@ namespace System451.Communication.Dashboard
         }
     }
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.OnOff.png")]
-    public partial class AlertControl : UserControl, IDashboardControl
+    public partial class AlertControl : ZomBControl
     {
         bool speedval = false;
-        string paramName = "digi1";
-        delegate void UpdaterDelegate();
+        delegate void UpdaterDelegate(string value);
 
         public AlertControl()
         {
             InitializeComponent();
-
+            ControlName = "alert1";
         }
         [DefaultValue("0"), Category("ZomB"), Description("The Value of the bool")]
         public bool Value
@@ -159,32 +122,19 @@ namespace System451.Communication.Dashboard
         }
 
 
-        #region IDashboardControl Members
-        string[] IDashboardControl.ParamName
-        {
-            get
-            {
-                return new string[] { BindToInput };
-            }
-            set
-            {
-                BindToInput = value[0];
-            }
-        }
-        [DefaultValue("digi1"), Category("ZomB"), Description("What this control will get the value of from the packet Data")]
+       [Obsolete("Use Control Name"), Category("ZomB"), Description("[OBSOLETE] What this control will get the value of from the packet Data")]
         public string BindToInput
         {
-            get { return paramName; }
-            set { paramName = value; }
+            get { return ControlName; }
+            set { ControlName = value; }
         }
-
-        string IDashboardControl.Value
+        public override void UpdateControl(string value)
         {
-            get
+            if (this.InvokeRequired)
             {
-                return Value.ToString();
+                this.Invoke(new UpdaterDelegate(UpdateControl));
             }
-            set
+            else
             {
                 if (value == "0" || value == "1")
                     Value = int.Parse(value) == 0 ? false : true;
@@ -192,30 +142,7 @@ namespace System451.Communication.Dashboard
                     Value = bool.Parse(value);
             }
         }
-
-        void IDashboardControl.Update()
-        {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(new UpdaterDelegate(Update));
-            }
-            else
-            {
-                this.Invalidate();
-            }
-        }
-
-
-        string IDashboardControl.DefalutValue
-        {
-            get
-            {
-                return Value.ToString();
-            }
-        }
-
-        #endregion
-
+             
         private void OnOffControl_Paint(object sender, PaintEventArgs e)
         {
             if (Value)
@@ -235,16 +162,15 @@ namespace System451.Communication.Dashboard
         Reverse = -1
     };
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.Spike.png")]
-    public partial class SpikeControl : UserControl, IDashboardControl
+    public partial class SpikeControl : ZomBControl
     {
         SpikePositions speedval = SpikePositions.Off;
-        string paramName = "spk1";
-        delegate void UpdaterDelegate();
+        delegate void UpdaterDelegate(string value);
 
         public SpikeControl()
         {
             InitializeComponent();
-
+            ControlName = "spike1";
         }
         [DefaultValue("Off"), Category("ZomB"), Description("The Value of the Spike")]
         public SpikePositions Value
@@ -261,59 +187,23 @@ namespace System451.Communication.Dashboard
         }
 
 
-        #region IDashboardControl Members
-        string[] IDashboardControl.ParamName
-        {
-            get
-            {
-                return new string[] { BindToInput };
-            }
-            set
-            {
-                BindToInput = value[0];
-            }
-        }
-        [DefaultValue("spk1"), Category("ZomB"), Description("What this control will get the value of from the packet Data")]
+        [Obsolete("Use Control Name"), Category("ZomB"), Description("[OBSOLETE] What this control will get the value of from the packet Data")]
         public string BindToInput
         {
-            get { return paramName; }
-            set { paramName = value; }
+            get { return ControlName; }
+            set { ControlName = value; }
         }
-
-        string IDashboardControl.Value
+        public override void UpdateControl(string value)
         {
-            get
+            if (this.InvokeRequired)
             {
-                return Value.ToString();
+                this.Invoke(new UpdaterDelegate(UpdateControl));
             }
-            set
+            else
             {
                 Value = (SpikePositions)int.Parse(value);
             }
         }
-
-        void IDashboardControl.Update()
-        {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(new UpdaterDelegate(Update));
-            }
-            else
-            {
-                this.Invalidate();
-            }
-        }
-
-
-        string IDashboardControl.DefalutValue
-        {
-            get
-            {
-                return ((int)Value).ToString();
-            }
-        }
-
-        #endregion
 
         private void SpikeControl_Paint(object sender, PaintEventArgs e)
         {

@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalogMeter.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="AnalogMeter.Designer.cs">
       <DependentUpon>AnalogMeter.cs</DependentUpon>
@@ -63,7 +63,9 @@
     <Compile Include="DashboardDataHub.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DashboardControl.cs" />
+    <Compile Include="DashboardControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DashboardDataHubForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,7 +73,7 @@
       <DependentUpon>DashboardDataHubForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DataGraph.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="DataGraph.Designer.cs">
       <DependentUpon>DataGraph.cs</DependentUpon>
@@ -86,13 +88,13 @@
       <DependentUpon>Default Dashboard.cs</DependentUpon>
     </Compile>
     <Compile Include="DirectionMeter.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="DirectionMeter.Designer.cs">
       <DependentUpon>DirectionMeter.cs</DependentUpon>
     </Compile>
     <Compile Include="DistanceMeter.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="DistanceMeter.Designer.cs">
       <DependentUpon>DistanceMeter.cs</DependentUpon>
@@ -106,13 +108,13 @@
     <Compile Include="FTP.cs" />
     <Compile Include="IDataSave.cs" />
     <Compile Include="MessageDisp.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="MessageDisp.Designer.cs">
       <DependentUpon>MessageDisp.cs</DependentUpon>
     </Compile>
     <Compile Include="OnOffControl.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="OnOffControl.Designer.cs">
       <DependentUpon>OnOffControl.cs</DependentUpon>
@@ -137,7 +139,7 @@
     </Compile>
     <Compile Include="Receiver.cs" />
     <Compile Include="RoundSpeedMeter.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="RoundSpeedMeter.Designer.cs">
       <DependentUpon>RoundSpeedMeter.cs</DependentUpon>
@@ -146,7 +148,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TacoMeter.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="TacoMeter.Designer.cs">
       <DependentUpon>TacoMeter.cs</DependentUpon>

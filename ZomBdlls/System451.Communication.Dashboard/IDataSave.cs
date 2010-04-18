@@ -24,7 +24,7 @@ using System.ComponentModel;
 namespace System451.Communication.Dashboard
 {
     //TODO: Savable has no benifits from inheritence YET
-    public interface ISavableZomBData : IDashboardControl
+    public interface ISavableZomBData// : IDashboardControl
     {
         /// <summary>
         /// Gets the TypeConverter for this data type

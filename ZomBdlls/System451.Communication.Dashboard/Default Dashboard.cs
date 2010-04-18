@@ -33,40 +33,40 @@ namespace System451.Communication.Dashboard
         public Default_Dashboard()
         {
             InitializeComponent();
-            dashboardDataHub1.AddDashboardControl(distanceMeter1);
-            dashboardDataHub1.AddDashboardControl(messageDisp1);
-            dashboardDataHub1.AddDashboardControl(roundSpeedMeter1);
-            dashboardDataHub1.AddDashboardControl(roundSpeedMeter10);
-            dashboardDataHub1.AddDashboardControl(roundSpeedMeter2);
-            dashboardDataHub1.AddDashboardControl(roundSpeedMeter3);
-            dashboardDataHub1.AddDashboardControl(roundSpeedMeter4);
-            dashboardDataHub1.AddDashboardControl(roundSpeedMeter5);
-            dashboardDataHub1.AddDashboardControl(roundSpeedMeter6);
-            dashboardDataHub1.AddDashboardControl(roundSpeedMeter7);
-            dashboardDataHub1.AddDashboardControl(roundSpeedMeter8);
-            dashboardDataHub1.AddDashboardControl(roundSpeedMeter9);
-            dashboardDataHub1.AddDashboardControl(onOffControl1);
-            dashboardDataHub1.AddDashboardControl(onOffControl10);
-            dashboardDataHub1.AddDashboardControl(onOffControl11);
-            dashboardDataHub1.AddDashboardControl(onOffControl12);
-            dashboardDataHub1.AddDashboardControl(onOffControl13);
-            dashboardDataHub1.AddDashboardControl(onOffControl14);
-            dashboardDataHub1.AddDashboardControl(onOffControl2);
-            dashboardDataHub1.AddDashboardControl(onOffControl3);
-            dashboardDataHub1.AddDashboardControl(onOffControl4);
-            dashboardDataHub1.AddDashboardControl(onOffControl5);
-            dashboardDataHub1.AddDashboardControl(onOffControl6);
-            dashboardDataHub1.AddDashboardControl(onOffControl8);
-            dashboardDataHub1.AddDashboardControl(onOffControl9);
-            dashboardDataHub1.AddDashboardControl(onOffControl7);
-            dashboardDataHub1.AddDashboardControl(analogMeter1);
-            dashboardDataHub1.AddDashboardControl(analogMeter2);
-            dashboardDataHub1.AddDashboardControl(analogMeter3);
-            dashboardDataHub1.AddDashboardControl(analogMeter4);
-            dashboardDataHub1.AddDashboardControl(analogMeter5);
-            dashboardDataHub1.AddDashboardControl(analogMeter6);
-            dashboardDataHub1.AddDashboardControl(analogMeter7);
-            dashboardDataHub1.AddDashboardControl(analogMeter8);
+            dashboardDataHub1.Add(distanceMeter1);
+            dashboardDataHub1.Add(messageDisp1);
+            dashboardDataHub1.Add(roundSpeedMeter1);
+            dashboardDataHub1.Add(roundSpeedMeter10);
+            dashboardDataHub1.Add(roundSpeedMeter2);
+            dashboardDataHub1.Add(roundSpeedMeter3);
+            dashboardDataHub1.Add(roundSpeedMeter4);
+            dashboardDataHub1.Add(roundSpeedMeter5);
+            dashboardDataHub1.Add(roundSpeedMeter6);
+            dashboardDataHub1.Add(roundSpeedMeter7);
+            dashboardDataHub1.Add(roundSpeedMeter8);
+            dashboardDataHub1.Add(roundSpeedMeter9);
+            dashboardDataHub1.Add(onOffControl1);
+            dashboardDataHub1.Add(onOffControl10);
+            dashboardDataHub1.Add(onOffControl11);
+            dashboardDataHub1.Add(onOffControl12);
+            dashboardDataHub1.Add(onOffControl13);
+            dashboardDataHub1.Add(onOffControl14);
+            dashboardDataHub1.Add(onOffControl2);
+            dashboardDataHub1.Add(onOffControl3);
+            dashboardDataHub1.Add(onOffControl4);
+            dashboardDataHub1.Add(onOffControl5);
+            dashboardDataHub1.Add(onOffControl6);
+            dashboardDataHub1.Add(onOffControl8);
+            dashboardDataHub1.Add(onOffControl9);
+            dashboardDataHub1.Add(onOffControl7);
+            dashboardDataHub1.Add(analogMeter1);
+            dashboardDataHub1.Add(analogMeter2);
+            dashboardDataHub1.Add(analogMeter3);
+            dashboardDataHub1.Add(analogMeter4);
+            dashboardDataHub1.Add(analogMeter5);
+            dashboardDataHub1.Add(analogMeter6);
+            dashboardDataHub1.Add(analogMeter7);
+            dashboardDataHub1.Add(analogMeter8);
 
         }
 
@@ -77,7 +77,7 @@ namespace System451.Communication.Dashboard
 
         private void button1_Click(object sender, EventArgs e)
         {
-            dashboardDataHub1.StartRecieving();
+            dashboardDataHub1.Start();
             button1.Enabled = false;
             button1.Text = "Recieving Dashboard Data on Port 1165...";
         }

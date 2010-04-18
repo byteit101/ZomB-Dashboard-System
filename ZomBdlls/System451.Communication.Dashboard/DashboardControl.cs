@@ -20,8 +20,10 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Collections.ObjectModel;
+using System.Text;
+using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace System451.Communication.Dashboard
 {
@@ -119,7 +121,7 @@ namespace System451.Communication.Dashboard
     /// <summary>
     /// A default implementation of the IZomBControl so you don't have to do boring work
     /// </summary>
-    public class ZomBControl : IZomBControl
+    public class ZomBControl : Control, IZomBControl
     {
         DashboardDataHub localDDH;
 
@@ -152,11 +154,11 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// The control name. This needs to be implemented.
         /// </summary>
-        /// <exception cref="System.NotImplementedException">Always throws NotImplementedException</exception>
+        [Category("ZomB"), Description("What this control will get the value of from the packet Data")]
         virtual public string ControlName
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get;
+            set;
         }
 
         /// <summary>
@@ -180,7 +182,7 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// When this control is added to a DashboardDataHub
         /// </summary>
-        public event ControlAddedDelegate ControlAdded;
+        new public event ControlAddedDelegate ControlAdded;
 
         void IZomBControl.ControlAdded(object sender, ZomBControlAddedEventArgs e)
         {

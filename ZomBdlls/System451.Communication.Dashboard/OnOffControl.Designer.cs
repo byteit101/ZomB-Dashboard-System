@@ -33,8 +33,6 @@
             // 
             // OnOffControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.DoubleBuffered = true;
             this.Name = "OnOffControl";
             this.Size = new System.Drawing.Size(25, 25);
@@ -77,8 +75,6 @@
             // 
             // OnOffControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.DoubleBuffered = true;
             this.Name = "AlertControl";
             this.Size = new System.Drawing.Size(50, 25);
@@ -122,9 +118,7 @@
             // 
             // OnOffControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Name = "OnOffControl";
+            this.Name = "SpikeControl";
             this.Size = new System.Drawing.Size(25, 25);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.SpikeControl_Paint);
             this.ResumeLayout(false);

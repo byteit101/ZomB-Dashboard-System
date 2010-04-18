@@ -28,7 +28,7 @@ using System.IO;
 
 namespace System451.Communication.Dashboard
 {
-    class DataSaver:Control,IDashboardControl
+    class DataSaver:Control, IZomBMonitor
     {
         string paramName = "DataSave1";
         Collection<string> buffer = new Collection<string>();
@@ -116,41 +116,18 @@ namespace System451.Communication.Dashboard
         }
 
 
-        #region IDashboardControl Members
 
-        string[] IDashboardControl.ParamName
-        {
-            get
-            {
-                return new string[] { BindToInput };
-            }
-            set
-            {
-                BindToInput = value[0];
-            }
-        }
+        #region IZomBMonitor Members
 
-        string IDashboardControl.Value
-        {
-            get
-            {
-                return "";
-            }
-            set
-            {
-                if (value!="" && value!=null)
-                this.AddValue(value);
-            }
-        }
-
-        string IDashboardControl.DefalutValue
-        {
-            get { return null; }
-        }
-
-        void IDashboardControl.Update()
+        public void UpdateStatus(FRCDSStatus status)
         {
             
+        }
+
+        public void UpdateData(Dictionary<string, string> data, byte[] packetData)
+        {
+#warning Implement this
+            //TODO: IMplement this
         }
 
         #endregion

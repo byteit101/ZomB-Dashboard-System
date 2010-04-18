@@ -201,7 +201,7 @@
             // 
             // onOffControl14
             // 
-            this.onOffControl14.BindToInput = "gpio14";
+            this.onOffControl14.ControlName = "gpio14";
             this.onOffControl14.Location = new System.Drawing.Point(204, 114);
             this.onOffControl14.Name = "onOffControl14";
             this.onOffControl14.Size = new System.Drawing.Size(15, 15);
@@ -210,7 +210,7 @@
             // 
             // onOffControl13
             // 
-            this.onOffControl13.BindToInput = "gpio13";
+            this.onOffControl13.ControlName = "gpio13";
             this.onOffControl13.Location = new System.Drawing.Point(189, 114);
             this.onOffControl13.Name = "onOffControl13";
             this.onOffControl13.Size = new System.Drawing.Size(15, 15);
@@ -219,7 +219,7 @@
             // 
             // onOffControl7
             // 
-            this.onOffControl7.BindToInput = "gpio7";
+            this.onOffControl7.ControlName = "gpio7";
             this.onOffControl7.Location = new System.Drawing.Point(99, 114);
             this.onOffControl7.Name = "onOffControl7";
             this.onOffControl7.Size = new System.Drawing.Size(15, 15);
@@ -228,7 +228,7 @@
             // 
             // onOffControl12
             // 
-            this.onOffControl12.BindToInput = "gpio12";
+            this.onOffControl12.ControlName = "gpio12";
             this.onOffControl12.Location = new System.Drawing.Point(174, 114);
             this.onOffControl12.Name = "onOffControl12";
             this.onOffControl12.Size = new System.Drawing.Size(15, 15);
@@ -237,7 +237,7 @@
             // 
             // onOffControl6
             // 
-            this.onOffControl6.BindToInput = "gpio6";
+            this.onOffControl6.ControlName = "gpio6";
             this.onOffControl6.Location = new System.Drawing.Point(84, 114);
             this.onOffControl6.Name = "onOffControl6";
             this.onOffControl6.Size = new System.Drawing.Size(15, 15);
@@ -246,7 +246,7 @@
             // 
             // onOffControl11
             // 
-            this.onOffControl11.BindToInput = "gpio11";
+            this.onOffControl11.ControlName = "gpio11";
             this.onOffControl11.Location = new System.Drawing.Point(159, 114);
             this.onOffControl11.Name = "onOffControl11";
             this.onOffControl11.Size = new System.Drawing.Size(15, 15);
@@ -255,7 +255,7 @@
             // 
             // onOffControl5
             // 
-            this.onOffControl5.BindToInput = "gpio5";
+            this.onOffControl5.ControlName = "gpio5";
             this.onOffControl5.Location = new System.Drawing.Point(69, 114);
             this.onOffControl5.Name = "onOffControl5";
             this.onOffControl5.Size = new System.Drawing.Size(15, 15);
@@ -264,7 +264,7 @@
             // 
             // onOffControl10
             // 
-            this.onOffControl10.BindToInput = "gpio10";
+            this.onOffControl10.ControlName = "gpio10";
             this.onOffControl10.Location = new System.Drawing.Point(144, 114);
             this.onOffControl10.Name = "onOffControl10";
             this.onOffControl10.Size = new System.Drawing.Size(15, 15);
@@ -273,7 +273,7 @@
             // 
             // onOffControl4
             // 
-            this.onOffControl4.BindToInput = "gpio4";
+            this.onOffControl4.ControlName = "gpio4";
             this.onOffControl4.Location = new System.Drawing.Point(54, 114);
             this.onOffControl4.Name = "onOffControl4";
             this.onOffControl4.Size = new System.Drawing.Size(15, 15);
@@ -282,7 +282,7 @@
             // 
             // onOffControl9
             // 
-            this.onOffControl9.BindToInput = "gpio9";
+            this.onOffControl9.ControlName = "gpio9";
             this.onOffControl9.Location = new System.Drawing.Point(129, 114);
             this.onOffControl9.Name = "onOffControl9";
             this.onOffControl9.Size = new System.Drawing.Size(15, 15);
@@ -291,7 +291,7 @@
             // 
             // onOffControl3
             // 
-            this.onOffControl3.BindToInput = "gpio3";
+            this.onOffControl3.ControlName = "gpio3";
             this.onOffControl3.Location = new System.Drawing.Point(39, 114);
             this.onOffControl3.Name = "onOffControl3";
             this.onOffControl3.Size = new System.Drawing.Size(15, 15);
@@ -300,7 +300,7 @@
             // 
             // onOffControl8
             // 
-            this.onOffControl8.BindToInput = "gpio8";
+            this.onOffControl8.ControlName = "gpio8";
             this.onOffControl8.Location = new System.Drawing.Point(114, 114);
             this.onOffControl8.Name = "onOffControl8";
             this.onOffControl8.Size = new System.Drawing.Size(15, 15);
@@ -309,7 +309,7 @@
             // 
             // onOffControl2
             // 
-            this.onOffControl2.BindToInput = "gpio2";
+            this.onOffControl2.ControlName = "gpio2";
             this.onOffControl2.Location = new System.Drawing.Point(24, 114);
             this.onOffControl2.Name = "onOffControl2";
             this.onOffControl2.Size = new System.Drawing.Size(15, 15);
@@ -318,7 +318,7 @@
             // 
             // onOffControl1
             // 
-            this.onOffControl1.BindToInput = "gpio1";
+            this.onOffControl1.ControlName = "gpio1";
             this.onOffControl1.Location = new System.Drawing.Point(9, 114);
             this.onOffControl1.Name = "onOffControl1";
             this.onOffControl1.Size = new System.Drawing.Size(15, 15);
@@ -327,7 +327,7 @@
             // 
             // roundSpeedMeter10
             // 
-            this.roundSpeedMeter10.BindToInput = "pwm10";
+            this.roundSpeedMeter10.ControlName = "pwm10";
             this.roundSpeedMeter10.Location = new System.Drawing.Point(170, 58);
             this.roundSpeedMeter10.Name = "roundSpeedMeter10";
             this.roundSpeedMeter10.Size = new System.Drawing.Size(35, 33);
@@ -336,7 +336,7 @@
             // 
             // roundSpeedMeter9
             // 
-            this.roundSpeedMeter9.BindToInput = "pwm9";
+            this.roundSpeedMeter9.ControlName = "pwm9";
             this.roundSpeedMeter9.Location = new System.Drawing.Point(129, 58);
             this.roundSpeedMeter9.Name = "roundSpeedMeter9";
             this.roundSpeedMeter9.Size = new System.Drawing.Size(35, 33);
@@ -345,7 +345,7 @@
             // 
             // roundSpeedMeter5
             // 
-            this.roundSpeedMeter5.BindToInput = "pwm5";
+            this.roundSpeedMeter5.ControlName = "pwm5";
             this.roundSpeedMeter5.Location = new System.Drawing.Point(170, 19);
             this.roundSpeedMeter5.Name = "roundSpeedMeter5";
             this.roundSpeedMeter5.Size = new System.Drawing.Size(35, 33);
@@ -354,7 +354,7 @@
             // 
             // roundSpeedMeter8
             // 
-            this.roundSpeedMeter8.BindToInput = "pwm8";
+            this.roundSpeedMeter8.ControlName = "pwm8";
             this.roundSpeedMeter8.Location = new System.Drawing.Point(88, 58);
             this.roundSpeedMeter8.Name = "roundSpeedMeter8";
             this.roundSpeedMeter8.Size = new System.Drawing.Size(35, 33);
@@ -363,7 +363,7 @@
             // 
             // roundSpeedMeter4
             // 
-            this.roundSpeedMeter4.BindToInput = "pwm4";
+            this.roundSpeedMeter4.ControlName = "pwm4";
             this.roundSpeedMeter4.Location = new System.Drawing.Point(129, 19);
             this.roundSpeedMeter4.Name = "roundSpeedMeter4";
             this.roundSpeedMeter4.Size = new System.Drawing.Size(35, 33);
@@ -372,7 +372,7 @@
             // 
             // roundSpeedMeter7
             // 
-            this.roundSpeedMeter7.BindToInput = "pwm7";
+            this.roundSpeedMeter7.ControlName = "pwm7";
             this.roundSpeedMeter7.Location = new System.Drawing.Point(47, 58);
             this.roundSpeedMeter7.Name = "roundSpeedMeter7";
             this.roundSpeedMeter7.Size = new System.Drawing.Size(35, 33);
@@ -381,7 +381,7 @@
             // 
             // roundSpeedMeter3
             // 
-            this.roundSpeedMeter3.BindToInput = "pwm3";
+            this.roundSpeedMeter3.ControlName = "pwm3";
             this.roundSpeedMeter3.Location = new System.Drawing.Point(88, 19);
             this.roundSpeedMeter3.Name = "roundSpeedMeter3";
             this.roundSpeedMeter3.Size = new System.Drawing.Size(35, 33);
@@ -390,7 +390,7 @@
             // 
             // roundSpeedMeter6
             // 
-            this.roundSpeedMeter6.BindToInput = "pwm6";
+            this.roundSpeedMeter6.ControlName = "pwm6";
             this.roundSpeedMeter6.Location = new System.Drawing.Point(6, 58);
             this.roundSpeedMeter6.Name = "roundSpeedMeter6";
             this.roundSpeedMeter6.Size = new System.Drawing.Size(35, 33);
@@ -399,7 +399,7 @@
             // 
             // roundSpeedMeter2
             // 
-            this.roundSpeedMeter2.BindToInput = "pwm2";
+            this.roundSpeedMeter2.ControlName = "pwm2";
             this.roundSpeedMeter2.Location = new System.Drawing.Point(47, 19);
             this.roundSpeedMeter2.Name = "roundSpeedMeter2";
             this.roundSpeedMeter2.Size = new System.Drawing.Size(35, 33);
@@ -416,7 +416,7 @@
             // 
             // distanceMeter1
             // 
-            this.distanceMeter1.BindToInput = "batt";
+            this.distanceMeter1.ControlName = "batt";
             this.distanceMeter1.DistanceColor = System.Drawing.Color.Peru;
             this.distanceMeter1.Location = new System.Drawing.Point(6, 19);
             this.distanceMeter1.Name = "distanceMeter1";
@@ -428,7 +428,7 @@
             // 
             this.analogMeter8.ArrowColor = System.Drawing.Color.SlateGray;
             this.analogMeter8.ArrowWidth = 4F;
-            this.analogMeter8.BindToInput = "anlg8";
+            this.analogMeter8.ControlName = "anlg8";
             this.analogMeter8.CircleColor = System.Drawing.Color.PaleGreen;
             this.analogMeter8.GuidesColor = System.Drawing.Color.Black;
             this.analogMeter8.GuidesWidth = 1F;
@@ -443,7 +443,7 @@
             // 
             this.analogMeter7.ArrowColor = System.Drawing.Color.SlateGray;
             this.analogMeter7.ArrowWidth = 4F;
-            this.analogMeter7.BindToInput = "anlg7";
+            this.analogMeter7.ControlName = "anlg7";
             this.analogMeter7.CircleColor = System.Drawing.Color.PaleGreen;
             this.analogMeter7.GuidesColor = System.Drawing.Color.Black;
             this.analogMeter7.GuidesWidth = 1F;
@@ -458,7 +458,7 @@
             // 
             this.analogMeter6.ArrowColor = System.Drawing.Color.SlateGray;
             this.analogMeter6.ArrowWidth = 4F;
-            this.analogMeter6.BindToInput = "anlg6";
+            this.analogMeter6.ControlName = "anlg6";
             this.analogMeter6.CircleColor = System.Drawing.Color.PaleGreen;
             this.analogMeter6.GuidesColor = System.Drawing.Color.Black;
             this.analogMeter6.GuidesWidth = 1F;
@@ -473,7 +473,7 @@
             // 
             this.analogMeter5.ArrowColor = System.Drawing.Color.SlateGray;
             this.analogMeter5.ArrowWidth = 4F;
-            this.analogMeter5.BindToInput = "anlg5";
+            this.analogMeter5.ControlName = "anlg5";
             this.analogMeter5.CircleColor = System.Drawing.Color.PaleGreen;
             this.analogMeter5.GuidesColor = System.Drawing.Color.Black;
             this.analogMeter5.GuidesWidth = 1F;
@@ -488,7 +488,7 @@
             // 
             this.analogMeter4.ArrowColor = System.Drawing.Color.SlateGray;
             this.analogMeter4.ArrowWidth = 4F;
-            this.analogMeter4.BindToInput = "anlg4";
+            this.analogMeter4.ControlName = "anlg4";
             this.analogMeter4.CircleColor = System.Drawing.Color.PaleGreen;
             this.analogMeter4.GuidesColor = System.Drawing.Color.Black;
             this.analogMeter4.GuidesWidth = 1F;
@@ -503,7 +503,7 @@
             // 
             this.analogMeter3.ArrowColor = System.Drawing.Color.SlateGray;
             this.analogMeter3.ArrowWidth = 4F;
-            this.analogMeter3.BindToInput = "anlg3";
+            this.analogMeter3.ControlName = "anlg3";
             this.analogMeter3.CircleColor = System.Drawing.Color.PaleGreen;
             this.analogMeter3.GuidesColor = System.Drawing.Color.Black;
             this.analogMeter3.GuidesWidth = 1F;
@@ -518,7 +518,7 @@
             // 
             this.analogMeter2.ArrowColor = System.Drawing.Color.SlateGray;
             this.analogMeter2.ArrowWidth = 4F;
-            this.analogMeter2.BindToInput = "anlg2";
+            this.analogMeter2.ControlName = "anlg2";
             this.analogMeter2.CircleColor = System.Drawing.Color.PaleGreen;
             this.analogMeter2.GuidesColor = System.Drawing.Color.Black;
             this.analogMeter2.GuidesWidth = 1F;

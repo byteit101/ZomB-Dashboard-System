@@ -30,17 +30,18 @@ using System451.Communication.Dashboard.Properties;
 namespace System451.Communication.Dashboard
 {
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.Taco.png")]
-    public partial class TacoMeter  : UserControl, IDashboardControl
+    public partial class TacoMeter : ZomBControl
     {
         float speedval = 0;
-        string paramName = "taco";
-        delegate void UpdaterDelegate();
-        
+        delegate void UpdaterDelegate(string value);
+
         public TacoMeter()
         {
             InitializeComponent();
             speedval = 0;
+            ControlName = "taco";
         }
+
         [DefaultValue("0"), Category("ZomB"), Description("The Value of the taco Meter")]
         public float Value
         {
@@ -55,60 +56,25 @@ namespace System451.Communication.Dashboard
             }
         }
 
-
-        #region IDashboardControl Members
-        string[] IDashboardControl.ParamName
-        {
-            get
-            {
-                return new string[] { BindToInput };
-            }
-            set
-            {
-                BindToInput = value[0];
-            }
-        }
-        [DefaultValue("taco"), Category("ZomB"), Description("What this control will get the value of from the packet Data")]
+        [Obsolete("Use Control Name"), Category("ZomB"), Description("[OBSOLETE] What this control will get the value of from the packet Data")]
         public string BindToInput
         {
-            get { return paramName; }
-            set { paramName = value; }
+            get { return ControlName; }
+            set { ControlName = value; }
         }
 
-        string IDashboardControl.Value
-        {
-            get
-            {
-                return Value.ToString();
-            }
-            set
-            {
-                Value = float.Parse(value);
-            }
-        }
-
-        void IDashboardControl.Update()
+        public override void UpdateControl(string value)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(Update));
+                this.Invoke(new UpdaterDelegate(UpdateControl));
             }
             else
             {
-                this.Invalidate();
+                this.Value = float.Parse(value);
             }
         }
 
-
-        string IDashboardControl.DefalutValue
-        {
-            get
-            {
-                return Value.ToString();
-            }
-        }
-
-        #endregion
         private void TacoMeter_Paint(object sender, PaintEventArgs e)
         {
             if (Math.Abs(Value) > 1)
@@ -121,16 +87,14 @@ namespace System451.Communication.Dashboard
                     Value = (Value < -1) ? -1 : 1;
                 }
             }
+
             e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Bicubic;
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            e.Graphics.DrawImage(Resources.TacoShell, 0, 0, this.Width,this.Height);
-            //e.Graphics.Clear(this.BackColor);
+            e.Graphics.DrawImage(Resources.TacoShell, 0, 0, this.Width, this.Height);
             e.Graphics.ScaleTransform((float)this.Width / 400f, (float)this.Height / 300f);
-            
+
             using (TextureBrush fullTaco = new TextureBrush(Resources.TacoFull_small21))
                 e.Graphics.FillPie(fullTaco, 0f, 0f, 400f, 434f, -180f, (Value * 90f) + 90);
-
-            
         }
     }
 }

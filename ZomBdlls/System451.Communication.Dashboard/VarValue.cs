@@ -30,65 +30,50 @@ using System.Reflection;
 
 namespace System451.Communication.Dashboard
 {
-    public partial class VarValue : UserControl,IDashboardControl
+    public partial class VarValue : UserControl, IZomBControl
     {
         System.Collections.Generic.Dictionary<string, string> vrs = new Dictionary<string, string>();
 
-        delegate void UpdaterDelegate();
+        delegate void UpdaterDelegate(string value);
 
         public VarValue()
         {
             InitializeComponent();
             this.DoubleBuffered = true;
-            
-            
-        }
-        
 
-        #region IDashboardControl Members
-        [Browsable(false)]
-        public string[] ParamName
+
+        }
+
+        [Obsolete("Use Control Name"), Category("ZomB"), Description("[OBSOLETE] What this control will get the value of from the packet Data")]
+        public string BindToInput
+        {
+            get { return ControlName; }
+        }
+        public string ControlName
         {
             get
             {
-                return new string[]{"dbg"};
+                return "dbg";
             }
             set
             {
-               
+
             }
         }
 
-        [DefaultValue("")]
-        public string Value
+        public void UpdateControl(string value)
         {
-            get
+            if (this.InvokeRequired)
             {
-                return "";
+                this.Invoke(new UpdaterDelegate(UpdateControl));
             }
-            set
+            else
             {
                 if (value != "")
                 {
                     if (value.Contains(": "))
-                        vrs[value.Substring(0, value.IndexOf(": "))] = value.Substring(value.IndexOf(": ")+2);
+                        vrs[value.Substring(0, value.IndexOf(": "))] = value.Substring(value.IndexOf(": ") + 2);
                 }
-            }
-        }
-        
-
-        public string DefalutValue
-        {
-            get { return ""; }
-        }
-        new public void Update()
-        {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(new UpdaterDelegate(Update));
-            }
-            else
-            {
                 label1.Text = label2.Text = "";
                 foreach (KeyValuePair<string, string> kv in vrs)
                 {
@@ -97,19 +82,57 @@ namespace System451.Communication.Dashboard
                 }
                 label1.Text += " \r\n";
                 label2.Text += " \r\n";
-                base.Update();
+                this.Update();
             }
         }
-
-        #endregion
-
         private void panel1_Scroll(object sender, ScrollEventArgs e)
         {
             this.Invalidate();
         }
 
 
+
+        #region IZomBControl Members
+
+        public bool RequiresAllData
+        {
+            get { return true; }
+        }
+
+        public bool IsMultiWatch
+        {
+            get { return false; }
+        }
+
+        public void UpdateControl(string value, byte[] packetData)
+        {
+            ///FROM DDH///
+            //this needs to be tested, but should work
+            string Output = UTF7Encoding.UTF7.GetString(packetData);
+
+            //Find segment of data
+            if (Output.Contains("@@ZomB:|") && Output.Contains("|:ZomB@@"))
+            {
+                Output = Output.Substring(Output.IndexOf("@@ZomB:|") + 8, (Output.IndexOf("|:ZomB@@") - (Output.IndexOf("@@ZomB:|") + 8)));
+                if (Output != "")
+                {
+                    string[] vars = Output.Split('|');
+                    foreach (string item in vars)
+                    {
+                        if (item.StartsWith("dbg="))
+                            UpdateControl(item.Substring(4));
+                    }
+                }
+            }
+        }
+
+        public new void ControlAdded(object sender, ZomBControlAddedEventArgs e)
+        {
+
+        }
+
+        #endregion
     }
-    
+
 
 }

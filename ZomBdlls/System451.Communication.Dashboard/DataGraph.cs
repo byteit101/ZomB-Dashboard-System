@@ -30,18 +30,18 @@ using System.Drawing.Drawing2D;
 namespace System451.Communication.Dashboard
 {
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.Graph.png")]
-    public partial class DataGraph : UserControl, IDashboardControl
+    public partial class DataGraph : ZomBControl
     {
         float speedval = 0;
         Queue<float> values = new Queue<float>();
-        string paramName = "graph1";
-        delegate void UpdaterDelegate();
+
+        delegate void UpdaterDelegate(string value);
 
         public DataGraph()
         {
             LineColor = Color.LimeGreen;
             InitializeComponent();
-
+            ControlName = "graph1";
         }
         [DefaultValue("0"), Category("ZomB"), Description("The Value of the next Graph Point")]
         public float Value
@@ -63,57 +63,25 @@ namespace System451.Communication.Dashboard
         }
 
 
-        #region IDashboardControl Members
-        string[] IDashboardControl.ParamName
-        {
-            get
-            {
-                return new string[] { BindToInput };
-            }
-            set
-            {
-                BindToInput = value[0];
-            }
-        }
-        [DefaultValue("graph1"), Category("ZomB"), Description("What this control will get the value of from the packet Data")]
+        [Obsolete("Use Control Name"), Category("ZomB"), Description("[OBSOLETE] What this control will get the value of from the packet Data")]
         public string BindToInput
         {
-            get { return paramName; }
-            set { paramName = value; }
+            get { return ControlName; }
+            set { ControlName = value; }
         }
-
-        string IDashboardControl.Value
-        {
-            get
-            {
-                return Value.ToString();
-            }
-            set
-            {
-                Value = float.Parse(value);
-            }
-        }
-
-        void IDashboardControl.Update()
+        public override void UpdateControl(string value)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(Update));
+                this.Invoke(new UpdaterDelegate(UpdateControl));
             }
             else
             {
+                this.Value = float.Parse(value);
                 this.Invalidate();
             }
         }
 
-
-        string IDashboardControl.DefalutValue
-        {
-            get
-            {
-                return Value.ToString();
-            }
-        }
         private float maxgrph = 100;
         [DefaultValue(100), Category("ZomB"), Description("Maximum Value of the graph")]
         public float Max
@@ -149,7 +117,6 @@ namespace System451.Communication.Dashboard
 
         }
 
-        #endregion
 
         private void DataGraph_Paint(object sender, PaintEventArgs e)
         {
@@ -181,7 +148,7 @@ namespace System451.Communication.Dashboard
                 }
         }
 
-        [DefaultValue(typeof(Color),"LimeGreen"), Category("ZomB"), Description("The color of the value line")]
+        [DefaultValue(typeof(Color), "LimeGreen"), Category("ZomB"), Description("The color of the value line")]
         public Color LineColor { get; set; }
         [DefaultValue(false), Category("ZomB"), Description("Should we show an arrow at the end of the Graph")]
         public bool Arrow { get; set; }

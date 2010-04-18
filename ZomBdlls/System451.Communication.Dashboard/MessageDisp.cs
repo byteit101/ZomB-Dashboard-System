@@ -28,14 +28,15 @@ using System.Windows.Forms;
 
 namespace System451.Communication.Dashboard
 {
-    public partial class MessageDisp : UserControl, IDashboardControl
+    public partial class MessageDisp : ZomBControl
     {
         public MessageDisp()
         {
             InitializeComponent();
+            this.ControlName = "printf";
         }
 string text = "";
-        string paramName = "printf";
+delegate void UpdaterDelegate(string value);
 
         [DefaultValue("0"), Category("ZomB"), Description("The Value of the control")]
         public string Value
@@ -65,54 +66,25 @@ string text = "";
         }
 
 
-        #region IDashboardControl Members
-        string[] IDashboardControl.ParamName
-        {
-            get
-            {
-                return new string[] { BindToInput };
-            }
-            set
-            {
-                BindToInput = value[0];
-            }
-        }
-        [DefaultValue("printf"), Category("ZomB"), Description("What this control will get the value of from the packet Data")]
+        [Obsolete("Use Control Name"), Category("ZomB"), Description("[OBSOLETE] What this control will get the value of from the packet Data")]
         public string BindToInput
         {
-            get { return paramName; }
-            set { paramName = value; }
+            get { return ControlName; }
+            set { ControlName = value; }
         }
-
-        string IDashboardControl.Value
+        public override void UpdateControl(string value)
         {
-            get
+            if (this.InvokeRequired)
             {
-                return Value.ToString();
+                this.Invoke(new UpdaterDelegate(UpdateControl));
             }
-            set
+            else
             {
                 if (Append)
                     Value += value;
                 else
-                    Value = value;
+                    Value=value;
             }
         }
-
-        void IDashboardControl.Update()
-        {
-            this.Invalidate();
-        }
-
-
-        string IDashboardControl.DefalutValue
-        {
-            get
-            {
-                return "";
-            }
-        }
-
-        #endregion
     }
 }

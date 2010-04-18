@@ -32,16 +32,16 @@ namespace System451.Communication.Dashboard
 {
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.DashboardSpeed.bmp")]
     //[ToolboxBitmap(typeof(Button))]
-    public partial class RoundSpeedMeter : UserControl, IDashboardControl
+    public partial class RoundSpeedMeter : ZomBControl
     {
         float speedval = 0;
-        string paramName = "pwm1";
-        delegate void UpdaterDelegate();
+        delegate void UpdaterDelegate(string value);
         
         public RoundSpeedMeter()
         {
             InitializeComponent();
             speedval = 0;
+            this.ControlName = "pwm1";
         }
         [DefaultValue("0"), Category("ZomB"), Description("The Value of the Speed Meter")]
         public float Value
@@ -58,59 +58,24 @@ namespace System451.Communication.Dashboard
         }
 
 
-        #region IDashboardControl Members
-        string[] IDashboardControl.ParamName
-        {
-            get
-            {
-                return new string[] { BindToInput };
-            }
-            set
-            {
-                BindToInput = value[0];
-            }
-        }
-        [DefaultValue("pwm1"), Category("ZomB"), Description("What this control will get the value of from the packet Data")]
+        [Obsolete("Use Control Name"), Category("ZomB"), Description("[OBSOLETE] What this control will get the value of from the packet Data")]
         public string BindToInput
         {
-            get { return paramName; }
-            set { paramName = value; }
+            get { return ControlName; }
+            set { ControlName = value; }
         }
-
-        string IDashboardControl.Value
-        {
-            get
-            {
-                return Value.ToString();
-            }
-            set
-            {
-                Value = float.Parse(value);
-            }
-        }
-
-        void IDashboardControl.Update()
+        public override void UpdateControl(string value)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(Update));
+                this.Invoke(new UpdaterDelegate(UpdateControl));
             }
             else
             {
-                this.Invalidate();
+                this.Value = float.Parse(value);
             }
         }
 
-
-        string IDashboardControl.DefalutValue
-        {
-            get
-            {
-                return Value.ToString();
-            }
-        }
-
-        #endregion
         private void RoundSpeedMeter_Paint(object sender, PaintEventArgs e)
         {
             if (Math.Abs(Value) > 1)

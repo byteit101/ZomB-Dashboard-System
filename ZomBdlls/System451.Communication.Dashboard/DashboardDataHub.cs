@@ -357,24 +357,32 @@ namespace System451.Communication.Dashboard
 
         private static void ProcessControl(IZomBControl control, Dictionary<string, string> vals, byte[] buffer)
         {
-            string val = "";
-            //if we are watching multiple values
-            if (control.IsMultiWatch)
+            try
             {
-                foreach (var item in control.ControlName.Split(';'))
-                {
-                    val += "|" + vals[item.Trim()];
-                }
-                val = val.Substring(1);//remove first |
-            }
-            else
-                val = vals[control.ControlName];//get the value it wants
 
-            //If it does not need the data, don't pass
-            if (control.RequiresAllData)
-                control.UpdateControl(val, buffer);
-            else
-                control.UpdateControl(val, null);
+                string val = "";
+                //if we are watching multiple values
+                if (control.IsMultiWatch)
+                {
+                    foreach (var item in control.ControlName.Split(';'))
+                    {
+                        val += "|" + vals[item.Trim()];
+                    }
+                    val = val.Substring(1);//remove first |
+                }
+                else
+                    val = vals[control.ControlName];//get the value it wants
+
+                //If it does not need the data, don't pass
+                if (control.RequiresAllData)
+                    control.UpdateControl(val, buffer);
+                else
+                    control.UpdateControl(val, null);
+            }
+                //It should only get here if the key does not exist
+            catch
+            {
+            }
         }
 
         /// <summary>

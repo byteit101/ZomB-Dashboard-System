@@ -34,15 +34,16 @@ namespace System451.Communication.Dashboard
 {
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.DashboardDirection.bmp")]
     //[ToolboxBitmap(typeof(Button))]
-    public partial class DirectionMeter : UserControl,IDashboardControl
+    public partial class DirectionMeter : ZomBControl
     {
         float speedval = 0;
-        delegate void UpdaterDelegate();
+        delegate void UpdaterDelegate(string value);
         
-        string paramName = "gyro1";
+        
         public DirectionMeter()
         {
             InitializeComponent();
+            ControlName = "gyro1";
         }
         [DefaultValue("0"), Category("ZomB"), Description("The Value of the Direction Meter")]
         public float Value
@@ -59,61 +60,27 @@ namespace System451.Communication.Dashboard
         }
 
 
-        #region IDashboardControl Members
-        string[] IDashboardControl.ParamName
-        {
-            get
-            {
-                return new string[] { BindToInput };
-            }
-            set
-            {
-                BindToInput = value[0];
-            }
-        }
-        [DefaultValue("pwm1"), Category("ZomB"), Description("What this control will get the value of from the packet Data")]
+        [Obsolete("Use Control Name"), Category("ZomB"), Description("[OBSOLETE] What this control will get the value of from the packet Data")]
         public string BindToInput
         {
-            get { return paramName; }
-            set { paramName = value; }
+            get { return ControlName; }
+            set { ControlName = value; }
         }
-
-        string IDashboardControl.Value
-        {
-            get
-            {
-                return Value.ToString();
-            }
-            set
-            {
-                Value = float.Parse(value);
-            }
-        }
-
-        void IDashboardControl.Update()
+        public override void UpdateControl(string value)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(Update));
+                this.Invoke(new UpdaterDelegate(UpdateControl));
             }
             else
             {
+                this.Value = float.Parse(value);
                 this.Invalidate();
             }
         }
 
-
-        string IDashboardControl.DefalutValue
-        {
-            get
-            {
-                return Value.ToString();
-            }
-        }
-
-        #endregion
         private Color circleColor = Color.IndianRed;
-        [DefaultValue("IndianRed"), Category("ZomB"), Description("Color of the Circle")]
+        [DefaultValue(typeof(Color), "IndianRed"), Category("ZomB"), Description("Color of the Circle")]
         public Color CircleColor
         {
             get
@@ -147,7 +114,7 @@ namespace System451.Communication.Dashboard
 
         }
         private Color arrowColor = Color.Navy;
-        [DefaultValue("Navy"), Category("ZomB"), Description("Color of the Arrow")]
+        [DefaultValue(typeof(Color), "Navy"), Category("ZomB"), Description("Color of the Arrow")]
         public Color ArrowColor
         {
             get
@@ -181,7 +148,7 @@ namespace System451.Communication.Dashboard
 
         }
         private Color guidesColor = Color.DeepSkyBlue;
-        [DefaultValue("DeepSkyBlue"), Category("ZomB"), Description("Color of the Guides")]
+        [DefaultValue(typeof(Color), "DeepSkyBlue"), Category("ZomB"), Description("Color of the Guides")]
         public Color GuidesColor
         {
             get
@@ -260,4 +227,3 @@ namespace System451.Communication.Dashboard
 
     }
 }
-//internal class icocl { }
