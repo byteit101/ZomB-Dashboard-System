@@ -319,7 +319,7 @@ namespace System451.Communication.Dashboard
     /// <summary>
     /// Easily manage a bunch of virtual or physical IZomBcontrols by name
     /// </summary>
-    public class ZomBControlCollection : KeyedCollection<string, IZomBControl>
+    public class ZomBControlCollection : Dictionary<string, IZomBControl>
     {
         /// <summary>
         /// Create a new ZomBControlCollection
@@ -327,25 +327,6 @@ namespace System451.Communication.Dashboard
         public ZomBControlCollection()
         {
 
-        }
-        protected override void SetItem(int index, IZomBControl item)
-        {
-            if (item.IsMultiWatch)
-                throw new NotSupportedException("All IZomBControl's must be single watchers. IsMultiWatch is not supported at this point");
-            else
-            base.SetItem(index, item);
-        }
-        protected override void InsertItem(int index, IZomBControl item)
-        {
-            if (item.IsMultiWatch)
-                throw new NotSupportedException("All IZomBControl's must be single watchers. IsMultiWatch is not supported at this point");
-            else
-            base.InsertItem(index, item);
-        }
-
-        protected override string GetKeyForItem(IZomBControl item)
-        {
-            return item.ControlName;
         }
     }
 
@@ -365,7 +346,7 @@ namespace System451.Communication.Dashboard
         /// </summary>
         /// <param name="data">A keyed collection of the name/value pairs of robot data</param>
         /// <param name="packetData">The raw packet data</param>
-        void UpdateData(KeyedCollection<string, string> data, byte[] packetData);
+        void UpdateData(Dictionary<string, string> data, byte[] packetData);
     }
 
     /// <summary>
@@ -391,7 +372,7 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// Gets or sets the battery voltage
         /// </summary>
-        public ushort Battery { get; set; }
+        public float Battery { get; set; }
 
         /// <summary>
         /// Gets or sets the status byte

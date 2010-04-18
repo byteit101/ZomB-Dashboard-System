@@ -20,48 +20,139 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using System.Net;
-using System.Net.Sockets;
-using System.ComponentModel;
-using System.IO;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Drawing;
 
 namespace System451.Communication.Dashboard
 {
-    public class DashboardDataHub : Component
+    /// <summary>
+    /// This is the main controller of the dashboard packets data
+    /// </summary>
+    public class DashboardDataHub : Component, IZomBController
     {
+        [Obsolete("This will be replaced with IZomBControl, and removed in v0.7 and later")]
         public delegate void DashboardDataRecievedDelegate(string getValue);
+        [Obsolete("This will be replaced with IZomBControl, and removed in v0.7 and later")]
         public event DashboardDataRecievedDelegate DashboardDataRecieved;
+
+        public event ErrorEventHandler OnError;
+
         UdpClient cRIOConnection;
-        //delegate void SetTextCallback(string text);
+        bool isrunning;
         Thread mt;
         Stack<IDashboardControl> controls = new Stack<IDashboardControl>();
-         
+
+        Collection<IZomBControl> zomBcontrols = new Collection<IZomBControl>();
+        Collection<IZomBControlGroup> zomBgroups = new Collection<IZomBControlGroup>();
+        Collection<IZomBMonitor> zomBmonitors = new Collection<IZomBMonitor>();
+
+        FRCDSStatus currentstatus;
+
+        /// <summary>
+        /// Creates a new DashboardDataHub
+        /// </summary>
         public DashboardDataHub()
         {
-            
-           
-            
             DashboardDataRecieved += new DashboardDataRecievedDelegate(DashboardReciever_DashboardDataRecieved);
         }
 
+        /// <summary>
+        /// Annihilates the DashboardDataHub
+        /// </summary>
         ~DashboardDataHub()
         {
             try
             {
-
                 cRIOConnection.Client.Disconnect(false);
                 cRIOConnection.Close();
             }
             catch
             {
+
             }
         }
+
+        /// <summary>
+        /// Adds a new ZomB control.
+        /// </summary>
+        /// <param name="control">The control to add. If this is already in the data hub, it will be ignored</param>
+        public void Add(IZomBControl control)
+        {
+            if (!zomBcontrols.Contains(control))
+            {
+                zomBcontrols.Add(control);
+            }
+        }
+
+        /// <summary>
+        /// Adds a new ZomB control group.
+        /// </summary>
+        /// <param name="control">The control group to add. If this is already in the data hub, it will be ignored</param>
+        public void Add(IZomBControlGroup controlgroup)
+        {
+            if (!zomBgroups.Contains(controlgroup))
+            {
+                zomBgroups.Add(controlgroup);
+            }
+        }
+
+        /// <summary>
+        /// Adds a new ZomB monitor.
+        /// </summary>
+        /// <param name="control">The monitor to add. If this is already in the data hub, it will be ignored</param>
+        public void Add(IZomBMonitor monitor)
+        {
+            if (!zomBmonitors.Contains(monitor))
+            {
+                zomBmonitors.Add(monitor);
+            }
+        }
+
+        /// <summary>
+        /// Removes a ZomB control.
+        /// </summary>
+        /// <param name="control">The control to remove.</param>
+        public void Remove(IZomBControl control)
+        {
+            if (zomBcontrols.Contains(control))
+            {
+                zomBcontrols.Remove(control);
+            }
+        }
+
+        /// <summary>
+        /// Removes a ZomB control group.
+        /// </summary>
+        /// <param name="control">The control group to remove.</param>
+        public void Remove(IZomBControlGroup controlgroup)
+        {
+            if (zomBgroups.Contains(controlgroup))
+            {
+                zomBgroups.Remove(controlgroup);
+            }
+        }
+
+        /// <summary>
+        /// Removes a ZomB monitor.
+        /// </summary>
+        /// <param name="control">The monitor to remove.</param>
+        public void Remove(IZomBMonitor monitor)
+        {
+            if (zomBmonitors.Contains(monitor))
+            {
+                zomBmonitors.Remove(monitor);
+            }
+        }
+
+        [Obsolete("This will be replaced with IZomBControl, and removed in v0.7 and later")]
         public Stack<IDashboardControl> GetControls()
         {
             return controls;
@@ -73,18 +164,20 @@ namespace System451.Communication.Dashboard
         }
 
         /// <summary>
-        /// Add a control to the Dashboard
+        /// Add a control to the Dashboard (Obsolete)
         /// </summary>
         /// <param name="control">the control inplementing IDashboardControl</param>
+        [Obsolete("This will be replaced with IZomBControl, and removed in v0.7 and later")]
         public void AddDashboardControl(IDashboardControl control)
         {
             controls.Push(control);
         }
 
         /// <summary>
-        /// Add a bunch of controls to the Dashboard
+        /// Add a bunch of controls to the Dashboard (Obsolete)
         /// </summary>
         /// <param name="controls">the controls inplementing IDashboardControl</param>
+        [Obsolete("This will be replaced with IZomBControl, and removed in v0.7 and later")]
         public void AddDashboardControl(Collection<IDashboardControl> controls)
         {
             foreach (IDashboardControl control in controls)
@@ -93,6 +186,7 @@ namespace System451.Communication.Dashboard
             }
         }
 
+        [Obsolete("This will be replaced with IZomBControl, and removed in v0.7 and later")]
         private void UpdateControls(string getValue)
         {
             foreach (IDashboardControl cont in controls)
@@ -112,16 +206,23 @@ namespace System451.Communication.Dashboard
                 try
                 {
                     cRIOConnection = new UdpClient(1165);
-                    mt = new Thread(new ThreadStart(this.moniter));
-                    mt.IsBackground = true;
-                    mt.Start();
                 }
-                catch
+                catch (Exception ex)
                 {
-                    MessageBox.Show("1165 not open");
+                    DoError(ex);
                 }
             }
-           
+            try
+            {
+                mt = new Thread(new ThreadStart(this.run));
+                mt.IsBackground = true;
+                isrunning = true;
+                mt.Start();
+            }
+            catch (Exception ex)
+            {
+                DoError(ex);
+            }
         }
 
         /// <summary>
@@ -131,55 +232,183 @@ namespace System451.Communication.Dashboard
         {
             try
             {
-                mt.Abort();
-
+                isrunning = false;
+                Thread.Sleep(500);
+                if (mt.IsAlive)
+                    mt.Abort();
             }
             catch
             {
             }
-
         }
 
-        private void moniter()
+        /// <summary>
+        /// The background worker. will exit after 5 consectutive errors
+        /// </summary>
+        private void run()
         {
-            try
+            int nume = 0;
+            while (isrunning)
             {
-                while (true)
+                try
                 {
                     IPEndPoint RIPend = null;
+                    //Recieve the data
                     byte[] buffer = cRIOConnection.Receive(ref RIPend);
-                    string Output = "";
+                    string Output;
 
-                    for (int cnr = 0; cnr < buffer.Length; cnr++)
+                    //Convert
+                    //this works, and is proven
+                    //Output="";
+                    //for (int cnr = 0; cnr < buffer.Length; cnr++)
+                    //{
+                    //    Output += ((buffer[cnr] != 0) ? ((char)buffer[cnr]).ToString() : "");
+                    //}
+                    //this needs to be tested, but should work
+                    Output = UTF7Encoding.UTF7.GetString(buffer);
+
+                    //Find segment of data
+                    if (Output.Contains("@@ZomB:|") && Output.Contains("|:ZomB@@"))
                     {
-                        Output += ((buffer[cnr] != 0) ? ((char)buffer[cnr]).ToString() : "");
-                    }
-
-                    //SetText2(Output);
-
-                    if (Output.Contains("@@@451:|") && Output.Contains("|:451@@@"))
-                    {
-                        Output = Output.Substring(Output.IndexOf("@@@451:|")+8, (Output.IndexOf("|:451@@@") - (Output.IndexOf("@@@451:|")+8)));
+                        Output = Output.Substring(Output.IndexOf("@@ZomB:|") + 8, (Output.IndexOf("|:ZomB@@") - (Output.IndexOf("@@ZomB:|") + 8)));
                         if (Output != "")
                         {
-                            
-                            DashboardDataRecieved(Output);
+                            ProcessControls(Output, buffer);
                         }
                     }
-                    //Output = Output.Replace("|", "\n|");
-                    //SetText(Output);
-
+                    if (nume > 0)
+                        nume--;
                 }
-                //DashboardDataRecieved();
-
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show("Error! moniter failed: \n\n"+ex.ToString());
-                return;
+                catch (ThreadAbortException)
+                {
+                    isrunning = false;
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    nume++;
+                    DoError(ex);
+                    if (nume > 5)
+                    {
+                        isrunning = false;
+                        DoError(new Exception("5 consecutive errors were encountered, stopping DashboardDataHub"));
+                        isrunning = false;
+                        return;
+                    }
+                }
             }
         }
 
+        private void ProcessControls(string Output, byte[] buffer)
+        {
+            //Get the items in a dictionary
+            Dictionary<string, string> vals = SplitParams(Output);
+            FRCDSStatus status = ParseDSBytes(buffer);
+            currentstatus = status;
+
+            //Process the Monitors
+            foreach (IZomBMonitor monitor in zomBmonitors)
+            {
+                monitor.UpdateStatus(status);
+                monitor.UpdateData(vals, buffer);
+            }
+
+            //Process the normal controls
+            foreach (IZomBControl cont in zomBcontrols)
+            {
+                ProcessControl(cont, vals, buffer);
+            }
+
+            //TODO: Remove Obsolete methoods
+            DashboardDataRecieved(Output);
+
+            //Process the GroupControls
+            foreach (IZomBControlGroup group in zomBgroups)
+            {
+                foreach (KeyValuePair<string, IZomBControl> item in group.GetControls())
+                {
+                    ProcessControl(item.Value, vals, buffer);
+                }
+            }
+        }
+
+        private static void ProcessControl(IZomBControl control, Dictionary<string, string> vals, byte[] buffer)
+        {
+            string val = "";
+            //if we are watching multiple values
+            if (control.IsMultiWatch)
+            {
+                foreach (var item in control.ControlName.Split(';'))
+                {
+                    val += "|" + vals[item.Trim()];
+                }
+                val = val.Substring(1);//remove first |
+            }
+            else
+                val = vals[control.ControlName];//get the value it wants
+
+            //If it does not need the data, don't pass
+            if (control.RequiresAllData)
+                control.UpdateControl(val, buffer);
+            else
+                control.UpdateControl(val, null);
+        }
+
+        /// <summary>
+        /// Gets the current robot status
+        /// </summary>
+        /// <returns>The current robot status</returns>
+        public FRCDSStatus GetDSStatus()
+        {
+            return currentstatus;
+        }
+        
+        /// <summary>
+        /// Convert the DS Bytes to a FRCDSStatus
+        /// </summary>
+        /// <param name="buffer">The bytes from the Robot packet</param>
+        /// <returns>A FRCDSStatus containg the robot status</returns>
+        static protected FRCDSStatus ParseDSBytes(byte[] buffer)
+        {
+            //TODO: Find and Fix errors here
+            FRCDSStatus ret = new FRCDSStatus();
+            ret.PacketNumber = buffer[0];
+            ret.PacketNumber += (ushort)(buffer[1] >> 8);
+            ret.DigitalIn = new DIOBitField(buffer[2]);
+            ret.DigitalOut = new DIOBitField(buffer[3]);
+            ret.Battery = float.Parse(buffer[4].ToString("x")+"." + buffer[5].ToString("x"));
+            ret.Status = new StatusBitField(buffer[6]);
+            ret.Error = new ErrorBitField(buffer[7]);
+            ret.Team = int.Parse(buffer[8].ToString("x") + buffer[9].ToString("x"));
+            //OR
+            ret.Team = (int)buffer[8] + (int)(buffer[9] >> 8);
+            //TODO: Add version
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Convert the name=value|n=v form to a Dictionary of name and values
+        /// </summary>
+        /// <param name="Output"></param>
+        /// <returns></returns>
+        private Dictionary<string, string> SplitParams(string Output)
+        {
+            //Split the main string
+            string[] s = Output.Split('|');
+            Dictionary<string, string> k = new Dictionary<string, string>(s.Length);
+            foreach (string item in s)
+            {
+                //split and add each item to the Dictionary
+                string ky, val;
+                ky = item.Split('=')[0];
+                val = item.Split('=')[1];
+                k[ky] = val;//Latter will overwrite
+            }
+            return k;
+        }
+
+        [Obsolete("This will be replaced with IZomBControl, and removed in v0.7 and later")]
         private string GetParam(string ParamName, string ParamString, string DefaultValue)
         {
             foreach (string ValString in ParamString.Split(new char[] { '|' }))
@@ -195,42 +424,38 @@ namespace System451.Communication.Dashboard
             }
             return DefaultValue;
         }
-        //private void SetText(string ntext)
-        //{
-        //    if (this.TextBox1.InvokeRequired)
-        //    {
-        //        SetTextCallback method = new SetTextCallback(this.SetText);
-        //        base.Invoke(method, new object[] { ntext });
-        //    }
-        //    else
-        //    {
-        //        this.TextBox1.Text = ntext;
-        //    }
-        //}
 
-        //private void SetText2(string ntext)
-        //{
-        //    if (this.TextBox1.InvokeRequired)
-        //    {
-        //        SetTextCallback method = new SetTextCallback(this.SetText2);
-        //        base.Invoke(method, new object[] { ntext });
-        //    }
-        //    else
-        //    {
-        //        this.TextBox1.Tag = ntext;
-        //    }
-        //}
+        /// <summary>
+        /// Processes any errors that may have been encountered, and either fires the OnError, or Alerts the user
+        /// </summary>
+        /// <param name="ex">The error</param>
+        protected void DoError(Exception ex)
+        {
+            if (OnError == null)
+                MessageBox.Show(ex.Message);
+            else
+                OnError(this, new ErrorEventArgs(ex));
+        }
 
+        /// <summary>
+        /// Kill, and then re-animate ZomB
+        /// </summary>
         public static void RestartZomB()
         {
             Application.Restart();
         }
 
+        /// <summary>
+        /// Cut off the ZomB's head
+        /// </summary>
         public static void ExitZomB()
         {
             Application.Exit();
         }
 
+        /// <summary>
+        /// Restart the DriverStation, removing FMS Locked condition
+        /// </summary>
         public static void RestartDS()
         {
             Process[] dgs = Process.GetProcessesByName("Driver Station");
@@ -252,12 +477,22 @@ namespace System451.Communication.Dashboard
             {
                 Process.Start(@"C:\Program Files\FRC Driver Station\Driver Station.exe");
             }
-            catch 
+            catch
             {
-                
+
             }
         }
+
+        #region IZomBController Members
+
+        DashboardDataHub IZomBController.GetDashboardDataHub()
+        {
+            return this;
+        }
+
+        #endregion
     }
+
     [ToolboxBitmap(typeof(Button))]
     public class ControlBoxMenuButton : Button
     {
