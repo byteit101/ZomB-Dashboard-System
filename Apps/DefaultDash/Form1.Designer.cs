@@ -124,7 +124,7 @@
             // 
             // roundSpeedMeter2
             // 
-            this.roundSpeedMeter2.BindToInput = "left";
+            this.roundSpeedMeter2.ControlName = "left";
             this.roundSpeedMeter2.Location = new System.Drawing.Point(669, 12);
             this.roundSpeedMeter2.Name = "roundSpeedMeter2";
             this.roundSpeedMeter2.Size = new System.Drawing.Size(148, 167);
@@ -133,7 +133,7 @@
             // 
             // roundSpeedMeter1
             // 
-            this.roundSpeedMeter1.BindToInput = "right";
+            this.roundSpeedMeter1.ControlName = "right";
             this.roundSpeedMeter1.Location = new System.Drawing.Point(823, 12);
             this.roundSpeedMeter1.Name = "roundSpeedMeter1";
             this.roundSpeedMeter1.Size = new System.Drawing.Size(150, 167);
@@ -142,7 +142,7 @@
             // 
             // onOffControl2
             // 
-            this.onOffControl2.BindToInput = "sw2";
+            this.onOffControl2.ControlName = "sw2";
             this.onOffControl2.Location = new System.Drawing.Point(979, 104);
             this.onOffControl2.Name = "onOffControl2";
             this.onOffControl2.Size = new System.Drawing.Size(25, 25);
@@ -151,7 +151,7 @@
             // 
             // onOffControl1
             // 
-            this.onOffControl1.BindToInput = "sw1";
+            this.onOffControl1.ControlName = "sw1";
             this.onOffControl1.Location = new System.Drawing.Point(979, 74);
             this.onOffControl1.Name = "onOffControl1";
             this.onOffControl1.Size = new System.Drawing.Size(25, 25);
@@ -160,7 +160,7 @@
             // 
             // spikeControl2
             // 
-            this.spikeControl2.BindToInput = "spk2";
+            this.spikeControl2.ControlName = "spk2";
             this.spikeControl2.Location = new System.Drawing.Point(979, 43);
             this.spikeControl2.Name = "spikeControl2";
             this.spikeControl2.Size = new System.Drawing.Size(25, 25);
@@ -177,7 +177,7 @@
             // 
             // distanceMeter1
             // 
-            this.distanceMeter1.BindToInput = "bat";
+            this.distanceMeter1.ControlName = "bat";
             this.distanceMeter1.DistanceColor = System.Drawing.Color.Peru;
             this.distanceMeter1.Location = new System.Drawing.Point(669, 185);
             this.distanceMeter1.Name = "distanceMeter1";
@@ -189,7 +189,7 @@
             // 
             this.directionMeter2.ArrowColor = System.Drawing.Color.Navy;
             this.directionMeter2.ArrowWidth = 4F;
-            this.directionMeter2.BindToInput = "dir";
+            this.directionMeter2.ControlName = "dir";
             this.directionMeter2.CircleColor = System.Drawing.Color.IndianRed;
             this.directionMeter2.CircleWidth = 5F;
             this.directionMeter2.GuidesColor = System.Drawing.Color.DeepSkyBlue;
@@ -204,7 +204,7 @@
             // 
             this.directionMeter1.ArrowColor = System.Drawing.Color.Navy;
             this.directionMeter1.ArrowWidth = 4F;
-            this.directionMeter1.BindToInput = "dir2";
+            this.directionMeter1.ControlName = "dir2";
             this.directionMeter1.CircleColor = System.Drawing.Color.IndianRed;
             this.directionMeter1.CircleWidth = 5F;
             this.directionMeter1.GuidesColor = System.Drawing.Color.DeepSkyBlue;
@@ -219,8 +219,8 @@
             // 
             this.analogMeter3.ArrowColor = System.Drawing.Color.SlateGray;
             this.analogMeter3.ArrowWidth = 4F;
-            this.analogMeter3.BindToInput = "anl3";
             this.analogMeter3.CircleColor = System.Drawing.Color.PaleGreen;
+            this.analogMeter3.ControlName = "anl3";
             this.analogMeter3.GuidesColor = System.Drawing.Color.Black;
             this.analogMeter3.GuidesWidth = 1F;
             this.analogMeter3.Location = new System.Drawing.Point(562, 279);
@@ -234,8 +234,8 @@
             // 
             this.analogMeter2.ArrowColor = System.Drawing.Color.SlateGray;
             this.analogMeter2.ArrowWidth = 4F;
-            this.analogMeter2.BindToInput = "anl2";
             this.analogMeter2.CircleColor = System.Drawing.Color.PaleGreen;
+            this.analogMeter2.ControlName = "anl2";
             this.analogMeter2.GuidesColor = System.Drawing.Color.Black;
             this.analogMeter2.GuidesWidth = 1F;
             this.analogMeter2.Location = new System.Drawing.Point(446, 279);
@@ -249,8 +249,8 @@
             // 
             this.analogMeter1.ArrowColor = System.Drawing.Color.SlateGray;
             this.analogMeter1.ArrowWidth = 4F;
-            this.analogMeter1.BindToInput = "anl1";
             this.analogMeter1.CircleColor = System.Drawing.Color.PaleGreen;
+            this.analogMeter1.ControlName = "anl1";
             this.analogMeter1.GuidesColor = System.Drawing.Color.Black;
             this.analogMeter1.GuidesWidth = 1F;
             this.analogMeter1.Location = new System.Drawing.Point(330, 279);
@@ -264,7 +264,7 @@
             // 
             this.dataGraph2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGraph2.BackColor = System.Drawing.Color.Black;
-            this.dataGraph2.BindToInput = "grph";
+            this.dataGraph2.ControlName = "grph";
             this.dataGraph2.ForeColor = System.Drawing.Color.Green;
             this.dataGraph2.Location = new System.Drawing.Point(12, 132);
             this.dataGraph2.Max = 1F;
@@ -278,7 +278,7 @@
             // 
             this.dataGraph1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGraph1.BackColor = System.Drawing.Color.Black;
-            this.dataGraph1.BindToInput = "grph2";
+            this.dataGraph1.ControlName = "grph2";
             this.dataGraph1.ForeColor = System.Drawing.Color.Green;
             this.dataGraph1.Location = new System.Drawing.Point(12, 266);
             this.dataGraph1.Max = 1F;
@@ -330,7 +330,7 @@
             // 
             // onOffControl3
             // 
-            this.onOffControl3.BindToInput = "GO";
+            this.onOffControl3.ControlName = "GO";
             this.onOffControl3.Location = new System.Drawing.Point(224, 13);
             this.onOffControl3.Name = "onOffControl3";
             this.onOffControl3.Size = new System.Drawing.Size(100, 100);
@@ -400,7 +400,6 @@
             this.Controls.Add(this.tacoMeter1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Form1";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Default Dashboard";
             this.videoContextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();

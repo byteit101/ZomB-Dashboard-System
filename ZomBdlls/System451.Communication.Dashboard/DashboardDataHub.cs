@@ -38,17 +38,12 @@ namespace System451.Communication.Dashboard
     /// </summary>
     public class DashboardDataHub : Component, IZomBController
     {
-        [Obsolete("This will be replaced with IZomBControl, and removed in v0.7 and later")]
-        public delegate void DashboardDataRecievedDelegate(string getValue);
-        [Obsolete("This will be replaced with IZomBControl, and removed in v0.7 and later")]
-        public event DashboardDataRecievedDelegate DashboardDataRecieved;
 
         public event ErrorEventHandler OnError;
 
         UdpClient cRIOConnection;
         bool isrunning;
         Thread mt;
-        Stack<IDashboardControl> controls = new Stack<IDashboardControl>();
 
         Collection<IZomBControl> zomBcontrols = new Collection<IZomBControl>();
         Collection<IZomBControlGroup> zomBgroups = new Collection<IZomBControlGroup>();
@@ -61,7 +56,7 @@ namespace System451.Communication.Dashboard
         /// </summary>
         public DashboardDataHub()
         {
-            DashboardDataRecieved += new DashboardDataRecievedDelegate(DashboardReciever_DashboardDataRecieved);
+
         }
 
         /// <summary>
@@ -157,59 +152,6 @@ namespace System451.Communication.Dashboard
             }
         }
 
-        [Obsolete("This will be replaced with IZomBControl, and removed in v0.7 and later")]
-        public Stack<IDashboardControl> GetControls()
-        {
-            return controls;
-        }
-
-        void DashboardReciever_DashboardDataRecieved(string getValue)
-        {
-            UpdateControls(getValue);
-        }
-
-        /// <summary>
-        /// Add a control to the Dashboard (Obsolete)
-        /// </summary>
-        /// <param name="control">the control inplementing IDashboardControl</param>
-        [Obsolete("This will be replaced with IZomBControl, and removed in v0.7 and later")]
-        public void AddDashboardControl(IDashboardControl control)
-        {
-            controls.Push(control);
-        }
-
-        /// <summary>
-        /// Add a bunch of controls to the Dashboard (Obsolete)
-        /// </summary>
-        /// <param name="controls">the controls inplementing IDashboardControl</param>
-        [Obsolete("This will be replaced with IZomBControl, and removed in v0.7 and later")]
-        public void AddDashboardControl(Collection<IDashboardControl> controls)
-        {
-            foreach (IDashboardControl control in controls)
-            {
-                AddDashboardControl(control);
-            }
-        }
-
-        [Obsolete("This will be replaced with IZomBControl, and removed in v0.7 and later")]
-        private void UpdateControls(string getValue)
-        {
-            foreach (IDashboardControl cont in controls)
-            {
-                cont.Value = GetParam(cont.ParamName[0], getValue, cont.DefalutValue);
-                cont.Update();
-            }
-        }
-
-        /// <summary>
-        /// Start Monitering the Dashboard port
-        /// </summary>
-        [Obsolete("This will be replaced with Start, and removed in v0.7 and later")]
-        public void StartRecieving()
-        {
-            Start();
-        }
-
         /// <summary>
         /// Start Monitering the Dashboard port
         /// </summary>
@@ -242,11 +184,6 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// Stop monitering the dashboard port
         /// </summary>
-        [Obsolete("This will be replaced with Stop, and removed in v0.7 and later")]
-        public void StopRecieving()
-        {
-            Stop();
-        }
 
         /// <summary>
         /// Stop monitering the dashboard port
@@ -342,9 +279,6 @@ namespace System451.Communication.Dashboard
                 ProcessControl(cont, vals, buffer);
             }
 
-            //TODO: Remove Obsolete methoods
-            DashboardDataRecieved(Output);
-
             //Process the GroupControls
             foreach (IZomBControlGroup group in zomBgroups)
             {
@@ -379,7 +313,7 @@ namespace System451.Communication.Dashboard
                 else
                     control.UpdateControl(val, null);
             }
-                //It should only get here if the key does not exist
+            //It should only get here if the key does not exist
             catch
             {
             }

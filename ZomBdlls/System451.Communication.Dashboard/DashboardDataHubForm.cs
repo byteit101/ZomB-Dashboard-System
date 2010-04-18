@@ -142,8 +142,6 @@ namespace System451.Communication.Dashboard
         /// </summary>
         public void ReloadControls()
         {
-            //Only clears out old controls
-            dashboardDataHub1.GetControls().Clear();
             AddControls(this.Controls);
         }
 
@@ -222,14 +220,6 @@ namespace System451.Communication.Dashboard
                 {
                     dashboardDataHub1.Add((IZomBControl)item);
                 }
-
-                //TODO: Remove in 0.7
-                //OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-
-                else if (item is IDashboardControl)
-                {
-                    dashboardDataHub1.AddDashboardControl((IDashboardControl)item);
-                }
-                //OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-
 
                 if (item is IZomBControlGroup)
                 {
