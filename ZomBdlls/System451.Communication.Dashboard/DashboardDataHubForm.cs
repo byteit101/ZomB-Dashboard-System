@@ -96,6 +96,7 @@ namespace System451.Communication.Dashboard
             }
             catch { }
         }
+
         ~DashboardDataHubForm()
         {
             try
@@ -104,6 +105,7 @@ namespace System451.Communication.Dashboard
             }
             catch { }
         }
+
         protected override Size DefaultSize
         {
             get
@@ -111,12 +113,14 @@ namespace System451.Communication.Dashboard
                 return new Size(1024, 400);
             }
         }
+
         [DefaultValue(typeof(Size), "1024, 400")]
         public new Size Size
         {
             get { return base.Size; }
             set { base.Size = value; }
         }
+
         /// <summary>
         /// Gets the internal DashboardDataHub
         /// </summary>
@@ -127,18 +131,22 @@ namespace System451.Communication.Dashboard
                 return dashboardDataHub1;
             }
         }
+
         /// <summary>
         /// Start the DashboardDataHub when we load the form?
         /// </summary>
         public bool AutoStart { get; set; }
+
         /// <summary>
         /// Re-iterate and find all controls
         /// </summary>
         public void ReloadControls()
         {
-
-            DashboardDataHubForm_Load(null, null);
+            //Only clears out old controls
+            dashboardDataHub1.GetControls().Clear();
+            AddControls(this.Controls);
         }
+
         /// <summary>
         /// Start the DashboardDataHub
         /// </summary>
@@ -146,10 +154,11 @@ namespace System451.Communication.Dashboard
         {
             if ((!DesignMode) && (!Running))
             {
-                dashboardDataHub1.StartRecieving();
+                dashboardDataHub1.Start();
                 Running = true;
             }
         }
+
         /// <summary>
         /// Restart the DashboardDataHub
         /// </summary>
@@ -158,6 +167,7 @@ namespace System451.Communication.Dashboard
             Stop();
             Start();
         }
+
         /// <summary>
         /// Stop the DashboardDataHub
         /// </summary>
@@ -165,10 +175,11 @@ namespace System451.Communication.Dashboard
         {
             if (Running)
             {
-                dashboardDataHub1.StopRecieving();
+                dashboardDataHub1.Stop();
                 Running = false;
             }
         }
+
         /// <summary>
         /// Are we running the dashboard task?
         /// </summary>
@@ -196,8 +207,7 @@ namespace System451.Communication.Dashboard
                 this.StartPosition = FormStartPosition.WindowsDefaultLocation;
                 this.ControlBox = true;
             }
-            dashboardDataHub1.GetControls().Clear();
-            AddControls(this.Controls);
+            ReloadControls();
             if (AutoStart && (!DesignMode))
             {
                 Start();
@@ -208,10 +218,29 @@ namespace System451.Communication.Dashboard
         {
             foreach (Control item in controlCollection)
             {
-                if (item is IDashboardControl)
+                if (item is IZomBControl)
+                {
+                    dashboardDataHub1.Add((IZomBControl)item);
+                }
+
+                //TODO: Remove in 0.7
+                //OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-
+                else if (item is IDashboardControl)
                 {
                     dashboardDataHub1.AddDashboardControl((IDashboardControl)item);
                 }
+                //OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-OBSOLETE-
+
+                if (item is IZomBControlGroup)
+                {
+                    dashboardDataHub1.Add((IZomBControlGroup)item);
+                }
+                if (item is IZomBMonitor)
+                {
+                    dashboardDataHub1.Add((IZomBMonitor)item);
+                }
+
+                //If panel or has other controls, find those
                 if (item.Controls.Count > 0)
                 {
                     AddControls(item.Controls);

@@ -89,6 +89,7 @@ namespace System451.Communication.Dashboard
             if (!zomBcontrols.Contains(control))
             {
                 zomBcontrols.Add(control);
+                control.ControlAdded(this, new ZomBControlAddedEventArgs(this));
             }
         }
 
@@ -101,6 +102,10 @@ namespace System451.Communication.Dashboard
             if (!zomBgroups.Contains(controlgroup))
             {
                 zomBgroups.Add(controlgroup);
+                foreach (KeyValuePair<string, IZomBControl> item in controlgroup.GetControls())
+                {
+                    item.Value.ControlAdded(this, new ZomBControlAddedEventArgs(this));
+                }
             }
         }
 
@@ -199,7 +204,16 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// Start Monitering the Dashboard port
         /// </summary>
+        [Obsolete("This will be replaced with Start, and removed in v0.7 and later")]
         public void StartRecieving()
+        {
+            Start();
+        }
+
+        /// <summary>
+        /// Start Monitering the Dashboard port
+        /// </summary>
+        public void Start()
         {
             if (cRIOConnection == null)
             {
@@ -228,7 +242,16 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// Stop monitering the dashboard port
         /// </summary>
+        [Obsolete("This will be replaced with Stop, and removed in v0.7 and later")]
         public void StopRecieving()
+        {
+            Stop();
+        }
+
+        /// <summary>
+        /// Stop monitering the dashboard port
+        /// </summary>
+        public void Stop()
         {
             try
             {
@@ -362,7 +385,7 @@ namespace System451.Communication.Dashboard
         {
             return currentstatus;
         }
-        
+
         /// <summary>
         /// Convert the DS Bytes to a FRCDSStatus
         /// </summary>
@@ -376,7 +399,7 @@ namespace System451.Communication.Dashboard
             ret.PacketNumber += (ushort)(buffer[1] >> 8);
             ret.DigitalIn = new DIOBitField(buffer[2]);
             ret.DigitalOut = new DIOBitField(buffer[3]);
-            ret.Battery = float.Parse(buffer[4].ToString("x")+"." + buffer[5].ToString("x"));
+            ret.Battery = float.Parse(buffer[4].ToString("x") + "." + buffer[5].ToString("x"));
             ret.Status = new StatusBitField(buffer[6]);
             ret.Error = new ErrorBitField(buffer[7]);
             ret.Team = int.Parse(buffer[8].ToString("x") + buffer[9].ToString("x"));

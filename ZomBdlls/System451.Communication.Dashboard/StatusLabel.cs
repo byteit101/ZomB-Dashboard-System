@@ -109,7 +109,7 @@ namespace System451.Communication.Dashboard
             }
             set
             {
-                base.AutoSize = !(DesignMode|| LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+                base.AutoSize = !(DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime);
             }
         }
 
@@ -135,9 +135,9 @@ namespace System451.Communication.Dashboard
             }
             set
             {
-                if (value == "Resize this to change the range of the label"||DesignMode)
+                if (value == "Resize this to change the range of the label" || DesignMode)
                     return;
-                    //MessageBox.Show("Change this programaticaly, not at design time!");
+                //MessageBox.Show("Change this programaticaly, not at design time!");
                 else
                     base.Text = value;
             }
@@ -270,6 +270,7 @@ namespace System451.Communication.Dashboard
             get;
             set;
         }
+
         /// <summary>
         /// The controls virtual Y Max
         /// </summary>
@@ -289,6 +290,7 @@ namespace System451.Communication.Dashboard
             get;
             set;
         }
+
         /// <summary>
         /// The controls physical X Max
         /// </summary>
@@ -298,6 +300,7 @@ namespace System451.Communication.Dashboard
             get;
             set;
         }
+
         /// <summary>
         /// The controls virtual X Min
         /// </summary>
@@ -307,6 +310,7 @@ namespace System451.Communication.Dashboard
             get;
             set;
         }
+
         /// <summary>
         /// The controls virtual X Max
         /// </summary>
@@ -316,6 +320,7 @@ namespace System451.Communication.Dashboard
             get;
             set;
         }
+
         /// <summary>
         /// The controls X value
         /// </summary>
@@ -350,8 +355,6 @@ namespace System451.Communication.Dashboard
             }
         }
 
-
-
         #region IZomBControlGroup Members
 
         ZomBControlCollection IZomBControlGroup.GetControls()
@@ -360,33 +363,12 @@ namespace System451.Communication.Dashboard
         }
 
         #endregion
-
-        //#region IComponent Members
-
-        //event EventHandler IComponent.Disposed
-        //{
-        //    add {  }
-        //    remove {  }
-        //}
-
-        //ISite IComponent.Site
-        //{
-        //    get;
-        //    set;
-        //}
-
-        //#endregion
-
-        //#region IDisposable Members
-
-        //void IDisposable.Dispose()
-        //{
-
-        //}
-
-        //#endregion
     }
 
+    /// <summary>
+    /// Designer for the StatusLabel
+    /// </summary>
+    /// <see cref="StatusLabel"/>
     internal class StatusLabelDesigner : ControlDesigner
     {
         public StatusLabelDesigner()

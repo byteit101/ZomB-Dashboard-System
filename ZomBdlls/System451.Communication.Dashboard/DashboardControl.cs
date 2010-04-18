@@ -111,7 +111,9 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// Notifies when this control is added to a DashboardDataHub
         /// </summary>
-        event ControlAddedDelegate ControlAdded;
+        /// <param name="sender">The sender</param>
+        /// <param name="e">The Arrrghs</param>
+        void ControlAdded(object sender, ZomBControlAddedEventArgs e);
     }
 
     /// <summary>
@@ -180,6 +182,12 @@ namespace System451.Communication.Dashboard
         /// </summary>
         public event ControlAddedDelegate ControlAdded;
 
+        void IZomBControl.ControlAdded(object sender, ZomBControlAddedEventArgs e)
+        {
+            if (ControlAdded != null)
+                ControlAdded(sender, e);
+        }
+
         #endregion
 
         void ZomBControl_ControlAdded(object sender, ZomBControlAddedEventArgs e)
@@ -228,7 +236,7 @@ namespace System451.Communication.Dashboard
         public ZomBControlUpdatedEventArgs(string value, byte[] packetData)
         {
             this.value = value;
-            this.packetData = packetData;;
+            this.packetData = packetData;
         }
 
         /// <summary>
@@ -282,7 +290,7 @@ namespace System451.Communication.Dashboard
         /// </summary>
         public ZomBRemoteControl()
         {
-            
+
         }
 
         /// <summary>
