@@ -618,7 +618,7 @@ namespace System451.Communication.Dashboard
             get { return mainData; }
         }
 
-        public bool Reset
+        public bool Byte1
         {
             get
             {
@@ -629,18 +629,18 @@ namespace System451.Communication.Dashboard
                 mainData[0] = value;
             }
         }
-        public bool DIO2
+        public bool EmergencyStopped
         {
             get
             {
-                return mainData[1];
+                return !mainData[1];
             }
             set
             {
-                mainData[1] = value;
+                mainData[1] = !value;
             }
         }
-        public bool DIO3
+        public bool Enabled
         {
             get
             {
@@ -651,7 +651,7 @@ namespace System451.Communication.Dashboard
                 mainData[2] = value;
             }
         }
-        public bool DIO4
+        public bool Auto
         {
             get
             {
@@ -662,7 +662,7 @@ namespace System451.Communication.Dashboard
                 mainData[3] = value;
             }
         }
-        public bool DIO5
+        public bool Byte5
         {
             get
             {
@@ -673,7 +673,7 @@ namespace System451.Communication.Dashboard
                 mainData[4] = value;
             }
         }
-        public bool DIO6
+        public bool Byte6
         {
             get
             {
@@ -684,7 +684,7 @@ namespace System451.Communication.Dashboard
                 mainData[5] = value;
             }
         }
-        public bool DIO7
+        public bool RobotAttached
         {
             get
             {
@@ -695,7 +695,7 @@ namespace System451.Communication.Dashboard
                 mainData[6] = value;
             }
         }
-        public bool DIO8
+        public bool FMSAttached
         {
             get
             {
@@ -756,7 +756,7 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// Get or set the value of error 1
         /// </summary>
-        public bool Field1
+        public bool PacketLost
         {
             get
             {
@@ -767,7 +767,7 @@ namespace System451.Communication.Dashboard
                 mainData[0] = value;
             }
         }
-        public bool Field2
+        public bool TeamMismatch
         {
             get
             {
@@ -778,7 +778,7 @@ namespace System451.Communication.Dashboard
                 mainData[1] = value;
             }
         }
-        public bool Field3
+        public bool cRIOVersionMismatch
         {
             get
             {
@@ -789,7 +789,7 @@ namespace System451.Communication.Dashboard
                 mainData[2] = value;
             }
         }
-        public bool Field4
+        public bool FPGAVersionMismatch
         {
             get
             {
@@ -800,7 +800,7 @@ namespace System451.Communication.Dashboard
                 mainData[3] = value;
             }
         }
-        public bool Field5
+        public bool Byte5
         {
             get
             {
@@ -811,7 +811,7 @@ namespace System451.Communication.Dashboard
                 mainData[4] = value;
             }
         }
-        public bool Field6
+        public bool Byte6
         {
             get
             {
@@ -822,7 +822,7 @@ namespace System451.Communication.Dashboard
                 mainData[5] = value;
             }
         }
-        public bool Field7
+        public bool Byte7
         {
             get
             {
@@ -833,7 +833,7 @@ namespace System451.Communication.Dashboard
                 mainData[6] = value;
             }
         }
-        public bool Field8
+        public bool DSVersionError
         {
             get
             {
