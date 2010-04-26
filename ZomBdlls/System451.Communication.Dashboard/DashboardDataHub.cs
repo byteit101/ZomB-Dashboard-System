@@ -38,7 +38,9 @@ namespace System451.Communication.Dashboard
     /// </summary>
     public class DashboardDataHub : Component, IZomBController
     {
+        public delegate void InvalidPacketRecievedEventHandler(object sender, InvalidPacketRecievedEventArgs e);
 
+        public event InvalidPacketRecievedEventHandler InvalidPacketRecieved;
         public event ErrorEventHandler OnError;
 
         UdpClient cRIOConnection;
@@ -261,6 +263,24 @@ namespace System451.Communication.Dashboard
 
         private void ProcessControls(string Output, byte[] buffer)
         {
+            //Check first
+            if (!VerifyPacket(buffer))
+            {
+                if (InvalidPacketRecieved != null)
+                {
+                    //Create our e
+                    InvalidPacketRecievedEventArgs e = new InvalidPacketRecievedEventArgs(buffer, this.InvalidPacketAction == InvalidPacketActions.AlwaysContinue || this.InvalidPacketAction == InvalidPacketActions.Continue);
+                    InvalidPacketRecieved(this, e);//TODO: Test multi-cast-ness of this
+                    if ((int)InvalidPacketAction < 3)//1-4
+                    {
+                        if (!e.ContinueAnyway)
+                            return;
+                    }
+                    else if (InvalidPacketAction == InvalidPacketActions.AlwaysIgnore)
+                        return;
+                }
+            }
+
             //Get the items in a dictionary
             Dictionary<string, string> vals = SplitParams(Output);
             FRCDSStatus status = ParseDSBytes(buffer);
@@ -344,12 +364,38 @@ namespace System451.Communication.Dashboard
             ret.Battery = float.Parse(buffer[4].ToString("x") + "." + buffer[5].ToString("x"));
             ret.Status = new StatusBitField(buffer[6]);
             ret.Error = new ErrorBitField(buffer[7]);
-            ret.Team = int.Parse(buffer[8].ToString("x") + buffer[9].ToString("x"));
-            //OR
             ret.Team = (int)buffer[8] + (int)(buffer[9] >> 8);
             //TODO: Add version
 
             return ret;
+        }
+
+        /// <summary>
+        /// Verifies the DS packet was transmitted successfully
+        /// </summary>
+        /// <param name="data">The Packet Data</param>
+        /// <returns>Is the packet valid?</returns>
+        /// <remarks>
+        /// Thanks to EHaskins for the bulk of this function (http://www.chiefdelphi.com/forums/showpost.php?p=955762&postcount=4)
+        /// </remarks>
+        static protected bool VerifyPacket(byte[] data)
+        {
+            if (data.Length != 1018)
+                return false;
+
+            uint calculatedCrc = 0;
+            uint dataCrc = 0;
+            Crc32 crc = new Crc32();
+
+            dataCrc = BitConverter.ToUInt32(data, data.Length - 4);
+
+            //remove CRC bytes from data before calculating CRC.
+            byte[] crcData = new byte[data.Length - 1];
+            Buffer.BlockCopy(data, 0, crcData, 0, data.Length - 4);
+
+            calculatedCrc = BitConverter.ToUInt32(crc.ComputeHash(crcData), 0);
+
+            return (dataCrc == calculatedCrc);
         }
 
         /// <summary>
@@ -401,6 +447,11 @@ namespace System451.Communication.Dashboard
             else
                 OnError(this, new ErrorEventArgs(ex));
         }
+
+        /// <summary>
+        /// What to do when an invalid packet is recieved
+        /// </summary>
+        public InvalidPacketActions InvalidPacketAction { get; set; }
 
         /// <summary>
         /// Kill, and then re-animate ZomB
@@ -456,6 +507,66 @@ namespace System451.Communication.Dashboard
         }
 
         #endregion
+    }
+
+    /// <summary>
+    /// Actions to take when a packet is corroupted
+    /// </summary>
+    public enum InvalidPacketActions
+    {
+        /// <summary>
+        /// Skip this packet
+        /// </summary>
+        Ignore = 1,
+        /// <summary>
+        /// Pretend the packet is fine
+        /// </summary>
+        Continue,
+        /// <summary>
+        /// Ignore, regardless of what the InvalidPacketRecievedEventArgs.ContinueAnyway is set to 
+        /// </summary>
+        AlwaysIgnore,
+        /// <summary>
+        /// Continue, regardless of what the InvalidPacketRecievedEventArgs.ContinueAnyway is set to 
+        /// </summary>
+        AlwaysContinue
+    }
+
+    /// <summary>
+    /// EventArgs for the InvalidPacketRecieved event in DashboardDataHub
+    /// </summary>
+    public class InvalidPacketRecievedEventArgs : EventArgs
+    {
+        /// <summary>
+        /// Create a new InvalidPacketRecievedEventArgs
+        /// </summary>
+        /// <param name="packetData">The invalid packet data</param>
+        public InvalidPacketRecievedEventArgs(byte[] packetData)
+        {
+            PacketData = packetData;
+        }
+
+        /// <summary>
+        /// Create a new InvalidPacketRecievedEventArgs
+        /// </summary>
+        /// <param name="packetData">The invalid packet data</param>
+        /// <param name="continueAnyway">Continue anyway</param>
+        public InvalidPacketRecievedEventArgs(byte[] packetData, bool continueAnyway)
+        {
+            PacketData = packetData;
+            ContinueAnyway = continueAnyway;
+        }
+
+        /// <summary>
+        /// The invalid packet
+        /// </summary>
+        public byte[] PacketData { get; private set; }
+
+        /// <summary>
+        /// Should we ignore this error?
+        /// This can be overridden by the IgnorePacketAction field's AlwaysContinue and AlwaysIgnore
+        /// </summary>
+        public bool ContinueAnyway { get; set; }
     }
 
     [ToolboxBitmap(typeof(Button))]

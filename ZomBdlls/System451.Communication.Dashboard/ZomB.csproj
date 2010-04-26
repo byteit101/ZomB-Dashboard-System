@@ -60,6 +60,7 @@
     <Compile Include="BitUtils.cs" />
     <Compile Include="BTFingerArc.cs">
     </Compile>
+    <Compile Include="Crc32.cs" />
     <Compile Include="DashboardDataHub.cs">
       <SubType>Component</SubType>
     </Compile>
