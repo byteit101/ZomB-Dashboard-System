@@ -1,3 +1,9 @@
+/*
+ * This code was found on http://www.codeproject.com/KB/audio-video/avifilewrapper.aspx
+ * and was released under The Code Project Open License (CPOL) @ http://www.codeproject.com/info/cpol10.aspx
+ * This, and all other source files from this project are not under the ZomB Dashboard System's 
+ * license, as this source code is unmodified (aside from this header)
+ **/
 using System;
 
 namespace AviFile

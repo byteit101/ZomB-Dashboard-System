@@ -139,6 +139,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Receiver.cs" />
+    <Compile Include="RobotStatusEventMonitor.cs" />
     <Compile Include="RoundSpeedMeter.cs">
       <SubType>Component</SubType>
     </Compile>

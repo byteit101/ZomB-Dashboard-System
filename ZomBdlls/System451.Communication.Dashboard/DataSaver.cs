@@ -30,11 +30,10 @@ namespace System451.Communication.Dashboard
 {
     class DataSaver:Control, IZomBMonitor
     {
-        string paramName = "DataSave1";
-        Collection<string> buffer = new Collection<string>();
+        Queue<byte[]> buffer = new Queue<byte[]>();
         bool saving = false;
-        StreamWriter outs;
-        delegate void UpdaterDelegate(string value);
+        BinaryWriter outs;
+        delegate void UpdaterDelegate(byte[] value);
 
         public DataSaver()
         {
@@ -53,14 +52,8 @@ namespace System451.Communication.Dashboard
             }
         }
 
-        [DefaultValue("DataSave1"), Category("ZomB"), Description("What this control will get the value of from the packet Data")]
-        public string BindToInput
-        {
-            get { return paramName; }
-            set { paramName = value; }
-        }
 
-        private void AddValue(string value)
+        private void AddValue(byte[] value)
         {
             if (this.InvokeRequired)
             {
@@ -68,9 +61,9 @@ namespace System451.Communication.Dashboard
             }
             else
             {
-                if (value != null && value != "")
+                if (value != null)
                 {
-                    buffer.Add(value);
+                    buffer.Enqueue(value);
                     if (buffer.Count >= 30)
                         WriteBuffer();
                 }
@@ -79,16 +72,20 @@ namespace System451.Communication.Dashboard
 
         private void WriteBuffer()
         {
-            foreach (string value in buffer)
+            while (buffer.Count>1)
             {
-                outs.Write("\""+value + "\",");
+                outs.Write(buffer.Dequeue());
+                outs.Write((byte)' ');
+                outs.Write((byte)' ');
+                outs.Write((byte)' ');
+                outs.Write((byte)'&');
+                outs.Write((byte)' ');
             }
-            buffer.Clear();
         }
 
         public void Start()
         {
-            outs = new StreamWriter(FilePath);
+            outs = new BinaryWriter(File.Open(FilePath, FileMode.Append));
             saving = true;
         }
         public void Stop()
@@ -126,8 +123,7 @@ namespace System451.Communication.Dashboard
 
         public void UpdateData(Dictionary<string, string> data, byte[] packetData)
         {
-#warning Implement this
-            //TODO: IMplement this
+            AddValue(packetData);
         }
 
         #endregion

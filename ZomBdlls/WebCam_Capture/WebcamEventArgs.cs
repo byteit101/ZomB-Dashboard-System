@@ -1,3 +1,9 @@
+/*
+ * This code was found on http://www.Planet-Source-Code.com/vb/scripts/ShowCode.asp?txtCodeId=1339&lngWId=10
+ * Since this code was not found with a license, it is subject
+ * to the ZomB Dashboard System's license
+ * This source code is unmodified from the original source (aside from this header)
+ **/
 using System;
 
 namespace WebCam_Capture

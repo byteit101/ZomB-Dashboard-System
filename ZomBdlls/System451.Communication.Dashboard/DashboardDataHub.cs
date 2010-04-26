@@ -365,7 +365,14 @@ namespace System451.Communication.Dashboard
             ret.Status = new StatusBitField(buffer[6]);
             ret.Error = new ErrorBitField(buffer[7]);
             ret.Team = (int)buffer[8] + (int)(buffer[9] >> 8);
-            //TODO: Add version
+
+            //there's got to be a better way to do this
+            int Month = int.Parse(new string(new char[] { (char)buffer[10], (char)buffer[11] }));
+            int Day = int.Parse(new string(new char[] { (char)buffer[12], (char)buffer[13] }));
+            int year = 2000+int.Parse(new string(new char[] { (char)buffer[14], (char)buffer[15] }));
+
+            ret.Version = new DateTime(year, Month, Day);
+            ret.Revision = (ushort)((ushort)(buffer[16]) + ((ushort)(buffer[17] >> 8)));
 
             return ret;
         }

@@ -72,36 +72,6 @@ namespace System451.Communication.Dashboard
 
         #endregion
 
-        #region IDashboardControl Members
-
-        public string[] ParamName
-        {
-            get
-            {
-                return null;
-            }
-            set
-            {
-                
-            }
-        }
-
-        public string Value
-        {
-            get;
-            set;
-        }
-
-        public string DefalutValue
-        {
-            get { return ""; }
-        }
-
-        public void Update()
-        {
-            
-        }
-
-        #endregion
+        
     }
 }
