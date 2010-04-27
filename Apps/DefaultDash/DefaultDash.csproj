@@ -89,8 +89,8 @@
     <None Include="Resources\varsexp21.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CREDITS.txt" />
     <Content Include="LICENSE.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

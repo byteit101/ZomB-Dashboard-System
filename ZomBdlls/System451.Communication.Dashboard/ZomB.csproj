@@ -100,12 +100,6 @@
     <Compile Include="DistanceMeter.Designer.cs">
       <DependentUpon>DistanceMeter.cs</DependentUpon>
     </Compile>
-    <Compile Include="dragobj.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="dragobj.Designer.cs">
-      <DependentUpon>dragobj.cs</DependentUpon>
-    </Compile>
     <Compile Include="FTP.cs" />
     <Compile Include="IDataSave.cs" />
     <Compile Include="MessageDisp.cs">
@@ -119,12 +113,6 @@
     </Compile>
     <Compile Include="OnOffControl.Designer.cs">
       <DependentUpon>OnOffControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="overlayobj.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="overlayobj.Designer.cs">
-      <DependentUpon>overlayobj.cs</DependentUpon>
     </Compile>
     <Compile Include="PercentBar.cs">
       <SubType>Component</SubType>
@@ -235,16 +223,8 @@
       <DependentUpon>DataGraph.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="dragobj.resx">
-      <DependentUpon>dragobj.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="MessageDisp.resx">
       <DependentUpon>MessageDisp.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="overlayobj.resx">
-      <DependentUpon>overlayobj.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="CameraView.resx">
@@ -260,6 +240,7 @@
     <Content Include="32feetWidcomm.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="CREDITS.txt" />
     <Content Include="Graph.ico" />
     <Content Include="InTheHand.Net.Personal.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

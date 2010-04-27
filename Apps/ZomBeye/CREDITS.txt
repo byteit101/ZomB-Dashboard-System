@@ -1,0 +1,60 @@
+﻿ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard> written by Patrick Plenefisch and Team 451 "The Cat Attack"
+
+http://www.codeproject.com/KB/audio-video/avifilewrapper.aspx (Corinna John) for the AviFile library
+http://www.chiefdelphi.com/forums/showthread.php?t=82422 (TheDominis) for the video feed
+http://www.virtualroadside.com/blog/index.php/2008/04/03/c-oscilloscope-and-analog-meter-controls/ (virtuald) for the beautiful analog meter
+http://32feet.codeplex.com/ for the Bluetooth interface
+http://damieng.com/blog/2006/08/08/calculating_crc32_in_c_and_net (Damien) for CRC calculations
+http://www.Planet-Source-Code.com/vb/scripts/ShowCode.asp?txtCodeId=1339&lngWId=10 (Philip Pierce) for the Webcam
+
+http://www.chiefdelphi.com/forums/forumdisplay.php?f=51
+    EHaskins - Help with the DS protocol and CRC
+    virtuald - His Analog meter
+    slavik262 - Help with the DS protocol
+    Greg McKaskle - Help with the DS protocol
+    
+
+The mentors and programmers of Team 451, for the continued support, and the tacometer images
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                   ....O.O$I, .8.                               
+                         ..,++8O8Z7I$7??+7I$?D8$7$$OO87I                        
+                      .OOO778+?7??+==============++I??$777$.                    
+                   :=$+$7?+=============================+??I8.                  
+                .+=87I?+===================================+?I$O,               
+              .=8Z7?+=========================================+?777.            
+            .I$O$I+=============================================??7O            
+           .~8$7I================================================+I$$.          
+         ..+77?+===================================================+$I?.        
+         .O$77+~====================================================??.~.       
+        .?ZI?========================================================??7=       
+        +ZI?==========================================================?$,       
+      ..?$?+===========================================================I$..     
+      .Z7?I================  TACOMETER V1.0  ==========================+7?.     
+    ..7$7?==============================================================7?.     
+    ..O$I+==============================================================+..     
+    .8O7?+==============================================================+       
+    .,OOI==============================================================+:       
+                    

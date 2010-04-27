@@ -1,10 +1,29 @@
-﻿using System;
+﻿/*
+ * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
+ * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace System451.Communication.Dashboard
 {
-    class RobotStatusEventMonitor : IZomBMonitor
+    /// <summary>
+    /// This class monitors for changes in the status of the Robot
+    /// </summary>
+    public class RobotStatusEventMonitor : IZomBMonitor
     {
         StatusBitField stat;
         ErrorBitField ebf;
@@ -28,16 +47,28 @@ namespace System451.Communication.Dashboard
         public event EventHandler MatchEnded;
         public event EventHandler MatchAborted;
 
-
+        /// <summary>
+        /// Create a gnu RobotStatusEventMonitor
+        /// </summary>
         public RobotStatusEventMonitor()
         {
             EnableEvents = false;
         }
+
+        /// <summary>
+        /// Create a gnu RobotStatusEventMonitor
+        /// </summary>
+        /// <param name="enableEvents">Should we enable the events? Default false.
+        /// Setting this to true allows you to bind to the events, but causes an increase in overhead for each packet</param>
         public RobotStatusEventMonitor(bool enableEvents)
         {
             EnableEvents = enableEvents;
         }
 
+        /// <summary>
+        /// Should we enable the events?
+        /// Setting this to true allows you to bind to the events, but causes an increase in overhead for each packet
+        /// </summary>
         public bool EnableEvents
         {
             get;
@@ -51,6 +82,7 @@ namespace System451.Communication.Dashboard
                 return team;
             }
         }
+
         public float Battery
         {
             get
@@ -66,6 +98,7 @@ namespace System451.Communication.Dashboard
                 return stat.Auto;
             }
         }
+
         public bool IsAuto
         {
             get
@@ -73,6 +106,7 @@ namespace System451.Communication.Dashboard
                 return stat.Auto;
             }
         }
+
         public bool IsOperatorControlled
         {
             get
@@ -80,6 +114,7 @@ namespace System451.Communication.Dashboard
                 return !stat.Auto;
             }
         }
+
         public bool IsTelop
         {
             get
@@ -87,6 +122,7 @@ namespace System451.Communication.Dashboard
                 return !stat.Auto;
             }
         }
+
         public bool IsEnabled
         {
             get
@@ -94,6 +130,7 @@ namespace System451.Communication.Dashboard
                 return stat.Enabled;
             }
         }
+
         public bool IsDisabled
         {
             get
@@ -101,6 +138,7 @@ namespace System451.Communication.Dashboard
                 return !stat.Enabled;
             }
         }
+
         public bool IsEStopped
         {
             get
@@ -108,6 +146,7 @@ namespace System451.Communication.Dashboard
                 return stat.EmergencyStopped;
             }
         }
+
         public bool IsRobotConnected
         {
             get
@@ -115,6 +154,7 @@ namespace System451.Communication.Dashboard
                 return stat.RobotAttached;
             }
         }
+
         public bool IsFMSConnected
         {
             get
@@ -122,6 +162,7 @@ namespace System451.Communication.Dashboard
                 return stat.FMSAttached;
             }
         }
+
         public bool DSPacketLost
         {
             get
@@ -129,6 +170,7 @@ namespace System451.Communication.Dashboard
                 return ebf.PacketLost;
             }
         }
+
         public bool cRIOVersionMismatch
         {
             get
@@ -136,6 +178,7 @@ namespace System451.Communication.Dashboard
                 return ebf.cRIOVersionMismatch;
             }
         }
+
         public bool DSVersionError
         {
             get
@@ -143,6 +186,7 @@ namespace System451.Communication.Dashboard
                 return ebf.DSVersionError;
             }
         }
+
         public bool TeamMismatch
         {
             get
@@ -150,6 +194,7 @@ namespace System451.Communication.Dashboard
                 return ebf.TeamMismatch;
             }
         }
+
         public bool FPGAVersionMismatch
         {
             get
@@ -157,6 +202,7 @@ namespace System451.Communication.Dashboard
                 return ebf.FPGAVersionMismatch;
             }
         }
+
         public DIOBitField DigitalOut
         {
             get
@@ -164,6 +210,7 @@ namespace System451.Communication.Dashboard
                 return outdio;
             }
         }
+
         public DIOBitField DigitalIn
         {
             get

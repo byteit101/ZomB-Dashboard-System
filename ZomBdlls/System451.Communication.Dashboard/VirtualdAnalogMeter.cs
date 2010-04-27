@@ -25,7 +25,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*
- * Added To (and therefore modded slightly) the ZomB Dashboard System by Patrick Plenefisch 
+ * This code was found on http://www.virtualroadside.com/blog/index.php/2008/04/03/c-oscilloscope-and-analog-meter-controls/
+ * and was released under the New BSD License
  * Original source can be found at http://www.virtualroadside.com/download/Instruments-1.0.zip
  */
 
