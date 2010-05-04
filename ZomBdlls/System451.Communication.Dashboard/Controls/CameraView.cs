@@ -289,12 +289,6 @@ namespace System451.Communication.Dashboard
 
 
         #region IZomBControl Members
-
-        public bool RequiresAllData
-        {
-            get { return false; }
-        }
-
         public bool IsMultiWatch
         {
             get { return false; }
@@ -306,7 +300,7 @@ namespace System451.Communication.Dashboard
             set;
         }
 
-        public void UpdateControl(string value, byte[] packetData)
+        public void UpdateControl(string value)
         {
             Target = RectParse(value);
 

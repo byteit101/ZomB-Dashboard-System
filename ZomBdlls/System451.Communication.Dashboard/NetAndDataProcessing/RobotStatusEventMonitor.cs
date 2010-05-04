@@ -334,7 +334,7 @@ namespace System451.Communication.Dashboard
             battery = status.Battery;
         }
 
-        void IZomBMonitor.UpdateData(Dictionary<string, string> data, byte[] packetData)
+        void IZomBMonitor.UpdateData(Dictionary<string, string> data)
         {
             //Nothing important happens here
         }

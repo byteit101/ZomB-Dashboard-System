@@ -101,6 +101,8 @@
       <DependentUpon>DistanceMeter.cs</DependentUpon>
     </Compile>
     <Compile Include="FTP.cs" />
+    <Compile Include="NetAndDataProcessing\DashboardData\IDashboardDataSource.cs" />
+    <Compile Include="NetAndDataProcessing\DashboardData\DashboardPacketDataSource.cs" />
     <Compile Include="NetAndDataProcessing\IDataSave.cs" />
     <Compile Include="Controls\MessageDisp.cs">
       <SubType>Component</SubType>

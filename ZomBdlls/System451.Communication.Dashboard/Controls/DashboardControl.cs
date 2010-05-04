@@ -85,11 +85,6 @@ namespace System451.Communication.Dashboard
     public interface IZomBControl
     {
         /// <summary>
-        /// Does this control need all the data, or just its own.
-        /// </summary>
-        bool RequiresAllData { get; }
-
-        /// <summary>
         /// Does this control watch multiple values, or just one.
         /// </summary>
         bool IsMultiWatch { get; }
@@ -104,8 +99,7 @@ namespace System451.Communication.Dashboard
         /// Updates the control with new data
         /// </summary>
         /// <param name="value">The new value of the control. If IsMultiWatch is true, this is a pipe seperated list of values</param>
-        /// <param name="packetData">If RequiresAllData is true, this contains all the packet data</param>
-        void UpdateControl(string value, byte[] packetData);
+        void UpdateControl(string value);
 
         /// <summary>
         /// Notifies when this control is added to a DashboardDataHub
@@ -133,14 +127,6 @@ namespace System451.Communication.Dashboard
         #region IZomBControl Members
 
         /// <summary>
-        /// Gets the RequiresAllData field. Default false.
-        /// </summary>
-        virtual public bool RequiresAllData
-        {
-            get { return false; }
-        }
-
-        /// <summary>
         /// Gets the IsMultiWatch field. Default false.
         /// </summary>
         virtual public bool IsMultiWatch
@@ -159,16 +145,7 @@ namespace System451.Communication.Dashboard
         }
 
         /// <summary>
-        /// Updates the control. This needs to be implemented if UpdateControl(string value) is not implemented.
-        /// </summary>
-        /// <exception cref="System.NotImplementedException">Always throws NotImplementedException</exception>
-        virtual public void UpdateControl(string value, byte[] packetData)
-        {
-            this.UpdateControl(value);
-        }
-
-        /// <summary>
-        /// Updates the control. This needs to be implemented if UpdateControl(string value, byte[] packetData) is not implemented.
+        /// Updates the control. This needs to be implemented.
         /// </summary>
         /// <exception cref="System.NotImplementedException">Always throws NotImplementedException</exception>
         virtual public void UpdateControl(string value)
@@ -224,18 +201,13 @@ namespace System451.Communication.Dashboard
     /// </summary>
     public class ZomBControlUpdatedEventArgs : EventArgs
     {
-        string value;
-        byte[] packetData;
-
         /// <summary>
         /// Create a new ZomBControlUpdatedEventArgs
         /// </summary>
         /// <param name="value">The new value of the control. If IsMultiWatch is true, this is a pipe seperated list of values</param>
-        /// <param name="packetData">If RequiresAllData is true, this contains all the packet data</param>
-        public ZomBControlUpdatedEventArgs(string value, byte[] packetData)
+        public ZomBControlUpdatedEventArgs(string value)
         {
-            this.value = value;
-            this.packetData = packetData;
+            this.Value = value;
         }
 
         /// <summary>
@@ -243,21 +215,8 @@ namespace System451.Communication.Dashboard
         /// </summary>
         public string Value
         {
-            get
-            {
-                return value;
-            }
-        }
-
-        /// <summary>
-        /// If RequiresAllData is true, this contains all the packet data
-        /// </summary>
-        public byte[] PacketData
-        {
-            get
-            {
-                return packetData;
-            }
+            get;
+            private set;
         }
     }
 
@@ -306,11 +265,10 @@ namespace System451.Communication.Dashboard
         /// Updates the control with new data
         /// </summary>
         /// <param name="value">The new value of the control. If IsMultiWatch is true, this is a pipe seperated list of values</param>
-        /// <param name="packetData">If RequiresAllData is true, this contains all the packet data</param>
-        public override void UpdateControl(string value, byte[] packetData)
+        public override void UpdateControl(string value)
         {
             if (ControlUpdated != null)
-                ControlUpdated(this, new ZomBControlUpdatedEventArgs(value, packetData));
+                ControlUpdated(this, new ZomBControlUpdatedEventArgs(value));
         }
 
         #region IZomBRemoteControl Members
@@ -352,8 +310,7 @@ namespace System451.Communication.Dashboard
         /// Updates with the new data from the robot
         /// </summary>
         /// <param name="data">A keyed collection of the name/value pairs of robot data</param>
-        /// <param name="packetData">The raw packet data</param>
-        void UpdateData(Dictionary<string, string> data, byte[] packetData);
+        void UpdateData(Dictionary<string, string> data);
     }
 
     /// <summary>

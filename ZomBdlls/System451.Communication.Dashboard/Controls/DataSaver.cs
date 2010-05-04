@@ -31,6 +31,7 @@ namespace System451.Communication.Dashboard
         bool saving = false;
         BinaryWriter outs;
         delegate void UpdaterDelegate(byte[] value);
+        DateTime  lasttime;
 
         public DataSaver()
         {
@@ -58,13 +59,32 @@ namespace System451.Communication.Dashboard
             }
             else
             {
-                if (value != null)
+                if (saving)
                 {
-                    buffer.Enqueue(value);
-                    if (buffer.Count >= 30)
-                        WriteBuffer();
+                    if (value != null)
+                    {
+                        buffer.Enqueue(GetTime());
+                        buffer.Enqueue(value);
+
+                        if (buffer.Count >= 30)
+                            WriteBuffer();
+                    }
                 }
             }
+        }
+
+        private byte[] GetTime()
+        {
+            byte[] bits = new byte[3];
+            bits[0] = 84;
+            DateTime dif = DateTime.Now.Subtract(lasttime);
+            lasttime = DateTime.Now;
+            ushort msd = (ushort)(dif.Minute * 60000);
+            msd += (ushort)(dif.Second * 1000);
+            msd += (ushort)dif.Millisecond;
+            bits[1] = (byte)(msd >> 8);
+            bits[2] = (byte)msd;
+            return bits;
         }
 
         private void WriteBuffer()
@@ -72,11 +92,6 @@ namespace System451.Communication.Dashboard
             while (buffer.Count>1)
             {
                 outs.Write(buffer.Dequeue());
-                outs.Write((byte)' ');
-                outs.Write((byte)' ');
-                outs.Write((byte)' ');
-                outs.Write((byte)'&');
-                outs.Write((byte)' ');
             }
         }
 
@@ -84,6 +99,7 @@ namespace System451.Communication.Dashboard
         {
             outs = new BinaryWriter(File.Open(FilePath, FileMode.Append));
             saving = true;
+            lasttime = DateTime.Now;
         }
         public void Stop()
         {
@@ -96,8 +112,10 @@ namespace System451.Communication.Dashboard
         {
             if (outs != null)
             {
+                outs.Write((byte)81);//Q
                 outs.Flush();
                 outs.Close();
+                outs = null;
             }
         }
 
@@ -115,14 +133,47 @@ namespace System451.Communication.Dashboard
 
         public void UpdateStatus(FRCDSStatus status)
         {
-            
+            if (saving)
+            {
+                byte[] bit = new byte[9];
+                bit[0] = 83;//"S"
+                bit[1] = status.Status.Byte;
+                bit[2] = status.Error.Byte;
+                bit[3] = status.DigitalIn.Byte;
+                bit[4] = status.DigitalOut.Byte;
+                bit[5] = (byte)(status.PacketNumber >> 8);
+                bit[6] = (byte)status.PacketNumber;
+                bit[7] = (byte)((int)status.Battery);
+                bit[8] = (byte)((status.Battery - ((int)status.Battery)) * 100);
+                AddValue(bit);
+            }
         }
 
-        public void UpdateData(Dictionary<string, string> data, byte[] packetData)
+        public void UpdateData(Dictionary<string, string> data)
         {
-            AddValue(packetData);
+#warning Make this work
+            if (saving)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("Dln");
+                foreach (var item in data)
+                {
+                    sb.Append(item.Key);
+                    sb.Append("=");
+                    sb.Append(item.Value);
+                    sb.Append("|");
+                }
+                byte[] bit = UTF8Encoding.UTF8.GetBytes(sb.ToString());
+                bit[0] = 68;//"D"
+                bit[1] = (byte)(sb.Length >> 8);
+                bit[2] = (byte)(sb.Length);
+                AddValue(bit);
+            }
+            //TODO: Fix this
+            //AddValue(packetData);
         }
 
         #endregion
     }
+    //Format: T(ushort)[timespan]S[data]D(ushort)[length][data]
 }

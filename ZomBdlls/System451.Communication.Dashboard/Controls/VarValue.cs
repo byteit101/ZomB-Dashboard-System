@@ -91,21 +91,17 @@ namespace System451.Communication.Dashboard
 
         #region IZomBControl Members
 
-        public bool RequiresAllData
-        {
-            get { return true; }
-        }
-
         public bool IsMultiWatch
         {
             get { return false; }
         }
 
-        public void UpdateControl(string value, byte[] packetData)
+        void IZomBControl.UpdateControl(string value)
         {
+#warning this no longer works
             ///FROM DDH///
             //this needs to be tested, but should work
-            string Output = UTF7Encoding.UTF7.GetString(packetData);
+            string Output = "";// UTF7Encoding.UTF7.GetString(packetData);
 
             //Find segment of data
             if (Output.Contains("@@ZomB:|") && Output.Contains("|:ZomB@@"))

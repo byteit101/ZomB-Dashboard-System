@@ -351,7 +351,7 @@ namespace System451.Communication.Dashboard
             set
             {
                 //use the mech to be true
-                xmove_ControlUpdated(this, new ZomBControlUpdatedEventArgs(value.ToString(), null));
+                xmove_ControlUpdated(this, new ZomBControlUpdatedEventArgs(value.ToString()));
             }
         }
 
@@ -368,7 +368,7 @@ namespace System451.Communication.Dashboard
             set
             {
                 //use the mech to be true
-                ymove_ControlUpdated(this, new ZomBControlUpdatedEventArgs(value.ToString(), null));
+                ymove_ControlUpdated(this, new ZomBControlUpdatedEventArgs(value.ToString()));
             }
         }
 

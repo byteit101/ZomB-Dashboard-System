@@ -27,22 +27,23 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System451.Communication.Dashboard.Net;
 
 namespace System451.Communication.Dashboard
 {
+
     /// <summary>
     /// This is the main controller of the dashboard packets data
     /// </summary>
     public class DashboardDataHub : Component, IZomBController
     {
-        public delegate void InvalidPacketRecievedEventHandler(object sender, InvalidPacketRecievedEventArgs e);
+        
 
         public event InvalidPacketRecievedEventHandler InvalidPacketRecieved;
         public event ErrorEventHandler OnError;
 
-        UdpClient cRIOConnection;
-        bool isrunning;
-        Thread mt;
+        bool havestatus = false;
+        Collection<IDashboardDataSource> DataSrcs;
 
         Collection<IZomBControl> zomBcontrols = new Collection<IZomBControl>();
         Collection<IZomBControlGroup> zomBgroups = new Collection<IZomBControlGroup>();
@@ -55,7 +56,35 @@ namespace System451.Communication.Dashboard
         /// </summary>
         public DashboardDataHub()
         {
+            ResetDataSources();
+            AddDBPacketDataSourceInit();
+        }
 
+        //TODO: Fix this
+        private void AddDBPacketDataSourceInit()
+        {
+            IDashboardDataSource src = new DashboardPacketDataSource(this);
+            src.InvalidPacketRecieved += new InvalidPacketRecievedEventHandler(src_InvalidPacketRecieved);
+            src.OnError += new ErrorEventHandler(src_OnError);
+            DataSrcs.Add(src);
+        }
+
+        private void ResetDataSources()
+        {
+            DataSrcs = new Collection<IDashboardDataSource>();
+        }
+
+
+        void src_OnError(object sender, ErrorEventArgs e)
+        {
+            if (this.OnError != null)
+                OnError(sender, e);
+        }
+
+        void src_InvalidPacketRecieved(object sender, InvalidPacketRecievedEventArgs e)
+        {
+            if (this.InvalidPacketRecieved != null)
+                InvalidPacketRecieved(sender, e);
         }
 
         /// <summary>
@@ -65,8 +94,7 @@ namespace System451.Communication.Dashboard
         {
             try
             {
-                cRIOConnection.Client.Disconnect(false);
-                cRIOConnection.Close();
+#warning Delete the src's !
             }
             catch
             {
@@ -156,27 +184,67 @@ namespace System451.Communication.Dashboard
         /// </summary>
         public void Start()
         {
-            if (cRIOConnection == null)
+            if (!Running)
             {
+                int i = 0;
                 try
                 {
-                    cRIOConnection = new UdpClient(1165);
+                    if (StartSource != StartSources.Manual)
+                    {
+                        //Auto setup the sources
+                        ClearSources();
+                        RegisterSource(StartSource);
+                    }
+                    for (; i < DataSrcs.Count; i++)
+                    {
+                        StartSrc(DataSrcs[i]);
+                    }
+                    Running = true;
                 }
-                catch (Exception ex)
+                catch
                 {
-                    DoError(ex);
+                    for (; i <=0; i--)
+                    {
+                        StopSrc(DataSrcs[i]);
+                    }
+                    Running = false;
                 }
             }
-            try
+        }
+
+        /// <summary>
+        /// stop the SCR and any associated srcs
+        /// </summary>
+        /// <param name="item">The src</param>
+        protected void StopSrc(IDashboardDataSource item)
+        {
+            item.Stop();
+            //TODO: Test, this shouldnt be nescesecary
+            if (item.HasData && item != (item.GetDataSource() as IDashboardDataSource))
             {
-                mt = new Thread(new ThreadStart(this.run));
-                mt.IsBackground = true;
-                isrunning = true;
-                mt.Start();
+                item.GetDataSource().Stop();
             }
-            catch (Exception ex)
+            if (item.HasStatus && item != (item.GetStatusSource() as IDashboardDataSource))
             {
-                DoError(ex);
+                item.GetStatusSource().Stop();
+            }
+        }
+
+        /// <summary>
+        /// Start the SCR and any associated srcs
+        /// </summary>
+        /// <param name="item">The src</param>
+        protected void StartSrc(IDashboardDataSource item)
+        {
+            item.Start();
+            //TODO: Test
+            if (item.HasData && item != (item.GetDataSource() as IDashboardDataSource))
+            {
+                item.GetDataSource().Start();
+            }
+            if (item.HasStatus && item != (item.GetStatusSource() as IDashboardDataSource))
+            {
+                item.GetStatusSource().Start();
             }
         }
 
@@ -189,111 +257,133 @@ namespace System451.Communication.Dashboard
         /// </summary>
         public void Stop()
         {
-            try
-            {
-                isrunning = false;
-                Thread.Sleep(500);
-                if (mt.IsAlive)
-                    mt.Abort();
-            }
-            catch
-            {
-            }
+            Running = false;
         }
 
         /// <summary>
-        /// The background worker. will exit after 5 consectutive errors
+        /// Are we running?
         /// </summary>
-        private void run()
+        public bool Running { get; private set; }
+
+        /// <summary>
+        /// What the DDH will load as sources when it start()'s
+        /// </summary>
+        public StartSources StartSource { get; set; }
+
+        /// <summary>
+        /// Register a new IDashboardDataSource. This adds it to the collection and uses it
+        /// You must not be running the DDH to add successfully
+        /// </summary>
+        /// <param name="src">The source to add</param>
+        /// <returns>True on success, false otherwise</returns>
+        public bool RegisterSource(IDashboardDataSource src)
         {
-            int nume = 0;
-            while (isrunning)
+            if (!Running && src != null)
             {
-                try
+                if (!DataSrcs.Contains(src))
                 {
-                    IPEndPoint RIPend = null;
-                    //Recieve the data
-                    byte[] buffer = cRIOConnection.Receive(ref RIPend);
-                    string Output;
-
-                    //Convert
-                    //this works, and is proven
-                    //Output="";
-                    //for (int cnr = 0; cnr < buffer.Length; cnr++)
-                    //{
-                    //    Output += ((buffer[cnr] != 0) ? ((char)buffer[cnr]).ToString() : "");
-                    //}
-                    //this needs to be tested, but should work
-                    Output = UTF7Encoding.UTF7.GetString(buffer);
-
-                    //Find segment of data
-                    if (Output.Contains("@@ZomB:|") && Output.Contains("|:ZomB@@"))
+                    src.InvalidPacketRecieved += new InvalidPacketRecievedEventHandler(src_InvalidPacketRecieved);
+                    src.OnError += new ErrorEventHandler(src_OnError);
+                    src.DataRecieved += new EventHandler(src_DataRecieved);
+                    if (src.HasData)
                     {
-                        Output = Output.Substring(Output.IndexOf("@@ZomB:|") + 8, (Output.IndexOf("|:ZomB@@") - (Output.IndexOf("@@ZomB:|") + 8)));
-                        if (Output != "")
-                        {
-                            ProcessControls(Output, buffer);
-                        }
+                        src.GetDataSource().NewDataRecieved += new NewDataRecievedEventHandler(src_NewDataRecieved);
                     }
-                    if (nume > 0)
-                        nume--;
-                }
-                catch (ThreadAbortException)
-                {
-                    isrunning = false;
-                    return;
-                }
-                catch (Exception ex)
-                {
-                    nume++;
-                    DoError(ex);
-                    if (nume > 5)
+                    if (src.HasStatus && !havestatus)
                     {
-                        isrunning = false;
-                        DoError(new Exception("5 consecutive errors were encountered, stopping DashboardDataHub"));
-                        isrunning = false;
-                        return;
+                        src.GetStatusSource().NewStatusRecieved += new NewStatusRecievedEventHandler(src_NewStatusRecieved);
                     }
+                    try
+                    {
+                        DataSrcs.Add(src);
+                        return true;
+                    }
+                    catch { }
                 }
             }
+            return false;
         }
 
-        private void ProcessControls(string Output, byte[] buffer)
+        /// <summary>
+        /// Clears the current sources
+        /// You must not be running the DDH to clear successfully
+        /// </summary>
+        /// <returns>true on success, false otherwise</returns>
+        public bool ClearSources()
         {
-            //Check first
-            if (!VerifyPacket(buffer))
+            if (!Running)
             {
-                if (InvalidPacketRecieved != null)
+                DataSrcs.Clear();
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Register the predefined sources
+        /// Will not clear the previous sources
+        /// You must not be running the DDH to add successfully
+        /// </summary>
+        /// <param name="sources">the sources</param>
+        /// <returns>true or false</returns>
+        protected bool RegisterSource(StartSources sources)
+        {
+            if (!Running)
+            {
+                switch (sources)
                 {
-                    //Create our e
-                    InvalidPacketRecievedEventArgs e = new InvalidPacketRecievedEventArgs(buffer, this.InvalidPacketAction == InvalidPacketActions.AlwaysContinue || this.InvalidPacketAction == InvalidPacketActions.Continue);
-                    InvalidPacketRecieved(this, e);//TODO: Test multi-cast-ness of this
-                    if ((int)InvalidPacketAction < 3)//1-4
-                    {
-                        if (!e.ContinueAnyway)
-                            return;
-                    }
-                    else if (InvalidPacketAction == InvalidPacketActions.AlwaysIgnore)
-                        return;
+                    case StartSources.DashboardPacket:
+                        return (RegisterDashboardPacketSource() == null ? false : true);
+                    case StartSources.Manual:
+                        //I can't set it up!
+                        break;
+                    default:
+                        //TODO: make sure this never happens
+                        throw new NotImplementedException();
+                        break;
                 }
             }
+            return false;
+        }
 
-            //Get the items in a dictionary
-            Dictionary<string, string> vals = SplitParams(Output);
-            FRCDSStatus status = ParseDSBytes(buffer);
-            currentstatus = status;
+        /// <summary>
+        /// Registers a DB Packet Datat source and returns it if successfull
+        /// You must not be running the DDH to add successfully
+        /// </summary>
+        /// <returns>If successfull, the registerd DBPDS</returns>
+        public DashboardPacketDataSource RegisterDashboardPacketSource()
+        {
+            if (!Running)
+            {
+                DashboardPacketDataSource src = new DashboardPacketDataSource(this);
+                return (RegisterSource(src) ? src : null);
+            }
+            return null;
+        }
 
+        void src_NewStatusRecieved(object sender, NewStatusRecievedEventArgs e)
+        {
+             //Process the Monitors
+            foreach (IZomBMonitor monitor in zomBmonitors)
+            {
+                monitor.UpdateStatus(e.NewStatus);
+            }
+            currentstatus = e.NewStatus;
+        }
+
+        void src_NewDataRecieved(object sender, NewDataRecievedEventArgs e)
+        {
             //Process the Monitors
             foreach (IZomBMonitor monitor in zomBmonitors)
             {
-                monitor.UpdateStatus(status);
-                monitor.UpdateData(vals, buffer);
+                
+                monitor.UpdateData(e.NewData);
             }
 
             //Process the normal controls
             foreach (IZomBControl cont in zomBcontrols)
             {
-                ProcessControl(cont, vals, buffer);
+                ProcessControl(cont, e.NewData);
             }
 
             //Process the GroupControls
@@ -301,39 +391,61 @@ namespace System451.Communication.Dashboard
             {
                 foreach (KeyValuePair<string, IZomBControl> item in group.GetControls())
                 {
-                    ProcessControl(item.Value, vals, buffer);
+                    ProcessControl(item.Value, e.NewData);
                 }
             }
         }
 
-        private static void ProcessControl(IZomBControl control, Dictionary<string, string> vals, byte[] buffer)
+        /// <summary>
+        /// Processes the control and gives it what it wants (aka. appesement)
+        /// </summary>
+        /// <param name="control">Le ZomB control</param>
+        /// <param name="vals">El dictionario</param>
+        /// <remarks>I must be tired</remarks>
+        private static void ProcessControl(IZomBControl control, Dictionary<string, string> vals)
         {
             try
             {
-
+                //TODO: Support dbg style multiple values
                 string val = "";
                 //if we are watching multiple values
                 if (control.IsMultiWatch)
                 {
-                    foreach (var item in control.ControlName.Split(';'))
+                    if (control.ControlName == "*")
                     {
-                        val += "|" + vals[item.Trim()];
+                        StringBuilder sb = new StringBuilder();
+                        foreach (var item in vals)
+                        {
+                            sb.Append("|"); 
+                            sb.Append(item.Key);
+                            sb.Append("=");
+                            sb.Append(item.Value);
+                        }
+                        val = sb.ToString();
+                    }
+                    else
+                    {
+                        foreach (var item in control.ControlName.Split(';'))
+                        {
+                            val += "|" + vals[item.Trim()];
+                        }
                     }
                     val = val.Substring(1);//remove first |
                 }
                 else
                     val = vals[control.ControlName];//get the value it wants
 
-                //If it does not need the data, don't pass
-                if (control.RequiresAllData)
-                    control.UpdateControl(val, buffer);
-                else
-                    control.UpdateControl(val, null);
+                control.UpdateControl(val);
             }
             //It should only get here if the key does not exist
             catch
             {
             }
+        }
+
+        void src_DataRecieved(object sender, EventArgs e)
+        {
+            //Don't Care at this point
         }
 
         /// <summary>
@@ -346,105 +458,10 @@ namespace System451.Communication.Dashboard
         }
 
         /// <summary>
-        /// Convert the DS Bytes to a FRCDSStatus
-        /// </summary>
-        /// <param name="buffer">The bytes from the Robot packet</param>
-        /// <returns>A FRCDSStatus containg the robot status</returns>
-        static protected FRCDSStatus ParseDSBytes(byte[] buffer)
-        {
-            //TODO: Find and Fix errors here
-            FRCDSStatus ret = new FRCDSStatus();
-            ret.PacketNumber = buffer[0];
-            ret.PacketNumber += (ushort)(buffer[1] >> 8);
-            ret.DigitalIn = new DIOBitField(buffer[2]);
-            ret.DigitalOut = new DIOBitField(buffer[3]);
-            ret.Battery = float.Parse(buffer[4].ToString("x") + "." + buffer[5].ToString("x"));
-            ret.Status = new StatusBitField(buffer[6]);
-            ret.Error = new ErrorBitField(buffer[7]);
-            ret.Team = (int)buffer[8] + (int)(buffer[9] >> 8);
-
-            //there's got to be a better way to do this
-            int Month = int.Parse(new string(new char[] { (char)buffer[10], (char)buffer[11] }));
-            int Day = int.Parse(new string(new char[] { (char)buffer[12], (char)buffer[13] }));
-            int year = 2000+int.Parse(new string(new char[] { (char)buffer[14], (char)buffer[15] }));
-
-            ret.Version = new DateTime(year, Month, Day);
-            ret.Revision = (ushort)((ushort)(buffer[16]) + ((ushort)(buffer[17] >> 8)));
-
-            return ret;
-        }
-
-        /// <summary>
-        /// Verifies the DS packet was transmitted successfully
-        /// </summary>
-        /// <param name="data">The Packet Data</param>
-        /// <returns>Is the packet valid?</returns>
-        /// <remarks>
-        /// Thanks to EHaskins for the bulk of this function (http://www.chiefdelphi.com/forums/showpost.php?p=955762&postcount=4)
-        /// </remarks>
-        static protected bool VerifyPacket(byte[] data)
-        {
-            if (data.Length != 1018)
-                return false;
-
-            uint calculatedCrc = 0;
-            uint dataCrc = 0;
-            Crc32 crc = new Crc32();
-
-            dataCrc = BitConverter.ToUInt32(data, data.Length - 4);
-
-            //remove CRC bytes from data before calculating CRC.
-            byte[] crcData = new byte[data.Length - 1];
-            Buffer.BlockCopy(data, 0, crcData, 0, data.Length - 4);
-
-            calculatedCrc = BitConverter.ToUInt32(crc.ComputeHash(crcData), 0);
-
-            return (dataCrc == calculatedCrc);
-        }
-
-        /// <summary>
-        /// Convert the name=value|n=v form to a Dictionary of name and values
-        /// </summary>
-        /// <param name="Output"></param>
-        /// <returns></returns>
-        private Dictionary<string, string> SplitParams(string Output)
-        {
-            //Split the main string
-            string[] s = Output.Split('|');
-            Dictionary<string, string> k = new Dictionary<string, string>(s.Length);
-            foreach (string item in s)
-            {
-                //split and add each item to the Dictionary
-                string ky, val;
-                ky = item.Split('=')[0];
-                val = item.Split('=')[1];
-                k[ky] = val;//Latter will overwrite
-            }
-            return k;
-        }
-
-        [Obsolete("This will be replaced with IZomBControl, and removed in v0.7 and later")]
-        private string GetParam(string ParamName, string ParamString, string DefaultValue)
-        {
-            foreach (string ValString in ParamString.Split(new char[] { '|' }))
-            {
-                if (ValString.ToUpper().StartsWith(ParamName.ToUpper()))
-                {
-                    if (ValString.Split(new char[] { '=' })[1] == "NaN")
-                    {
-                        return "0";
-                    }
-                    return ValString.Split(new char[] { '=' })[1];
-                }
-            }
-            return DefaultValue;
-        }
-
-        /// <summary>
         /// Processes any errors that may have been encountered, and either fires the OnError, or Alerts the user
         /// </summary>
         /// <param name="ex">The error</param>
-        protected void DoError(Exception ex)
+        internal void DoError(Exception ex)
         {
             if (OnError == null)
                 MessageBox.Show(ex.Message);
@@ -511,6 +528,22 @@ namespace System451.Communication.Dashboard
         }
 
         #endregion
+    }
+
+    /// <summary>
+    /// What the DDH will load as sources when it loads
+    /// </summary>
+    public enum StartSources
+    {
+        /// <summary>
+        /// Use the DB packet
+        /// </summary>
+        DashboardPacket,
+
+        /// <summary>
+        /// Manual configuration
+        /// </summary>
+        Manual
     }
 
     /// <summary>
