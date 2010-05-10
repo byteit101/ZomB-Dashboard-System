@@ -71,7 +71,7 @@ namespace System451.Communication.Dashboard
                     this.StartPosition = FormStartPosition.WindowsDefaultLocation;
                 }
                 this.ControlBox = false;
-                this.Size = DefaultSize;
+                this.ClientSize = DefaultSize;
             }
             else
             {
@@ -180,6 +180,28 @@ namespace System451.Communication.Dashboard
         /// </summary>
         public bool Running { get; private set; }
 
+        /// <summary>
+        /// Enable resizing when not in Driver mode
+        /// </summary>
+        [DefaultValue(false), Category("ZomB"), Description("Enable resizing when not in driver mode")]
+        public bool EnableResize { get; set; }
+
+        /// <summary>
+        /// What the DDH will load as sources when it start()'s
+        /// </summary>
+        [DefaultValue(typeof(StartSources), "DashboardPacket"), Category("ZomB"), Description("What the DDH will load as sources when it start()'s")]
+        public StartSources DefaultSources
+        {
+            get
+            {
+                return dashboardDataHub1.StartSource;
+            }
+            set
+            {
+                dashboardDataHub1.StartSource = value;
+            }
+        }
+
         private void DashboardDataHubForm_Load(object sender, EventArgs e)
         {
             if (Environment.UserName == "Driver" || DesignMode)
@@ -194,11 +216,14 @@ namespace System451.Communication.Dashboard
                     this.StartPosition = FormStartPosition.WindowsDefaultLocation;
                 }
                 this.ControlBox = false;
-                this.Size = DefaultSize;
+                this.ClientSize = DefaultSize;
             }
             else
             {
-                this.FormBorderStyle = FormBorderStyle.FixedSingle;
+                if (EnableResize)
+                    this.FormBorderStyle = FormBorderStyle.Sizable;
+                else
+                    this.FormBorderStyle = FormBorderStyle.FixedSingle;
                 this.StartPosition = FormStartPosition.WindowsDefaultLocation;
                 this.ControlBox = true;
             }
@@ -237,8 +262,8 @@ namespace System451.Communication.Dashboard
 
         private void DashboardDataHubForm_SizeChanged(object sender, EventArgs e)
         {
-            if (this.Size != DefaultSize && DesignMode)
-                this.Size = DefaultSize;
+            if (this.ClientSize != DefaultSize && DesignMode && (!EnableResize))
+                this.ClientSize = DefaultSize;
         }
 
     }

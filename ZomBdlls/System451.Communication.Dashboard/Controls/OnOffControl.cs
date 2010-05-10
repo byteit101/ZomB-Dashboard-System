@@ -51,13 +51,6 @@ namespace System451.Communication.Dashboard
             }
         }
 
-
-        [Browsable(false), Obsolete("Use Control Name"), Category("ZomB"), Description("[OBSOLETE] What this control will get the value of from the packet Data")]
-        public string BindToInput
-        {
-            get { return ControlName; }
-            set { ControlName = value; }
-        }
         public override void UpdateControl(string value)
         {
             if (this.InvokeRequired)
@@ -118,13 +111,6 @@ namespace System451.Communication.Dashboard
             }
         }
 
-
-       [Browsable(false), Obsolete("Use Control Name"), Category("ZomB"), Description("[OBSOLETE] What this control will get the value of from the packet Data")]
-        public string BindToInput
-        {
-            get { return ControlName; }
-            set { ControlName = value; }
-        }
         public override void UpdateControl(string value)
         {
             if (this.InvokeRequired)
@@ -183,13 +169,6 @@ namespace System451.Communication.Dashboard
             }
         }
 
-
-        [Browsable(false), Obsolete("Use Control Name"), Category("ZomB"), Description("[OBSOLETE] What this control will get the value of from the packet Data")]
-        public string BindToInput
-        {
-            get { return ControlName; }
-            set { ControlName = value; }
-        }
         public override void UpdateControl(string value)
         {
             if (this.InvokeRequired)

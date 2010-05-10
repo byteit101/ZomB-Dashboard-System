@@ -48,15 +48,19 @@ namespace System451.Communication.Dashboard
             this.dashboardDataHub1 = new System451.Communication.Dashboard.DashboardDataHub();
             this.SuspendLayout();
             // 
+            // dashboardDataHub1
+            // 
+            this.dashboardDataHub1.StartSource = System451.Communication.Dashboard.StartSources.DashboardPacket;
+            // 
             // DashboardDataHubForm
             // 
-            this.BackgroundImage = global::System451.Communication.Dashboard.Properties.Resources.ZomB_text;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.ClientSize = new System.Drawing.Size(1016, 366);
+            this.BackgroundImage = global::System451.Communication.Dashboard.Properties.Resources.ZomBWFrame;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.ClientSize = new System.Drawing.Size(1024, 400);
             this.DoubleBuffered = true;
             this.MaximizeBox = false;
             this.Name = "DashboardDataHubForm";
-            this.Text = "DashboardDataHub"; 
+            this.Text = "DashboardDataHub";
             this.Load += new System.EventHandler(this.DashboardDataHubForm_Load);
             this.SizeChanged += new System.EventHandler(this.DashboardDataHubForm_SizeChanged);
             this.ResumeLayout(false);

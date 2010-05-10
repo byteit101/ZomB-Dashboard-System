@@ -188,7 +188,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -248,10 +248,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="LICENSE.txt" />
-    <None Include="Resources\Apollo451Small.png" />
     <None Include="Resources\brz.bmp" />
     <Content Include="Resources\TacoFull-small2.jpg" />
     <Content Include="Resources\TacoFull-small2.png" />
+    <Content Include="Resources\ZomB text.png" />
+    <EmbeddedResource Include="Resources\ZomB text.svg" />
+    <EmbeddedResource Include="Resources\ZomBDS.svg" />
+    <EmbeddedResource Include="Resources\ZomBDSMini.svg" />
+    <Content Include="Resources\ZomBWFrame.png" />
     <Content Include="TBB\ZomB text t.png" />
     <Content Include="TBB\ZomB text.png" />
     <EmbeddedResource Include="TBB\ZomBeye.png" />
@@ -264,6 +268,7 @@
     <EmbeddedResource Include="TBB\Graph.ico" />
     <EmbeddedResource Include="TBB\Graph.png" />
     <None Include="Resources\TacoShell.png" />
+    <EmbeddedResource Include="Resources\ZomB W Frame.svg" />
     <None Include="TBB\ZomBeye.svg" />
     <EmbeddedResource Include="TBB\Analog.svg" />
     <EmbeddedResource Include="TBB\Distance.svg" />

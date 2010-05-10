@@ -133,9 +133,6 @@
   <data name="TacoFull_small2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\tacofull-small2.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Apollo451Small" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Apollo451Small.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="DashboardSpeedBase" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DashboardSpeedBase.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -145,7 +142,10 @@
   <data name="brz" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\brz.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ZomBWFrame" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\zombwframe.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ZomB_text" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\tbb\zomb text t.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\zomb text.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

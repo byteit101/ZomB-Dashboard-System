@@ -77,11 +77,9 @@ namespace System451.Communication.Dashboard
         {
             byte[] bits = new byte[3];
             bits[0] = 84;
-            DateTime dif = DateTime.Now.Subtract(lasttime);
+            TimeSpan dif = DateTime.Now.Subtract(lasttime);
             lasttime = DateTime.Now;
-            ushort msd = (ushort)(dif.Minute * 60000);
-            msd += (ushort)(dif.Second * 1000);
-            msd += (ushort)dif.Millisecond;
+            ushort msd = (ushort)(dif.TotalMinutes * 60000);
             bits[1] = (byte)(msd >> 8);
             bits[2] = (byte)msd;
             return bits;
@@ -151,11 +149,11 @@ namespace System451.Communication.Dashboard
 
         public void UpdateData(Dictionary<string, string> data)
         {
-#warning Make this work
+            //TODO: Test
             if (saving)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("Dln");
+                sb.Append("D00");//hog space for thesize
                 foreach (var item in data)
                 {
                     sb.Append(item.Key);
@@ -164,13 +162,12 @@ namespace System451.Communication.Dashboard
                     sb.Append("|");
                 }
                 byte[] bit = UTF8Encoding.UTF8.GetBytes(sb.ToString());
-                bit[0] = 68;//"D"
+                //bit[0] = 68;//"D"//Already set
                 bit[1] = (byte)(sb.Length >> 8);
                 bit[2] = (byte)(sb.Length);
                 AddValue(bit);
             }
             //TODO: Fix this
-            //AddValue(packetData);
         }
 
         #endregion

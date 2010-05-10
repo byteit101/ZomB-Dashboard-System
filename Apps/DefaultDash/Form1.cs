@@ -33,7 +33,7 @@ namespace DefaultDash
             //Init stuff
             InitializeComponent();
             pictureBox1.Dock = DockStyle.Fill;
-            pictureBox2.Image = System451.Communication.Dashboard.Properties.Resources.ZomB_text;
+            pictureBox2.Image = Resources.ZomBs;
             //Get ready to save images
             Directory.CreateDirectory(BTZomBFingerFactory.DefaultSaveLocation);
             vss = new VideoStreamSaver(this.cameraView1);

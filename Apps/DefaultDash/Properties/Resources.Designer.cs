@@ -66,5 +66,12 @@ namespace DefaultDash.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        internal static System.Drawing.Bitmap ZomBs {
+            get {
+                object obj = ResourceManager.GetObject("ZomBs", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

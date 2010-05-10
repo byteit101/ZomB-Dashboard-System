@@ -36,7 +36,7 @@ namespace System451.Communication.Dashboard.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System451.Communication.Dashboard.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace System451.Communication.Dashboard.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -60,73 +60,72 @@ namespace System451.Communication.Dashboard.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Apollo451Small {
-            get {
-                object obj = ResourceManager.GetObject("Apollo451Small", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap brz {
+        public static System.Drawing.Bitmap brz {
             get {
                 object obj = ResourceManager.GetObject("brz", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap DashboardSpeed {
+        public static System.Drawing.Bitmap DashboardSpeed {
             get {
                 object obj = ResourceManager.GetObject("DashboardSpeed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap DashboardSpeedBase {
+        public static System.Drawing.Bitmap DashboardSpeedBase {
             get {
                 object obj = ResourceManager.GetObject("DashboardSpeedBase", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap DashboardSpeedFlufs {
+        public static System.Drawing.Bitmap DashboardSpeedFlufs {
             get {
                 object obj = ResourceManager.GetObject("DashboardSpeedFlufs", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap DashboardSpeedFull {
+        public static System.Drawing.Bitmap DashboardSpeedFull {
             get {
                 object obj = ResourceManager.GetObject("DashboardSpeedFull", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap TacoFull_small2 {
+        public static System.Drawing.Bitmap TacoFull_small2 {
             get {
                 object obj = ResourceManager.GetObject("TacoFull_small2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap TacoFull_small21 {
+        public static System.Drawing.Bitmap TacoFull_small21 {
             get {
                 object obj = ResourceManager.GetObject("TacoFull_small21", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap TacoShell {
+        public static System.Drawing.Bitmap TacoShell {
             get {
                 object obj = ResourceManager.GetObject("TacoShell", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-
-        public static System.Drawing.Bitmap ZomB_text
-        {
+        
+        public static System.Drawing.Bitmap ZomB_text {
             get {
                 object obj = ResourceManager.GetObject("ZomB_text", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        public static System.Drawing.Bitmap ZomBWFrame {
+            get {
+                object obj = ResourceManager.GetObject("ZomBWFrame", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -41,11 +41,6 @@ namespace System451.Communication.Dashboard
 
         }
 
-        [Browsable(false), Obsolete("Use Control Name"), Category("ZomB"), Description("[OBSOLETE] What this control will get the value of from the packet Data")]
-        public string BindToInput
-        {
-            get { return ControlName; }
-        }
         public string ControlName
         {
             get
