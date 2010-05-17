@@ -148,4 +148,10 @@
   <data name="ZomB_text" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\zomb text.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="InTheHand_Net_Personal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\ext\InTheHand.Net.Personal.dll;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="_32feetWidcomm" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\ext\32feetWidcomm.dll;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

@@ -25,6 +25,7 @@ using System.Windows.Forms;
 using SmashTcpDashboard;
 using System.IO;
 using System.Collections.ObjectModel;
+using System451.Communication.Dashboard.Net;
 
 namespace System451.Communication.Dashboard
 {
@@ -32,8 +33,10 @@ namespace System451.Communication.Dashboard
     {
         ZomBControlCollection targs = new ZomBControlCollection();
         Image view;
-        Receiver Receiver;
-        delegate void UpdaterDelegate();
+        delegate void UpdaterDelegate(object sender, NewImageDataRecievedEventArgs e);
+
+        IDashboardVideoDataSource videoSource;
+       
 
         public CameraView()
         {
@@ -42,7 +45,7 @@ namespace System451.Communication.Dashboard
             InitializeComponent();
             if (!this.DesignMode)
             {
-                Receiver = null;
+                videoSource = null;
                 //Receiver.OnImageUpdate += new Receiver.ImageUpdate(Receiver_OnImageUpdate);
                 //Start();// we don't know the IP
                 timer1.Enabled = false;
@@ -52,24 +55,26 @@ namespace System451.Communication.Dashboard
                 timer1.Enabled = false;
             }
         }
-        private string ip = "10.0.0.2";
-        [Category("ZomB"), Description("Target IP (10.xx.xx.2, where xxxx is your team number)")]
-        public string IPAddress
+        private int team = 0;
+        [Category("ZomB"), Description("Your team number")]
+        public int TeamNumber
         {
-            get { return ip; }
+            get { return team; }
             set
             {
-                ip = value;
+                team = value;
                 if (!DesignMode)
                 {
-                    
-                    if (Receiver != null)
+
+                    if (videoSource != null)
                     {
-                        Receiver.Stop();
+                        videoSource.Stop();
                     }
-                    Receiver = new TcpReceiver(ip);
-                    Receiver.OnImageUpdate += new Receiver.ImageUpdate(Receiver_OnImageUpdate);
-                    Start();
+                    //TODO: support other sources
+                    videoSource = new RemoteAxisVideoImageSource(TeamNumber);
+                    videoSource.NewImageRecieved +=new NewImageDataRecievedEventHandler(videoSource_NewImageRecieved);
+                    if (EnableAutoReset)
+                        Start();
                 }
             }
         }
@@ -80,31 +85,33 @@ namespace System451.Communication.Dashboard
             Stop();
             Start();
         }
-
-
-        public void Start()
+        public IDashboardVideoDataSource VideoSource
         {
-            if (!this.DesignMode && Receiver != null && this.CanFocus)
+            get
             {
-                Receiver.Start();
-                timer1.Enabled = EnableAutoReset;
+                return videoSource;
+            }
+            set
+            {
+                if (videoSource != null)
+                {
+                    videoSource.Stop();
+                }
+                videoSource = value;
+                videoSource.NewImageRecieved += new NewImageDataRecievedEventHandler(videoSource_NewImageRecieved);
             }
         }
-        public void Stop()
-        {
-            Receiver.Stop();
-        }
 
-        void Receiver_OnImageUpdate()
+        void videoSource_NewImageRecieved(object sender, NewImageDataRecievedEventArgs e)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(Receiver_OnImageUpdate));
+                this.Invoke(new UpdaterDelegate(videoSource_NewImageRecieved), sender, e);
             }
             else
             {
-                
-                view = Bitmap.FromStream(new MemoryStream(Receiver.ImageData));
+
+                this.view = e.NewData;
                 if (this.dataUpdatedEvent != null)
                     dataUpdatedEvent(this, new EventArgs());
                 this.Invalidate();
@@ -113,6 +120,22 @@ namespace System451.Communication.Dashboard
                 //File.WriteAllBytes(@"C:\Program Files\FRC Dashboard\img\ZomEye"+(calls++)+".jpg", Receiver.ImageData);
             }
         }
+
+
+        public void Start()
+        {
+            if (!this.DesignMode && VideoSource != null && this.CanFocus)
+            {
+                videoSource.Start();
+                timer1.Enabled = EnableAutoReset;
+            }
+        }
+        public void Stop()
+        {
+            videoSource.Stop();
+        }
+
+
 
         protected override Size DefaultSize
         {
@@ -130,25 +153,23 @@ namespace System451.Communication.Dashboard
                 using (Pen pn = new Pen(TargetColor, TargetWidth))
                 {
                     pn.LineJoin = System.Drawing.Drawing2D.LineJoin.Round;
-
-                    using (Brush br = new SolidBrush(TargetFillColor))
+                }
+                using (Brush br = new SolidBrush(TargetFillColor))
+                {
+                    foreach (KeyValuePair<string, IZomBControl> ttarget in Targets)
                     {
-                        foreach (KeyValuePair<string,IZomBControl> ttarget in Targets)
+                        TargetInfo target = (TargetInfo)((object)ttarget);
+                        if (!target.Target.IsEmpty)
                         {
-                            TargetInfo target = (TargetInfo)((object)ttarget);
-                            if (!target.Target.IsEmpty)
-                            {
-                                PointF[] pts = new PointF[] { new PointF(target.Target.Top, target.Target.Left),
+                            PointF[] pts = new PointF[] { new PointF(target.Target.Top, target.Target.Left),
                                 new PointF(target.Target.Top, target.Target.Right),
                                 new PointF(target.Target.Bottom, target.Target.Right),
                                 new PointF(target.Target.Bottom, target.Target.Left)};
 
-                                e.Graphics.FillPolygon(br, pts);
+                            e.Graphics.FillPolygon(br, pts);
 
-                                e.Graphics.DrawPolygon(pn, pts);
-                            }
+                            e.Graphics.DrawPolygon(pn, pts);
                         }
-
                     }
                 }
             }
@@ -198,11 +219,11 @@ namespace System451.Communication.Dashboard
 
             try
             {
-                if (Receiver != null)
+                if (videoSource != null)
                 {
-                    if (!Receiver.Running)
+                    if (!videoSource.Running)
                     {
-                        Start();
+                        videoSource.Start();
                     }
                 }
                 else

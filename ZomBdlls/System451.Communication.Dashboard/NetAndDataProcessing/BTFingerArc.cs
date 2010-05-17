@@ -35,6 +35,36 @@ namespace System451.Communication.Dashboard
     /// <summary>
     /// Creates a Bluetooth Finger
     /// </summary>
+    public class BlueFinger
+    {
+        static BTZomBFingerFactory s;
+         /// <summary>
+        /// Create a new ZomB FingerServer Factory
+        /// </summary>
+        /// <param name="teamNumber">Your team number</param>
+        /// <param name="from">Path to saved data folder</param>
+        /// <param name="to">Save data to this folder</param>
+        /// <remarks>
+        /// The path should be a reference to a folder that contains all the data files.
+        /// Once all the files are sent, the tag .ZomBarchiveXXX is appended to their file name, where
+        /// XXX is the time ticks.
+        /// The To path works similarly, but .ZomBYYY is appended before the file extension, where 
+        /// YYY is the transfer number stored in the file .ZomB in the To path
+        /// </remarks>
+        public static BTZomBFingerFactory GetFactory(int teamNumber, string from, string to)
+        {
+            if (s == null)
+            {
+                AutoExtractor.Extract(AutoExtractor.Files.InTheHandManaged | AutoExtractor.Files.InTheHandNative);
+                s = new BTZomBFingerFactory(teamNumber, from, to);
+            }
+            return s;
+        }
+    }
+
+    /// <summary>
+    /// Creates a Bluetooth Finger
+    /// </summary>
     public class BTZomBFingerFactory
     {
         BluetoothRadio radio;
@@ -57,8 +87,9 @@ namespace System451.Communication.Dashboard
         /// The To path works similarly, but .ZomBYYY is appended before the file extension, where 
         /// YYY is the transfer number stored in the file .ZomB in the To path
         /// </remarks>
-        public BTZomBFingerFactory(int teamNumber, string from, string to)
+        internal BTZomBFingerFactory(int teamNumber, string from, string to)
         {
+            AutoExtractor.Extract(AutoExtractor.Files.InTheHandManaged | AutoExtractor.Files.InTheHandNative);
             saveTo = to;
             pullFrom = from;
             //team GUID, last part is random, don't want to calculate

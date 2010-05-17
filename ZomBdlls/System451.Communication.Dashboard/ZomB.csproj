@@ -40,7 +40,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="InTheHand.Net.Personal, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="InTheHand.Net.Personal, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data" />
@@ -51,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoExtractor.cs" />
     <Compile Include="Controls\AnalogMeter.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -58,9 +61,20 @@
       <DependentUpon>AnalogMeter.cs</DependentUpon>
     </Compile>
     <Compile Include="BitUtils.cs" />
+    <Compile Include="ext\AviFile\AudioStream.cs" />
+    <Compile Include="ext\AviFile\Avi.cs" />
+    <Compile Include="ext\AviFile\AviManager.cs" />
+    <Compile Include="ext\AviFile\AviPlayer.cs" />
+    <Compile Include="ext\AviFile\AviStream.cs" />
+    <Compile Include="ext\AviFile\EditableVideoStream.cs" />
+    <Compile Include="ext\AviFile\VideoStream.cs" />
+    <Compile Include="ext\WebCam_Capture\WebCamCapture.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ext\WebCam_Capture\WebcamEventArgs.cs" />
     <Compile Include="NetAndDataProcessing\BTFingerArc.cs">
     </Compile>
-    <Compile Include="NetAndDataProcessing\Crc32.cs" />
+    <Compile Include="ext\Crc32.cs" />
     <Compile Include="NetAndDataProcessing\DashboardDataHub.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -100,7 +114,6 @@
     <Compile Include="Controls\DistanceMeter.Designer.cs">
       <DependentUpon>DistanceMeter.cs</DependentUpon>
     </Compile>
-    <Compile Include="FTP.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\IDashboardDataSource.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\DashboardPacketDataSource.cs" />
     <Compile Include="NetAndDataProcessing\IDataSave.cs" />
@@ -122,6 +135,7 @@
     <Compile Include="Controls\PercentBar.Designer.cs">
       <DependentUpon>PercentBar.cs</DependentUpon>
     </Compile>
+    <Compile Include="NetAndDataProcessing\ImageSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -159,7 +173,7 @@
       <DependentUpon>VarValue.cs</DependentUpon>
     </Compile>
     <Compile Include="NetAndDataProcessing\VideoStreamSaver.cs" />
-    <Compile Include="Controls\VirtualdAnalogMeter.cs">
+    <Compile Include="ext\VirtualdAnalogMeter.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="NetAndDataProcessing\WebCam.cs" />
@@ -219,6 +233,10 @@
       <DependentUpon>DashboardDataHubForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ext\WebCam_Capture\WebCamCapture.resx">
+      <DependentUpon>WebCamCapture.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="TBB\DashboardSpeed.bmp" />
     <EmbeddedResource Include="TBB\DashboardDirection.bmp" />
     <EmbeddedResource Include="Controls\DataGraph.resx">
@@ -239,13 +257,13 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TBB\DashboardSpeed.ico" />
     <EmbeddedResource Include="DashboardSpeed.bmp" />
-    <Content Include="32feetWidcomm.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="ext\32feetWidcomm.dll">
+    </None>
     <Content Include="CREDITS.txt" />
+    <Content Include="ext\WebCam_Capture\%40PSC_ReadMe_1339_10.txt" />
+    <Content Include="ext\WebCam_Capture\CAMERA.ICO" />
     <Content Include="Graph.ico" />
-    <Content Include="InTheHand.Net.Personal.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="ext\InTheHand.Net.Personal.dll">
     </Content>
     <Content Include="LICENSE.txt" />
     <None Include="Resources\brz.bmp" />
@@ -285,9 +303,6 @@
       <DependentUpon>ZomBeye.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ext\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

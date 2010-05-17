@@ -60,6 +60,13 @@ namespace System451.Communication.Dashboard.Properties {
             }
         }
         
+        public static byte[] _32feetWidcomm {
+            get {
+                object obj = ResourceManager.GetObject("_32feetWidcomm", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         public static System.Drawing.Bitmap brz {
             get {
                 object obj = ResourceManager.GetObject("brz", resourceCulture);
@@ -92,6 +99,13 @@ namespace System451.Communication.Dashboard.Properties {
             get {
                 object obj = ResourceManager.GetObject("DashboardSpeedFull", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        public static byte[] InTheHand_Net_Personal {
+            get {
+                object obj = ResourceManager.GetObject("InTheHand_Net_Personal", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

@@ -241,6 +241,7 @@ namespace System451.Communication.Dashboard
     /// <summary>
     /// This is used to make simple having multiple ZomB controls on one physical control
     /// </summary>
+    [DesignTimeVisible(false)]
     public class ZomBRemoteControl : ZomBControl, IZomBRemoteControl
     {
         /// <summary>
