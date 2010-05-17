@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultDash", "Apps\Default
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ZomB.dll", "ZomB.dll", "{C570AA47-2C31-4301-B7E0-85DB63716545}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZomB", "ZomBdlls\System451.Communication.Dashboard\ZomB.csproj", "{B40501FE-DF11-452B-BAD6-30DE836902C6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZomB", "ZomBdll\ZomB.csproj", "{B40501FE-DF11-452B-BAD6-30DE836902C6}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
