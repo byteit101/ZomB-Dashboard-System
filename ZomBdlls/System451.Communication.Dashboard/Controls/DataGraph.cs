@@ -63,7 +63,7 @@ namespace System451.Communication.Dashboard
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(UpdateControl));
+                this.Invoke(new UpdaterDelegate(UpdateControl),value);
             }
             else
             {

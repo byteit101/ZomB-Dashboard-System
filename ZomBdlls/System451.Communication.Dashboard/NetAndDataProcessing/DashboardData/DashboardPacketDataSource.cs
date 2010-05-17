@@ -181,7 +181,8 @@ namespace System451.Communication.Dashboard.Net
                         if (Output != "")
                         {
                             //Check first
-                            if (!VerifyPacket(buffer))
+#warning this validation does not work
+                            if (!VerifyPacket(buffer)&&false)
                             {
                                 if (InvalidPacketRecieved != null)
                                 {
@@ -254,15 +255,16 @@ namespace System451.Communication.Dashboard.Net
             ret.Battery = float.Parse(buffer[4].ToString("x") + "." + buffer[5].ToString("x"));
             ret.Status = new StatusBitField(buffer[6]);
             ret.Error = new ErrorBitField(buffer[7]);
-            ret.Team = (int)buffer[8] + (int)(buffer[9] >> 8);
+            ret.Team = (int)(buffer[8] * 100) + (int)(buffer[9]);
 
             //there's got to be a better way to do this
-            int Month = int.Parse(new string(new char[] { (char)buffer[10], (char)buffer[11] }));
-            int Day = int.Parse(new string(new char[] { (char)buffer[12], (char)buffer[13] }));
-            int year = 2000 + int.Parse(new string(new char[] { (char)buffer[14], (char)buffer[15] }));
+#warning This does not work DS Bytes
+            //int Month = int.Parse(new string(new char[] { (char)buffer[10], (char)buffer[11] }));
+            //int Day = int.Parse(new string(new char[] { (char)buffer[12], (char)buffer[13] }));
+            //int year = 2000 + int.Parse(new string(new char[] { (char)buffer[14], (char)buffer[15] }));
 
-            ret.Version = new DateTime(year, Month, Day);
-            ret.Revision = (ushort)((ushort)(buffer[16]) + ((ushort)(buffer[17] >> 8)));
+            //ret.Version = new DateTime(year, Month, Day);
+            //ret.Revision = (ushort)((ushort)(buffer[16]) + ((ushort)(buffer[17] >> 8)));
 
             return ret;
         }
