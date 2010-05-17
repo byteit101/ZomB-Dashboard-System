@@ -153,22 +153,23 @@ namespace System451.Communication.Dashboard
                 using (Pen pn = new Pen(TargetColor, TargetWidth))
                 {
                     pn.LineJoin = System.Drawing.Drawing2D.LineJoin.Round;
-                }
-                using (Brush br = new SolidBrush(TargetFillColor))
-                {
-                    foreach (KeyValuePair<string, IZomBControl> ttarget in Targets)
+
+                    using (Brush br = new SolidBrush(TargetFillColor))
                     {
-                        TargetInfo target = (TargetInfo)((object)ttarget);
-                        if (!target.Target.IsEmpty)
+                        foreach (KeyValuePair<string, IZomBControl> ttarget in Targets)
                         {
-                            PointF[] pts = new PointF[] { new PointF(target.Target.Top, target.Target.Left),
+                            TargetInfo target = (TargetInfo)((object)ttarget);
+                            if (!target.Target.IsEmpty)
+                            {
+                                PointF[] pts = new PointF[] { new PointF(target.Target.Top, target.Target.Left),
                                 new PointF(target.Target.Top, target.Target.Right),
                                 new PointF(target.Target.Bottom, target.Target.Right),
                                 new PointF(target.Target.Bottom, target.Target.Left)};
 
-                            e.Graphics.FillPolygon(br, pts);
+                                e.Graphics.FillPolygon(br, pts);
 
-                            e.Graphics.DrawPolygon(pn, pts);
+                                e.Graphics.DrawPolygon(pn, pts);
+                            }
                         }
                     }
                 }
