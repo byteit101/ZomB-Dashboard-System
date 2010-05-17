@@ -57,7 +57,7 @@ namespace ZomBeye
                 numericUpDown1.Visible = false;
                 try
                 {
-                    bf = (new BTZomBFingerFactory((int)numericUpDown1.Value, BTZomBFingerFactory.DefaultLoadLocation, BTZomBFingerFactory.DefaultSaveLocation)).GetFinger();
+                    bf = (BlueFinger.GetFactory((int)numericUpDown1.Value, BTZomBFingerFactory.DefaultLoadLocation, BTZomBFingerFactory.DefaultSaveLocation)).GetFinger();
                     bf.Start();
                     button1.Enabled = false;
                     button1.Text = "BlueFinger Running";
