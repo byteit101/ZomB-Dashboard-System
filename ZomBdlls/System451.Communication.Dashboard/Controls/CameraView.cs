@@ -29,7 +29,7 @@ using System451.Communication.Dashboard.Net;
 
 namespace System451.Communication.Dashboard
 {
-    public partial class CameraView : UserControl, ISavableZomBData, IZomBControlGroup
+    public partial class CameraView : Control, ISavableZomBData, IZomBControlGroup
     {
         ZomBControlCollection targs = new ZomBControlCollection();
         Image view;

@@ -103,7 +103,6 @@ namespace DefaultDash
             // 
             this.cameraView1.BackColor = System.Drawing.SystemColors.ControlDark;
             this.cameraView1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.cameraView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.cameraView1.ContextMenuStrip = this.videoContextMenuStrip1;
             this.cameraView1.TeamNumber = 451;
             this.cameraView1.Location = new System.Drawing.Point(330, 43);

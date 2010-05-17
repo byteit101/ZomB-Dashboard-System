@@ -94,7 +94,7 @@ namespace System451.Communication.Dashboard
         {
             try
             {
-#warning Delete the src's !
+                this.Stop();
             }
             catch
             {
@@ -247,17 +247,28 @@ namespace System451.Communication.Dashboard
                 item.GetStatusSource().Start();
             }
         }
-
-        /// <summary>
-        /// Stop monitering the dashboard port
-        /// </summary>
-
+       
         /// <summary>
         /// Stop monitering the dashboard port
         /// </summary>
         public void Stop()
         {
-            Running = false;
+            if (Running)
+            {
+                try
+                {
+                    for (int i=0; i < DataSrcs.Count; i++)
+                    {
+                        StopSrc(DataSrcs[i]);
+                    }
+                    Running = false;
+                }
+                catch
+                {
+                    Running = true;
+                }
+            }
+
         }
 
         /// <summary>
