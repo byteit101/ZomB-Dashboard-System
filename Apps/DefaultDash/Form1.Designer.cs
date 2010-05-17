@@ -105,7 +105,7 @@ namespace DefaultDash
             this.cameraView1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.cameraView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.cameraView1.ContextMenuStrip = this.videoContextMenuStrip1;
-            this.cameraView1.IPAddress = "10.4.51.2";
+            this.cameraView1.TeamNumber = 451;
             this.cameraView1.Location = new System.Drawing.Point(330, 43);
             this.cameraView1.Name = "cameraView1";
             this.cameraView1.Size = new System.Drawing.Size(333, 243);

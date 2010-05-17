@@ -61,7 +61,7 @@ namespace DefaultDash
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             //Change IP, then reset
-            cameraView1.IPAddress = "10." + numericUpDown1.Value.ToString().PadLeft(4, '0').Substring(0, 2) + "." + numericUpDown1.Value.ToString().PadLeft(4, '0').Substring(2) + ".2";
+            cameraView1.TeamNumber = (int)numericUpDown1.Value;
             cameraView1.Restart();
         }
 
