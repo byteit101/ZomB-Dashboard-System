@@ -10,9 +10,9 @@ using System.IO;
 namespace System451.Communication.Dashboard.Net
 {
     /// <summary>
-    /// Access a Axis camera
+    /// Access a WPILib camera
     /// </summary>
-    public class RemoteAxisVideoImageSource : IDashboardVideoDataSource
+    public class WPILibTcpVideoSource : IDashboardVideoDataSource
     {
         // axis camera sends video in the following order :
         // header { 0x1, 0x0, 0x0, 0x0 } raw bytes - no endianness
@@ -34,24 +34,24 @@ namespace System451.Communication.Dashboard.Net
         //and fibulas? and, never mind. Sigh
 
         /// <summary>
-        /// Create a new instance of RemoteAxisVideoImageSource
+        /// Create a new instance of WPILibTcpVideoImageSource
         /// </summary>
         /// <param name="team">Team number, for IP</param>
         /// <param name="instance">The camera number</param>
-        public RemoteAxisVideoImageSource(int team, int instance)
+        public WPILibTcpVideoSource(int team, int instance)
         {
             Init(team, instance);
         }
 
         /// <summary>
-        /// Create a new instance of RemoteAxisVideoImageSource
+        /// Create a new instance of WPILibTcpVideoImageSource
         /// </summary>
         /// <param name="team">Team number, for IP</param>
-        public RemoteAxisVideoImageSource(int team)
+        public WPILibTcpVideoSource(int team)
         {
             Init(team, 1);
         }
-        ~RemoteAxisVideoImageSource()
+        ~WPILibTcpVideoSource()
         {
             Stop();
         }
@@ -78,7 +78,7 @@ namespace System451.Communication.Dashboard.Net
         }
 
         /// <summary>
-        /// Starts the Remote Axis Camera
+        /// Starts the WPILib Camera
         /// </summary>
         public void Start()
         {
@@ -103,7 +103,7 @@ namespace System451.Communication.Dashboard.Net
         }
 
         /// <summary>
-        /// Stops the Remote Axis Camera
+        /// Stops the WPILib Camera
         /// </summary>
         public void Stop()
         {

@@ -182,7 +182,7 @@ namespace System451.Communication.Dashboard.Net
                         {
                             //Check first
 #warning this validation does not work
-                            if (!VerifyPacket(buffer)&&false)
+                            if (!VerifyPacket(buffer) && false)
                             {
                                 if (InvalidPacketRecieved != null)
                                 {
@@ -237,7 +237,7 @@ namespace System451.Communication.Dashboard.Net
             }
         }
 
-       
+
 
         /// <summary>
         /// Convert the DS Bytes to a FRCDSStatus

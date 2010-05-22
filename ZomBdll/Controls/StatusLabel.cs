@@ -175,19 +175,35 @@ namespace System451.Communication.Dashboard
 
         void ymove_ControlUpdated(object sender, ZomBControlUpdatedEventArgs e)
         {
-            //Scale virtual to real
-            this.Location = new Point(this.Location.X, (int)(((float.Parse(e.Value) - YVMin) / (YVMax - YVMin)) * (YMax - YMin) + YMin));
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new cupd(ymove_ControlUpdated), sender, e);
+            }
+            else
+                //Scale virtual to real
+                this.Location = new Point(this.Location.X, (int)((1 - (float.Parse(e.Value) - YVMin) / (YVMax - YVMin)) * (YMax - YMin) - YMin));
         }
 
         void xmove_ControlUpdated(object sender, ZomBControlUpdatedEventArgs e)
         {
-            //Scale virtual to real
-            this.Location = new Point((int)(((float.Parse(e.Value) - XVMin) / (XVMax - XVMin)) * (XMax - XMin) + XMin), this.Location.Y);
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new cupd(xmove_ControlUpdated), sender, e);
+            }
+            else
+                //Scale virtual to real
+                this.Location = new Point((int)(((float.Parse(e.Value) - XVMin) / (XVMax - XVMin)) * (XMax - XMin) + XMin), this.Location.Y);
         }
 
+        delegate void cupd(object sender, ZomBControlUpdatedEventArgs e);
         void label_ControlUpdated(object sender, ZomBControlUpdatedEventArgs e)
         {
-            this.Text = e.Value;
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new cupd(label_ControlUpdated), sender, e);
+            }
+            else
+                this.Text = e.Value;
         }
 
         /// <summary>
@@ -363,7 +379,7 @@ namespace System451.Communication.Dashboard
         {
             get
             {
-                return ((this.Location.Y - YMin) / (YMax - YMin)) * (YVMax - YVMin) + YVMin;
+                return 1 - ((this.Location.Y - YMin) / (YMax - YMin)) * (YVMax - YVMin) - YVMin;
             }
             set
             {

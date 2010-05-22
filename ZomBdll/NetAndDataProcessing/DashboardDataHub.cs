@@ -37,7 +37,7 @@ namespace System451.Communication.Dashboard
     /// </summary>
     public class DashboardDataHub : Component, IZomBController
     {
-        
+
 
         public event InvalidPacketRecievedEventHandler InvalidPacketRecieved;
         public event ErrorEventHandler OnError;
@@ -203,7 +203,7 @@ namespace System451.Communication.Dashboard
                 }
                 catch
                 {
-                    for (; i <=0; i--)
+                    for (; i <= 0; i--)
                     {
                         StopSrc(DataSrcs[i]);
                     }
@@ -247,7 +247,7 @@ namespace System451.Communication.Dashboard
                 item.GetStatusSource().Start();
             }
         }
-       
+
         /// <summary>
         /// Stop monitering the dashboard port
         /// </summary>
@@ -257,7 +257,7 @@ namespace System451.Communication.Dashboard
             {
                 try
                 {
-                    for (int i=0; i < DataSrcs.Count; i++)
+                    for (int i = 0; i < DataSrcs.Count; i++)
                     {
                         StopSrc(DataSrcs[i]);
                     }
@@ -374,7 +374,7 @@ namespace System451.Communication.Dashboard
 
         void src_NewStatusRecieved(object sender, NewStatusRecievedEventArgs e)
         {
-             //Process the Monitors
+            //Process the Monitors
             foreach (IZomBMonitor monitor in zomBmonitors)
             {
                 monitor.UpdateStatus(e.NewStatus);
@@ -387,7 +387,7 @@ namespace System451.Communication.Dashboard
             //Process the Monitors
             foreach (IZomBMonitor monitor in zomBmonitors)
             {
-                
+
                 monitor.UpdateData(e.NewData);
             }
 
@@ -427,7 +427,7 @@ namespace System451.Communication.Dashboard
                         StringBuilder sb = new StringBuilder();
                         foreach (var item in vals)
                         {
-                            sb.Append("|"); 
+                            sb.Append("|");
                             sb.Append(item.Key);
                             sb.Append("=");
                             sb.Append(item.Value);

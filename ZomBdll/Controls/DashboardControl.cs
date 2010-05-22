@@ -129,6 +129,7 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// Gets the IsMultiWatch field. Default false.
         /// </summary>
+        [Browsable(false)]
         virtual public bool IsMultiWatch
         {
             get { return false; }
@@ -174,6 +175,7 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// Gets the current DashboardDataHub
         /// </summary>
+        [Browsable(false)]
         public DashboardDataHub LocalDashboardDataHub
         {
             get

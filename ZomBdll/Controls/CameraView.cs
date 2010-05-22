@@ -22,7 +22,6 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
-using SmashTcpDashboard;
 using System.IO;
 using System.Collections.ObjectModel;
 using System451.Communication.Dashboard.Net;
@@ -36,7 +35,7 @@ namespace System451.Communication.Dashboard
         delegate void UpdaterDelegate(object sender, NewImageDataRecievedEventArgs e);
 
         IDashboardVideoDataSource videoSource;
-       
+
 
         public CameraView()
         {
@@ -71,13 +70,15 @@ namespace System451.Communication.Dashboard
                         videoSource.Stop();
                     }
                     //TODO: support other sources
-                    videoSource = new RemoteAxisVideoImageSource(TeamNumber);
-                    videoSource.NewImageRecieved +=new NewImageDataRecievedEventHandler(videoSource_NewImageRecieved);
+                    videoSource = GetDefaultSrc();
+                    videoSource.NewImageRecieved += new NewImageDataRecievedEventHandler(videoSource_NewImageRecieved);
                     if (EnableAutoReset)
                         Start();
                 }
             }
         }
+
+
         [Category("ZomB"), Description("Auto Reset the Camera"), DefaultValue(false)]
         public bool EnableAutoReset { get; set; }
         public void Restart()
@@ -85,6 +86,44 @@ namespace System451.Communication.Dashboard
             Stop();
             Start();
         }
+
+        private DefaultVideoSource defsrc;
+        [Category("ZomB"), Description("The default camera source"), DefaultValue(typeof(DefaultVideoSource), "WPILibTcpStream")]
+        public DefaultVideoSource DefaultVideoSource
+        {
+            get { return defsrc; }
+            set
+            {
+                defsrc = value;
+                if (defsrc != DefaultVideoSource.Manual)
+                    LoadDefaultSrc();
+            }
+        }
+
+        private void LoadDefaultSrc()
+        {
+            VideoSource = GetDefaultSrc();
+        }
+
+        private IDashboardVideoDataSource GetDefaultSrc()
+        {
+            switch (DefaultVideoSource)
+            {
+                case DefaultVideoSource.WPILibTcpStream:
+                    if (TeamNumber != 0)
+                        return new WPILibTcpVideoSource(TeamNumber);
+                    else
+                        return null;
+                case DefaultVideoSource.Webcam:
+                    return new WebCamVideoSource(50, this.Width, this.Height);
+                case DefaultVideoSource.Manual:
+                default:
+                    return null;
+            }
+        }
+
+
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IDashboardVideoDataSource VideoSource
         {
             get
@@ -98,7 +137,8 @@ namespace System451.Communication.Dashboard
                     videoSource.Stop();
                 }
                 videoSource = value;
-                videoSource.NewImageRecieved += new NewImageDataRecievedEventHandler(videoSource_NewImageRecieved);
+                if (value != null)
+                    videoSource.NewImageRecieved += new NewImageDataRecievedEventHandler(videoSource_NewImageRecieved);
             }
         }
 
@@ -124,6 +164,8 @@ namespace System451.Communication.Dashboard
 
         public void Start()
         {
+            if (VideoSource == null)
+                LoadDefaultSrc();
             if (!this.DesignMode && VideoSource != null && this.CanFocus)
             {
                 videoSource.Start();
@@ -206,7 +248,7 @@ namespace System451.Communication.Dashboard
             set { checkBox1.Visible = value; }
         }
 
-        [Category("ZomB"), Description("The Targets")]
+        [Category("ZomB"), Description("The Targets"), Browsable(false)]
         public ZomBControlCollection Targets
         {
             get { return targs; }
@@ -220,15 +262,9 @@ namespace System451.Communication.Dashboard
 
             try
             {
-                if (videoSource != null)
+                if (videoSource != null && !videoSource.Running)
                 {
-                    if (!videoSource.Running)
-                    {
-                        videoSource.Start();
-                    }
-                }
-                else
-                {
+                    videoSource.Start();
                 }
             }
             catch
@@ -242,7 +278,7 @@ namespace System451.Communication.Dashboard
 
         TypeConverter ISavableZomBData.GetTypeConverter()
         {
-             return new BitmapConverter();
+            return new BitmapConverter();
         }
 
         string ISavableZomBData.DataValue
@@ -272,6 +308,23 @@ namespace System451.Communication.Dashboard
 
         #endregion
     }
+
+    public enum DefaultVideoSource
+    {
+        /// <summary>
+        /// The Axis Camera from WPILib
+        /// </summary>
+        WPILibTcpStream,
+        /// <summary>
+        /// The Webcam on this computer
+        /// </summary>
+        Webcam,
+        /// <summary>
+        /// Manually configure the video source
+        /// </summary>
+        Manual
+    }
+
     public class TargetInfo : IZomBControl
     {
 
@@ -330,7 +383,7 @@ namespace System451.Communication.Dashboard
 
         public void ControlAdded(object sender, ZomBControlAddedEventArgs e)
         {
-            
+
         }
 
         #endregion
