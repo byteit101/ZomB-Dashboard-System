@@ -58,7 +58,6 @@ namespace DefaultDash
             this.onOffControl1 = new System451.Communication.Dashboard.OnOffControl();
             this.spikeControl2 = new System451.Communication.Dashboard.SpikeControl();
             this.spikeControl1 = new System451.Communication.Dashboard.SpikeControl();
-            this.distanceMeter1 = new System451.Communication.Dashboard.DistanceMeter();
             this.directionMeter2 = new System451.Communication.Dashboard.DirectionMeter();
             this.directionMeter1 = new System451.Communication.Dashboard.DirectionMeter();
             this.analogMeter3 = new System451.Communication.Dashboard.AnalogMeter();
@@ -73,6 +72,7 @@ namespace DefaultDash
             this.controlBoxMenuButton1 = new System451.Communication.Dashboard.ControlBoxMenuButton();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.valueMeter1 = new System451.Communication.Dashboard.ValueMeter();
             this.videoContextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -104,13 +104,13 @@ namespace DefaultDash
             this.cameraView1.BackColor = System.Drawing.SystemColors.ControlDark;
             this.cameraView1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.cameraView1.ContextMenuStrip = this.videoContextMenuStrip1;
-            this.cameraView1.TeamNumber = 451;
             this.cameraView1.Location = new System.Drawing.Point(330, 43);
             this.cameraView1.Name = "cameraView1";
             this.cameraView1.Size = new System.Drawing.Size(333, 243);
             this.cameraView1.TabIndex = 14;
             this.cameraView1.TargetFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(0)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.cameraView1.TargetWidth = 1.5F;
+            this.cameraView1.TeamNumber = 451;
             // 
             // videoContextMenuStrip1
             // 
@@ -185,30 +185,18 @@ namespace DefaultDash
             // 
             // spikeControl1
             // 
+            this.spikeControl1.ControlName = "spike1";
             this.spikeControl1.Location = new System.Drawing.Point(979, 12);
             this.spikeControl1.Name = "spikeControl1";
             this.spikeControl1.Size = new System.Drawing.Size(25, 25);
             this.spikeControl1.TabIndex = 8;
             this.spikeControl1.Value = System451.Communication.Dashboard.SpikePositions.Off;
             // 
-            // distanceMeter1
-            // 
-            this.distanceMeter1.ControlName = "bat";
-            this.distanceMeter1.DistanceColor = System.Drawing.Color.Peru;
-            this.distanceMeter1.Location = new System.Drawing.Point(669, 185);
-            this.distanceMeter1.Name = "distanceMeter1";
-            this.distanceMeter1.Size = new System.Drawing.Size(100, 169);
-            this.distanceMeter1.TabIndex = 6;
-            this.distanceMeter1.Value = 0F;
-            // 
             // directionMeter2
             // 
-            this.directionMeter2.ArrowColor = System.Drawing.Color.Navy;
             this.directionMeter2.ArrowWidth = 4F;
-            this.directionMeter2.ControlName = "dir";
-            this.directionMeter2.CircleColor = System.Drawing.Color.IndianRed;
             this.directionMeter2.CircleWidth = 5F;
-            this.directionMeter2.GuidesColor = System.Drawing.Color.DeepSkyBlue;
+            this.directionMeter2.ControlName = "dir";
             this.directionMeter2.GuidesWidth = 1F;
             this.directionMeter2.Location = new System.Drawing.Point(12, 13);
             this.directionMeter2.Name = "directionMeter2";
@@ -218,12 +206,9 @@ namespace DefaultDash
             // 
             // directionMeter1
             // 
-            this.directionMeter1.ArrowColor = System.Drawing.Color.Navy;
             this.directionMeter1.ArrowWidth = 4F;
-            this.directionMeter1.ControlName = "dir2";
-            this.directionMeter1.CircleColor = System.Drawing.Color.IndianRed;
             this.directionMeter1.CircleWidth = 5F;
-            this.directionMeter1.GuidesColor = System.Drawing.Color.DeepSkyBlue;
+            this.directionMeter1.ControlName = "dir2";
             this.directionMeter1.GuidesWidth = 1F;
             this.directionMeter1.Location = new System.Drawing.Point(118, 13);
             this.directionMeter1.Name = "directionMeter1";
@@ -233,11 +218,8 @@ namespace DefaultDash
             // 
             // analogMeter3
             // 
-            this.analogMeter3.ArrowColor = System.Drawing.Color.SlateGray;
             this.analogMeter3.ArrowWidth = 4F;
-            this.analogMeter3.CircleColor = System.Drawing.Color.PaleGreen;
             this.analogMeter3.ControlName = "anl3";
-            this.analogMeter3.GuidesColor = System.Drawing.Color.Black;
             this.analogMeter3.GuidesWidth = 1F;
             this.analogMeter3.Location = new System.Drawing.Point(562, 279);
             this.analogMeter3.Name = "analogMeter3";
@@ -248,11 +230,8 @@ namespace DefaultDash
             // 
             // analogMeter2
             // 
-            this.analogMeter2.ArrowColor = System.Drawing.Color.SlateGray;
             this.analogMeter2.ArrowWidth = 4F;
-            this.analogMeter2.CircleColor = System.Drawing.Color.PaleGreen;
             this.analogMeter2.ControlName = "anl2";
-            this.analogMeter2.GuidesColor = System.Drawing.Color.Black;
             this.analogMeter2.GuidesWidth = 1F;
             this.analogMeter2.Location = new System.Drawing.Point(446, 279);
             this.analogMeter2.Name = "analogMeter2";
@@ -263,11 +242,8 @@ namespace DefaultDash
             // 
             // analogMeter1
             // 
-            this.analogMeter1.ArrowColor = System.Drawing.Color.SlateGray;
             this.analogMeter1.ArrowWidth = 4F;
-            this.analogMeter1.CircleColor = System.Drawing.Color.PaleGreen;
             this.analogMeter1.ControlName = "anl1";
-            this.analogMeter1.GuidesColor = System.Drawing.Color.Black;
             this.analogMeter1.GuidesWidth = 1F;
             this.analogMeter1.Location = new System.Drawing.Point(330, 279);
             this.analogMeter1.Name = "analogMeter1";
@@ -306,6 +282,7 @@ namespace DefaultDash
             // 
             // tacoMeter1
             // 
+            this.tacoMeter1.ControlName = "taco";
             this.tacoMeter1.Location = new System.Drawing.Point(775, 161);
             this.tacoMeter1.Name = "tacoMeter1";
             this.tacoMeter1.Size = new System.Drawing.Size(233, 193);
@@ -383,6 +360,27 @@ namespace DefaultDash
             this.pictureBox1.Visible = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
+            // valueMeter1
+            // 
+            this.valueMeter1.BarColor = System.Drawing.Color.DeepSkyBlue;
+            this.valueMeter1.BarWidth = 4F;
+            this.valueMeter1.ControlName = null;
+            this.valueMeter1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.valueMeter1.ForeColor = System.Drawing.Color.Peru;
+            this.valueMeter1.HighColor = System.Drawing.Color.Orange;
+            this.valueMeter1.HighThreshold = 13.5F;
+            this.valueMeter1.Label = true;
+            this.valueMeter1.Location = new System.Drawing.Point(669, 185);
+            this.valueMeter1.LowColor = System.Drawing.Color.Red;
+            this.valueMeter1.LowThreshold = 8F;
+            this.valueMeter1.Max = 14.5F;
+            this.valueMeter1.Min = 7F;
+            this.valueMeter1.Name = "valueMeter1";
+            this.valueMeter1.Size = new System.Drawing.Size(100, 169);
+            this.valueMeter1.TabIndex = 22;
+            this.valueMeter1.Text = "valueMeter1";
+            this.valueMeter1.Value = 12F;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -390,6 +388,7 @@ namespace DefaultDash
             this.BackgroundImage = null;
             this.ClientSize = new System.Drawing.Size(1024, 400);
             this.ControlBox = false;
+            this.Controls.Add(this.valueMeter1);
             this.Controls.Add(this.controlBoxMenuButton1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.pictureBox2);
@@ -405,7 +404,6 @@ namespace DefaultDash
             this.Controls.Add(this.onOffControl1);
             this.Controls.Add(this.spikeControl2);
             this.Controls.Add(this.spikeControl1);
-            this.Controls.Add(this.distanceMeter1);
             this.Controls.Add(this.directionMeter2);
             this.Controls.Add(this.directionMeter1);
             this.Controls.Add(this.analogMeter3);
@@ -435,7 +433,6 @@ namespace DefaultDash
         private System451.Communication.Dashboard.AnalogMeter analogMeter3;
         private System451.Communication.Dashboard.DirectionMeter directionMeter1;
         private System451.Communication.Dashboard.DirectionMeter directionMeter2;
-        private System451.Communication.Dashboard.DistanceMeter distanceMeter1;
         private System451.Communication.Dashboard.TacoMeter tacoMeter1;
         private System451.Communication.Dashboard.SpikeControl spikeControl1;
         private System451.Communication.Dashboard.SpikeControl spikeControl2;
@@ -455,6 +452,7 @@ namespace DefaultDash
         private System.Windows.Forms.ContextMenuStrip videoContextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem startBothToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem;
+        private System451.Communication.Dashboard.ValueMeter valueMeter1;
     }
 }
 

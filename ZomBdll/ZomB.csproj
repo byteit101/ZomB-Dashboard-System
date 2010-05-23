@@ -64,6 +64,9 @@
       <DependentUpon>AnalogMeter.cs</DependentUpon>
     </Compile>
     <Compile Include="BitUtils.cs" />
+    <Compile Include="Controls\ValueMeter.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ext\AviFile\AudioStream.cs" />
     <Compile Include="ext\AviFile\Avi.cs" />
     <Compile Include="ext\AviFile\AviManager.cs" />
