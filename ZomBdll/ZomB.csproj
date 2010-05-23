@@ -114,12 +114,6 @@
     <Compile Include="Controls\DirectionMeter.Designer.cs">
       <DependentUpon>DirectionMeter.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DistanceMeter.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\DistanceMeter.Designer.cs">
-      <DependentUpon>DistanceMeter.cs</DependentUpon>
-    </Compile>
     <Compile Include="NetAndDataProcessing\DashboardData\DashboardPacketEmulator.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\IDashboardDataSource.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\DashboardPacketDataSource.cs" />
@@ -135,12 +129,6 @@
     </Compile>
     <Compile Include="Controls\OnOffControl.Designer.cs">
       <DependentUpon>OnOffControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\PercentBar.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\PercentBar.Designer.cs">
-      <DependentUpon>PercentBar.cs</DependentUpon>
     </Compile>
     <Compile Include="NetAndDataProcessing\ImageSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -196,10 +184,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DirectionMeter.resx">
       <DependentUpon>DirectionMeter.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\DistanceMeter.resx">
-      <DependentUpon>DistanceMeter.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\OnOffControl.resx">
