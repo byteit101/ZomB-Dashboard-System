@@ -9,7 +9,7 @@ namespace System451.Communication.Dashboard
 {
     public class ValueMeter : ZomBControl
     {
-        float speedval;
+        float speedval,aval;
         delegate void UpdaterDelegate(string value);
 
         public ValueMeter()
@@ -31,11 +31,12 @@ namespace System451.Communication.Dashboard
         {
             get
             {
-                return (float)Math.Round((speedval / 100.0) * (Max - Min) + Min, 5);
+                return aval;// (float)Math.Round((speedval / 100.0) * (Max - Min) + Min, 5);
             }
             set
             {
                 speedval = ((value - Min) / (Max - Min)) * 100f;
+                aval = value;
                 this.Invalidate();
             }
         }
@@ -149,29 +150,31 @@ namespace System451.Communication.Dashboard
         {
             get
             {
-                return (float)Math.Round((lowthresh / 100.0) * (Max - Min) + Min, 5);
+                return alowthresh;// (float)Math.Round((lowthresh / 100.0) * (Max - Min) + Min, 5);
             }
             set
             {
                 lowthresh = ((value - Min) / (Max - Min)) * 100f;
+                alowthresh = value;
                 Invalidate();
             }
         }
-        float lowthresh = 10f;
+        float alowthresh = 10f,lowthresh = 10f;
         [DefaultValue(90f), Category("ZomB"), Description("The value that triggers a high value")]
         public float HighThreshold
         {
             get
             {
-                return (float)Math.Round((highthresh / 100.0) * (Max - Min) + Min, 5);
+                return ahighthresh;// (float)Math.Round((highthresh / 100.0) * (Max - Min) + Min, 5);
             }
             set
             {
                 highthresh = ((value - Min) / (Max - Min)) * 100f;
+                ahighthresh = value;
                 Invalidate();
             }
         }
-        float highthresh = 90f;
+        float highthresh = 90f, ahighthresh = 90f;
 
         [DefaultValue(typeof(Color), "Green"), Category("Appearance"), Description("The color of the meter when low is hit")]
         public Color LowColor

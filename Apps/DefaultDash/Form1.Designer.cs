@@ -143,7 +143,7 @@ namespace DefaultDash
             this.roundSpeedMeter2.ControlName = "left";
             this.roundSpeedMeter2.Location = new System.Drawing.Point(669, 12);
             this.roundSpeedMeter2.Name = "roundSpeedMeter2";
-            this.roundSpeedMeter2.Size = new System.Drawing.Size(148, 167);
+            this.roundSpeedMeter2.Size = new System.Drawing.Size(148, 101);
             this.roundSpeedMeter2.TabIndex = 11;
             this.roundSpeedMeter2.Value = 0F;
             // 
@@ -152,7 +152,7 @@ namespace DefaultDash
             this.roundSpeedMeter1.ControlName = "right";
             this.roundSpeedMeter1.Location = new System.Drawing.Point(823, 12);
             this.roundSpeedMeter1.Name = "roundSpeedMeter1";
-            this.roundSpeedMeter1.Size = new System.Drawing.Size(150, 167);
+            this.roundSpeedMeter1.Size = new System.Drawing.Size(150, 101);
             this.roundSpeedMeter1.TabIndex = 11;
             this.roundSpeedMeter1.Value = 0F;
             // 
@@ -368,11 +368,11 @@ namespace DefaultDash
             this.valueMeter1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.valueMeter1.ForeColor = System.Drawing.Color.Peru;
             this.valueMeter1.HighColor = System.Drawing.Color.Orange;
-            this.valueMeter1.HighThreshold = 13.5F;
+            this.valueMeter1.HighThreshold = 13.25F;
             this.valueMeter1.Label = true;
             this.valueMeter1.Location = new System.Drawing.Point(669, 185);
             this.valueMeter1.LowColor = System.Drawing.Color.Red;
-            this.valueMeter1.LowThreshold = 8F;
+            this.valueMeter1.LowThreshold = 9.5F;
             this.valueMeter1.Max = 14.5F;
             this.valueMeter1.Min = 7F;
             this.valueMeter1.Name = "valueMeter1";
