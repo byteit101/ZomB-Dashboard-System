@@ -67,6 +67,9 @@
     <Compile Include="Controls\ValueMeter.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DashboardDataHubPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ext\AviFile\AudioStream.cs" />
     <Compile Include="ext\AviFile\Avi.cs" />
     <Compile Include="ext\AviFile\AviManager.cs" />
@@ -188,15 +191,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\DashboardSpeedFull.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\DashboardSpeedFlufs.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\DashboardSpeedBase.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Controls\AnalogMeter.resx">
       <DependentUpon>AnalogMeter.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -246,6 +240,7 @@
     <EmbeddedResource Include="Resources\ZomBDS.svg" />
     <EmbeddedResource Include="Resources\ZomBDSMini.svg" />
     <Content Include="Resources\ZomBWFrame.png" />
+    <None Include="Resources\ZomBZ.png" />
     <Content Include="TBB\ZomB text t.png" />
     <Content Include="TBB\ZomB text.png" />
     <EmbeddedResource Include="TBB\ZomBeye.png" />

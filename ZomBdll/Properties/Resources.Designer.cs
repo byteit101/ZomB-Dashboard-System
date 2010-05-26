@@ -81,27 +81,6 @@ namespace System451.Communication.Dashboard.Properties {
             }
         }
         
-        public static System.Drawing.Bitmap DashboardSpeedBase {
-            get {
-                object obj = ResourceManager.GetObject("DashboardSpeedBase", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        public static System.Drawing.Bitmap DashboardSpeedFlufs {
-            get {
-                object obj = ResourceManager.GetObject("DashboardSpeedFlufs", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        public static System.Drawing.Bitmap DashboardSpeedFull {
-            get {
-                object obj = ResourceManager.GetObject("DashboardSpeedFull", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         public static byte[] InTheHand_Net_Personal {
             get {
                 object obj = ResourceManager.GetObject("InTheHand_Net_Personal", resourceCulture);
@@ -140,6 +119,13 @@ namespace System451.Communication.Dashboard.Properties {
         public static System.Drawing.Bitmap ZomBWFrame {
             get {
                 object obj = ResourceManager.GetObject("ZomBWFrame", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        public static System.Drawing.Bitmap ZomBZ {
+            get {
+                object obj = ResourceManager.GetObject("ZomBZ", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
