@@ -44,15 +44,36 @@ namespace System451.Communication.Dashboard
         [DefaultValue(100f), Category("ZomB"), Description("The Max value of the meter")]
         public float Max
         {
-            get;
-            set;
+            get
+            {
+                return mx;
+            }
+            set
+            {
+                mx = value;
+                highthresh = ((ahighthresh - Min) / (Max - Min)) * 100f;
+                lowthresh = ((alowthresh - Min) / (Max - Min)) * 100f;
+                speedval = ((aval - Min) / (Max - Min)) * 100f;
+                this.Invalidate();
+            }
         }
         [DefaultValue(0f), Category("ZomB"), Description("The Min value of the meter")]
         public float Min
         {
-            get;
-            set;
+            get
+            {
+                return mn;
+            }
+            set
+            {
+                mn = value;
+                highthresh = ((ahighthresh - Min) / (Max - Min)) * 100f;
+                lowthresh = ((alowthresh - Min) / (Max - Min)) * 100f;
+                speedval = ((aval - Min) / (Max - Min)) * 100f;
+                this.Invalidate();
+            }
         }
+        float mx, mn;
         [DefaultValue(6f), Category("ZomB"), Description("The Width of the Bar")]
         public float BarWidth
         {
