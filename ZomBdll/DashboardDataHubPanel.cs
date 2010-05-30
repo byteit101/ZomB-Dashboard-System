@@ -1,31 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using System.ComponentModel;
-using System451.Communication.Dashboard.Properties;
+﻿using System.ComponentModel;
 using System.Drawing;
+using System.Windows.Forms;
+using System451.Communication.Dashboard.Properties;
 
 namespace System451.Communication.Dashboard
 {
     [ToolboxBitmap(typeof(Panel))]
-    public class DashboardDataHubPanel: Panel
+    public class DashboardDataHubPanel : Panel
     {
         DashboardDataHub ddh;
+        bool loaded = false;
         public DashboardDataHubPanel()
         {
             ddh = new DashboardDataHub();
             ddh.StartSource = StartSources.DashboardPacket;
+            ddh.InvalidPacketAction = InvalidPacketActions.Ignore;
             this.DoubleBuffered = true;
         }
         protected override void OnPaintBackground(PaintEventArgs e)
         {
-            
+
             base.OnPaintBackground(e);
             if (DesignMode)
                 e.Graphics.DrawImage(Resources.ZomBZ, 3, 3);
         }
-        
+
         /// <summary>
         /// Gets the internal DashboardDataHub
         /// </summary>
@@ -42,6 +41,7 @@ namespace System451.Communication.Dashboard
         /// </summary>
         public void ReloadControls()
         {
+            loaded = true;
             AddControls(this.Controls);
         }
 
@@ -52,6 +52,8 @@ namespace System451.Communication.Dashboard
         {
             if ((!DesignMode) && (!Running))
             {
+                if (!loaded)
+                    ReloadControls();
                 ddh.Start();
                 Running = true;
             }
@@ -81,6 +83,7 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// Are we running the dashboard task?
         /// </summary>
+        [Browsable(false)]
         public bool Running { get; private set; }
 
         /// <summary>
@@ -96,6 +99,22 @@ namespace System451.Communication.Dashboard
             set
             {
                 ddh.StartSource = value;
+            }
+        }
+
+        /// <summary>
+        /// What to do when an invalid packet is recieved
+        /// </summary>
+        [DefaultValue(typeof(InvalidPacketActions), "Ignore"), Category("ZomB"), Description("What the DDH will do when an invalid packet is recieved")]
+        public InvalidPacketActions InvalidPacketAction
+        {
+            get
+            {
+                return ddh.InvalidPacketAction;
+            }
+            set
+            {
+                ddh.InvalidPacketAction = value;
             }
         }
 

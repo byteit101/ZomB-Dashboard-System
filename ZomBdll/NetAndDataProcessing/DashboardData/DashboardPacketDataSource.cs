@@ -17,11 +17,11 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using System.Net.Sockets;
-using System.Threading;
 using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 
 namespace System451.Communication.Dashboard.Net
 {
@@ -181,8 +181,7 @@ namespace System451.Communication.Dashboard.Net
                         if (Output != "")
                         {
                             //Check first
-#warning this validation does not work
-                            if (!VerifyPacket(buffer) && false)
+                            if (!VerifyPacket(buffer))
                             {
                                 if (InvalidPacketRecieved != null)
                                 {
@@ -192,10 +191,10 @@ namespace System451.Communication.Dashboard.Net
                                     if ((int)ddh.InvalidPacketAction < 3)//1-4
                                     {
                                         if (!e.ContinueAnyway)
-                                            return;
+                                            break;
                                     }
                                     else if (ddh.InvalidPacketAction == InvalidPacketActions.AlwaysIgnore)
-                                        return;
+                                        break;
                                 }
                             }
 
@@ -249,7 +248,7 @@ namespace System451.Communication.Dashboard.Net
             //TODO: Find and Fix errors here
             FRCDSStatus ret = new FRCDSStatus();
             ret.PacketNumber = buffer[0];
-            ret.PacketNumber += (ushort)(buffer[1] >> 8);
+            ret.PacketNumber += (ushort)(buffer[1] << 8);
             ret.DigitalIn = new DIOBitField(buffer[2]);
             ret.DigitalOut = new DIOBitField(buffer[3]);
             ret.Battery = float.Parse(buffer[4].ToString("x") + "." + buffer[5].ToString("x"));
@@ -289,7 +288,7 @@ namespace System451.Communication.Dashboard.Net
             dataCrc = BitConverter.ToUInt32(data, data.Length - 4);
 
             //remove CRC bytes from data before calculating CRC.
-            byte[] crcData = new byte[data.Length - 1];
+            byte[] crcData = new byte[data.Length];
             Buffer.BlockCopy(data, 0, crcData, 0, data.Length - 4);
 
             calculatedCrc = BitConverter.ToUInt32(crc.ComputeHash(crcData), 0);

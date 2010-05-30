@@ -79,6 +79,7 @@ namespace System451.Communication.Dashboard
                 this.StartPosition = FormStartPosition.WindowsDefaultLocation;
                 this.ControlBox = true;
             }
+            dashboardDataHub1.InvalidPacketAction = InvalidPacketActions.Ignore;
             this.ResumeLayout(false);
             GC.KeepAlive(mutex);
             this.FormClosing += new FormClosingEventHandler(DashboardDataHubForm_FormClosing);
@@ -178,6 +179,7 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// Are we running the dashboard task?
         /// </summary>
+        [Browsable(false)]
         public bool Running { get; private set; }
 
         /// <summary>
@@ -199,6 +201,22 @@ namespace System451.Communication.Dashboard
             set
             {
                 dashboardDataHub1.StartSource = value;
+            }
+        }
+
+        /// <summary>
+        /// What to do when an invalid packet is recieved
+        /// </summary>
+        [DefaultValue(typeof(InvalidPacketActions), "Ignore"), Category("ZomB"), Description("What the DDH will do when an invalid packet is recieved")]
+        public InvalidPacketActions InvalidPacketAction
+        {
+            get
+            {
+                return dashboardDataHub1.InvalidPacketAction;
+            }
+            set
+            {
+                dashboardDataHub1.InvalidPacketAction = value;
             }
         }
 
