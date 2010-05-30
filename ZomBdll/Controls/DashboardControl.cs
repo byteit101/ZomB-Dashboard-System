@@ -173,6 +173,22 @@ namespace System451.Communication.Dashboard
         }
 
         /// <summary>
+        /// Overide Text for easy values
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public override string Text
+        {
+            get
+            {
+                return ControlName;
+            }
+            set
+            {
+                ControlName = value;
+            }
+        }
+
+        /// <summary>
         /// Gets the current DashboardDataHub
         /// </summary>
         [Browsable(false)]
