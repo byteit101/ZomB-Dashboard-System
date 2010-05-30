@@ -364,7 +364,7 @@ namespace DefaultDash
             // 
             this.valueMeter1.BarColor = System.Drawing.Color.DeepSkyBlue;
             this.valueMeter1.BarWidth = 4F;
-            this.valueMeter1.ControlName = null;
+            this.valueMeter1.ControlName = "bat";
             this.valueMeter1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.valueMeter1.ForeColor = System.Drawing.Color.Peru;
             this.valueMeter1.HighColor = System.Drawing.Color.Orange;
@@ -378,7 +378,6 @@ namespace DefaultDash
             this.valueMeter1.Name = "valueMeter1";
             this.valueMeter1.Size = new System.Drawing.Size(100, 169);
             this.valueMeter1.TabIndex = 22;
-            this.valueMeter1.Text = "valueMeter1";
             this.valueMeter1.Value = 12F;
             // 
             // Form1

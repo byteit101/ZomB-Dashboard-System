@@ -1,15 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.ComponentModel;
-using System.Windows.Forms;
+using System.ComponentModel.Design;
 using System.Drawing;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
 
 namespace System451.Communication.Dashboard
 {
+    [Designer(typeof(ValueMeterDesigner))]
     public class ValueMeter : ZomBControl
     {
-        float speedval,aval;
+        float speedval, aval;
         delegate void UpdaterDelegate(string value);
 
         public ValueMeter()
@@ -22,7 +23,7 @@ namespace System451.Communication.Dashboard
         {
             get
             {
-                return new Size(125,200);
+                return new Size(125, 200);
             }
         }
 
@@ -180,7 +181,7 @@ namespace System451.Communication.Dashboard
                 Invalidate();
             }
         }
-        float alowthresh = 10f,lowthresh = 10f;
+        float alowthresh = 10f, lowthresh = 10f;
         [DefaultValue(90f), Category("ZomB"), Description("The value that triggers a high value")]
         public float HighThreshold
         {
@@ -263,7 +264,7 @@ namespace System451.Communication.Dashboard
                 height = this.Width;
             }
 
-            if (speedval<=lowthresh)
+            if (speedval <= lowthresh)
                 e.Graphics.Clear(this.LowColor);
             else
                 e.Graphics.Clear(this.BackColor);
@@ -286,36 +287,36 @@ namespace System451.Communication.Dashboard
                     e.Graphics.FillRectangle(b, (((speedval) / 100.0f) * width) - (BarWidth / 2f + .5f), -0.5f, BarWidth, height + 1f);
                 }
             }
-                if (Label)
+            if (Label)
+            {
+                using (Brush p = new SolidBrush(this.BorderColor))
                 {
-                    using (Brush p = new SolidBrush(this.BorderColor))
+                    string v = this.Value.ToString("0.00");
+                    if (!Decimal)
+                        v = this.Value.ToString("0");
+                    SizeF x = e.Graphics.MeasureString(v, this.Font);
+                    x.Height = (this.Height - x.Height) / 2.0f;
+                    x.Width = (this.Width - x.Width) / 2.0f;
+                    if (Orientation == Orientation.Vertical)
                     {
-                        string v = this.Value.ToString("0.00");
-                        if (!Decimal)
-                            v = this.Value.ToString("0");
-                        SizeF x=e.Graphics.MeasureString(v, this.Font);
-                        x.Height = (this.Height - x.Height) / 2.0f;
-                        x.Width = (this.Width - x.Width) / 2.0f;
-                        if (Orientation == Orientation.Vertical)
-                        {
-                            e.Graphics.ResetTransform();
-                            e.Graphics.DrawString(v, this.Font, p, x.ToPointF());
-                            e.Graphics.TranslateTransform(.5f, (float)this.Height - .5f);
-                            e.Graphics.RotateTransform(-90);
-                        }
-                        else
-                            e.Graphics.DrawString(v, this.Font, p, x.ToPointF());
+                        e.Graphics.ResetTransform();
+                        e.Graphics.DrawString(v, this.Font, p, x.ToPointF());
+                        e.Graphics.TranslateTransform(.5f, (float)this.Height - .5f);
+                        e.Graphics.RotateTransform(-90);
                     }
+                    else
+                        e.Graphics.DrawString(v, this.Font, p, x.ToPointF());
                 }
+            }
 
-                if (BorderStyle != BorderStyle.None)
+            if (BorderStyle != BorderStyle.None)
+            {
+                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+                using (Pen p = new Pen(this.BorderColor))
                 {
-                    e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-                    using (Pen p = new Pen(this.BorderColor))
-                    {
-                        e.Graphics.DrawRectangle(p, 0, 0, width - 1, height - 1);
-                    }
+                    e.Graphics.DrawRectangle(p, 0, 0, width - 1, height - 1);
                 }
+            }
         }
 
         public override void UpdateControl(string value)
@@ -328,6 +329,146 @@ namespace System451.Communication.Dashboard
             {
                 this.Value = float.Parse(value);
             }
+        }
+    }
+    internal class ValueMeterDesigner : ControlDesigner
+    {
+        ValueMeter vm;
+        bool dragin = false;
+        bool inadorn = false;
+
+        private const int WM_MouseMove = 0x0200;
+        private const int WM_LButtonDown = 0x0201;
+        private const int WM_LButtonUp = 0x0202;
+        private const int WM_LButtonDblClick = 0x0203;
+        private const int WM_RButtonDown = 0x0204;
+        private const int WM_RButtonUp = 0x0205;
+        private const int WM_RButtonDblClick = 0x0206;
+
+        DesignerVerbCollection vbs;
+
+        public ValueMeterDesigner()
+        {
+
+        }
+        public override void Initialize(IComponent component)
+        {
+            base.Initialize(component);
+            vm = (ValueMeter)component;
+
+        }
+
+        void vm_MouseMove(object sender, MouseEventArgs e)
+        {
+            vm.Value += .01f;
+        }
+        protected override void OnSetCursor()
+        {
+            if (!inadorn && !dragin)
+                base.OnSetCursor();
+        }
+
+        public Rectangle GetValueRec()
+        {
+            Rectangle r = new Rectangle();
+            float value = (vm.Value - vm.Min) / (vm.Max - vm.Min);
+            float width = vm.Orientation == Orientation.Vertical ? vm.Width : vm.Height;
+            float height = vm.Orientation == Orientation.Horizontal ? vm.Width : vm.Height;
+            float barv = (vm.BarWidth) / (height);
+            if (vm.UseBar == false)
+                barv = (2) / (height);
+            if (vm.Orientation == Orientation.Vertical)
+            {
+                r.Location = new Point(0, (int)(height - (value * height) - (barv * height / 2)));
+                r.Width = (int)width;
+                r.Height = (int)(barv * height);
+            }
+            else
+            {
+                value = 1 - value;
+                r.Location = new Point((int)(height - (value * height) - (barv * height / 2)), 0);
+                r.Width = (int)(barv * height);
+                r.Height = (int)width;
+            }
+            return r;
+        }
+        protected override void WndProc(ref Message m)
+        {
+            switch (m.Msg)
+            {
+                case WM_LButtonDown:
+                    if (GetValueRec().Contains(new Point(m.LParam.ToInt32())))
+                    {
+                        dragin = true;
+                        vm.Parent.Cursor = Cursors.Hand;
+                    }
+                    break;
+                case WM_MouseMove:
+                    if (dragin)
+                    {
+                        Point p = new Point(m.LParam.ToInt32());
+
+                        float value = 1 - ((vm.Value - vm.Min) / (vm.Max - vm.Min));
+                        float height = vm.Height;
+                        float nval = 1 - p.Y / height;
+                        if (vm.Orientation == Orientation.Horizontal)
+                        {
+                            height = vm.Width;
+                            nval = p.X / height;
+                        }
+                        nval = Math.Max(0, Math.Min(1, nval));
+                        if (value != nval)
+                            vm.Value = (nval * (vm.Max - vm.Min)) + vm.Min;
+                        vm.Parent.Cursor = Cursors.Hand;
+                        return;
+                    }
+                    else if (GetValueRec().Contains(new Point(m.LParam.ToInt32())))
+                    {
+                        inadorn = true;
+                        vm.Parent.Cursor = Cursors.Hand;
+                    }
+                    else
+                        inadorn = false;
+
+                    break;
+                case WM_LButtonUp:
+                    if (dragin)
+                        dragin = false;
+                    break;
+            }
+            base.WndProc(ref m);
+        }
+        public override DesignerVerbCollection Verbs
+        {
+            get
+            {
+                if (vbs == null)
+                {
+                    vbs = new DesignerVerbCollection();
+                    vbs.Add(new DesignerVerb("Show/Hide Label", new EventHandler(showHideLbl)));
+                    vbs.Add(new DesignerVerb("Set range to normalized", new EventHandler(Reset1_1)));
+                    vbs.Add(new DesignerVerb("Set range to battery", new EventHandler(Resetbat)));
+                }
+                return vbs;
+            }
+        }
+        public void showHideLbl(object sender, EventArgs e)
+        {
+            vm.Label = !vm.Label;
+        }
+        public void Reset1_1(object sender, EventArgs e)
+        {
+            vm.Min = -1f;
+            vm.Max = 1f;
+            vm.Value = 0f;
+        }
+        public void Resetbat(object sender, EventArgs e)
+        {
+            vm.Min = 7f;
+            vm.Max = 14.5f;
+            vm.HighThreshold = 13.25f;
+            vm.LowThreshold = 9.5f;
+            vm.Value = 0f;
         }
     }
 }
