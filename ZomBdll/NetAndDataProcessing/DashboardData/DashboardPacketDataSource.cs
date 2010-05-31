@@ -49,7 +49,7 @@ namespace System451.Communication.Dashboard.Net
 
         public void Start()
         {
-            if (!isrunning)//TODO: test
+            if (!isrunning)
             {
                 if (cRIOConnection == null)
                 {
