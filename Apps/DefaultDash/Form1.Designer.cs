@@ -52,6 +52,9 @@ namespace DefaultDash
             this.videoContextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.startBothToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.robotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.webcamToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.roundSpeedMeter2 = new System451.Communication.Dashboard.RoundSpeedMeter();
             this.roundSpeedMeter1 = new System451.Communication.Dashboard.RoundSpeedMeter();
             this.onOffControl2 = new System451.Communication.Dashboard.OnOffControl();
@@ -116,11 +119,12 @@ namespace DefaultDash
             // 
             this.videoContextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.startBothToolStripMenuItem,
-            this.stopToolStripMenuItem});
+            this.stopToolStripMenuItem,
+            this.sourceToolStripMenuItem});
             this.videoContextMenuStrip1.Name = "contextMenuStrip1";
             this.videoContextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.videoContextMenuStrip1.ShowImageMargin = false;
-            this.videoContextMenuStrip1.Size = new System.Drawing.Size(242, 64);
+            this.videoContextMenuStrip1.Size = new System.Drawing.Size(242, 94);
             // 
             // startBothToolStripMenuItem
             // 
@@ -137,6 +141,32 @@ namespace DefaultDash
             this.stopToolStripMenuItem.Size = new System.Drawing.Size(241, 30);
             this.stopToolStripMenuItem.Text = "End Video Capture";
             this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
+            // 
+            // sourceToolStripMenuItem
+            // 
+            this.sourceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.robotToolStripMenuItem,
+            this.webcamToolStripMenuItem});
+            this.sourceToolStripMenuItem.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sourceToolStripMenuItem.Name = "sourceToolStripMenuItem";
+            this.sourceToolStripMenuItem.Size = new System.Drawing.Size(241, 30);
+            this.sourceToolStripMenuItem.Text = "Source";
+            // 
+            // robotToolStripMenuItem
+            // 
+            this.robotToolStripMenuItem.Checked = true;
+            this.robotToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.robotToolStripMenuItem.Name = "robotToolStripMenuItem";
+            this.robotToolStripMenuItem.Size = new System.Drawing.Size(186, 30);
+            this.robotToolStripMenuItem.Text = "Robot";
+            this.robotToolStripMenuItem.Click += new System.EventHandler(this.robotToolStripMenuItem_Click);
+            // 
+            // webcamToolStripMenuItem
+            // 
+            this.webcamToolStripMenuItem.Name = "webcamToolStripMenuItem";
+            this.webcamToolStripMenuItem.Size = new System.Drawing.Size(186, 30);
+            this.webcamToolStripMenuItem.Text = "Webcam";
+            this.webcamToolStripMenuItem.Click += new System.EventHandler(this.robotToolStripMenuItem_Click);
             // 
             // roundSpeedMeter2
             // 
@@ -452,6 +482,9 @@ namespace DefaultDash
         private System.Windows.Forms.ToolStripMenuItem startBothToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem;
         private System451.Communication.Dashboard.ValueMeter valueMeter1;
+        private System.Windows.Forms.ToolStripMenuItem sourceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem robotToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem webcamToolStripMenuItem;
     }
 }
 

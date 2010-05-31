@@ -21,6 +21,7 @@ using DefaultDash.Properties;
 using System.Collections.ObjectModel;
 using System451.Communication.Dashboard;
 using System.IO;
+using System451.Communication.Dashboard.Net;
 
 namespace DefaultDash
 {
@@ -75,6 +76,26 @@ namespace DefaultDash
         {
             //Start Saving
             vss.StartSave(BTZomBFingerFactory.DefaultSaveLocation + "\\Capture" + (DateTime.Now.Ticks.ToString("x")) + ".avi");
+        }
+
+        private void robotToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (ToolStripMenuItem item in sourceToolStripMenuItem.DropDownItems)
+                item.Checked = false;
+            ((ToolStripMenuItem)sender).Checked = true;
+            switch (((ToolStripMenuItem)sender).Text)
+            {
+                case "Robot":
+                    cameraView1.VideoSource = new WPILibTcpVideoSource((int)numericUpDown1.Value);
+                    cameraView1.Start();
+                    break;
+                case "Webcam":
+                    cameraView1.VideoSource = new WebCamVideoSource(25f,cameraView1.Width, cameraView1.Height);
+                    cameraView1.Start();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
