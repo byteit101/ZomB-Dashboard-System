@@ -58,6 +58,53 @@ namespace System451.Communication.Dashboard.Net
         event NewDataRecievedEventHandler NewDataRecieved;
     }
 
+    /// <summary>
+    /// Allows the ZomB URL parser to automaticaly find and instance a DataSource
+    /// </summary>
+    [global::System.AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    public sealed class DataSourceAttribute : Attribute
+    {
+        /// <summary>
+        /// Allows the ZomB URL parser to automaticaly find and instance a DataSource
+        /// </summary>
+        /// <param name="sourceName">The name of this source (ie DBPacket)</param>
+        public DataSourceAttribute(string sourceName)
+        {
+            this.SourceName = sourceName;
+            this.ConstructorFormat = "";
+        }
+
+        /// <summary>
+        /// Allows the ZomB URL parser to automaticaly find and instance a DataSource
+        /// </summary>
+        /// <param name="sourceName">The name of this source (ie DBPacket)</param>
+        /// <param name="constructorFormat">The format of the constructor, leave blank if it accepts empty constructor. Otherwise, use the format "_name,_required,[_optional,[o_ptional" for the constructor. All values are case-insensitive, shorthand is specified with the underscore.</param>
+        public DataSourceAttribute(string sourceName, string constructorFormat)
+        {
+            this.SourceName = sourceName;
+            this.ConstructorFormat = constructorFormat;
+        }
+
+        /// <summary>
+        /// The name of this source (ie DBPacket)
+        /// </summary>
+        public string SourceName { get; private set; }
+
+        /// <summary>
+        /// The format of the constructor, leave blank if it accepts empty constructor.
+        /// Otherwise, use the format "_name,_required,[_optional,[o_ptional" for the constructor.
+        /// All values are case-insensitive, shorthand is specified with the underscore.
+        /// </summary>
+        /// <remarks>
+        /// There are a few special arguments:
+        /// _port is the URL's port
+        /// _team is the URL's team
+        /// & denotes a IZomBController must be passed in
+        /// $ denotes the service must be passed in (path on server as string)
+        /// </remarks>
+        public string ConstructorFormat { get; private set; }
+    }
+
     public delegate void InvalidPacketRecievedEventHandler(object sender, InvalidPacketRecievedEventArgs e);
     public delegate void NewDataRecievedEventHandler(object sender, NewDataRecievedEventArgs e);
     public delegate void NewStatusRecievedEventHandler(object sender, NewStatusRecievedEventArgs e);

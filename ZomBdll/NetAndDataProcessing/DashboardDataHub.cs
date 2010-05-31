@@ -34,13 +34,11 @@ namespace System451.Communication.Dashboard
     /// </summary>
     public class DashboardDataHub : Component, IZomBController
     {
-
-
         public event InvalidPacketRecievedEventHandler InvalidPacketRecieved;
         public event ErrorEventHandler OnError;
 
         bool havestatus = false;
-        Collection<IDashboardDataSource> DataSrcs;
+        Collection<IDashboardDataSource> DataSrcs = new Collection<IDashboardDataSource>();
 
         Collection<IZomBControl> zomBcontrols = new Collection<IZomBControl>();
         Collection<IZomBControlGroup> zomBgroups = new Collection<IZomBControlGroup>();
@@ -53,24 +51,9 @@ namespace System451.Communication.Dashboard
         /// </summary>
         public DashboardDataHub()
         {
-            ResetDataSources();
-            AddDBPacketDataSourceInit();
+            ClearSources();
+            RegisterDashboardPacketSource();//Default
         }
-
-        //TODO: Fix this
-        private void AddDBPacketDataSourceInit()
-        {
-            IDashboardDataSource src = new DashboardPacketDataSource(this);
-            src.InvalidPacketRecieved += new InvalidPacketRecievedEventHandler(src_InvalidPacketRecieved);
-            src.OnError += new ErrorEventHandler(src_OnError);
-            DataSrcs.Add(src);
-        }
-
-        private void ResetDataSources()
-        {
-            DataSrcs = new Collection<IDashboardDataSource>();
-        }
-
 
         void src_OnError(object sender, ErrorEventArgs e)
         {
@@ -355,7 +338,7 @@ namespace System451.Communication.Dashboard
         }
 
         /// <summary>
-        /// Registers a DB Packet Datat source and returns it if successfull
+        /// Registers a DB Packet Data source and returns it if successfull
         /// You must not be running the DDH to add successfully
         /// </summary>
         /// <returns>If successfull, the registerd DBPDS</returns>
@@ -364,6 +347,22 @@ namespace System451.Communication.Dashboard
             if (!Running)
             {
                 DashboardPacketDataSource src = new DashboardPacketDataSource(this);
+                return (RegisterSource(src) ? src : null);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Registers a TCP Data source and returns it if successfull
+        /// You must not be running the DDH to add successfully
+        /// </summary>
+        /// <param name="team">The team number</param>
+        /// <returns>If successfull, the registerd TCPDS</returns>
+        public TCPDataSource RegisterTCPSource(int team)
+        {
+            if (!Running)
+            {
+                TCPDataSource src = new TCPDataSource(team);
                 return (RegisterSource(src) ? src : null);
             }
             return null;
@@ -541,7 +540,7 @@ namespace System451.Communication.Dashboard
     /// <summary>
     /// What the DDH will load as sources when it loads
     /// </summary>
-    public enum StartSources
+    public enum StartSources //TODO: Add TCP
     {
         /// <summary>
         /// Use the DB packet

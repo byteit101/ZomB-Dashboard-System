@@ -25,6 +25,7 @@ using System.Threading;
 
 namespace System451.Communication.Dashboard.Net
 {
+    [DataSource("DBPacket", "&")]
     public class DashboardPacketDataSource : IDashboardDataSource, IDashboardStatusDataSource, IDashboardDataDataSource
     {
         public const int DBPacketPort = 1165;

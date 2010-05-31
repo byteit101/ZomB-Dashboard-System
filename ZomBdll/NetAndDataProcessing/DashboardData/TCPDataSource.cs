@@ -25,6 +25,7 @@ using System.Threading;
 
 namespace System451.Communication.Dashboard.Net
 {
+    [DataSource("TCP","_team,[_port")]
     public class TCPDataSource : IDashboardDataSource, IDashboardDataDataSource
     {
         public const int DefaultPort = 9066;//"ZB"
