@@ -229,9 +229,13 @@ namespace System451.Communication.Dashboard.Net
                 }
                 finally
                 {
-                    eyeSocket.Close();
-                    if (istream != null)
-                        istream.Close();
+                    try
+                    {
+                        eyeSocket.Close();
+                        if (istream != null)
+                            istream.Close();
+                    }
+                    catch { }
                 }
             }
         }

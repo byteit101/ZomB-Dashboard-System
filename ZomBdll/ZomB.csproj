@@ -56,14 +56,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoExtractor.cs" />
+    <Compile Include="Utils\AutoExtractor.cs" />
     <Compile Include="Controls\AnalogMeter.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\AnalogMeter.Designer.cs">
       <DependentUpon>AnalogMeter.cs</DependentUpon>
     </Compile>
-    <Compile Include="BitUtils.cs" />
+    <Compile Include="Utils\BitUtils.cs" />
     <Compile Include="Controls\ValueMeter.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -136,7 +136,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="NetAndDataProcessing\RobotStatusEventMonitor.cs" />
-    <Compile Include="Controls\RoundSpeedMeter.cs">
+    <Compile Include="Controls\SpeedMeter.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\StatusLabel.cs">
@@ -171,6 +171,7 @@
     <Compile Include="Controls\ZomBeye.Designer.cs">
       <DependentUpon>ZomBeye.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utils\RangeAndValue.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\DirectionMeter.resx">
@@ -226,13 +227,17 @@
     <EmbeddedResource Include="DashboardSpeed.bmp" />
     <None Include="ext\32feetWidcomm.dll">
     </None>
-    <Content Include="CREDITS.txt" />
+    <Content Include="CREDITS.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ext\WebCam_Capture\%40PSC_ReadMe_1339_10.txt" />
     <Content Include="ext\WebCam_Capture\CAMERA.ICO" />
     <Content Include="Graph.ico" />
     <Content Include="ext\InTheHand.Net.Personal.dll">
     </Content>
-    <Content Include="LICENSE.txt" />
+    <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\brz.bmp" />
     <Content Include="Resources\TacoFull-small2.jpg" />
     <Content Include="Resources\TacoFull-small2.png" />

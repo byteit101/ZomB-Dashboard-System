@@ -16,18 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
 
 namespace System451.Communication.Dashboard
 {
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.Analog.png")]
-    public partial class AnalogMeter : ZomBControl 
+    [Designer(typeof(Design.AnalogMeterDesigner))]
+    public partial class AnalogMeter : ZomBControl
     {
         float speedval = 0;
         bool use1to1023 = false;
@@ -67,23 +66,22 @@ namespace System451.Communication.Dashboard
 
 
         #region IDashboardControl Members
-        
+
         public override void UpdateControl(string value)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(UpdateControl),value);
+                this.Invoke(new UpdaterDelegate(UpdateControl), value);
             }
             else
             {
                 this.Value = float.Parse(value);
-                this.Invalidate();
             }
         }
 
-        #endregion 
+        #endregion
         private Color circleColor = Color.PaleGreen;
-        [DefaultValue(typeof(Color),"PaleGreen"), Category("ZomB"), Description("Color of the Circle")]
+        [DefaultValue(typeof(Color), "PaleGreen"), Category("ZomB"), Description("Color of the Circle")]
         public Color CircleColor
         {
             get
@@ -168,6 +166,21 @@ namespace System451.Communication.Dashboard
             }
 
         }
+        /// <summary>
+        /// Converts a Point with center 50,70 to an angle
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns>The angle off of the center 50,70</returns>
+        public static double PointToAngle(PointF p)
+        {
+            double r = Math.Atan((50.0 - p.X) / (p.Y - 70.0)) / Math.PI * 180;
+            if (p.Y > 70)
+                if (p.X > 50)
+                    return 180f;
+                else
+                    return 0f;
+            return r + 90f;
+        }
 
         private void AnalogMeter_Paint(object sender, PaintEventArgs e)
         {
@@ -213,11 +226,118 @@ namespace System451.Communication.Dashboard
                 ArrPen.EndCap = LineCap.ArrowAnchor;
                 ArrPen.StartCap = System.Drawing.Drawing2D.LineCap.RoundAnchor;
                 PointF tp = new Point();
-                double radians = (((Value-.5)*2)*90) * Math.PI / 180;
+                double radians = (((Value - .5) * 2) * 90) * Math.PI / 180;
                 tp.Y = (float)(70 - (Math.Cos(radians) * 50));
                 tp.X = (float)(50 + (Math.Sin(radians) * 50));
-                // }
                 e.Graphics.DrawLine(ArrPen, new PointF(50, 70), tp);
+            }
+        }
+    }
+
+    namespace Design
+    {
+        internal class AnalogMeterDesigner : ControlDesigner
+        {
+            AnalogMeter vm;
+            bool dragin = false;
+            bool inadorn = false;
+            long ltime = DateTime.Now.Ticks;
+            int lpoint;
+            Rectangle europeanswallow;
+            bool cans = false;
+
+            private const int WM_MouseMove = 0x0200;
+            private const int WM_LButtonDown = 0x0201;
+            private const int WM_LButtonUp = 0x0202;
+            private const int WM_LButtonDblClick = 0x0203;
+            private const int WM_RButtonDown = 0x0204;
+            private const int WM_RButtonUp = 0x0205;
+            private const int WM_RButtonDblClick = 0x0206;
+
+            public AnalogMeterDesigner()
+            {
+
+            }
+
+            public override void Initialize(IComponent component)
+            {
+                base.Initialize(component);
+                vm = (AnalogMeter)component;
+            }
+            protected override void OnSetCursor()
+            {
+                if ((!inadorn && !dragin) || (cans && inadorn && !dragin))
+                    base.OnSetCursor();
+            }
+
+            public GraphicsPath GetValueRec()
+            {
+                GraphicsPath gp = new GraphicsPath();
+                gp.AddArc((float)((.05f) * vm.Width), (float)((1f / 3f) * vm.Height), (float)(.90f) * vm.Width, (float)(1.2f) * vm.Height, -180f, 180f);
+                gp.AddLine((float)((.05f) * vm.Width), (float)((70f / 75f) * vm.Height), (float)(.95f) * vm.Width, (float)((70f / 75f) * vm.Height));
+                return gp;
+            }
+
+            protected override void WndProc(ref Message m)
+            {
+                switch (m.Msg)
+                {
+                    case WM_LButtonDown:
+                        if (GetValueRec().IsVisible(new Point(m.LParam.ToInt32())))
+                        {
+                            dragin = true;
+                            lpoint = m.LParam.ToInt32();
+                            Point tp = new Point(lpoint);
+                            tp.Offset(-3, -3);
+                            europeanswallow = new Rectangle(tp, new Size(6, 6));
+                            ltime = DateTime.Now.Ticks;
+                            Cursor.Current = Cursors.Hand;
+                            cans = true;
+                        }
+                        break;
+                    case WM_MouseMove:
+                        if (dragin)
+                        {
+
+                            Point p = new Point(m.LParam.ToInt32());
+                            if (cans)
+                            {
+                                if (europeanswallow.Contains(p))
+                                {
+                                    double f = DateTime.Now.Subtract(new DateTime(ltime)).TotalSeconds;
+                                    if (f >= 1.5)
+                                        cans = false;
+                                    else if (f >= 0.5)
+                                    {
+                                        dragin = false;
+                                        Cursor.Current = Cursors.SizeAll;
+                                        break;
+                                    }
+                                }
+                                else
+                                    cans = false;
+                            }
+
+                            float v = (float)(((AnalogMeter.PointToAngle(p)) / 180f) * (1023));
+                            vm.Value = Math.Max(0, Math.Min(1023, v));
+                            Cursor.Current = Cursors.Hand;
+                            return;
+                        }
+                        else if (GetValueRec().IsVisible(new Point(m.LParam.ToInt32())))
+                        {
+                            inadorn = true;
+                            Cursor.Current = Cursors.Hand;
+                        }
+                        else
+                            inadorn = false;
+
+                        break;
+                    case WM_LButtonUp:
+                        if (dragin)
+                            dragin = false;
+                        break;
+                }
+                base.WndProc(ref m);
             }
         }
     }

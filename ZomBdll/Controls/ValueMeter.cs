@@ -24,7 +24,7 @@ using System.Windows.Forms.Design;
 
 namespace System451.Communication.Dashboard
 {
-    [Designer(typeof(ValueMeterDesigner))]
+    [Designer(typeof(Design.ValueMeterDesigner))]
     public class ValueMeter : ZomBControl
     {
         float speedval, aval;
@@ -348,144 +348,148 @@ namespace System451.Communication.Dashboard
             }
         }
     }
-    internal class ValueMeterDesigner : ControlDesigner
+
+    namespace Design
     {
-        ValueMeter vm;
-        bool dragin = false;
-        bool inadorn = false;
-
-        private const int WM_MouseMove = 0x0200;
-        private const int WM_LButtonDown = 0x0201;
-        private const int WM_LButtonUp = 0x0202;
-        private const int WM_LButtonDblClick = 0x0203;
-        private const int WM_RButtonDown = 0x0204;
-        private const int WM_RButtonUp = 0x0205;
-        private const int WM_RButtonDblClick = 0x0206;
-
-        DesignerVerbCollection vbs;
-
-        public ValueMeterDesigner()
+        internal class ValueMeterDesigner : ControlDesigner
         {
+            ValueMeter vm;
+            bool dragin = false;
+            bool inadorn = false;
 
-        }
-        public override void Initialize(IComponent component)
-        {
-            base.Initialize(component);
-            vm = (ValueMeter)component;
+            private const int WM_MouseMove = 0x0200;
+            private const int WM_LButtonDown = 0x0201;
+            private const int WM_LButtonUp = 0x0202;
+            private const int WM_LButtonDblClick = 0x0203;
+            private const int WM_RButtonDown = 0x0204;
+            private const int WM_RButtonUp = 0x0205;
+            private const int WM_RButtonDblClick = 0x0206;
 
-        }
+            DesignerVerbCollection vbs;
 
-        void vm_MouseMove(object sender, MouseEventArgs e)
-        {
-            vm.Value += .01f;
-        }
-        protected override void OnSetCursor()
-        {
-            if (!inadorn && !dragin)
-                base.OnSetCursor();
-        }
-
-        public Rectangle GetValueRec()
-        {
-            Rectangle r = new Rectangle();
-            float value = (vm.Value - vm.Min) / (vm.Max - vm.Min);
-            float width = vm.Orientation == Orientation.Vertical ? vm.Width : vm.Height;
-            float height = vm.Orientation == Orientation.Horizontal ? vm.Width : vm.Height;
-            float barv = (vm.BarWidth) / (height);
-            if (vm.UseBar == false)
-                barv = (2) / (height);
-            if (vm.Orientation == Orientation.Vertical)
+            public ValueMeterDesigner()
             {
-                r.Location = new Point(0, (int)(height - (value * height) - (barv * height / 2)));
-                r.Width = (int)width;
-                r.Height = (int)(barv * height);
+
             }
-            else
+            public override void Initialize(IComponent component)
             {
-                value = 1 - value;
-                r.Location = new Point((int)(height - (value * height) - (barv * height / 2)), 0);
-                r.Width = (int)(barv * height);
-                r.Height = (int)width;
-            }
-            return r;
-        }
-        protected override void WndProc(ref Message m)
-        {
-            switch (m.Msg)
-            {
-                case WM_LButtonDown:
-                    if (GetValueRec().Contains(new Point(m.LParam.ToInt32())))
-                    {
-                        dragin = true;
-                        vm.Parent.Cursor = Cursors.Hand;
-                    }
-                    break;
-                case WM_MouseMove:
-                    if (dragin)
-                    {
-                        Point p = new Point(m.LParam.ToInt32());
+                base.Initialize(component);
+                vm = (ValueMeter)component;
 
-                        float value = 1 - ((vm.Value - vm.Min) / (vm.Max - vm.Min));
-                        float height = vm.Height;
-                        float nval = 1 - p.Y / height;
-                        if (vm.Orientation == Orientation.Horizontal)
-                        {
-                            height = vm.Width;
-                            nval = p.X / height;
-                        }
-                        nval = Math.Max(0, Math.Min(1, nval));
-                        if (value != nval)
-                            vm.Value = (nval * (vm.Max - vm.Min)) + vm.Min;
-                        vm.Parent.Cursor = Cursors.Hand;
-                        return;
-                    }
-                    else if (GetValueRec().Contains(new Point(m.LParam.ToInt32())))
-                    {
-                        inadorn = true;
-                        vm.Parent.Cursor = Cursors.Hand;
-                    }
-                    else
-                        inadorn = false;
-
-                    break;
-                case WM_LButtonUp:
-                    if (dragin)
-                        dragin = false;
-                    break;
             }
-            base.WndProc(ref m);
-        }
-        public override DesignerVerbCollection Verbs
-        {
-            get
+
+            void vm_MouseMove(object sender, MouseEventArgs e)
             {
-                if (vbs == null)
+                vm.Value += .01f;
+            }
+            protected override void OnSetCursor()
+            {
+                if (!inadorn && !dragin)
+                    base.OnSetCursor();
+            }
+
+            public Rectangle GetValueRec()
+            {
+                Rectangle r = new Rectangle();
+                float value = (vm.Value - vm.Min) / (vm.Max - vm.Min);
+                float width = vm.Orientation == Orientation.Vertical ? vm.Width : vm.Height;
+                float height = vm.Orientation == Orientation.Horizontal ? vm.Width : vm.Height;
+                float barv = (vm.BarWidth) / (height);
+                if (vm.UseBar == false)
+                    barv = (2) / (height);
+                if (vm.Orientation == Orientation.Vertical)
                 {
-                    vbs = new DesignerVerbCollection();
-                    vbs.Add(new DesignerVerb("Show/Hide Label", new EventHandler(showHideLbl)));
-                    vbs.Add(new DesignerVerb("Set range to normalized", new EventHandler(Reset1_1)));
-                    vbs.Add(new DesignerVerb("Set range to battery", new EventHandler(Resetbat)));
+                    r.Location = new Point(0, (int)(height - (value * height) - (barv * height / 2)));
+                    r.Width = (int)width;
+                    r.Height = (int)(barv * height);
                 }
-                return vbs;
+                else
+                {
+                    value = 1 - value;
+                    r.Location = new Point((int)(height - (value * height) - (barv * height / 2)), 0);
+                    r.Width = (int)(barv * height);
+                    r.Height = (int)width;
+                }
+                return r;
             }
-        }
-        public void showHideLbl(object sender, EventArgs e)
-        {
-            vm.Label = !vm.Label;
-        }
-        public void Reset1_1(object sender, EventArgs e)
-        {
-            vm.Min = -1f;
-            vm.Max = 1f;
-            vm.Value = 0f;
-        }
-        public void Resetbat(object sender, EventArgs e)
-        {
-            vm.Min = 7f;
-            vm.Max = 14.5f;
-            vm.HighThreshold = 13.25f;
-            vm.LowThreshold = 9.5f;
-            vm.Value = 0f;
+            protected override void WndProc(ref Message m)
+            {
+                switch (m.Msg)
+                {
+                    case WM_LButtonDown:
+                        if (GetValueRec().Contains(new Point(m.LParam.ToInt32())))
+                        {
+                            dragin = true;
+                            Cursor.Current = Cursors.Hand;
+                        }
+                        break;
+                    case WM_MouseMove:
+                        if (dragin)
+                        {
+                            Point p = new Point(m.LParam.ToInt32());
+
+                            float value = 1 - ((vm.Value - vm.Min) / (vm.Max - vm.Min));
+                            float height = vm.Height;
+                            float nval = 1 - p.Y / height;
+                            if (vm.Orientation == Orientation.Horizontal)
+                            {
+                                height = vm.Width;
+                                nval = p.X / height;
+                            }
+                            nval = Math.Max(0, Math.Min(1, nval));
+                            if (value != nval)
+                                vm.Value = (nval * (vm.Max - vm.Min)) + vm.Min;
+                            Cursor.Current = Cursors.Hand;
+                            return;
+                        }
+                        else if (GetValueRec().Contains(new Point(m.LParam.ToInt32())))
+                        {
+                            inadorn = true;
+                            Cursor.Current = Cursors.Hand;
+                        }
+                        else
+                            inadorn = false;
+
+                        break;
+                    case WM_LButtonUp:
+                        if (dragin)
+                            dragin = false;
+                        break;
+                }
+                base.WndProc(ref m);
+            }
+            public override DesignerVerbCollection Verbs
+            {
+                get
+                {
+                    if (vbs == null)
+                    {
+                        vbs = new DesignerVerbCollection();
+                        vbs.Add(new DesignerVerb("Show/Hide Label", new EventHandler(showHideLbl)));
+                        vbs.Add(new DesignerVerb("Set range to normalized", new EventHandler(Reset1_1)));
+                        vbs.Add(new DesignerVerb("Set range to battery", new EventHandler(Resetbat)));
+                    }
+                    return vbs;
+                }
+            }
+            public void showHideLbl(object sender, EventArgs e)
+            {
+                vm.Label = !vm.Label;
+            }
+            public void Reset1_1(object sender, EventArgs e)
+            {
+                vm.Min = -1f;
+                vm.Max = 1f;
+                vm.Value = 0f;
+            }
+            public void Resetbat(object sender, EventArgs e)
+            {
+                vm.Min = 7f;
+                vm.Max = 14.5f;
+                vm.HighThreshold = 13.25f;
+                vm.LowThreshold = 9.5f;
+                vm.Value = 12f;
+            }
         }
     }
 }

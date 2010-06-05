@@ -16,43 +16,70 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
+using System451.Communication.Dashboard.Utils;
+
 internal class icofinds
 {
 
 }
+
 namespace System451.Communication.Dashboard
 {
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.DashboardDirection.bmp")]
-    //[ToolboxBitmap(typeof(Button))]
+    [Designer(typeof(Design.DirectionMeterDesigner))]
     public partial class DirectionMeter : ZomBControl
     {
-        float speedval = 0;
+        RangeAndValue rv;
         delegate void UpdaterDelegate(string value);
-        
-        
+
         public DirectionMeter()
         {
+            rv = new RangeAndValue(0, 360, 0, true, true);
+            rv.Invalidate += this.Invalidate;
             InitializeComponent();
             ControlName = "gyro1";
         }
-        [DefaultValue("0"), Category("ZomB"), Description("The Value of the Direction Meter")]
+
+        [DefaultValue("0"), Category("ZomB"), Description("The value of the Direction Meter")]
         public float Value
         {
             get
             {
-                return speedval;
+                return rv.Value;
             }
             set
             {
-                speedval = value;
-                this.Invalidate();
+                rv.Value = value;
+            }
+        }
+        [DefaultValue("360"), Category("ZomB"), Description("The maximum value of the Direction Meter")]
+        public float Max
+        {
+            get
+            {
+                return rv.Max;
+            }
+            set
+            {
+                rv.Max = value;
+            }
+        }
+        [DefaultValue("0"), Category("ZomB"), Description("The minimum value of the Direction Meter")]
+        public float Min
+        {
+            get
+            {
+                return rv.Min;
+            }
+            set
+            {
+                rv.Min = value;
             }
         }
 
@@ -60,12 +87,11 @@ namespace System451.Communication.Dashboard
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(UpdateControl),value);
+                this.Invoke(new UpdaterDelegate(UpdateControl), value);
             }
             else
             {
                 this.Value = float.Parse(value);
-                this.Invalidate();
             }
         }
 
@@ -172,48 +198,173 @@ namespace System451.Communication.Dashboard
 
         }
 
+        /// <summary>
+        /// Converts a Point with center 50,50 to an angle
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns>The angle off of the center 50,50</returns>
+        public static double PointToAngle(PointF p)
+        {
+            double r = Math.Atan((p.X - 50.0) / (50.0 - p.Y)) / Math.PI * 90;
+            if (p.Y > 50)
+                return r + 90;
+            return r;
+        }
+
 
         private void DirectionMeter_Paint(object sender, PaintEventArgs e)
         {
-            if (Value > 360 || Value < 0)
-            {
-                if (Value == -999.99)
-                {
-                }
-                else
-                {
-                    while (Value < 0)
-                        Value += 360;
-                    if (Value > 360)
-                        Value = Value % 360;
-                    //Value = (Value < 0) ? 0 : 0;
-                }
-            }
+            float value = rv.Scale(0, 360);
+
+            //Set settings
             e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Bicubic;
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             e.Graphics.Clear(this.BackColor);
             e.Graphics.ScaleTransform((float)this.Width / 100f, (float)this.Height / 100f);
+
+            //Draw outer circle
             using (Pen roundPen = new Pen(CircleColor, CircleWidth))
             {
                 e.Graphics.DrawEllipse(roundPen, 5, 5, 90, 90);
             }
+
+            //Draw Guides
             using (Pen guidepen = new Pen(GuidesColor, GuidesWidth))
             {
-                e.Graphics.DrawLine(guidepen, 3, 50, 107, 50);
-                e.Graphics.DrawLine(guidepen, 50, 3, 50, 107);
+                e.Graphics.DrawLine(guidepen, (6f - (CircleWidth / 2f)), 50f, (94f + (CircleWidth / 2f)), 50f);
+                e.Graphics.DrawLine(guidepen, 50f, (6f - (CircleWidth / 2f)), 50f, (94f + (CircleWidth / 2f)));
             }
+
+            //Draw arrow
             using (Pen ArrPen = new Pen(ArrowColor, ArrowWidth))
             {
                 ArrPen.EndCap = LineCap.ArrowAnchor;
                 ArrPen.StartCap = System.Drawing.Drawing2D.LineCap.RoundAnchor;
                 PointF tp = new Point();
-                double radians = Value * Math.PI / 180;
-                tp.Y = (float)(50 - (Math.Cos(radians) * 50));
-                tp.X = (float)(50 + (Math.Sin(radians) * 50));
-                // }
+
+                //Its a circle, use trig
+                double radians = value * Math.PI / 180;
+                tp.Y = (float)(50f - (Math.Cos(radians) * 50f));
+                tp.X = (float)(50f + (Math.Sin(radians) * 50f));
                 e.Graphics.DrawLine(ArrPen, new PointF(50, 50), tp);
             }
         }
 
+    }
+
+    namespace Design
+    {
+        internal class DirectionMeterDesigner : ControlDesigner
+        {
+            DirectionMeter vm;
+            bool dragin = false;
+            bool inadorn = false;
+
+            private const int WM_MouseMove = 0x0200;
+            private const int WM_LButtonDown = 0x0201;
+            private const int WM_LButtonUp = 0x0202;
+            private const int WM_LButtonDblClick = 0x0203;
+            private const int WM_RButtonDown = 0x0204;
+            private const int WM_RButtonUp = 0x0205;
+            private const int WM_RButtonDblClick = 0x0206;
+
+            DesignerVerbCollection vbs;
+
+            public DirectionMeterDesigner()
+            {
+
+            }
+            public override void Initialize(IComponent component)
+            {
+                base.Initialize(component);
+                vm = (DirectionMeter)component;
+
+            }
+            protected override void OnSetCursor()
+            {
+                if (!inadorn && !dragin)
+                    base.OnSetCursor();
+            }
+
+            public Region GetValueRec()
+            {
+                Region r;
+                GraphicsPath gp = new GraphicsPath();
+                gp.AddEllipse((float)((.05 - vm.CircleWidth / 200f) * vm.Width), (float)((.05 - vm.CircleWidth / 200f) * vm.Height), (float)(.90 + vm.CircleWidth / 100f) * vm.Width, (float)(.90 + vm.CircleWidth / 100f) * vm.Height);
+                r = new Region(gp);
+                gp = new GraphicsPath();
+                gp.AddEllipse((float)((.05 + vm.CircleWidth / 200f) * vm.Width), (float)((.05 + vm.CircleWidth / 200f) * vm.Height), (float)(.90 - vm.CircleWidth / 100f) * vm.Width, (float)(.90 - vm.CircleWidth / 100f) * vm.Height);
+                r.Xor(gp);
+                return r;
+            }
+            protected override void WndProc(ref Message m)
+            {
+                switch (m.Msg)
+                {
+                    case WM_LButtonDown:
+                        if (GetValueRec().IsVisible(new Point(m.LParam.ToInt32())))
+                        {
+                            dragin = true;
+                            Cursor.Current = Cursors.Hand;
+                        }
+                        break;
+                    case WM_MouseMove:
+                        if (dragin)
+                        {
+                            Point p = new Point(m.LParam.ToInt32());
+
+                            vm.Value = (float)(DirectionMeter.PointToAngle(p) / 180 * (vm.Max - vm.Min) + vm.Min);
+                            Cursor.Current = Cursors.Hand;
+                            return;
+                        }
+                        else if (GetValueRec().IsVisible(new Point(m.LParam.ToInt32())))
+                        {
+                            inadorn = true;
+                            Cursor.Current = Cursors.Hand;
+                        }
+                        else
+                            inadorn = false;
+
+                        break;
+                    case WM_LButtonUp:
+                        if (dragin)
+                            dragin = false;
+                        break;
+                }
+                base.WndProc(ref m);
+            }
+            public override DesignerVerbCollection Verbs
+            {
+                get
+                {
+                    if (vbs == null)
+                    {
+                        vbs = new DesignerVerbCollection();
+                        vbs.Add(new DesignerVerb("Set range to normalized", new EventHandler(Reset1_1)));
+                        vbs.Add(new DesignerVerb("Set range to degrees", new EventHandler(Resetdeg)));
+                        vbs.Add(new DesignerVerb("Set range to radians", new EventHandler(Resetpi)));
+                    }
+                    return vbs;
+                }
+            }
+            public void Reset1_1(object sender, EventArgs e)
+            {
+                vm.Min = -1f;
+                vm.Max = 1f;
+                vm.Value = 0f;
+            }
+            public void Resetdeg(object sender, EventArgs e)
+            {
+                vm.Min = 0;
+                vm.Max = 360;
+                vm.Value = 0;
+            }
+            public void Resetpi(object sender, EventArgs e)
+            {
+                vm.Min = 0;
+                vm.Max = (float)(2 * Math.PI);
+                vm.Value = 0;
+            }
+        }
     }
 }

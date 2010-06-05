@@ -15,17 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using System.Windows.Forms.Design;
 
 namespace System451.Communication.Dashboard
 {
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.OnOff.png")]
+    [Designer(typeof(Design.OnOffControlDesigner))]
     public partial class OnOffControl : ZomBControl
     {
         bool speedval = false;
@@ -55,7 +54,7 @@ namespace System451.Communication.Dashboard
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(UpdateControl),value);
+                this.Invoke(new UpdaterDelegate(UpdateControl), value);
             }
             else
             {
@@ -87,6 +86,7 @@ namespace System451.Communication.Dashboard
         }
     }
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.OnOff.png")]
+    [Designer(typeof(Design.AlertControlDesigner))]
     public partial class AlertControl : ZomBControl
     {
         bool speedval = false;
@@ -115,7 +115,7 @@ namespace System451.Communication.Dashboard
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(UpdateControl),value);
+                this.Invoke(new UpdaterDelegate(UpdateControl), value);
             }
             else
             {
@@ -125,7 +125,7 @@ namespace System451.Communication.Dashboard
                     Value = bool.Parse(value);
             }
         }
-             
+
         private void OnOffControl_Paint(object sender, PaintEventArgs e)
         {
             if (Value)
@@ -145,6 +145,7 @@ namespace System451.Communication.Dashboard
         Reverse = -1
     };
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.Spike.png")]
+    [Designer(typeof(Design.SpikeControlDesigner))]
     public partial class SpikeControl : ZomBControl
     {
         SpikePositions speedval = SpikePositions.Off;
@@ -173,7 +174,7 @@ namespace System451.Communication.Dashboard
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(UpdateControl),value);
+                this.Invoke(new UpdaterDelegate(UpdateControl), value);
             }
             else
             {
@@ -202,6 +203,226 @@ namespace System451.Communication.Dashboard
             else
             {
                 e.Graphics.FillRectangle(Brushes.Black, 1 - .5f, 1 - .5f, 23, 23);
+            }
+        }
+    }
+
+    namespace Design
+    {
+        internal class OnOffControlDesigner : ControlDesigner
+        {
+            OnOffControl vm;
+            bool dragin = false;
+            bool inadorn = false;
+            int point = 0;
+
+            private const int WM_MouseMove = 0x0200;
+            private const int WM_LButtonDown = 0x0201;
+            private const int WM_LButtonUp = 0x0202;
+            private const int WM_LButtonDblClick = 0x0203;
+            private const int WM_RButtonDown = 0x0204;
+            private const int WM_RButtonUp = 0x0205;
+            private const int WM_RButtonDblClick = 0x0206;
+
+            public OnOffControlDesigner()
+            {
+
+            }
+            public override void Initialize(IComponent component)
+            {
+                base.Initialize(component);
+                vm = (OnOffControl)component;
+            }
+            protected override void OnSetCursor()
+            {
+                if (!inadorn && !dragin)
+                    base.OnSetCursor();
+            }
+
+            public GraphicsPath GetValueRec()
+            {
+                GraphicsPath gp = new GraphicsPath();
+                gp.AddEllipse((float)((.04) * vm.Width), (float)((.04) * vm.Height), (float)(.92) * vm.Width, (float)(.92) * vm.Height);
+                return gp;
+            }
+            protected override void WndProc(ref Message m)
+            {
+                switch (m.Msg)
+                {
+                    case WM_LButtonDown:
+                        if (GetValueRec().IsVisible(new Point(m.LParam.ToInt32())))
+                        {
+                            dragin = true;
+                            Cursor.Current = Cursors.Hand;
+                            point = m.LParam.ToInt32();
+                        }
+                        break;
+                    case WM_MouseMove:
+                        if (dragin)
+                        {
+                            Cursor.Current = Cursors.Hand;
+                            if (point == m.LParam.ToInt32())
+                                return;
+                        }
+                        else if (GetValueRec().IsVisible(new Point(m.LParam.ToInt32())))
+                        {
+                            inadorn = true;
+                            Cursor.Current = Cursors.Hand;
+                        }
+                        else
+                            inadorn = false;
+
+                        break;
+                    case WM_LButtonUp:
+                        if (dragin)
+                        {
+                            dragin = false;
+                            if (point == m.LParam.ToInt32())
+                                vm.Value = !vm.Value;
+                        }
+                        break;
+                }
+                base.WndProc(ref m);
+            }
+        }
+        internal class AlertControlDesigner : ControlDesigner
+        {
+            AlertControl vm;
+            bool dragin = false;
+            bool inadorn = false;
+            int point = 0;
+
+            private const int WM_MouseMove = 0x0200;
+            private const int WM_LButtonDown = 0x0201;
+            private const int WM_LButtonUp = 0x0202;
+            private const int WM_LButtonDblClick = 0x0203;
+            private const int WM_RButtonDown = 0x0204;
+            private const int WM_RButtonUp = 0x0205;
+            private const int WM_RButtonDblClick = 0x0206;
+
+            public AlertControlDesigner()
+            {
+
+            }
+            public override void Initialize(IComponent component)
+            {
+                base.Initialize(component);
+                vm = (AlertControl)component;
+            }
+            protected override void OnSetCursor()
+            {
+                if (!inadorn && !dragin)
+                    base.OnSetCursor();
+            }
+            protected override void WndProc(ref Message m)
+            {
+                switch (m.Msg)
+                {
+                    case WM_LButtonDown:
+                        dragin = true;
+                        Cursor.Current = Cursors.Hand;
+                        point = m.LParam.ToInt32();
+                        break;
+                    case WM_MouseMove:
+                        if (dragin)
+                        {
+                            Cursor.Current = Cursors.Hand;
+                            if (point == m.LParam.ToInt32())
+                                return;
+                        }
+                        else
+                        {
+                            inadorn = true;
+                            Cursor.Current = Cursors.Hand;
+                        }
+                        break;
+                    case WM_LButtonUp:
+                        if (dragin)
+                        {
+                            dragin = false;
+                            if (point == m.LParam.ToInt32())
+                                vm.Value = !vm.Value;
+                        }
+                        break;
+                }
+                base.WndProc(ref m);
+            }
+        }
+        internal class SpikeControlDesigner : ControlDesigner
+        {
+            SpikeControl vm;
+            bool dragin = false;
+            bool inadorn = false;
+            int point = 0;
+
+            private const int WM_MouseMove = 0x0200;
+            private const int WM_LButtonDown = 0x0201;
+            private const int WM_LButtonUp = 0x0202;
+            private const int WM_LButtonDblClick = 0x0203;
+            private const int WM_RButtonDown = 0x0204;
+            private const int WM_RButtonUp = 0x0205;
+            private const int WM_RButtonDblClick = 0x0206;
+
+            public SpikeControlDesigner()
+            {
+
+            }
+            public override void Initialize(IComponent component)
+            {
+                base.Initialize(component);
+                vm = (SpikeControl)component;
+            }
+            protected override void OnSetCursor()
+            {
+                if (!inadorn && !dragin)
+                    base.OnSetCursor();
+            }
+            protected override void WndProc(ref Message m)
+            {
+                switch (m.Msg)
+                {
+                    case WM_LButtonDown:
+                        dragin = true;
+                        point = m.LParam.ToInt32();
+                        Cursor.Current = Cursors.Hand;
+                        break;
+                    case WM_MouseMove:
+                        if (dragin)
+                        {
+                            Cursor.Current = Cursors.Hand;
+                            if (point == m.LParam.ToInt32())
+                                return;
+                        }
+                        else
+                        {
+                            inadorn = true;
+                            Cursor.Current = Cursors.Hand;
+                        }
+                        break;
+                    case WM_LButtonUp:
+                        if (dragin)
+                        {
+                            dragin = false;
+                            if (point == m.LParam.ToInt32())
+                                switch (vm.Value)
+                                {
+                                    case SpikePositions.Forward:
+                                        vm.Value = SpikePositions.Reverse;
+                                        break;
+                                    case SpikePositions.Off:
+                                        vm.Value = SpikePositions.Forward;
+                                        break;
+                                    case SpikePositions.Reverse:
+                                        vm.Value = SpikePositions.Off;
+                                        break;
+                                    default:
+                                        vm.Value = SpikePositions.Forward;
+                                        break;
+                                }
+                        }
+                        break;
+                }
+                base.WndProc(ref m);
             }
         }
     }

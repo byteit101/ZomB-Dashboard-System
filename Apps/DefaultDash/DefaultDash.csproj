@@ -104,8 +104,11 @@
     <None Include="Resources\varsexp21.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CREDITS.txt" />
+    <Content Include="CREDITS.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\ZomBs.png" />
   </ItemGroup>
