@@ -102,7 +102,7 @@
     <Compile Include="Controls\DataGraph.Designer.cs">
       <DependentUpon>DataGraph.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DataSaver.cs">
+    <Compile Include="NetAndDataProcessing\DashboardData\DataSaver.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\DirectionMeter.cs">
