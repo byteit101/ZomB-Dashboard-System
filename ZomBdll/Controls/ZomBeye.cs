@@ -19,9 +19,9 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using AviFile;
+using System451.Communication.Dashboard.Libs.AviFile;
 
-namespace System451.Communication.Dashboard
+namespace System451.Communication.Dashboard.Controls
 {
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.ZomBeye.png")]
     public partial class ZomBeye : UserControl

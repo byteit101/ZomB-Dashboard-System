@@ -19,20 +19,16 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms;
 
-namespace System451.Communication.Dashboard
+namespace System451.Communication.Dashboard.Controls
 {
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.Graph.png")]
     public partial class DataGraph : ZomBControl
     {
         float speedval = 0;
         Queue<float> values = new Queue<float>();
-
-        delegate void UpdaterDelegate(string value);
 
         public DataGraph()
         {
@@ -63,7 +59,7 @@ namespace System451.Communication.Dashboard
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(UpdateControl), value);
+                this.Invoke(new Utils.StringFunction(UpdateControl), value);
             }
             else
             {

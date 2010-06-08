@@ -2,7 +2,7 @@
  * This code was found on http://www.Planet-Source-Code.com/vb/scripts/ShowCode.asp?txtCodeId=1339&lngWId=10
  * Since this code was not found with a license, it is subject
  * to the ZomB Dashboard System's license
- * This source code is unmodified from the original source (aside from this header, and the notice below)
+ * This source code is unmodified from the original source aside from line 26 (aside from this header, and the notice below)
  **/
 /*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
@@ -23,7 +23,7 @@
  */
 using System;
 
-namespace WebCam_Capture
+namespace System451.Communication.Dashboard.Libs.WebCam_Capture
 {
 	/// <summary>
 	/// EventArgs for the webcam control

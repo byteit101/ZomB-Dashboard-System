@@ -22,10 +22,11 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Diagnostics.CodeAnalysis;
 
 namespace System451.Communication.Dashboard.Net
 {
-    [DataSource("TCP","_team,[_port")]
+    [DataSource("TCP", "_team,[_port")]
     public class TCPDataSource : IDashboardDataSource, IDashboardDataDataSource
     {
         public const int DefaultPort = 9066;//"ZB"
@@ -131,7 +132,11 @@ namespace System451.Communication.Dashboard.Net
 
         public event EventHandler DataRecieved;
 
-        public event InvalidPacketRecievedEventHandler InvalidPacketRecieved;
+        event InvalidPacketRecievedEventHandler IDashboardDataSource.InvalidPacketRecieved
+        {
+            add { }
+            remove { }
+        }
 
         public event ErrorEventHandler OnError;
 

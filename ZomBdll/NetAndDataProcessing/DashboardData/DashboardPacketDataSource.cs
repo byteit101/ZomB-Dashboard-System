@@ -284,7 +284,7 @@ namespace System451.Communication.Dashboard.Net
 
             uint calculatedCrc = 0;
             uint dataCrc = 0;
-            Crc32 crc = new Crc32();
+            Libs.Crc32 crc = new Libs.Crc32();
 
             dataCrc = BitConverter.ToUInt32(data, data.Length - 4);
 

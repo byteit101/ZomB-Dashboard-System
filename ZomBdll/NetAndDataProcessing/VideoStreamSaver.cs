@@ -22,7 +22,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Threading;
-using AviFile;
+using System451.Communication.Dashboard.Libs.AviFile;
 
 namespace System451.Communication.Dashboard
 {

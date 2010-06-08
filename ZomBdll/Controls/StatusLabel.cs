@@ -16,21 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.ComponentModel.Design;
+using System.Drawing;
+using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
-namespace System451.Communication.Dashboard
+namespace System451.Communication.Dashboard.Controls
 {
     /// <summary>
     /// A ZomB control that displays text at different locations
     /// </summary>
-    [ToolboxBitmap(typeof(Label)), Designer(typeof(StatusLabelDesigner))]
+    [ToolboxBitmap(typeof(Label)), Designer(typeof(Design.StatusLabelDesigner))]
     public class StatusLabel : Label, IZomBControlGroup
     {
         ZomBControlCollection innerCollection = new ZomBControlCollection();
@@ -195,7 +192,7 @@ namespace System451.Communication.Dashboard
                 this.Location = new Point((int)(((float.Parse(e.Value) - XVMin) / (XVMax - XVMin)) * (XMax - XMin) + XMin), this.Location.Y);
         }
 
-        delegate void cupd(object sender, ZomBControlUpdatedEventArgs e);
+        private delegate void cupd(object sender, ZomBControlUpdatedEventArgs e);
         void label_ControlUpdated(object sender, ZomBControlUpdatedEventArgs e)
         {
             if (this.InvokeRequired)
@@ -397,33 +394,35 @@ namespace System451.Communication.Dashboard
 
         #endregion
     }
-
-    /// <summary>
-    /// Designer for the StatusLabel
-    /// </summary>
-    /// <see cref="StatusLabel"/>
-    internal class StatusLabelDesigner : ControlDesigner
+    namespace Design
     {
-        public StatusLabelDesigner()
+        /// <summary>
+        /// Designer for the StatusLabel
+        /// </summary>
+        /// <see cref="StatusLabel"/>
+        internal class StatusLabelDesigner : ControlDesigner
         {
-
-        }
-
-        public override DesignerVerbCollection Verbs
-        {
-            get
+            public StatusLabelDesigner()
             {
-                return new DesignerVerbCollection(new DesignerVerb[] 
+
+            }
+
+            public override DesignerVerbCollection Verbs
+            {
+                get
+                {
+                    return new DesignerVerbCollection(new DesignerVerb[] 
             {
                 new DesignerVerb("AutoSize Height", new EventHandler(OnAutoSizeHeight))
             });
+                }
             }
-        }
-        private void OnAutoSizeHeight(object sender, EventArgs e)
-        {
-            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(this.Component);
-            Font f = (Font)props["Font"].GetValue(this.Component);
-            props["Height"].SetValue(this.Component, f.Height);
+            private void OnAutoSizeHeight(object sender, EventArgs e)
+            {
+                PropertyDescriptorCollection props = TypeDescriptor.GetProperties(this.Component);
+                Font f = (Font)props["Font"].GetValue(this.Component);
+                props["Height"].SetValue(this.Component, f.Height);
+            }
         }
     }
 }

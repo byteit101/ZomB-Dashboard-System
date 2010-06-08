@@ -331,7 +331,6 @@ namespace System451.Communication.Dashboard
                     default:
                         //TODO: make sure this never happens
                         throw new NotImplementedException();
-                        break;
                 }
             }
             return false;

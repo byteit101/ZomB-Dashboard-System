@@ -16,10 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace System451.Communication.Dashboard
+namespace System451.Communication.Dashboard.Utils
 {
     public enum BitFlags : byte
     {

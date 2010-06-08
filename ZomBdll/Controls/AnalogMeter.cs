@@ -22,7 +22,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
-namespace System451.Communication.Dashboard
+namespace System451.Communication.Dashboard.Controls
 {
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.Analog.png")]
     [Designer(typeof(Design.AnalogMeterDesigner))]
@@ -30,7 +30,7 @@ namespace System451.Communication.Dashboard
     {
         float speedval = 0;
         bool use1to1023 = false;
-        delegate void UpdaterDelegate(string value);
+
         public AnalogMeter()
         {
             InitializeComponent();
@@ -71,7 +71,7 @@ namespace System451.Communication.Dashboard
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(UpdateControl), value);
+                this.Invoke(new Utils.StringFunction(UpdateControl), value);
             }
             else
             {

@@ -1,4 +1,6 @@
-﻿/*
+﻿using System.Net;
+using System.Net.Sockets;
+/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
  * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
@@ -15,12 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
-using System.Net.Sockets;
-using System.Net;
 
 namespace System451.Communication.Dashboard.Net
 {
@@ -70,8 +67,6 @@ namespace System451.Communication.Dashboard.Net
                 }
             }
         }
-
-        delegate void eh();
 
         /// <summary>
         /// Starts the packet sending to localhost

@@ -16,12 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading;
 using InTheHand.Net;
 using InTheHand.Net.Bluetooth;
 using InTheHand.Net.Sockets;
-using System.Collections.ObjectModel;
+using System451.Communication.Dashboard.Utils;
 
 namespace System451.Communication.Dashboard
 {
@@ -38,7 +39,7 @@ namespace System451.Communication.Dashboard
     public class BlueFinger
     {
         static BTZomBFingerFactory s;
-         /// <summary>
+        /// <summary>
         /// Create a new ZomB FingerServer Factory
         /// </summary>
         /// <param name="teamNumber">Your team number</param>

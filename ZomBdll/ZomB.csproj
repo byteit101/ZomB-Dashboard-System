@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NetAndDataProcessing\DashboardData\DataPlayerSource.cs" />
     <Compile Include="Utils\AutoExtractor.cs" />
     <Compile Include="Controls\AnalogMeter.cs">
       <SubType>Component</SubType>
@@ -103,7 +104,6 @@
       <DependentUpon>DataGraph.cs</DependentUpon>
     </Compile>
     <Compile Include="NetAndDataProcessing\DashboardData\DataSaver.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\DirectionMeter.cs">
       <SubType>Component</SubType>
@@ -171,6 +171,7 @@
     <Compile Include="Controls\ZomBeye.Designer.cs">
       <DependentUpon>ZomBeye.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utils\Delegates.cs" />
     <Compile Include="Utils\RangeAndValue.cs" />
   </ItemGroup>
   <ItemGroup>

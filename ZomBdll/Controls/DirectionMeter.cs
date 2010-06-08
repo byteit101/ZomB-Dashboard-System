@@ -29,14 +29,13 @@ internal class icofinds
 
 }
 
-namespace System451.Communication.Dashboard
+namespace System451.Communication.Dashboard.Controls
 {
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.DashboardDirection.bmp")]
     [Designer(typeof(Design.DirectionMeterDesigner))]
     public partial class DirectionMeter : ZomBControl
     {
         RangeAndValue rv;
-        delegate void UpdaterDelegate(string value);
 
         public DirectionMeter()
         {
@@ -87,7 +86,7 @@ namespace System451.Communication.Dashboard
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(UpdateControl), value);
+                this.Invoke(new Utils.StringFunction(UpdateControl), value);
             }
             else
             {

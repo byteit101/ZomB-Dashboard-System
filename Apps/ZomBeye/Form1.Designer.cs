@@ -45,7 +45,7 @@ namespace ZomBeye
         /// </summary>
         private void InitializeComponent()
         {
-            this.zomBeye1 = new System451.Communication.Dashboard.ZomBeye();
+            this.zomBeye1 = new System451.Communication.Dashboard.Controls.ZomBeye();
             this.button1 = new System.Windows.Forms.Button();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.button2 = new System.Windows.Forms.Button();
@@ -142,7 +142,7 @@ namespace ZomBeye
 
         #endregion
 
-        private System451.Communication.Dashboard.ZomBeye zomBeye1;
+        private System451.Communication.Dashboard.Controls.ZomBeye zomBeye1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Button button2;

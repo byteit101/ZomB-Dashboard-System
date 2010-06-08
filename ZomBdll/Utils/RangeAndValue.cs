@@ -26,8 +26,7 @@ namespace System451.Communication.Dashboard.Utils
         private float valuei;
         private bool wrap;
         private bool oob;
-        public delegate void Invalidater();
-        public event Invalidater Invalidate;
+        public event VoidFunction Invalidate;
 
         public RangeAndValue()
         {
@@ -64,7 +63,7 @@ namespace System451.Communication.Dashboard.Utils
             Init(min, max, value, wrap, allowOOB);
         }
 
-        public RangeAndValue(float min, float max, float value, bool wrap, bool allowOOB, Invalidater invalidatecall)
+        public RangeAndValue(float min, float max, float value, bool wrap, bool allowOOB, VoidFunction invalidatecall)
         {
             Init(min, max, value, wrap, allowOOB);
             Invalidate += invalidatecall;

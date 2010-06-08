@@ -21,14 +21,13 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
-namespace System451.Communication.Dashboard
+namespace System451.Communication.Dashboard.Controls
 {
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.OnOff.png")]
     [Designer(typeof(Design.OnOffControlDesigner))]
     public partial class OnOffControl : ZomBControl
     {
         bool speedval = false;
-        delegate void UpdaterDelegate(string value);
 
         public OnOffControl()
         {
@@ -54,7 +53,7 @@ namespace System451.Communication.Dashboard
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(UpdateControl), value);
+                this.Invoke(new Utils.StringFunction(UpdateControl), value);
             }
             else
             {
@@ -90,7 +89,6 @@ namespace System451.Communication.Dashboard
     public partial class AlertControl : ZomBControl
     {
         bool speedval = false;
-        delegate void UpdaterDelegate(string value);
 
         public AlertControl()
         {
@@ -115,7 +113,7 @@ namespace System451.Communication.Dashboard
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(UpdateControl), value);
+                this.Invoke(new Utils.StringFunction(UpdateControl), value);
             }
             else
             {
@@ -138,18 +136,12 @@ namespace System451.Communication.Dashboard
             }
         }
     }
-    public enum SpikePositions
-    {
-        Forward = 1,
-        Off = 0,
-        Reverse = -1
-    };
+
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.Spike.png")]
     [Designer(typeof(Design.SpikeControlDesigner))]
     public partial class SpikeControl : ZomBControl
     {
         SpikePositions speedval = SpikePositions.Off;
-        delegate void UpdaterDelegate(string value);
 
         public SpikeControl()
         {
@@ -174,7 +166,7 @@ namespace System451.Communication.Dashboard
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(UpdateControl), value);
+                this.Invoke(new Utils.StringFunction(UpdateControl), value);
             }
             else
             {
@@ -426,4 +418,13 @@ namespace System451.Communication.Dashboard
             }
         }
     }
+}
+namespace System451.Communication.Dashboard
+{
+    public enum SpikePositions
+    {
+        Forward = 1,
+        Off = 0,
+        Reverse = -1
+    };
 }

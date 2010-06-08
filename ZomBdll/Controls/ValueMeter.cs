@@ -22,13 +22,12 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
-namespace System451.Communication.Dashboard
+namespace System451.Communication.Dashboard.Controls
 {
     [Designer(typeof(Design.ValueMeterDesigner))]
     public class ValueMeter : ZomBControl
     {
         float speedval, aval;
-        delegate void UpdaterDelegate(string value);
 
         public ValueMeter()
         {
@@ -340,7 +339,7 @@ namespace System451.Communication.Dashboard
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(UpdateControl), value);
+                this.Invoke(new Utils.StringFunction(UpdateControl), value);
             }
             else
             {

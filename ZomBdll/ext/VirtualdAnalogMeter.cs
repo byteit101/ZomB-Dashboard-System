@@ -40,7 +40,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using System451.Communication.Dashboard;
 
-namespace Instruments {
+namespace System451.Communication.Dashboard.Controls {
 
 	/// <summary>
 	/// Awesome analog meter. :) 

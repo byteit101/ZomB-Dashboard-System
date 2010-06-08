@@ -16,21 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using System451.Communication.Dashboard.Properties;
 
-namespace System451.Communication.Dashboard
+namespace System451.Communication.Dashboard.Controls
 {
     [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.Taco.png")]
     public partial class TacoMeter : ZomBControl
     {
         float speedval = 0;
-        delegate void UpdaterDelegate(string value);
 
         public TacoMeter()
         {
@@ -57,7 +53,7 @@ namespace System451.Communication.Dashboard
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(UpdateControl),value);
+                this.Invoke(new Utils.StringFunction(UpdateControl), value);
             }
             else
             {

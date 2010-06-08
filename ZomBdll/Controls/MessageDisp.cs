@@ -15,15 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
 
-namespace System451.Communication.Dashboard
+namespace System451.Communication.Dashboard.Controls
 {
     public partial class MessageDisp : ZomBControl
     {
@@ -32,8 +26,7 @@ namespace System451.Communication.Dashboard
             InitializeComponent();
             this.ControlName = "printf";
         }
-string text = "";
-delegate void UpdaterDelegate(string value);
+        string text = "";
 
         [DefaultValue("0"), Category("ZomB"), Description("The Value of the control")]
         public string Value
@@ -66,14 +59,14 @@ delegate void UpdaterDelegate(string value);
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(UpdateControl),value);
+                this.Invoke(new Utils.StringFunction(UpdateControl), value);
             }
             else
             {
                 if (Append)
                     Value += value;
                 else
-                    Value=value;
+                    Value = value;
             }
         }
     }

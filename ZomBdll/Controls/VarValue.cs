@@ -15,30 +15,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
-using System.Collections.Specialized;
-using System.Reflection;
 
-namespace System451.Communication.Dashboard
+namespace System451.Communication.Dashboard.Controls
 {
     public partial class VarValue : UserControl, IZomBControl
     {
         System.Collections.Generic.Dictionary<string, string> vrs = new Dictionary<string, string>();
 
-        delegate void UpdaterDelegate(string value);
-
         public VarValue()
         {
             InitializeComponent();
             this.DoubleBuffered = true;
-
-
         }
 
         public string ControlName
@@ -57,7 +46,7 @@ namespace System451.Communication.Dashboard
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new UpdaterDelegate(UpdateControl),value);
+                this.Invoke(new Utils.StringFunction(UpdateControl), value);
             }
             else
             {
@@ -81,8 +70,6 @@ namespace System451.Communication.Dashboard
         {
             this.Invalidate();
         }
-
-
 
         #region IZomBControl Members
 

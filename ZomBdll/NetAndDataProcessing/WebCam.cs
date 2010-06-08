@@ -18,7 +18,7 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
-using WebCam_Capture;
+using System451.Communication.Dashboard.Libs.WebCam_Capture;
 using System451.Communication.Dashboard.Net;
 
 namespace System451.Communication.Dashboard

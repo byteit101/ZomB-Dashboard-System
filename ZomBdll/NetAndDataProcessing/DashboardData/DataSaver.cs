@@ -17,31 +17,41 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 using System.ComponentModel;
-using System.Collections.ObjectModel;
 using System.IO;
+using System.Text;
 
 namespace System451.Communication.Dashboard
 {
-    class DataSaver:Control, IZomBMonitor
+    /// <summary>
+    /// DataSaver saves data from the DDH to a file that can be read by DataPlayerSource
+    /// </summary>
+    public class DataSaver : IZomBMonitor
     {
         Queue<byte[]> buffer = new Queue<byte[]>();
         bool saving = false;
         BinaryWriter outs;
-        delegate void UpdaterDelegate(byte[] value);
-        DateTime  lasttime;
+        DateTime lasttime;
+        string fpath;
 
-        public DataSaver()
+        /// <summary>
+        /// Creates a new DataSaver
+        /// </summary>
+        /// <param name="file">A file to save to</param>
+        public DataSaver(string file)
         {
+            fpath = file;
         }
+
         ~DataSaver()
         {
             Stop();
             WriteOff();
         }
 
+        /// <summary>
+        /// Are we saving
+        /// </summary>
         public bool Running
         {
             get
@@ -53,22 +63,17 @@ namespace System451.Communication.Dashboard
 
         private void AddValue(byte[] value)
         {
-            if (this.InvokeRequired)
+            if (saving)
             {
-                this.Invoke(new UpdaterDelegate(AddValue),value);
-            }
-            else
-            {
-                if (saving)
+                if (value != null)
                 {
-                    if (value != null)
+                    lock (buffer)
                     {
                         buffer.Enqueue(GetTime());
                         buffer.Enqueue(value);
-
-                        if (buffer.Count >= 30)
-                            WriteBuffer();
                     }
+                    if (buffer.Count >= 30)
+                        WriteBuffer();
                 }
             }
         }
@@ -76,10 +81,10 @@ namespace System451.Communication.Dashboard
         private byte[] GetTime()
         {
             byte[] bits = new byte[3];
-            bits[0] = 84;
+            bits[0] = 84;//T
             TimeSpan dif = DateTime.Now.Subtract(lasttime);
             lasttime = DateTime.Now;
-            ushort msd = (ushort)(dif.TotalMinutes * 60000);
+            ushort msd = (ushort)(dif.TotalMinutes * 60000);//ms
             bits[1] = (byte)(msd >> 8);
             bits[2] = (byte)msd;
             return bits;
@@ -87,48 +92,74 @@ namespace System451.Communication.Dashboard
 
         private void WriteBuffer()
         {
-            while (buffer.Count>1)
+            lock (buffer)
             {
-                outs.Write(buffer.Dequeue());
+                lock (outs)
+                {
+                    while (buffer.Count > 1)
+                    {
+                        outs.Write(buffer.Dequeue());
+                    }
+                }
             }
         }
 
+        /// <summary>
+        /// Start saving
+        /// </summary>
         public void Start()
         {
-            outs = new BinaryWriter(File.Open(FilePath, FileMode.Append));
-            saving = true;
-            lasttime = DateTime.Now;
+            if (!Running)
+            {
+                outs = new BinaryWriter(File.Open(FilePath, FileMode.Append));
+                saving = true;
+                lasttime = DateTime.Now;
+            }
         }
+
+        /// <summary>
+        /// Stop Saving
+        /// </summary>
         public void Stop()
         {
-            saving = false;
-            WriteBuffer();
-            WriteOff();
+            if (Running)
+            {
+                saving = false;
+                WriteBuffer();
+                WriteOff();
+            }
         }
 
         private void WriteOff()
         {
             if (outs != null)
             {
-                outs.Write((byte)81);//Q
-                outs.Flush();
-                outs.Close();
-                outs = null;
+                lock (outs)
+                {
+                    outs.Write((byte)81);//Q
+                    outs.Flush();
+                    outs.Close();
+                    outs = null;
+                }
             }
         }
 
-        private string fpath;
-        [Category("ZomB"),Description("Where to save the files")]
+        /// <summary>
+        /// Where to save the file
+        /// </summary>
+        [Category("ZomB"), Description("Where to save the files")]
         public string FilePath
         {
             get { return fpath; }
             set { fpath = value; }
         }
 
-
-
         #region IZomBMonitor Members
 
+        /// <summary>
+        /// IZomBMonitor: Updates the status
+        /// </summary>
+        /// <param name="status">The new status</param>
         public void UpdateStatus(FRCDSStatus status)
         {
             if (saving)
@@ -147,13 +178,17 @@ namespace System451.Communication.Dashboard
             }
         }
 
+        /// <summary>
+        /// IZomBMonitor: Updates the data
+        /// </summary>
+        /// <param name="data">The new data</param>
         public void UpdateData(Dictionary<string, string> data)
         {
             //TODO: Test
             if (saving)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("D00");//hog space for thesize
+                sb.Append("D00");//hog space for the size
                 foreach (var item in data)
                 {
                     sb.Append(item.Key);
@@ -162,7 +197,6 @@ namespace System451.Communication.Dashboard
                     sb.Append("|");
                 }
                 byte[] bit = UTF8Encoding.UTF8.GetBytes(sb.ToString());
-                //bit[0] = 68;//"D"//Already set
                 bit[1] = (byte)(sb.Length >> 8);
                 bit[2] = (byte)(sb.Length);
                 AddValue(bit);

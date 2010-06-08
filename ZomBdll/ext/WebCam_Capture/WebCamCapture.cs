@@ -2,7 +2,7 @@
  * This code was found on http://www.Planet-Source-Code.com/vb/scripts/ShowCode.asp?txtCodeId=1339&lngWId=10
  * Since this code was not found with a license, it is subject
  * to the ZomB Dashboard System's license
- * This source code is unmodified aside from line 37 from the original source (aside from this header, and the notice below)
+ * This source code is unmodified aside from line 33 & 38 from the original source (aside from this header, and the notice below)
  * Original source can be found at http://www.Planet-Source-Code.com/vb/scripts/ShowCode.asp?txtCodeId=1339&lngWId=10
  **/
 /*
@@ -30,7 +30,7 @@ using System.Data;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
-namespace WebCam_Capture
+namespace System451.Communication.Dashboard.Libs.WebCam_Capture
 {
 	/// <summary>
 	/// Summary description for UserControl1.

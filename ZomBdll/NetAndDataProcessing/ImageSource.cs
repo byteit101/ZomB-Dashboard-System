@@ -37,8 +37,7 @@ namespace System451.Communication.Dashboard.Net
         // image data { variable size, variable data } - always big endian
 
         public event NewImageDataRecievedEventHandler NewImageRecieved;
-        public delegate void Error(string msg);
-        public event Error OnError;
+        public event Utils.StringFunction OnError;
 
         bool shouldBeRunning = false;
         Image CurImg = new Bitmap(1, 1);

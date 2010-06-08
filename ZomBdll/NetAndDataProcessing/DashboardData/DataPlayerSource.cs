@@ -1,0 +1,224 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Threading;
+
+namespace System451.Communication.Dashboard.Net
+{
+    /// <summary>
+    /// DataPlayerSource "plays" the data saved by DataSaver
+    /// </summary>
+    public class DataPlayerSource : IDashboardDataSource, IDashboardStatusDataSource, IDashboardDataDataSource
+    {
+        Dictionary<string, string> vls = new Dictionary<string, string>();
+        FRCDSStatus sts = new FRCDSStatus();
+        Thread workthread;
+        BinaryReader redbit;
+
+        /// <summary>
+        /// Create a new DataPlayerSource from the specified file
+        /// </summary>
+        /// <param name="file">The file name</param>
+        public DataPlayerSource(string file)
+        {
+            FilePath = file;
+        }
+
+        /// <summary>
+        /// The file to read
+        /// </summary>
+        public string FilePath
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Are we playing
+        /// </summary>
+        public bool Running
+        {
+            get;
+            private set;
+        }
+
+        private void worker()
+        {
+            char c;
+            ushort us;
+            int iv;
+            while (Running)
+            {
+                try
+                {
+                    c = (char)redbit.ReadByte();
+                    switch (c)
+                    {
+                        case 'T':
+                            iv = (((int)redbit.ReadByte()) << 8) + redbit.ReadByte();
+                            while (Running && iv > 1)//takes some time to read the next one
+                            {
+                                Thread.Sleep(2);
+                                iv -= 2;
+                            }
+                            break;
+                        case 'S':
+                            sts = new FRCDSStatus();
+                            sts.Status = new StatusBitField(redbit.ReadByte());
+                            sts.Error = new ErrorBitField(redbit.ReadByte());
+                            sts.DigitalIn = new DIOBitField(redbit.ReadByte());
+                            sts.DigitalOut = new DIOBitField(redbit.ReadByte());
+                            sts.PacketNumber = (ushort)((((int)redbit.ReadByte()) << 8) + redbit.ReadByte());
+                            sts.Battery = redbit.ReadByte() + (((int)redbit.ReadByte()) / 100);
+                            if (NewStatusRecieved != null)
+                                NewStatusRecieved(this, new NewStatusRecievedEventArgs(sts));
+                            break;
+                        case 'D':
+                            iv = (((int)redbit.ReadByte()) << 8) + redbit.ReadByte();
+                            byte[] buffer = new byte[iv];
+                            us = 0;
+                            us = (ushort)redbit.Read(buffer, 0, iv);
+                            while (us != iv)
+                            {
+                                us += (ushort)redbit.Read(buffer, us, iv - us);
+                            }
+                            vls = SplitParams(UTF8Encoding.UTF8.GetString(buffer));
+                            if (DataRecieved != null)
+                                DataRecieved(this, new EventArgs());
+                            if (NewDataRecieved != null)
+                                NewDataRecieved(this, new NewDataRecievedEventArgs(vls));
+                            break;
+                        case 'Q':
+                            return;
+                        default:
+                            if (OnError != null)
+                                OnError(this, new ErrorEventArgs(new Exception("missed command statements")));
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (OnError != null)
+                        OnError(this, new ErrorEventArgs(ex));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Convert the name=value|n=v form to a Dictionary of name and values
+        /// </summary>
+        /// <param name="Output"></param>
+        /// <returns></returns>
+        private Dictionary<string, string> SplitParams(string Output)
+        {
+            //Split the main string
+            string[] s = Output.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            Dictionary<string, string> k = new Dictionary<string, string>(s.Length);
+            foreach (string item in s)
+            {
+                //split and add each item to the Dictionary
+                string ky, val;
+                ky = item.Split('=')[0];
+                val = item.Split('=')[1];
+                k[ky] = val;//Latter will overwrite
+            }
+            return k;
+        }
+
+
+        #region IDashboardDataSource Members
+
+        void IDashboardDataSource.Start()
+        {
+            if (!Running)
+            {
+                redbit = new BinaryReader(File.Open(FilePath, FileMode.Open, FileAccess.Read, FileShare.Read));
+                workthread = new Thread(worker);
+                workthread.IsBackground = true;
+                workthread.Start();
+                Running = true;
+            }
+        }
+
+        void IDashboardDataSource.Stop()
+        {
+            if (Running)
+            {
+                try
+                {
+
+                }
+                finally
+                {
+                    Running = false;
+                }
+            }
+        }
+
+        bool IDashboardDataSource.HasStatus
+        {
+            get { return true; }
+        }
+
+        bool IDashboardDataSource.HasData
+        {
+            get { return true; }
+        }
+
+        IDashboardStatusDataSource IDashboardDataSource.GetStatusSource()
+        {
+            return this;
+        }
+
+        IDashboardDataDataSource IDashboardDataSource.GetDataSource()
+        {
+            return this;
+        }
+
+        public event EventHandler DataRecieved;
+
+        event InvalidPacketRecievedEventHandler IDashboardDataSource.InvalidPacketRecieved
+        {
+            add { }
+            remove { }
+        }
+
+        public event ErrorEventHandler OnError;
+
+        #endregion
+
+        #region IDashboardDataDataSource Members
+
+        Dictionary<string, string> IDashboardDataDataSource.GetData()
+        {
+            return vls;
+        }
+
+        IDashboardDataSource IDashboardDataDataSource.ParentDataSource
+        {
+            get { return this; }
+        }
+
+        public event NewDataRecievedEventHandler NewDataRecieved;
+
+        #endregion
+
+        #region IDashboardStatusDataSource Members
+
+        FRCDSStatus IDashboardStatusDataSource.GetStatus()
+        {
+            return sts;
+        }
+
+        IDashboardDataSource IDashboardStatusDataSource.ParentDataSource
+        {
+            get { return this; }
+        }
+
+        public event NewStatusRecievedEventHandler NewStatusRecieved;
+
+        #endregion
+    }
+    //Format: T(ushort)[timespan]S[data]D(ushort)[length][data]
+}
