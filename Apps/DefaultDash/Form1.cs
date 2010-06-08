@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
+using System.IO;
 using System.Windows.Forms;
 using DefaultDash.Properties;
-using System.Collections.ObjectModel;
 using System451.Communication.Dashboard;
-using System.IO;
-using System451.Communication.Dashboard.Net;
+using System451.Communication.Dashboard.Net.Video;
+using System451.Communication.Dashboard.Utils;
 
 namespace DefaultDash
 {
@@ -90,7 +90,7 @@ namespace DefaultDash
                     cameraView1.Start();
                     break;
                 case "Webcam":
-                    cameraView1.VideoSource = new WebCamVideoSource(25f,cameraView1.Width, cameraView1.Height);
+                    cameraView1.VideoSource = new WebCamVideoSource(25f, cameraView1.Width, cameraView1.Height);
                     cameraView1.Start();
                     break;
                 default:

@@ -20,6 +20,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using System451.Communication.Dashboard.Libs.AviFile;
+using System451.Communication.Dashboard.Utils;
 
 namespace System451.Communication.Dashboard.Controls
 {
@@ -34,7 +35,7 @@ namespace System451.Communication.Dashboard.Controls
         {
             InitializeComponent();
             if (!DesignMode)
-            ReloadAll();
+                ReloadAll();
         }
 
         protected override Size DefaultSize

@@ -22,9 +22,8 @@ using System.Threading;
 using InTheHand.Net;
 using InTheHand.Net.Bluetooth;
 using InTheHand.Net.Sockets;
-using System451.Communication.Dashboard.Utils;
 
-namespace System451.Communication.Dashboard
+namespace System451.Communication.Dashboard.Utils
 {
     //BT is Bluetooth
     //All BT classes are optional

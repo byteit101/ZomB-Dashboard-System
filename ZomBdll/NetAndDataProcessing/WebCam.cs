@@ -21,7 +21,7 @@ using System.Drawing;
 using System451.Communication.Dashboard.Libs.WebCam_Capture;
 using System451.Communication.Dashboard.Net;
 
-namespace System451.Communication.Dashboard
+namespace System451.Communication.Dashboard.Net.Video
 {
     public class WebCam : ISavableZomBData
     {
@@ -72,6 +72,7 @@ namespace System451.Communication.Dashboard
 
 
     }
+
     public class WebCamVideoSource : IDashboardVideoDataSource
     {
         WebCamCapture wcc;

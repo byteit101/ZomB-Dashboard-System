@@ -18,7 +18,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace System451.Communication.Dashboard
+namespace System451.Communication.Dashboard.Utils
 {
     /// <summary>
     /// This class monitors for changes in the status of the Robot

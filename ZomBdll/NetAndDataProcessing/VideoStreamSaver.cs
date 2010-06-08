@@ -26,180 +26,212 @@ using System451.Communication.Dashboard.Libs.AviFile;
 
 namespace System451.Communication.Dashboard
 {
-    public class VideoStreamSaver : IZomBDataSaver
+    namespace Utils
     {
-        Queue<string> pubicQueue { get; set; }
-        Queue<string> privateQueue { get; set; }
-        Queue<Bitmap> imageQueue { get; set; }
-
-        ISavableZomBData source;
-
-        Thread saber;
-        bool saving;
-
-        public VideoStreamSaver(ISavableZomBData DataSource)
-        {
-            this.Add(DataSource);
-            pubicQueue = new Queue<string>();
-            privateQueue = new Queue<string>();
-            imageQueue = new Queue<Bitmap>();
-            PrefixBindings = false;
-            saber = new Thread(aviSaverbg);
-            saber.IsBackground = true;
-            FPS = 15;
-        }
-
-        #region IZomBDataSaver Members
-
         /// <summary>
-        /// Ignore this
+        /// Saves a video
         /// </summary>
-        public bool PrefixBindings
+        public class VideoStreamSaver : IZomBDataSaver
         {
-            get;
-            set;
-        }
+            Queue<string> pubicQueue { get; set; }
+            Queue<string> privateQueue { get; set; }
+            Queue<Bitmap> imageQueue { get; set; }
 
-        public double FPS { get; set; }
+            ISavableZomBData source;
 
-        public void Add(ISavableZomBData DataSource)
-        {
-            if (source == null)
+            Thread saber;
+            bool saving;
+
+            public VideoStreamSaver(ISavableZomBData DataSource)
             {
-                source = DataSource;
-                source.DataUpdated += new EventHandler(source_DataUpdated);
-            }
-        }
-
-        void source_DataUpdated(object sender, EventArgs e)
-        {
-            if (saving)
-                lock (pubicQueue)
-                {
-                    pubicQueue.Enqueue(source.DataValue);
-                }
-        }
-
-        public void StartSave(string file)
-        {
-            if (!saving)
-            {
+                this.Add(DataSource);
+                pubicQueue = new Queue<string>();
+                privateQueue = new Queue<string>();
+                imageQueue = new Queue<Bitmap>();
+                PrefixBindings = false;
                 saber = new Thread(aviSaverbg);
                 saber.IsBackground = true;
-                saber.Start(file);
+                FPS = 15;
             }
-        }
 
-        public void StartSave()
-        {
+            #region IZomBDataSaver Members
 
-        }
-
-        public void EndSave()
-        {
-            saving = false;
-        }
-
-        private void aviSaverbg(object file)
-        {
-            string filename = file.ToString();
-            pubicQueue.Clear();
-            privateQueue.Clear();
-            imageQueue.Clear();
-            saving = true;
-            AviStreamer srm = null;
-            while (saving)
+            /// <summary>
+            /// Ignore this
+            /// </summary>
+            public bool PrefixBindings
             {
-                Thread.Sleep(750);
-                while (pubicQueue.Count < 1 && saving)
+                get;
+                set;
+            }
+
+            public double FPS { get; set; }
+
+            public void Add(ISavableZomBData DataSource)
+            {
+                if (source == null)
                 {
-                    Thread.Sleep(50);
+                    source = DataSource;
+                    source.DataUpdated += new EventHandler(source_DataUpdated);
                 }
-                if (!saving)
-                {
-                    return;
-                }
-                while (pubicQueue.Count > 0)
-                {
+            }
+
+            void source_DataUpdated(object sender, EventArgs e)
+            {
+                if (saving)
                     lock (pubicQueue)
                     {
-                        privateQueue.Enqueue(pubicQueue.Dequeue());
+                        pubicQueue.Enqueue(source.DataValue);
                     }
-                }
-                Thread.Sleep(50);
-                while (privateQueue.Count > 0)
-                {
-                    //We should honor them, but lets not, as we should have a imageconverter
-                    //imageQueue.Enqueue((Bitmap)source.GetTypeConverter().ConvertFrom(null, System.Globalization.CultureInfo.CurrentCulture, privateQueue.Dequeue(), typeof(Image)));
-                    imageQueue.Enqueue((Bitmap)((new BitmapConverter()).ConvertFromString(privateQueue.Dequeue())));
-                }
-                if (srm == null)
-                    srm = new AviStreamer(filename, FPS, imageQueue.Dequeue());
-                Thread.Sleep(50);
-                while (imageQueue.Count>0)
-                {
-                    srm.Add(imageQueue.Dequeue());
-                }
-                Thread.Sleep(500);
             }
-            srm.Close();
-        }
 
-        #endregion
-    }
-    public class BitmapConverter:TypeConverter
-    {
-        public BitmapConverter() { }
-        public string ConvertToString(Image value)
-        {
-            MemoryStream imageStream = new MemoryStream();
-            value.Save(imageStream, ImageFormat.Jpeg);
-            return Convert.ToBase64String(imageStream.ToArray());
-        }
-        new public Image ConvertFromString(string value)
-        {
-            byte[] imgs = Convert.FromBase64String(value);
-            return Image.FromStream(new MemoryStream(imgs));
-        }
-    }
-    public class AviStreamer : IDisposable
-    {
-        AviManager mgr;
-        VideoStream vs;
-        public AviStreamer(string filename, double fps, Bitmap first)
-        {
-            mgr = new AviManager(filename, false);
-            vs = mgr.AddVideoStream(false, fps, first);
-        }
-        ~AviStreamer()
-        {
-            Dispose();
-        }
-
-        #region IDisposable Members
-
-        public void Dispose()
-        {
-            try
+            public void StartSave(string file)
             {
-                //vs.Close();
-                mgr.Close();
+                if (!saving)
+                {
+                    saber = new Thread(aviSaverbg);
+                    saber.IsBackground = true;
+                    saber.Start(file);
+                }
             }
-            catch
+
+            public void StartSave()
             {
 
             }
+
+            public void EndSave()
+            {
+                saving = false;
+            }
+
+            private void aviSaverbg(object file)
+            {
+                string filename = file.ToString();
+                pubicQueue.Clear();
+                privateQueue.Clear();
+                imageQueue.Clear();
+                saving = true;
+                Net.Video.AviStreamer srm = null;
+                while (saving)
+                {
+                    Thread.Sleep(750);
+                    while (pubicQueue.Count < 1 && saving)
+                    {
+                        Thread.Sleep(50);
+                    }
+                    if (!saving)
+                    {
+                        return;
+                    }
+                    while (pubicQueue.Count > 0)
+                    {
+                        lock (pubicQueue)
+                        {
+                            privateQueue.Enqueue(pubicQueue.Dequeue());
+                        }
+                    }
+                    Thread.Sleep(50);
+                    while (privateQueue.Count > 0)
+                    {
+                        //We should honor them, but lets not, as we should have a imageconverter
+                        //imageQueue.Enqueue((Bitmap)source.GetTypeConverter().ConvertFrom(null, System.Globalization.CultureInfo.CurrentCulture, privateQueue.Dequeue(), typeof(Image)));
+                        imageQueue.Enqueue((Bitmap)((new Net.Video.BitmapConverter()).ConvertFromString(privateQueue.Dequeue())));
+                    }
+                    if (srm == null)
+                        srm = new Net.Video.AviStreamer(filename, FPS, imageQueue.Dequeue());
+                    Thread.Sleep(50);
+                    while (imageQueue.Count > 0)
+                    {
+                        srm.Add(imageQueue.Dequeue());
+                    }
+                    Thread.Sleep(500);
+                }
+                srm.Close();
+            }
+
+            #endregion
         }
-        public void Add(Bitmap nextFrame)
+    }
+
+    namespace Net.Video
+    {
+        /// <summary>
+        /// Here for the Vido Saver
+        /// </summary>
+        public class BitmapConverter : TypeConverter
         {
-            vs.AddFrame(nextFrame);
+            public BitmapConverter() { }
+            public string ConvertToString(Image value)
+            {
+                MemoryStream imageStream = new MemoryStream();
+                value.Save(imageStream, ImageFormat.Jpeg);
+                return Convert.ToBase64String(imageStream.ToArray());
+            }
+            new public Image ConvertFromString(string value)
+            {
+                byte[] imgs = Convert.FromBase64String(value);
+                return Image.FromStream(new MemoryStream(imgs));
+            }
         }
 
-        #endregion
-
-        public void Close()
+        /// <summary>
+        /// Creates an easy to use class that saves AVI files
+        /// </summary>
+        public class AviStreamer : IDisposable
         {
-            Dispose();
+            AviManager mgr;
+            VideoStream vs;
+
+            /// <summary>
+            /// Creates a new AVI Streamer
+            /// </summary>
+            /// <param name="filename">The file to save the avi to</param>
+            /// <param name="fps">The framerate</param>
+            /// <param name="first">The first frame</param>
+            public AviStreamer(string filename, double fps, Bitmap first)
+            {
+                mgr = new AviManager(filename, false);
+                vs = mgr.AddVideoStream(false, fps, first);
+            }
+
+            ~AviStreamer()
+            {
+                Dispose();
+            }
+
+            /// <summary>
+            /// Dispose of the streamer
+            /// </summary>
+            public void Dispose()
+            {
+                try
+                {
+                    //vs.Close();
+                    mgr.Close();
+                }
+                catch
+                {
+
+                }
+            }
+
+            /// <summary>
+            /// Add another frame
+            /// </summary>
+            /// <param name="nextFrame">The next frame</param>
+            public void Add(Bitmap nextFrame)
+            {
+                vs.AddFrame(nextFrame);
+            }
+
+            /// <summary>
+            /// Save and close the AVI file
+            /// </summary>
+            public void Close()
+            {
+                Dispose();
+            }
         }
     }
 }

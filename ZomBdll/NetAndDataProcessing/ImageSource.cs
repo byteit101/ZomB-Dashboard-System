@@ -24,7 +24,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.IO;
 
-namespace System451.Communication.Dashboard.Net
+namespace System451.Communication.Dashboard.Net.Video
 {
     /// <summary>
     /// Access a WPILib camera

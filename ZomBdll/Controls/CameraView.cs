@@ -21,6 +21,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using System451.Communication.Dashboard.Net;
+using System451.Communication.Dashboard.Net.Video;
 
 namespace System451.Communication.Dashboard
 {
@@ -40,6 +41,7 @@ namespace System451.Communication.Dashboard
                 view = new Bitmap(10, 10);
                 EnableAutoReset = false;
                 InitializeComponent();
+#warning This Design mode will fail, always false
                 if (!this.DesignMode)
                 {
                     videoSource = null;
@@ -276,12 +278,12 @@ namespace System451.Communication.Dashboard
 
             TypeConverter ISavableZomBData.GetTypeConverter()
             {
-                return new BitmapConverter();
+                return new Net.Video.BitmapConverter();
             }
 
             string ISavableZomBData.DataValue
             {
-                get { return (new BitmapConverter()).ConvertToString(this.view); }
+                get { return (new Net.Video.BitmapConverter()).ConvertToString(this.view); }
             }
             private EventHandler dataUpdatedEvent;
 
