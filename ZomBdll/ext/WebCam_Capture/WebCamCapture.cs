@@ -2,7 +2,7 @@
  * This code was found on http://www.Planet-Source-Code.com/vb/scripts/ShowCode.asp?txtCodeId=1339&lngWId=10
  * Since this code was not found with a license, it is subject
  * to the ZomB Dashboard System's license
- * This source code is unmodified aside from line 33 & 38 from the original source (aside from this header, and the notice below)
+ * This source code is unmodified aside from line 33 & 38 & 39 from the original source (aside from this header, and the notice below)
  * Original source can be found at http://www.Planet-Source-Code.com/vb/scripts/ShowCode.asp?txtCodeId=1339&lngWId=10
  **/
 /*
@@ -35,8 +35,8 @@ namespace System451.Communication.Dashboard.Libs.WebCam_Capture
 	/// <summary>
 	/// Summary description for UserControl1.
 	/// </summary>
-	[System.Drawing.ToolboxBitmap(typeof(WebCamCapture), "CAMERA.ICO"),DesignTimeVisible(false)] // toolbox bitmap
-	[Designer("Sytem.Windows.Forms.Design.ParentControlDesigner,System.Design", typeof(System.ComponentModel.Design.IDesigner))] // make composite
+	[System.Drawing.ToolboxBitmap(typeof(WebCamCapture), "CAMERA.ICO"),DesignTimeVisible(false), Browsable(false)] // toolbox bitmap
+	//[Designer("Sytem.Windows.Forms.Design.ParentControlDesigner,System.Design", typeof(System.ComponentModel.Design.IDesigner))] // make composite
 	public class WebCamCapture : System.Windows.Forms.Control
 	{
 		private System.ComponentModel.IContainer components;

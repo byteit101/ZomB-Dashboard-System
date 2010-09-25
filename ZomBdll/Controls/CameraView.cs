@@ -41,18 +41,6 @@ namespace System451.Communication.Dashboard
                 view = new Bitmap(10, 10);
                 EnableAutoReset = false;
                 InitializeComponent();
-#warning This Design mode will fail, always false
-                if (!this.DesignMode)
-                {
-                    videoSource = null;
-                    //Receiver.OnImageUpdate += new Receiver.ImageUpdate(Receiver_OnImageUpdate);
-                    //Start();// we don't know the IP
-                    timer1.Enabled = false;
-                }
-                else
-                {
-                    timer1.Enabled = false;
-                }
             }
             private int team = 0;
             [Category("ZomB"), Description("Your team number")]
@@ -200,7 +188,7 @@ namespace System451.Communication.Dashboard
                         {
                             foreach (KeyValuePair<string, IZomBControl> ttarget in Targets)
                             {
-                                TargetInfo target = (TargetInfo)((object)ttarget);
+                                TargetInfo target = (TargetInfo)(ttarget.Value);
                                 if (!target.Target.IsEmpty)
                                 {
                                     PointF[] pts = new PointF[] { new PointF(target.Target.Top, target.Target.Left),
