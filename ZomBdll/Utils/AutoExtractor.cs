@@ -28,7 +28,8 @@ namespace System451.Communication.Dashboard
             {
                 All = 0xffff,
                 InTheHandManaged = 0x1,
-                InTheHandNative = 0x2
+                InTheHandNative = 0x2,
+                SlimDX = 0x4
             }
             public static void Extract(Files files)
             {
@@ -41,6 +42,16 @@ namespace System451.Communication.Dashboard
                 {
                     if (!File.Exists("32feetWidcomm.dll"))
                         File.WriteAllBytes("32feetWidcomm.dll", Resources._32feetWidcomm);
+                }
+                if ((files & Files.SlimDX) == Files.SlimDX)
+                {
+                    if (!File.Exists("SlimDX.dll"))
+                    {
+                        if (CPU.Is64BitOperatingSystem())
+                            File.WriteAllBytes("SlimDX.dll", Resources.SlimDX64);
+                        else
+                        File.WriteAllBytes("SlimDX.dll", Resources.SlimDX86);
+                    }
                 }
             }
         }

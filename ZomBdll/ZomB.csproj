@@ -46,6 +46,9 @@
     <Reference Include="InTheHand.Net.Personal, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>False</Private>
     </Reference>
+    <Reference Include="SlimDX, Version=2.0.10.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data" />
@@ -56,6 +59,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\XShake.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Utils\CPU.cs" />
+    <Compile Include="ext\Gamepad.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\DataPlayerSource.cs" />
     <Compile Include="Utils\AutoExtractor.cs" />
     <Compile Include="Controls\AnalogMeter.cs">
@@ -231,8 +239,10 @@
     <Content Include="CREDITS.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="ext\SlimDX.dll" />
     <Content Include="ext\WebCam_Capture\%40PSC_ReadMe_1339_10.txt" />
     <Content Include="ext\WebCam_Capture\CAMERA.ICO" />
+    <None Include="ext\x64\SlimDX.dll" />
     <Content Include="Graph.ico" />
     <Content Include="ext\InTheHand.Net.Personal.dll">
     </Content>
