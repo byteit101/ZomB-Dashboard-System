@@ -194,6 +194,8 @@
     <Compile Include="Utils\Delegates.cs" />
     <Compile Include="Utils\RangeAndValue.cs" />
     <Compile Include="WPF\ArrowGeometry.cs" />
+    <Compile Include="WPF\Controls\AnalogMeter.cs">
+    </Compile>
     <Compile Include="WPF\Controls\ZomBGLControl.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -304,6 +306,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controls\AnalogMeter.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

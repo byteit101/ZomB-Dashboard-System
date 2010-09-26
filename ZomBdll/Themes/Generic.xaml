@@ -4,5 +4,6 @@
     xmlns:ZomB="clr-namespace:System451.Communication.Dashboard.WPF.Controls">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/ZomBGLControl.xaml" />
+        <ResourceDictionary Source="/ZomB;component/WPF/Controls/AnalogMeter.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
