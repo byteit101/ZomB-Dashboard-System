@@ -3,27 +3,34 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ZomB="clr-namespace:System451.Communication.Dashboard.WPF.Controls">
     <ZomB:ThicknessDoublerZomB x:Key="ThicknessDoublerZomB" />
-    <ZomB:AnalogMeter x:Key="AnalogMeterValueLimiter2" />
-    <Style TargetType="{x:Type ZomB:AnalogMeter}">
+    <ZomB:DirectionMeter x:Key="DirectionMeterLmt" />
+    <Style TargetType="{x:Type ZomB:DirectionMeter}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ZomB:AnalogMeter}">
+                <ControlTemplate TargetType="{x:Type ZomB:DirectionMeter}">
                     <Border Padding="{TemplateBinding Padding}">
                         <Image Stretch="Fill">
                             <Image.Source>
                                 <DrawingImage>
                                     <DrawingImage.Drawing>
-                                        <DrawingGroup>
-                                            <GeometryDrawing Geometry="M-3.5,28 53.5,28 53.5,-3.5 -3.5,-3.5 z" >
+                                        <DrawingGroup  >
+                                            <GeometryDrawing Geometry="M-3.5,53.5 53.5,53.5 53.5,-3.5 -3.5,-3.5 z" >
                                                 <GeometryDrawing.Pen>
                                                     <Pen Brush="Transparent" Thickness="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness, Converter={StaticResource ThicknessDoublerZomB}, ConverterParameter=2}" />
                                                 </GeometryDrawing.Pen>
                                             </GeometryDrawing>
-                                            <GeometryDrawing Brush="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background}" Geometry="M0,25L50,25A25,25 0 0,0 0,25z M 25,2 25,10 M 13.5,5 17.5,12 M 36.5,5 32.5,12 M 5,13.5 12,17.5 M 44.9,13.5 38,17.5">
+                                            <GeometryDrawing Geometry="M0,25A25,25 0 0,0 50,25 A25,25 0 0,0 0,25z ">
                                                 <GeometryDrawing.Pen>
-                                                    <Pen Brush="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderBrush}" Thickness="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness}" />
+                                                    <Pen Brush="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderBrush}" Thickness="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness, Converter={StaticResource ThicknessDoublerZomB}, ConverterParameter=2}"  />
                                                 </GeometryDrawing.Pen>
                                             </GeometryDrawing>
+                                            <GeometryDrawing 
+                                                             Geometry="M0,25 50,25M25,0 25,50">
+                                                <GeometryDrawing.Pen>
+                                                    <Pen Brush="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background}" Thickness="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness, Converter={StaticResource ThicknessDoublerZomB}, ConverterParameter=2}" />
+                                                </GeometryDrawing.Pen>
+                                            </GeometryDrawing>
+                                            
                                             <GeometryDrawing Brush="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Foreground}">
                                                 <GeometryDrawing.Pen>
                                                     <Pen Brush="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Foreground}" Thickness="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness, Converter={StaticResource ThicknessDoublerZomB}, ConverterParameter=2}" />
@@ -32,16 +39,16 @@
                                                     <GeometryGroup FillRule="Nonzero">
                                                         <PathGeometry>
                                                             <PathGeometry.Transform>
-                                                                <RotateTransform CenterX="25" CenterY="25" Angle="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DoubleValue, Converter={StaticResource AnalogMeterValueLimiter2}}"/>
+                                                                <RotateTransform CenterX="25" CenterY="25" Angle="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DoubleValue, Converter={StaticResource DirectionMeterLmt}}"/>
                                                             </PathGeometry.Transform>
-                                                            <PathFigure StartPoint="24.7,25" >
-                                                                <LineSegment Point="24.7,1"/>
-                                                                <LineSegment Point="23.5,1.1"/>
-                                                                <LineSegment Point="25,-2"/>
-                                                                <LineSegment Point="26.5,1.1"/>
-                                                                <LineSegment Point="25.3,1"/>
-                                                                <LineSegment Point="25.3,25"/>
-                                                            </PathFigure>
+                                                                <PathFigure StartPoint="24.7,25" >
+                                                                    <LineSegment Point="24.7,1"/>
+                                                                    <LineSegment Point="23.5,1.1"/>
+                                                                    <LineSegment Point="25,-2"/>
+                                                                    <LineSegment Point="26.5,1.1"/>
+                                                                    <LineSegment Point="25.3,1"/>
+                                                                    <LineSegment Point="25.3,25"/>
+                                                                </PathFigure>
                                                         </PathGeometry>
                                                         <EllipseGeometry Center="25,25" RadiusX="1" RadiusY="1"/>
                                                     </GeometryGroup>

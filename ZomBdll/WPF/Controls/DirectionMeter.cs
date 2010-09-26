@@ -16,20 +16,20 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
-    public class AnalogMeter : ZomBGLControl, IValueConverter
+    public class DirectionMeter : ZomBGLControl, IValueConverter
     {
-        static AnalogMeter()
+        static DirectionMeter()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(AnalogMeter),
-            new FrameworkPropertyMetadata(typeof(AnalogMeter)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(DirectionMeter),
+            new FrameworkPropertyMetadata(typeof(DirectionMeter)));
         }
 
-        public AnalogMeter()
+        public DirectionMeter()
         {
-            this.Background = Brushes.PaleGreen;
-            this.Foreground = Brushes.DarkSlateGray;
+            this.Background = Brushes.PowderBlue;
+            this.Foreground = Brushes.Blue;
             this.SnapsToDevicePixels = true;
-            this.BorderBrush = Brushes.Black;
+            this.BorderBrush = Brushes.IndianRed;
             this.BorderThickness = new Thickness(1.0);
             this.Width = 100;
             this.Height = 50;
@@ -48,14 +48,14 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         static void MaxUpdated(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            AnalogMeter am = (o as AnalogMeter);
+            DirectionMeter am = (o as DirectionMeter);
             am.DoubleValue = Math.Max(am.Min, Math.Min(am.DoubleValue, (double)e.OldValue));
             am.IntValue = (int)am.DoubleValue;
             am.StringValue = am.DoubleValue.ToString();
         }
         static void MinUpdated(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            AnalogMeter am = (o as AnalogMeter);
+            DirectionMeter am = (o as DirectionMeter);
             am.DoubleValue = Math.Max((double)e.OldValue, Math.Min(am.DoubleValue, am.Max));
             am.IntValue = (int)am.DoubleValue;
             am.StringValue = am.DoubleValue.ToString();
@@ -69,7 +69,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         // Using a DependencyProperty as the backing store for Max.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MaxProperty =
-            DependencyProperty.Register("Max", typeof(double), typeof(AnalogMeter), new UIPropertyMetadata(1024.0, new PropertyChangedCallback(AnalogMeter.MaxUpdated)));
+            DependencyProperty.Register("Max", typeof(double), typeof(DirectionMeter), new UIPropertyMetadata(1024.0, new PropertyChangedCallback(DirectionMeter.MaxUpdated)));
 
 
 
@@ -81,11 +81,11 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         // Using a DependencyProperty as the backing store for Min.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MinProperty =
-            DependencyProperty.Register("Min", typeof(double), typeof(AnalogMeter), new UIPropertyMetadata(0.0, new PropertyChangedCallback(AnalogMeter.MinUpdated)));
+            DependencyProperty.Register("Min", typeof(double), typeof(DirectionMeter), new UIPropertyMetadata(0.0, new PropertyChangedCallback(DirectionMeter.MinUpdated)));
        
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return Math.Max(-90, Math.Min(((Math.Max(this.Min, Math.Min((double)value, this.Max)) - this.Min )/(this.Max-this.Min)*180) - 90, 90));
+            return value;// Math.Max(-90, Math.Min(((Math.Max(this.Min, Math.Min((double)value, this.Max)) - this.Min) / (this.Max - this.Min) * 180) - 90, 90));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

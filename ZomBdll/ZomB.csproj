@@ -196,6 +196,8 @@
     <Compile Include="WPF\ArrowGeometry.cs" />
     <Compile Include="WPF\Controls\AnalogMeter.cs">
     </Compile>
+    <Compile Include="WPF\Controls\DirectionMeter.cs">
+    </Compile>
     <Compile Include="WPF\Controls\ZomBGLControl.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -310,6 +312,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="WPF\Controls\AnalogMeter.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controls\DirectionMeter.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

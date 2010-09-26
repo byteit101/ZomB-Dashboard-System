@@ -156,7 +156,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             if ((value is Thickness))
             {
-                return ((Thickness)value).Left * (double.Parse(parameter.ToString()));
+                return (double)(((Thickness)value).Left * (double.Parse(parameter.ToString())));
             }
             if ((value is double || value is int))
             {
