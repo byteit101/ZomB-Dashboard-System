@@ -6,5 +6,8 @@
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/ZomBGLControl.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/AnalogMeter.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/DirectionMeter.xaml" />
+        <ResourceDictionary Source="/ZomB;component/WPF/Controls/OnOffControl.xaml" />
+        <ResourceDictionary Source="/ZomB;component/WPF/Controls/SpikeControl.xaml" />
+        <ResourceDictionary Source="/ZomB;component/WPF/Controls/AlertControl.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
