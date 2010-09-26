@@ -23,15 +23,6 @@ using System451.Communication.Dashboard.Utils;
 
 namespace System451.Communication.Dashboard
 {
-    [Obsolete("This will be replaced with IZomBControl, and removed in v0.7 and later")]
-    public interface IDashboardControl
-    {
-        string[] ParamName { get; set; }
-        string Value { get; set; }
-        string DefalutValue { get; }
-        void Update();
-    }
-
     /// <summary>
     /// Defines a ZomB Dashboard System Controller
     /// </summary>
