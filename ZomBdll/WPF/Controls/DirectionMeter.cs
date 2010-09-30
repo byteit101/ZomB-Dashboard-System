@@ -1,4 +1,21 @@
-﻿using System;
+﻿/*
+ * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
+ * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -16,7 +33,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
-    public class DirectionMeter : ZomBGLControl, IValueConverter
+    [Design.ZomBDesignable()]
+    public class DirectionMeter : ZomBGLControl, IValueConverter, Design.IZomBDesignableControl
     {
         static DirectionMeter()
         {
@@ -32,7 +50,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.BorderBrush = Brushes.IndianRed;
             this.BorderThickness = new Thickness(1.0);
             this.Width = 100;
-            this.Height = 50;
+            this.Height = 100;
         }
 
         public override void UpdateControl(string value)
@@ -82,7 +100,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         // Using a DependencyProperty as the backing store for Min.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MinProperty =
             DependencyProperty.Register("Min", typeof(double), typeof(DirectionMeter), new UIPropertyMetadata(0.0, new PropertyChangedCallback(DirectionMeter.MinUpdated)));
-       
+
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return value;// Math.Max(-90, Math.Min(((Math.Max(this.Min, Math.Min((double)value, this.Max)) - this.Min) / (this.Max - this.Min) * 180) - 90, 90));
@@ -93,6 +111,13 @@ namespace System451.Communication.Dashboard.WPF.Controls
             throw new NotImplementedException();
         }
 
+        #region IZomBDesignableControl Members
 
+        public Design.ZomBDesignableControlInfo GetDesignInfo()
+        {
+            return new Design.ZomBDesignableControlInfo { Name = "Direction Meter", Description = "This shows 360 degrees, helpful for direction", Type = typeof(DirectionMeter) };
+        }
+
+        #endregion
     }
 }
