@@ -10,5 +10,6 @@
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/SpikeControl.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/AlertControl.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/SpeedMeter.xaml" />
+        <ResourceDictionary Source="/ZomB;component/WPF/Controls/xShake.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

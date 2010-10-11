@@ -49,15 +49,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.SnapsToDevicePixels = true;
             this.Width = 100;
             this.Height = 50;
-            /*
-                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                                        <GradientBrush.GradientStops>
-                                                                <GradientStop Color="{TemplateBinding Foreground}" Offset="0" />
-                                                                <GradientStop Color="{TemplateBinding BorderBrush}" Offset="0.5" />
-                                                                <GradientStop Color="{TemplateBinding Background}" Offset="1" />
-
-                                                        </GradientBrush.GradientStops>
-                                                    </LinearGradientBrush>*/
         }
 
         static void MaxUpdated(DependencyObject o, DependencyPropertyChangedEventArgs e)
