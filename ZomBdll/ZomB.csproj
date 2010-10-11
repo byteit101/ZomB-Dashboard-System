@@ -200,6 +200,7 @@
     <Compile Include="WPF\Controls\AnalogMeter.cs">
     </Compile>
     <Compile Include="WPF\Controls\AlertControl.cs" />
+    <Compile Include="WPF\Controls\SpeedMeter.cs" />
     <Compile Include="WPF\Controls\SpikeControl.cs" />
     <Compile Include="WPF\Controls\OnOffControl.cs" />
     <Compile Include="WPF\Controls\DirectionMeter.cs">
@@ -326,6 +327,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="WPF\Controls\AlertControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controls\SpeedMeter.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

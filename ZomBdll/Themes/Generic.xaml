@@ -9,5 +9,6 @@
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/OnOffControl.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/SpikeControl.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/AlertControl.xaml" />
+        <ResourceDictionary Source="/ZomB;component/WPF/Controls/SpeedMeter.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
