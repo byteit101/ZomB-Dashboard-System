@@ -1,0 +1,33 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ZomB="clr-namespace:System451.Communication.Dashboard.WPF.Controls">
+    <ZomB:TacoMeter x:Key="Rotor" />
+    <Style TargetType="{x:Type ZomB:TacoMeter}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ZomB:TacoMeter}">
+                    <Border Padding="{TemplateBinding Padding}">
+                        <Viewbox>
+                            <Grid>
+                                <Image Stretch="Fill" Source="pack://application:,,,/ZomB;Component/Resources/tacoempty.png" />
+                                <Image Stretch="Fill" Source="pack://application:,,,/ZomB;Component/Resources/tacofull.png">
+                                    <Image.OpacityMask>
+                                        <DrawingBrush>
+                                            <DrawingBrush.Transform>
+                                                <RotateTransform CenterX="337.5" CenterY="291" Angle="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DoubleValue, Converter={StaticResource Rotor}}" />
+                                            </DrawingBrush.Transform>
+                                            <DrawingBrush.Drawing>
+                                                <GeometryDrawing Geometry="M 0 291 337.5 291 337.5 0 0 0 z" Brush="Black" />
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Image.OpacityMask>
+                                </Image>
+                            </Grid>
+                        </Viewbox>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

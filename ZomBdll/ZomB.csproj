@@ -200,6 +200,7 @@
     <Compile Include="WPF\Controls\AnalogMeter.cs">
     </Compile>
     <Compile Include="WPF\Controls\AlertControl.cs" />
+    <Compile Include="WPF\Controls\TacoMeter.cs" />
     <Compile Include="WPF\Controls\xShake.cs" />
     <Compile Include="WPF\Controls\SpeedMeter.cs" />
     <Compile Include="WPF\Controls\SpikeControl.cs" />
@@ -280,8 +281,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\brz.bmp" />
+    <Resource Include="Resources\tacoempty.png" />
     <Content Include="Resources\TacoFull-small2.jpg" />
     <Content Include="Resources\TacoFull-small2.png" />
+    <Resource Include="Resources\tacofull.png" />
     <Content Include="Resources\ZomB text.png" />
     <EmbeddedResource Include="Resources\ZomB text.svg" />
     <EmbeddedResource Include="Resources\ZomBDS.svg" />
@@ -328,6 +331,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="WPF\Controls\AlertControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controls\TacoMeter.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
