@@ -15,5 +15,6 @@
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/CameraView.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/DataGraph.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/StatusLabel.xaml" />
+        <ResourceDictionary Source="/ZomB;component/WPF/Controls/ValueMeter.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
