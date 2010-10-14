@@ -78,11 +78,11 @@ namespace System451.Communication.Dashboard.WPF.Controls
             {
                 if (x == 0)
                 {
-                    pf.StartPoint = new Point(++x/2.0, y*10.0+10.0);
+                    pf.StartPoint = new Point(++x/2.0, y*-10.0+10.0);
                 }
                 else
                 {
-                    pf.Segments.Add(new LineSegment(new Point(++x/2.0, y*10.0+10.0), true));
+                    pf.Segments.Add(new LineSegment(new Point(++x/2.0, y*-10.0+10.0), true));
                 }
             }
             var pgo = new PathGeometry();

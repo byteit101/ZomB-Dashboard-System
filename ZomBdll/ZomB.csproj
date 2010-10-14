@@ -201,6 +201,7 @@
     </Compile>
     <Compile Include="WPF\Controls\AlertControl.cs" />
     <Compile Include="WPF\Controls\CameraView.cs" />
+    <Compile Include="WPF\Controls\StatusLabel.cs" />
     <Compile Include="WPF\Controls\DataGraph.cs" />
     <Compile Include="WPF\Controls\TacoMeter.cs" />
     <Compile Include="WPF\Controls\xShake.cs" />
@@ -338,6 +339,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="WPF\Controls\CameraView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controls\StatusLabel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
