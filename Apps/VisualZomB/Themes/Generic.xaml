@@ -16,7 +16,13 @@
                         </Canvas.Background>
                         <Canvas.ContextMenu>
                             <ContextMenu Name="PART_ctxMenu">
-                                <MenuItem Header="Element Properties" />
+                                <MenuItem Header="Order">
+                                    <MenuItem Header="Move to Top" Command="MoveLeft" />
+                                    <MenuItem Header="Move Up" Command="MoveUp" />
+                                    <MenuItem Header="Move Down" Command="MoveDown" />
+                                    <MenuItem Header="Move to Bottom" Command="MoveRight" />
+                                </MenuItem>
+                                <MenuItem Header="Element Properties" IsEnabled="False" />
                             </ContextMenu>
                         </Canvas.ContextMenu>
                         <Border Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Name="Part_border" BorderThickness="2" BorderBrush="Blue" Opacity="0"></Border>

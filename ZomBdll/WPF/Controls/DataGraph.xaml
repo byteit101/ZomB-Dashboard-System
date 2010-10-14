@@ -23,7 +23,7 @@
                             <Rectangle.Fill>
                                 <DrawingBrush Viewbox="0 0 150 20" ViewboxUnits="Absolute">
                                     <DrawingBrush.Drawing>
-                                        <GeometryDrawing Geometry="M 0 1 1 1" x:Name="PART_PathGeo">
+                                        <GeometryDrawing Geometry="M 0 10 150 10" x:Name="PART_PathGeo">
                                             <GeometryDrawing.Pen>
                                                 <Pen Brush="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Foreground}"  Thickness="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Viewbox}}, Path=ActualHeight, Converter={StaticResource Thickbox}}" />
                                             </GeometryDrawing.Pen>

@@ -212,7 +212,7 @@ namespace System451.Communication.Dashboard.ViZ
             }
         }
 
-        private void ZDash_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private void ZDash_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Deselect();
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -227,7 +227,6 @@ namespace System451.Communication.Dashboard.ViZ
                 }
                 else if (e.OriginalSource is SurfaceControl || VisualTreeHelper.GetParent((DependencyObject)e.OriginalSource) is SurfaceControl) //resize, TODO: add PART_xxx detection
                 {
-                    System.Diagnostics.Debug.Print("st");
                     cd = CurrentDrag.Move;
                     dndopoint = e.GetPosition(ZDash);
                     origSrc = FindAnchestor<SurfaceControl>((DependencyObject)e.OriginalSource);
@@ -340,5 +339,66 @@ namespace System451.Communication.Dashboard.ViZ
         }
 
         #endregion
+
+        private void CommandBinding_MoveTop_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (curObj != null)
+            {
+                ZDash.Children.Remove(curObj);
+                ZDash.Children.Insert(ZDash.Children.Count, curObj);
+            }
+        }
+
+        private void CommandBinding_MoveUp_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (curObj != null)
+            {
+                var i = ZDash.Children.IndexOf(curObj);
+                ZDash.Children.Remove(curObj);
+                if (i + 1 >= ZDash.Children.Count)
+                    i = ZDash.Children.Count-1;
+                ZDash.Children.Insert(i+1, curObj);
+            }
+        }
+
+        private void CommandBinding_MoveDown_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (curObj != null)
+            {
+                var i = ZDash.Children.IndexOf(curObj);
+                ZDash.Children.Remove(curObj);
+                if (i <= 1)
+                    i = 1;
+                ZDash.Children.Insert(i - 1, curObj);
+            }
+        }
+
+        private void CommandBinding_MoveBottom_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (curObj != null)
+            {
+                ZDash.Children.Remove(curObj);
+                ZDash.Children.Insert(0, curObj);
+            }
+        }
+
+        private void ZDash_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.RightButton == MouseButtonState.Pressed)
+            {
+                if (e.Source is Button || VisualTreeHelper.GetParent((DependencyObject)e.Source) is Button || VisualTreeHelper.GetParent(VisualTreeHelper.GetParent((DependencyObject)e.Source)) is Button) //resize, TODO: add PART_xxx detection
+                {
+                    origSrc = FindAnchestor<SurfaceControl>((DependencyObject)e.OriginalSource);
+                    Deselect();
+                    Select(origSrc as SurfaceControl);
+                }
+                else if (e.Source is SurfaceControl || VisualTreeHelper.GetParent((DependencyObject)e.Source) is SurfaceControl) //resize, TODO: add PART_xxx detection
+                {
+                    origSrc = FindAnchestor<SurfaceControl>((DependencyObject)e.OriginalSource);
+                    Deselect();
+                    Select(origSrc as SurfaceControl);
+                }
+            }
+        }
     }
 }

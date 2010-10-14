@@ -16,6 +16,10 @@
     <Window.CommandBindings>
         <CommandBinding Command="Play" Executed="CommandBinding_Play_Executed" />
         <CommandBinding Command="Save" Executed="CommandBinding_Save_Executed" />
+        <CommandBinding Command="MoveLeft" Executed="CommandBinding_MoveTop_Executed" />
+        <CommandBinding Command="MoveUp" Executed="CommandBinding_MoveUp_Executed" />
+        <CommandBinding Command="MoveDown" Executed="CommandBinding_MoveDown_Executed" />
+        <CommandBinding Command="MoveRight" Executed="CommandBinding_MoveBottom_Executed" />
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="F5" Command="Play"/>
@@ -49,7 +53,8 @@
                            FocusManager.IsFocusScope="False">
             <loc:DropShadowChrome Width="1024" Height="400">
                 <Canvas Width="1024" Height="400" Background="White" Name="ZDash" AllowDrop="True" Drop="ZDash_Drop" 
-                    DragEnter="ZDash_DragEnter" PreviewMouseDown="ZDash_MouseRightButtonDown"
+                    DragEnter="ZDash_DragEnter" PreviewMouseLeftButtonDown="ZDash_MouseLeftButtonDown"
+                        PreviewMouseRightButtonDown="ZDash_PreviewMouseRightButtonDown"
                     Focusable="True" FocusManager.IsFocusScope="True">
                 </Canvas>
             </loc:DropShadowChrome>
