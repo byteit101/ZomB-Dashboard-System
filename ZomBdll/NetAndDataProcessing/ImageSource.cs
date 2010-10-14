@@ -216,7 +216,7 @@ namespace System451.Communication.Dashboard.Net.Video
                             //Save Image
                             CurImg = Bitmap.FromStream(new MemoryStream(buf));
                             if (NewImageRecieved != null)
-                                NewImageRecieved(this, new NewImageDataRecievedEventArgs(CurImg));
+                                NewImageRecieved(this, new NewImageDataRecievedEventArgs(CurImg, new MemoryStream(buf)));
                         }
                         else
                             er("Unknown size");
@@ -283,10 +283,12 @@ namespace System451.Communication.Dashboard.Net.Video
     public delegate void NewImageDataRecievedEventHandler(object sender, NewImageDataRecievedEventArgs e);
     public class NewImageDataRecievedEventArgs : EventArgs
     {
-        public NewImageDataRecievedEventArgs(Image data)
+        public NewImageDataRecievedEventArgs(Image data, Stream streamdata)
         {
             NewData = data;
+            NewDataStream = streamdata;
         }
         public Image NewData { get; set; }
+        public Stream NewDataStream { get; set; }
     }
 }

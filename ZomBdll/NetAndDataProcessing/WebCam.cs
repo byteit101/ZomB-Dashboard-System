@@ -20,6 +20,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System451.Communication.Dashboard.Libs.WebCam_Capture;
 using System451.Communication.Dashboard.Net;
+using System.IO;
 
 namespace System451.Communication.Dashboard.Net.Video
 {
@@ -105,7 +106,12 @@ namespace System451.Communication.Dashboard.Net.Video
         {
             latest = e.WebCamImage;
             if (NewImageRecieved != null)
-                NewImageRecieved(this, new NewImageDataRecievedEventArgs(e.WebCamImage));
+            {
+                Stream s = new MemoryStream();
+                e.WebCamImage.Save(s, System.Drawing.Imaging.ImageFormat.Jpeg);
+                s.Position = 0;
+                NewImageRecieved(this, new NewImageDataRecievedEventArgs(e.WebCamImage,s));
+            }
         }
         #region IDashboardVideoDataSource Members
 

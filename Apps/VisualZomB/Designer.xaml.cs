@@ -325,6 +325,13 @@ namespace System451.Communication.Dashboard.ViZ
                     sb.Append("\" Name=\"");
                     sb.Append((((SurfaceControl)item).Control as ZomBGLControl).ControlName);
                 }
+                foreach (KeyValuePair<string, string> cprops in ((SurfaceControl)item).GetProps())
+                {
+                    sb.Append("\" ");
+                    sb.Append(cprops.Key);
+                    sb.Append("=\"");
+                    sb.Append(cprops.Value);
+                }
                 sb.Append("\" />");
             }
 

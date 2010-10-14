@@ -19,8 +19,8 @@ using System;
 
 namespace System451.Communication.Dashboard.WPF.Design
 {
-    [global::System.AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
-    sealed class ZomBDesignableAttribute : Attribute
+    [global::System.AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, Inherited = true, AllowMultiple = true)]
+    public sealed class ZomBDesignableAttribute : Attribute
     {
         public ZomBDesignableAttribute() { }
     }

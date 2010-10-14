@@ -200,6 +200,7 @@
     <Compile Include="WPF\Controls\AnalogMeter.cs">
     </Compile>
     <Compile Include="WPF\Controls\AlertControl.cs" />
+    <Compile Include="WPF\Controls\CameraView.cs" />
     <Compile Include="WPF\Controls\TacoMeter.cs" />
     <Compile Include="WPF\Controls\xShake.cs" />
     <Compile Include="WPF\Controls\SpeedMeter.cs" />
@@ -282,6 +283,7 @@
     </Content>
     <None Include="Resources\brz.bmp" />
     <Resource Include="Resources\tacoempty.png" />
+    <Resource Include="Resources\camloading.png" />
     <Content Include="Resources\TacoFull-small2.jpg" />
     <Content Include="Resources\TacoFull-small2.png" />
     <Resource Include="Resources\tacofull.png" />
@@ -331,6 +333,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="WPF\Controls\AlertControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controls\CameraView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
