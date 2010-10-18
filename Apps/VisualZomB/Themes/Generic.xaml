@@ -22,6 +22,8 @@
                                     <MenuItem Header="Move Down" Command="MoveDown" />
                                     <MenuItem Header="Move to Bottom" Command="MoveRight" />
                                 </MenuItem>
+                                <MenuItem Header="Delete" Command="Delete">
+                                </MenuItem>
                                 <MenuItem Header="Element Properties" IsEnabled="False" />
                             </ContextMenu>
                         </Canvas.ContextMenu>

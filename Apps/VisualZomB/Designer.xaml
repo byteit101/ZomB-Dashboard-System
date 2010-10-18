@@ -20,6 +20,7 @@
         <CommandBinding Command="MoveUp" Executed="CommandBinding_MoveUp_Executed" />
         <CommandBinding Command="MoveDown" Executed="CommandBinding_MoveDown_Executed" />
         <CommandBinding Command="MoveRight" Executed="CommandBinding_MoveBottom_Executed" />
+        <CommandBinding Command="Delete" Executed="CommandBinding_Delete_Executed" />
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="F5" Command="Play"/>

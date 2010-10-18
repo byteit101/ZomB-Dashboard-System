@@ -400,5 +400,14 @@ namespace System451.Communication.Dashboard.ViZ
                 }
             }
         }
+
+        private void CommandBinding_Delete_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (curObj != null)
+            {
+                ZDash.Children.Remove(curObj);
+                curObj = null;
+            }
+        }
     }
 }
