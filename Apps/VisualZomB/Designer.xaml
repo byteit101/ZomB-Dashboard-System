@@ -31,8 +31,6 @@
         <DockPanel FocusManager.IsFocusScope="False" Name="toolBar1" SnapsToDevicePixels="True" DockPanel.Dock="Top" LastChildFill="False" VerticalAlignment="Center" Background="Gainsboro">
             <Button Margin="1" Command="Save">Save</Button>
             <Button Margin="1" Command="Play">Run</Button>
-            <TextBox Name="NameBox" PreviewKeyUp="NameBox_KeyUp" Width="100" DockPanel.Dock="Right" Focusable="False" Margin="2"></TextBox>
-            <Label DockPanel.Dock="Right" Name="lblfoc">Name:</Label>
         </DockPanel>
         <ListBox Width="175" Name="listBox1" VerticalAlignment="Stretch" FocusManager.IsFocusScope="true" DockPanel.Dock="Left" PreviewMouseLeftButtonDown="listBox1_PreviewMouseLeftButtonDown" PreviewMouseUp="listBox1_PreviewMouseUp" PreviewMouseMove="listBox1_PreviewMouseMove">
             <ListBox.ItemTemplate>

@@ -26,10 +26,12 @@ namespace System451.Communication.Dashboard.ViZ
 {
     [TemplatePart(Name = "PART_Resize")]
     [TemplatePart(Name = "PART_ctxMenu")]
+    [TemplatePart(Name = "PART_props")]
     public class SurfaceControl : Control
     {
         Control sizer;
         ContextMenu mnu;
+        StackPanel prophld;
 
         static SurfaceControl()
         {
@@ -58,6 +60,7 @@ namespace System451.Communication.Dashboard.ViZ
         {
             base.OnApplyTemplate();
             sizer = base.GetTemplateChild("PART_Resize") as Control;
+            prophld = base.GetTemplateChild("PART_props") as StackPanel;
             mnu = base.GetTemplateChild("PART_ctxMenu") as ContextMenu;
             mnu.ContextMenuClosing += new ContextMenuEventHandler(mnu_ContextMenuClosing);
             if (Control!=null)
@@ -71,7 +74,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void SaveProps()
         {
-            foreach (var item in mnu.Items)
+            foreach (var item in prophld.Children)
             {
                 if (item is StackPanel && (item as StackPanel).Tag != null)
                 {
@@ -100,7 +103,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void loadCtx(object ctrl)
         {
-            if (mnu == null)
+            if (prophld == null)
                 return;
             //TODO: class stuff
             foreach (var prop in ctrl.GetType().GetProperties())
@@ -115,7 +118,8 @@ namespace System451.Communication.Dashboard.ViZ
                     (itm.Children[1] as TextBox).Width = 100.0;
                     (itm.Children[1] as TextBox).Tag = prop;
                     itm.Tag = (itm.Children[1] as TextBox);
-                    mnu.Items.Add(itm);
+                    itm.Margin = new Thickness(1);
+                    prophld.Children.Add(itm);
                 }
             }
         }
@@ -123,7 +127,7 @@ namespace System451.Communication.Dashboard.ViZ
         public Dictionary<string, string> GetProps()
         {
             var ret = new Dictionary<string, string>();
-            foreach (var item in mnu.Items)
+            foreach (var item in prophld.Children)
             {
                 if (item is StackPanel && (item as StackPanel).Tag != null)
                 {
