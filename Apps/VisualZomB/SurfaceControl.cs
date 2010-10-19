@@ -50,7 +50,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         void SurfaceControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (Control != null)
+            if (Control != null && !(Double.IsNaN(Control.Width) || Double.IsNaN(Control.Height)))
             {
                 Control.Width = e.NewSize.Width;
                 Control.Height = e.NewSize.Height;
@@ -64,8 +64,14 @@ namespace System451.Communication.Dashboard.ViZ
             prophld = base.GetTemplateChild("PART_props") as StackPanel;
             mnu = base.GetTemplateChild("PART_ctxMenu") as ContextMenu;
             mnu.ContextMenuClosing += new ContextMenuEventHandler(mnu_ContextMenuClosing);
-            if (Control!=null)
+            if (Control != null)
+            {
+                if (Double.IsNaN(Control.Width) || Double.IsNaN(Control.Height))
+                {
+                    sizer.Visibility = Visibility.Collapsed;
+                }
                 loadCtx(Control);
+            }
         }
 
         void mnu_ContextMenuClosing(object sender, ContextMenuEventArgs e)
@@ -152,6 +158,7 @@ namespace System451.Communication.Dashboard.ViZ
                             //TODO: better support
                             itm.Children.Add(new TextBox());
                             (itm.Children[1] as TextBox).Width = 50.0;
+                            (itm.Children[1] as TextBox).Text = prop.GetValue(Control, null).ToString();
                         }
                         else if (prop.PropertyType.IsEnum)
                         {
@@ -166,6 +173,7 @@ namespace System451.Communication.Dashboard.ViZ
                     {
                         itm.Children.Add(new TextBox());
                         (itm.Children[1] as TextBox).Width = 100.0;
+                        (itm.Children[1] as TextBox).Text = prop.GetValue(Control, null).ToString();
                     }
                     (itm.Children[1] as Control).Tag = prop;
                     itm.Tag = itm.Children[1];

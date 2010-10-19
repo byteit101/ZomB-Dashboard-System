@@ -28,7 +28,13 @@
                             </ContextMenu>
                         </Canvas.ContextMenu>
                         <Border Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Name="Part_border" BorderThickness="2" BorderBrush="Blue" Opacity="0"></Border>
-                        <Button Width="10" Height="10" Canvas.Right="0" Opacity="0" Canvas.Bottom="0" Name="PART_Resize"></Button>
+                        <Button Width="10" Height="10" Canvas.Right="-5" Opacity="0" Canvas.Bottom="-5" Name="PART_Resize" Cursor="SizeNWSE">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Rectangle Fill="Black"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
                         <Border Canvas.Top="0" Width="200" Canvas.Right="-205" Name="part_propborder" Visibility="Hidden" Background="LightBlue" BorderBrush="Black" BorderThickness="1" SnapsToDevicePixels="True" CornerRadius="5" Padding="3">
                         <StackPanel Name="PART_props">
                         </StackPanel>

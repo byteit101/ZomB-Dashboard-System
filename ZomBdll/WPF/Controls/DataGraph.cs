@@ -51,8 +51,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.Foreground = Brushes.Lime;
             this.SnapsToDevicePixels = true;
             this.BorderBrush = Brushes.Green;
-            this.Width = 300;
-            this.Height = 50;
+            this.Width = 200;
+            this.Height = 100;
             for (int i = 0; i < 300; i++) vals.Enqueue(0);
         }
 

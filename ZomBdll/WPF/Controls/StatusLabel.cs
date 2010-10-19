@@ -31,11 +31,18 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(StatusLabel),
             new FrameworkPropertyMetadata(typeof(StatusLabel)));
+            StringValueProperty.OverrideMetadata(typeof(StatusLabel), new FrameworkPropertyMetadata("Label"));
         }
 
         public StatusLabel()
         {
+            this.Foreground = Brushes.Black;
+            this.StringValue = "Label";
+        }
 
+        public override void UpdateControl(string value)
+        {
+            StringValue = value;
         }
 
         #region IZomBDesignableControl Members

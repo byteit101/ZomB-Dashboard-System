@@ -159,6 +159,14 @@ namespace System451.Communication.Dashboard.ViZ
             sc.Control = fe;
             sc.Width = fe.Width;
             sc.Height = fe.Height;
+            if (Double.IsNaN(fe.Width))
+            {
+                sc.Width = 75;//fe.ActualWidth;
+            }
+            if (Double.IsNaN(fe.Height))
+            {
+                sc.Height = 25;//fe.ActualHeight;
+            }
             ZDash.Children.Add(sc);
             //hider.Children.Add(fe);
             Canvas.SetTop(sc, point.Y);
