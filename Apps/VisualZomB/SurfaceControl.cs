@@ -141,6 +141,11 @@ namespace System451.Communication.Dashboard.ViZ
                         if (prop.PropertyType == typeof(bool))
                         {
                             itm.Children.Add(new CheckBox());
+                            (itm.Children[1] as CheckBox).IsChecked = (bool)prop.GetValue(Control, null);
+                            (itm.Children[1] as CheckBox).Checked += new RoutedEventHandler(SurfaceControl_Checked);
+                            (itm.Children[1] as CheckBox).Unchecked += new RoutedEventHandler(SurfaceControl_Unchecked);
+                            FocusManager.SetIsFocusScope((itm.Children[1] as CheckBox), false);
+                            (itm.Children[1] as CheckBox).Focusable = false;
                         }
                         else if (prop.PropertyType == typeof(int))
                         {
@@ -173,6 +178,16 @@ namespace System451.Communication.Dashboard.ViZ
                         prophld.Children.Add(itm);
                 }
             }
+        }
+
+        void SurfaceControl_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ((sender as CheckBox).Tag as PropertyInfo).SetValue(Control, false, null);
+        }
+
+        void SurfaceControl_Checked(object sender, RoutedEventArgs e)
+        {
+            ((sender as CheckBox).Tag as PropertyInfo).SetValue(Control, true, null);
         }
 
         public Dictionary<string, string> GetProps()
