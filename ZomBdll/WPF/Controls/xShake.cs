@@ -29,6 +29,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System451.Communication.Dashboard.Libs.Xbox360Controller;
 using System451.Communication.Dashboard.Utils;
+using System.ComponentModel;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -58,6 +59,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             catch { }
         }
 
+        [Design.ZomBDesignable(DisplayName="Controller #"), Description("The Gamepad Number")]
         public int GamepadNumber
         {
             get { return (int)GetValue(GamepadNumberProperty); }

@@ -60,6 +60,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             PART_img = base.GetTemplateChild("PART_img") as Image;
             PART_refresh = base.GetTemplateChild("PART_refresh") as UIElement;
             PART_refresh.PreviewMouseLeftButtonUp += new System.Windows.Input.MouseButtonEventHandler(PART_refresh_PreviewMouseLeftButtonUp);
+            PART_refresh.Visibility = ((ShowReset) ? Visibility.Visible : Visibility.Collapsed);
         }
 
         void PART_refresh_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -68,7 +69,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             videoSource.Start();
         }
 
-        [Design.ZomBDesignable()]
+        [Design.ZomBDesignable(DisplayName = "Team #")]
         public int TeamNumber
         {
             get { return (int)GetValue(TeamNumberProperty); }
@@ -81,6 +82,13 @@ namespace System451.Communication.Dashboard.WPF.Controls
             am.videoSource = new WPILibTcpVideoSource((int)e.NewValue);
             am.videoSource.NewImageRecieved += new NewImageDataRecievedEventHandler(am.videoSource_NewImageRecieved);
             am.videoSource.Start();
+        }
+
+        static void ResetVischanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            CameraView am = (o as CameraView);
+            if (am.PART_refresh!=null)
+            am.PART_refresh.Visibility = (((bool)e.NewValue)? Visibility.Visible: Visibility.Collapsed);
         }
 
         private void videoSource_NewImageRecieved(object sender, NewImageDataRecievedEventArgs e)
@@ -98,6 +106,19 @@ namespace System451.Communication.Dashboard.WPF.Controls
         // Using a DependencyProperty as the backing store for TeamNumber.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TeamNumberProperty =
             DependencyProperty.Register("TeamNumber", typeof(int), typeof(CameraView), new UIPropertyMetadata(0, TeamUpdated));
+
+
+        [Design.ZomBDesignable(DisplayName = "Show Reset")]
+        public bool ShowReset
+        {
+            get { return (bool)GetValue(ShowResetProperty); }
+            set { SetValue(ShowResetProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ShowReset.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ShowResetProperty =
+            DependencyProperty.Register("ShowReset", typeof(bool), typeof(CameraView), new UIPropertyMetadata(true, ResetVischanged));
+
 
 
 

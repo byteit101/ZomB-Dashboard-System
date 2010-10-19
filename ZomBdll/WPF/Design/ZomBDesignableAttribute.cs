@@ -23,5 +23,15 @@ namespace System451.Communication.Dashboard.WPF.Design
     public sealed class ZomBDesignableAttribute : Attribute
     {
         public ZomBDesignableAttribute() { }
+
+        /// <summary>
+        /// What to show as the field in the designer
+        /// </summary>
+        public string DisplayName { get; set; }
+
+        /// <summary>
+        /// The 1 based index of position in the list. Do not use 1.
+        /// </summary>
+        public uint Index { get; set; }
     }
 }

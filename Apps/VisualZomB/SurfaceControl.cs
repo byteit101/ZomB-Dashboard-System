@@ -21,6 +21,7 @@ using System.Windows.Input;
 using System451.Communication.Dashboard.WPF.Design;
 using System.Reflection;
 using System.Collections.Generic;
+using System;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -78,7 +79,27 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 if (item is StackPanel && (item as StackPanel).Tag != null)
                 {
-                    (((item as StackPanel).Tag as Control).Tag as PropertyInfo).SetValue(Control, ((item as StackPanel).Tag as TextBox).Text,null);
+                    var pi = (((item as StackPanel).Tag as Control).Tag as PropertyInfo);
+                    if (pi.PropertyType.IsValueType)
+                    {
+                        if (pi.PropertyType == typeof(bool))
+                        {
+                            pi.SetValue(Control, ((item as StackPanel).Tag as CheckBox).IsChecked, null);
+                        }
+                        else if (pi.PropertyType == typeof(int))
+                        {
+                            //TODO: better support
+                            pi.SetValue(Control, int.Parse(((item as StackPanel).Tag as TextBox).Text), null);
+                        }
+                        else if (pi.PropertyType.IsEnum)
+                        {
+                            pi.SetValue(Control, Enum.Parse(pi.PropertyType, ((item as StackPanel).Tag as ComboBox).Text), null);
+                        }
+                    }
+                    else
+                    {
+                        pi.SetValue(Control, ((item as StackPanel).Tag as TextBox).Text, null);
+                    }
                 }
             }
         }
@@ -110,16 +131,46 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 foreach (var at in prop.GetCustomAttributes(typeof(ZomBDesignableAttribute), true))
                 {
+                    var zat = (at as ZomBDesignableAttribute);
                     var itm = new StackPanel();
                     itm.Orientation = Orientation.Horizontal;
                     itm.Children.Add(new TextBlock());
-                    (itm.Children[0] as TextBlock).Text = prop.Name + ": ";
-                    itm.Children.Add(new TextBox());
-                    (itm.Children[1] as TextBox).Width = 100.0;
-                    (itm.Children[1] as TextBox).Tag = prop;
-                    itm.Tag = (itm.Children[1] as TextBox);
+                    (itm.Children[0] as TextBlock).Text = (zat.DisplayName ?? prop.Name) + ": ";
+                    if (prop.PropertyType.IsValueType)
+                    {
+                        if (prop.PropertyType == typeof(bool))
+                        {
+                            itm.Children.Add(new CheckBox());
+                        }
+                        else if (prop.PropertyType == typeof(int))
+                        {
+                            //TODO: better support
+                            itm.Children.Add(new TextBox());
+                            (itm.Children[1] as TextBox).Width = 50.0;
+                        }
+                        else if (prop.PropertyType.IsEnum)
+                        {
+                            itm.Children.Add(new ComboBox());
+                            foreach (var item in Enum.GetNames(prop.PropertyType))
+                            {
+                                (itm.Children[1] as ComboBox).Items.Add(item);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        itm.Children.Add(new TextBox());
+                        (itm.Children[1] as TextBox).Width = 100.0;
+                    }
+                    (itm.Children[1] as Control).Tag = prop;
+                    itm.Tag = itm.Children[1];
                     itm.Margin = new Thickness(1);
-                    prophld.Children.Add(itm);
+                    if (zat.Index > 0)
+                    {
+                        prophld.Children.Insert(Math.Min((int)zat.Index - 1, prophld.Children.Count), itm);
+                    }
+                    else
+                        prophld.Children.Add(itm);
                 }
             }
         }
@@ -131,7 +182,29 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 if (item is StackPanel && (item as StackPanel).Tag != null)
                 {
-                    ret.Add((((item as StackPanel).Tag as Control).Tag as PropertyInfo).Name, ((item as StackPanel).Tag as TextBox).Text);
+                    var pi = (((item as StackPanel).Tag as Control).Tag as PropertyInfo);
+                    string va = null;
+                    if (pi.PropertyType.IsValueType)
+                    {
+                        if (pi.PropertyType == typeof(bool))
+                        {
+                            va = ((item as StackPanel).Tag as CheckBox).IsChecked.ToString();
+                        }
+                        else if (pi.PropertyType == typeof(int))
+                        {
+                            //TODO: better support
+                            va = ((item as StackPanel).Tag as TextBox).Text;
+                        }
+                        else if (pi.PropertyType.IsEnum)
+                        {
+                            va = ((item as StackPanel).Tag as ComboBox).Text;
+                        }
+                    }
+                    else
+                    {
+                        va = ((item as StackPanel).Tag as TextBox).Text;
+                    }
+                    ret.Add((((item as StackPanel).Tag as Control).Tag as PropertyInfo).Name, va);
                 }
             }
             return ret;

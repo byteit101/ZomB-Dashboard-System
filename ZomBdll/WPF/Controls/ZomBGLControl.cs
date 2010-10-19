@@ -112,7 +112,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         /// The control name
         /// </summary>
         [Browsable(false), Category("ZomB"), Description("What this control will get the value of from the packet Data")]
-        [Design.ZomBDesignable()]
+        [Design.ZomBDesignable(DisplayName = "Name", Index=1)]
         virtual public string ControlName
         {
             get { return (string)GetValue(NameProperty); }
