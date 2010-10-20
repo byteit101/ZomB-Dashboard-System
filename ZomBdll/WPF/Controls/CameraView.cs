@@ -28,9 +28,10 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for CameraView.xaml
     /// </summary>
-    [TemplatePart(Name = "PART_img", Type = typeof(Image)), Design.ZomBDesignable()]
-    [TemplatePart(Name = "PART_refresh", Type = typeof(UIElement)), Design.ZomBDesignable()]
-    public class CameraView : ZomBGLControl, Design.IZomBDesignableControl
+    [Design.ZomBControl("Camera View Control", Description = "This shows you what the camera sees, and any targets its reporting")]
+    [TemplatePart(Name = "PART_img", Type = typeof(Image))]
+    [TemplatePart(Name = "PART_refresh", Type = typeof(UIElement))]
+    public class CameraView : ZomBGLControl
     {
         Image PART_img;
         IDashboardVideoDataSource videoSource;
@@ -118,17 +119,5 @@ namespace System451.Communication.Dashboard.WPF.Controls
         // Using a DependencyProperty as the backing store for ShowReset.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowResetProperty =
             DependencyProperty.Register("ShowReset", typeof(bool), typeof(CameraView), new UIPropertyMetadata(true, ResetVischanged));
-
-
-
-
-        #region IZomBDesignableControl Members
-
-        public Design.ZomBDesignableControlInfo GetDesignInfo()
-        {
-            return new Design.ZomBDesignableControlInfo { Name = "Camera View Control", Description = "This shows you what the camera sees, and any targets its reporting", Type = typeof(CameraView) };
-        }
-
-        #endregion
     }
 }

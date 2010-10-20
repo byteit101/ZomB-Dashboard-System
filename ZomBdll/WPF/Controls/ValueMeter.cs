@@ -26,8 +26,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for ValueMeter.xaml
     /// </summary>
-    [Design.ZomBDesignable()]
-    public class ValueMeter : ZomBGLControl, IValueConverter, Design.IZomBDesignableControl
+    [Design.ZomBControl("Value Meter", Description = "This shows a -1 to 1 value and is useful for total parts things (like battery)")]
+    public class ValueMeter : ZomBGLControl, IValueConverter
     {
         static ValueMeter()
         {
@@ -55,15 +55,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new System.NotImplementedException();
-        }
-
-        #endregion
-
-        #region IZomBDesignableControl Members
-
-        public Design.ZomBDesignableControlInfo GetDesignInfo()
-        {
-            return new Design.ZomBDesignableControlInfo { Name = "Value Meter", Description = "This shows a -1 to 1 value and is useful for total parts things (like battery)", Type = typeof(ValueMeter) };
         }
 
         #endregion

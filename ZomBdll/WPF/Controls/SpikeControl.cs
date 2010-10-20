@@ -34,7 +34,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
     [TemplatePart(Name = "PART_Rect")]
-    public class SpikeControl : ZomBGLControl, Design.IZomBDesignableControl
+    [Design.ZomBControl("Spike Control", Description = "This is a tri-state control, forward, reverse, or off")]
+    public class SpikeControl : ZomBGLControl
     {
         Rectangle PART_Rect;
         static SpikeControl()
@@ -91,13 +92,5 @@ namespace System451.Communication.Dashboard.WPF.Controls
             DependencyProperty.Register("Value", typeof(SpikePositions), typeof(SpikeControl),
             new FrameworkPropertyMetadata(SpikePositions.Off, boolchanges));
 
-        #region IZomBDesignableControl Members
-
-        public Design.ZomBDesignableControlInfo GetDesignInfo()
-        {
-            return new Design.ZomBDesignableControlInfo { Name = "Spike Control", Description = "This is a tri-state control, forward, reverse, or off", Type = typeof(SpikeControl) };
-        }
-
-        #endregion
     }
 }

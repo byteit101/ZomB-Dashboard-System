@@ -33,8 +33,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
-    [TemplatePart(Name = "PART_Rect", Type = typeof(Ellipse)), Design.ZomBDesignable()]
-    public class OnOffControl : ZomBGLControl, Design.IZomBDesignableControl
+    [TemplatePart(Name = "PART_Rect", Type = typeof(Ellipse)), Design.ZomBControl("On/Off Control", Description = "This is a true/false or yes/no control")]
+    public class OnOffControl : ZomBGLControl
     {
         Ellipse PART_Rect;
         static OnOffControl()
@@ -71,14 +71,5 @@ namespace System451.Communication.Dashboard.WPF.Controls
             PART_Rect = base.GetTemplateChild("PART_Rect") as Ellipse;
             boolchange(null, new DependencyPropertyChangedEventArgs());
         }
-
-        #region IZomBDesignableControl Members
-
-        public Design.ZomBDesignableControlInfo GetDesignInfo()
-        {
-            return new Design.ZomBDesignableControlInfo { Name = "On/Off Control", Description = "This is a true/false or yes/no control", Type=typeof(OnOffControl) };
-        }
-
-        #endregion
     }
 }

@@ -24,8 +24,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
-    [TemplatePart(Name = "PART_Rect", Type = typeof(Rectangle)), Design.ZomBDesignable()]
-    public class AlertControl : ZomBGLControl, Design.IZomBDesignableControl
+    [TemplatePart(Name = "PART_Rect", Type = typeof(Rectangle)), Design.ZomBControl("Alert Control", Description = "This is a square version of the OnOffControl, and shows a true/false value")]
+    public class AlertControl : ZomBGLControl
     {
         Rectangle PART_Rect;
         static AlertControl()
@@ -62,14 +62,5 @@ namespace System451.Communication.Dashboard.WPF.Controls
             PART_Rect = base.GetTemplateChild("PART_Rect") as Rectangle;
             boolchange(null, new DependencyPropertyChangedEventArgs());
         }
-
-        #region IZomBDesignableControl Members
-
-        public Design.ZomBDesignableControlInfo GetDesignInfo()
-        {
-            return new Design.ZomBDesignableControlInfo { Name = "Alert Control", Description = "This is a square version of the OnOffControl, and shows a true/false value", Type = typeof(AlertControl) };
-        }
-
-        #endregion
     }
 }

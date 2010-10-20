@@ -19,15 +19,17 @@ using System;
 
 namespace System451.Communication.Dashboard.WPF.Design
 {
-    public interface IZomBDesignableControl
+    [global::System.AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    public sealed class ZomBControlAttribute : Attribute
     {
-        ZomBDesignableControlInfo GetDesignInfo();
-    }
+        public ZomBControlAttribute(string name)
+        {
+            Name = name;
+        }
 
-    public struct ZomBDesignableControlInfo
-    {
-        public string Name { get; set; }
+        public string Name { get; private set; }
         public string Description { get; set; }
-        public Type Type { get; set; }
+        public Type Type { get; internal set; }
+        public Uri IconURI { get; set; }
     }
 }

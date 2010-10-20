@@ -24,8 +24,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for StatusLabel.xaml
     /// </summary>
-    [Design.ZomBDesignable()]
-    public class StatusLabel : ZomBGLControl, Design.IZomBDesignableControl
+    [Design.ZomBControl("Status Label", Description = "This shows a raw value for a control, and is a nice label")]
+    public class StatusLabel : ZomBGLControl
     {
         static StatusLabel()
         {
@@ -44,14 +44,5 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             StringValue = value;
         }
-
-        #region IZomBDesignableControl Members
-
-        public Design.ZomBDesignableControlInfo GetDesignInfo()
-        {
-            return new Design.ZomBDesignableControlInfo { Name = "Status Label", Description = "This shows a raw value for a control, and is a nice label", Type = typeof(StatusLabel) };
-        }
-
-        #endregion
     }
 }

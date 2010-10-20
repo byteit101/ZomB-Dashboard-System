@@ -34,16 +34,19 @@ namespace System451.Communication.Dashboard
                     var types = asm.GetTypes();
                     foreach (var type in types)
                     {
-                        if (type.GetInterface("System451.Communication.Dashboard.WPF.Design.IZomBDesignableControl") != null)
+                        foreach (var atr in type.GetCustomAttributes(typeof(ZomBControlAttribute),false))
+                        {
                             retTypes.Add(type);
+                            break;
+                        }
                     }
                 }
                 return retTypes;
             }
 
-            public static IEnumerable<ZomBDesignableControlInfo> GetZomBDesignableInfos(IEnumerable<Type> types)
+            public static IEnumerable<ZomBControlAttribute> GetZomBDesignableInfos(IEnumerable<Type> types)
             {
-                return (from t in types let info=((t.GetConstructor(Type.EmptyTypes).Invoke(null)) as IZomBDesignableControl).GetDesignInfo() orderby info.Name select info);
+                return (from t in types let info = (t.GetCustomAttributes(typeof(ZomBControlAttribute), false)[0] as ZomBControlAttribute) where ((info.Type=t)!=null) orderby info.Name select info);
             }
 
             public static object Inflate(Type t)

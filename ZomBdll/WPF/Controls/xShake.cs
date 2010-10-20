@@ -36,8 +36,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
-    [Design.ZomBDesignable()]
-    public class xShake : ZomBGLControl, Design.IZomBDesignableControl
+    [Design.ZomBControl("X Shaker", Description = "This will send the shake command to a Direct X controller")]
+    public class xShake : ZomBGLControl
     {
         GamepadState pad;
         static xShake()
@@ -111,14 +111,5 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 pad.Vibrate(l, r);
             }
         }
-
-        #region IZomBDesignableControl Members
-
-        public Design.ZomBDesignableControlInfo GetDesignInfo()
-        {
-            return new Design.ZomBDesignableControlInfo { Name = "X Shaker", Description = "This will send the shake command to a Direct X controller", Type = typeof(xShake) };
-        }
-
-        #endregion
     }
 }

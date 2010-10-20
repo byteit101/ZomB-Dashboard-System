@@ -33,8 +33,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for TacoMeter.xaml
     /// </summary>
-    [Design.ZomBDesignable()]
-    public class TacoMeter : ZomBGLControl, IValueConverter, Design.IZomBDesignableControl
+    [Design.ZomBControl("Taco Meter", Description = "This shows -1 to 1, useful for eating")]
+    public class TacoMeter : ZomBGLControl, IValueConverter
     {
         static TacoMeter()
         {
@@ -58,14 +58,5 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             throw new NotImplementedException();
         }
-
-        #region IZomBDesignableControl Members
-
-        public Design.ZomBDesignableControlInfo GetDesignInfo()
-        {
-            return new Design.ZomBDesignableControlInfo { Name = "Taco Meter", Description = "This shows -1 to 1, useful for eating", Type = typeof(TacoMeter) };
-        }
-
-        #endregion
     }
 }

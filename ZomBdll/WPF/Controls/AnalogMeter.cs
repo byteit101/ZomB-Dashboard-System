@@ -33,8 +33,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
-    [Design.ZomBDesignable()]
-    public class AnalogMeter : ZomBGLControl, IValueConverter, Design.IZomBDesignableControl
+    [Design.ZomBControl("Analog Meter", Description = "This shows 0-1024, useful for analog inputs")]
+    public class AnalogMeter : ZomBGLControl, IValueConverter
     {
         static AnalogMeter()
         {
@@ -110,14 +110,5 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             throw new NotImplementedException();
         }
-
-        #region IZomBDesignableControl Members
-
-        public Design.ZomBDesignableControlInfo GetDesignInfo()
-        {
-            return new Design.ZomBDesignableControlInfo { Name = "Analog Meter", Description = "This shows 0-1024, useful for analog inputs", Type = typeof(AnalogMeter) };
-        }
-
-        #endregion
     }
 }

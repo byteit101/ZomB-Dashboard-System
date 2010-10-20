@@ -88,7 +88,7 @@ namespace System451.Communication.Dashboard.ViZ
 
                     //System.Diagnostics.Debug.Print("Moving...");
                     // Find the data behind the ListViewItem
-                    ZomBDesignableControlInfo contact = (ZomBDesignableControlInfo)listBox1.ItemContainerGenerator.
+                    ZomBControlAttribute contact = (ZomBControlAttribute)listBox1.ItemContainerGenerator.
                         ItemFromContainer(listViewItem);
                     //System.Diagnostics.Debug.Print("Found...");
                     // Initialize the drag & drop operation
@@ -133,9 +133,9 @@ namespace System451.Communication.Dashboard.ViZ
         {
             if (e.Data.GetDataPresent("ZomBControl"))
             {
-                ZomBDesignableControlInfo? info = (e.Data.GetData("ZomBControl") as ZomBDesignableControlInfo?);
+                ZomBControlAttribute info = (e.Data.GetData("ZomBControl") as ZomBControlAttribute);
                 if (info != null)
-                    AddControl((ZomBDesignableControlInfo)info, e.GetPosition(ZDash));
+                    AddControl((ZomBControlAttribute)info, e.GetPosition(ZDash));
             }
         }
 
@@ -147,12 +147,12 @@ namespace System451.Communication.Dashboard.ViZ
             }
         }
 
-        private void AddControl(ZomBDesignableControlInfo info)
+        private void AddControl(ZomBControlAttribute info)
         {
             AddControl(info, new Point(5.0, 5.0));
         }
 
-        private void AddControl(ZomBDesignableControlInfo info, Point point)
+        private void AddControl(ZomBControlAttribute info, Point point)
         {
             Control fe = Reflector.Inflate(info.Type) as Control;
             var sc = new SurfaceControl();

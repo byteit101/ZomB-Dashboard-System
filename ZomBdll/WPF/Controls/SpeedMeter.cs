@@ -33,8 +33,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for SpeedMeter.xaml
     /// </summary>
-    [Design.ZomBDesignable()]
-    public class SpeedMeter : ZomBGLControl, IValueConverter, Design.IZomBDesignableControl
+    [Design.ZomBControl("Speed Meter", Description = "This shows -1 to 1, useful for any thing, but helpful for motors and joystick inputs")]
+    public class SpeedMeter : ZomBGLControl, IValueConverter
     {
         static SpeedMeter()
         {
@@ -154,14 +154,5 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             throw new NotImplementedException();
         }
-
-        #region IZomBDesignableControl Members
-
-        public Design.ZomBDesignableControlInfo GetDesignInfo()
-        {
-            return new Design.ZomBDesignableControlInfo { Name = "Speed Meter", Description = "This shows -1 to 1, useful for any thing, but helpful for motors and joystick inputs", Type = typeof(SpeedMeter) };
-        }
-
-        #endregion
     }
 }

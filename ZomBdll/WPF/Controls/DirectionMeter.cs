@@ -33,8 +33,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
-    [Design.ZomBDesignable()]
-    public class DirectionMeter : ZomBGLControl, IValueConverter, Design.IZomBDesignableControl
+    [Design.ZomBControl("Direction Meter", Description = "This shows 360 degrees, helpful for direction")]
+    public class DirectionMeter : ZomBGLControl, IValueConverter
     {
         static DirectionMeter()
         {
@@ -110,14 +110,5 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             throw new NotImplementedException();
         }
-
-        #region IZomBDesignableControl Members
-
-        public Design.ZomBDesignableControlInfo GetDesignInfo()
-        {
-            return new Design.ZomBDesignableControlInfo { Name = "Direction Meter", Description = "This shows 360 degrees, helpful for direction", Type = typeof(DirectionMeter) };
-        }
-
-        #endregion
     }
 }

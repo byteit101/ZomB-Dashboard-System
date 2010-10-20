@@ -33,8 +33,9 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for DataGraph.xaml
     /// </summary>
-    [TemplatePart(Name = "PART_PathGeo", Type = typeof(GeometryDrawing)), Design.ZomBDesignable()]
-    public class DataGraph : ZomBGLControl, IValueConverter, Design.IZomBDesignableControl
+    [TemplatePart(Name = "PART_PathGeo", Type = typeof(GeometryDrawing))]
+    [Design.ZomBControl("Data Graph", Description="This shows -1 to 1 over time, useful for almost everything")]
+    public class DataGraph : ZomBGLControl, IValueConverter
     {
         GeometryDrawing PathGeo;
         Queue<double> vals = new Queue<double>(300);
@@ -101,15 +102,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotImplementedException();
-        }
-
-        #endregion
-
-        #region IZomBDesignableControl Members
-
-        public Design.ZomBDesignableControlInfo GetDesignInfo()
-        {
-            return new Design.ZomBDesignableControlInfo { Name = "Data Graph", Description = "This shows -1 to 1 over time, useful for almost everything", Type = typeof(DataGraph) };
         }
 
         #endregion
