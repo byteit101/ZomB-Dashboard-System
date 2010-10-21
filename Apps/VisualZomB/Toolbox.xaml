@@ -1,0 +1,30 @@
+﻿<Window x:Class="System451.Communication.Dashboard.ViZ.Toolbox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Toolbox" Height="300" Width="500" ShowInTaskbar="False" WindowStyle="ToolWindow" Topmost="True">
+    <Window.Resources>
+        <Style TargetType="{x:Type ListBoxItem}">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="LightBlue" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <ListBox Name="ToolListBox" x:FieldModifier="public" VerticalAlignment="Stretch" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <ListBoxItem Padding="3" HorizontalAlignment="Stretch" Content="{Binding Path=Name}"  ToolTipService.InitialShowDelay="1000" ToolTipService.ShowDuration="10000">
+                        <ListBoxItem.ToolTip>
+                            <StackPanel Width="200">
+                                <Label FontWeight="Bold" Background="Blue" Foreground="White" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="{Binding Path=Name}"></Label>
+                                <TextBlock Padding="10" TextWrapping="Wrap" Text="{Binding Path=Description}"></TextBlock>
+                            </StackPanel>
+                        </ListBoxItem.ToolTip>
+                    </ListBoxItem>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>

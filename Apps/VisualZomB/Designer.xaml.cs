@@ -51,14 +51,32 @@ namespace System451.Communication.Dashboard.ViZ
 
         SurfaceControl curObj;
 
+        Toolbox tbx;
+        ListBox listBox1;
+
         public Designer()
         {
             InitializeComponent();
+            tbx = new Toolbox();
+            listBox1 = tbx.ToolListBox;
+            listBox1.PreviewMouseLeftButtonDown+=listBox1_PreviewMouseLeftButtonDown;
+            listBox1.PreviewMouseUp+=listBox1_PreviewMouseUp;
+            listBox1.PreviewMouseMove+=listBox1_PreviewMouseMove;
+            this.Activated += new EventHandler(Designer_Initialized);
+        }
+
+        void Designer_Initialized(object sender, EventArgs e)
+        {
+            this.Top = 5;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            
+            tbx.Top = this.Top + this.ActualHeight;
+            tbx.Left = this.Left + (this.ActualWidth / 2.0)-(tbx.Width/2.0);
+            tbx.Show();
+            tbx.Owner = this;
             listBox1.ItemsSource = Reflector.GetZomBDesignableInfos(Reflector.GetZomBDesignableClasses());
         }
 

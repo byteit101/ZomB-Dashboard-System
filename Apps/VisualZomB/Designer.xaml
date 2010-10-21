@@ -3,16 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ZomB="clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB"
         xmlns:loc="clr-namespace:System451.Communication.Dashboard.ViZ"
-    Title="ZomB Designer" Height="488" Width="1238" SnapsToDevicePixels="True" WindowState="Maximized" Loaded="Window_Loaded">
-    <Window.Resources>
-        <Style TargetType="{x:Type ListBoxItem}">
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="LightBlue" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
+    Title="ZomB Designer" Height="488" Width="1238" SnapsToDevicePixels="True" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Window.CommandBindings>
         <CommandBinding Command="Play" Executed="CommandBinding_Play_Executed" />
         <CommandBinding Command="Save" Executed="CommandBinding_Save_Executed" />
@@ -32,20 +23,7 @@
             <Button Margin="1" Command="Save">Save</Button>
             <Button Margin="1" Command="Play">Run</Button>
         </DockPanel>
-        <ListBox Width="175" Name="listBox1" VerticalAlignment="Stretch" FocusManager.IsFocusScope="true" DockPanel.Dock="Left" PreviewMouseLeftButtonDown="listBox1_PreviewMouseLeftButtonDown" PreviewMouseUp="listBox1_PreviewMouseUp" PreviewMouseMove="listBox1_PreviewMouseMove">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <ListBoxItem Padding="3" HorizontalAlignment="Stretch" Content="{Binding Path=Name}"  ToolTipService.InitialShowDelay="1000" ToolTipService.ShowDuration="10000">
-                        <ListBoxItem.ToolTip>
-                            <StackPanel Width="200">
-                                <Label FontWeight="Bold" Background="Blue" Foreground="White" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="{Binding Path=Name}"></Label>
-                                <TextBlock Padding="10" TextWrapping="Wrap" Text="{Binding Path=Description}"></TextBlock>
-                            </StackPanel>
-                        </ListBoxItem.ToolTip>
-                    </ListBoxItem>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        
         <StackPanel Name="hider" DockPanel.Dock="Bottom" Visibility="Collapsed" Focusable="False"></StackPanel>
         <ScrollViewer Name="Scrlview" Background="LightGray" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
                           PreviewMouseLeftButtonUp="ScrollViewer_MouseLeftButtonUp" PreviewMouseMove="ScrollViewer_MouseMove"
