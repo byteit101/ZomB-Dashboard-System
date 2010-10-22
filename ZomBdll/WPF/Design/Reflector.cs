@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Media;
 
 namespace System451.Communication.Dashboard
 {
@@ -34,7 +35,7 @@ namespace System451.Communication.Dashboard
                     var types = asm.GetTypes();
                     foreach (var type in types)
                     {
-                        foreach (var atr in type.GetCustomAttributes(typeof(ZomBControlAttribute),false))
+                        foreach (var atr in type.GetCustomAttributes(typeof(ZomBControlAttribute), false))
                         {
                             retTypes.Add(type);
                             break;
@@ -46,7 +47,10 @@ namespace System451.Communication.Dashboard
 
             public static IEnumerable<ZomBControlAttribute> GetZomBDesignableInfos(IEnumerable<Type> types)
             {
-                return (from t in types let info = (t.GetCustomAttributes(typeof(ZomBControlAttribute), false)[0] as ZomBControlAttribute) where ((info.Type=t)!=null) orderby info.Name select info);
+                return (from t in types let info = (t.GetCustomAttributes(typeof(ZomBControlAttribute), false)[0] as ZomBControlAttribute)
+                        where (((info.Type = t) != null) &&
+                        ((info.Icon = info.Icon ?? (ImageSource)System.Windows.Application.Current.FindResource("DefaultControlImage")) != null))
+                        orderby info.Name select info);
             }
 
             public static object Inflate(Type t)
