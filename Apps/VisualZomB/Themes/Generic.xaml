@@ -36,9 +36,9 @@
                             </Button.Template>
                         </Button>
                         <Border Canvas.Top="0" Width="200" Canvas.Right="-205" Name="part_propborder" Visibility="Hidden" Background="LightBlue" BorderBrush="Black" BorderThickness="1" SnapsToDevicePixels="True" CornerRadius="5" Padding="3">
-                        <StackPanel Name="PART_props">
-                        </StackPanel>
-                            </Border>
+                            <StackPanel Name="PART_props">
+                            </StackPanel>
+                        </Border>
                     </Canvas>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">

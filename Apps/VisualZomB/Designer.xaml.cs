@@ -102,7 +102,7 @@ namespace System451.Communication.Dashboard.ViZ
                 {
                     // Get the dragged ListViewItem
                     ListBoxItem listViewItem =
-                        FindAnchestor<ListBoxItem, VirtualizingStackPanel>((DependencyObject)origSrc);
+                        FindAnchestor<ListBoxItem, WrapPanel>((DependencyObject)origSrc);
 
                     //System.Diagnostics.Debug.Print("Moving...");
                     // Find the data behind the ListViewItem
