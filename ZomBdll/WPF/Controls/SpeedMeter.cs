@@ -33,7 +33,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for SpeedMeter.xaml
     /// </summary>
-    [Design.ZomBControl("Speed Meter", Description = "This shows -1 to 1, useful for any thing, but helpful for motors and joystick inputs")]
+    [Design.ZomBControl("Speed Meter", Description = "This shows -1 to 1, useful for any thing, but helpful for motors and joystick inputs", IconName="SpeedMeterIcon")]
     public class SpeedMeter : ZomBGLControl, IValueConverter
     {
         static SpeedMeter()

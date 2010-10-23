@@ -17,6 +17,7 @@
  */
 using System.IO;
 using System.Windows;
+using System;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -27,6 +28,7 @@ namespace System451.Communication.Dashboard.ViZ
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            LoadAssembliesGeneric();
             var args = e.Args;
             if (args.Length == 1 && File.Exists(args[0]))
             {
@@ -34,6 +36,23 @@ namespace System451.Communication.Dashboard.ViZ
             }
             else
                 new Designer().Show();
+        }
+
+        private void LoadAssembliesGeneric()
+        {
+            foreach (var item in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                try
+                {
+                    ResourceDictionary MyResourceDictionary = new ResourceDictionary();
+     MyResourceDictionary.Source = new Uri("pack://application:,,,/"+item.FullName+";component/Themes/Generic.xaml");
+     App.Current.Resources.MergedDictionaries.Add(MyResourceDictionary);
+                }
+                catch
+                {
+                    //must not have Themes/Generic.xaml
+                }
+            }
         }
     }
 }

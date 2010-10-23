@@ -19,4 +19,22 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <DrawingImage x:Key="ValueMeterIcon">
+        <DrawingImage.Drawing>
+            <GeometryDrawing Geometry="M 0 0 16 0 16 16 0 16 z">
+                <GeometryDrawing.Brush>
+                    <VisualBrush Viewbox="0 0 16 16" ViewboxUnits="Absolute">
+                        <VisualBrush.Visual>
+                            <Viewbox>
+                                <Canvas Width="16" Height="16" SnapsToDevicePixels="True">
+                                    <Rectangle Canvas.Left="4" Canvas.Top="1" Width="9" Height="15" Stroke="#FF000000" StrokeThickness="1"/>
+                                    <Rectangle Canvas.Left="5" Canvas.Top="7" Width="7" Height="8" Fill="#FF3D3A07"/>
+                                </Canvas>
+                            </Viewbox>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </GeometryDrawing.Brush>
+            </GeometryDrawing>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>

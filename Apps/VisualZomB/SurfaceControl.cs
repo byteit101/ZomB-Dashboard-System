@@ -33,6 +33,7 @@ namespace System451.Communication.Dashboard.ViZ
         Control sizer;
         ContextMenu mnu;
         StackPanel prophld;
+        Dictionary<string, List<PropertyElement>> proplist;
 
         static SurfaceControl()
         {

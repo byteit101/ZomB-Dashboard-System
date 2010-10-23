@@ -19,23 +19,43 @@
                             </DrawingBrush>
                         </Border.Background>
                         <Viewbox Stretch="Fill">
-                        <Rectangle Width="150" Height="20">
-                            <Rectangle.Fill>
-                                <DrawingBrush Viewbox="0 0 150 20" ViewboxUnits="Absolute">
-                                    <DrawingBrush.Drawing>
-                                        <GeometryDrawing Geometry="M 0 10 150 10" x:Name="PART_PathGeo">
-                                            <GeometryDrawing.Pen>
-                                                <Pen Brush="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Foreground}"  Thickness="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Viewbox}}, Path=ActualHeight, Converter={StaticResource Thickbox}}" />
-                                            </GeometryDrawing.Pen>
-                                        </GeometryDrawing>
-                                    </DrawingBrush.Drawing>
-                                </DrawingBrush>
-                            </Rectangle.Fill>
-                        </Rectangle>
-                            </Viewbox>
+                            <Rectangle Width="150" Height="20">
+                                <Rectangle.Fill>
+                                    <DrawingBrush Viewbox="0 0 150 20" ViewboxUnits="Absolute">
+                                        <DrawingBrush.Drawing>
+                                            <GeometryDrawing Geometry="M 0 10 150 10" x:Name="PART_PathGeo">
+                                                <GeometryDrawing.Pen>
+                                                    <Pen Brush="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Foreground}"  Thickness="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Viewbox}}, Path=ActualHeight, Converter={StaticResource Thickbox}}" />
+                                                </GeometryDrawing.Pen>
+                                            </GeometryDrawing>
+                                        </DrawingBrush.Drawing>
+                                    </DrawingBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </Viewbox>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+    <DrawingImage x:Key="DataGraphIcon">
+        <DrawingImage.Drawing>
+            <GeometryDrawing Geometry="M 0 0 1 0 1 1 0 1 z">
+                <GeometryDrawing.Brush>
+                    <VisualBrush>
+                        <VisualBrush.Visual>
+                            <Viewbox SnapsToDevicePixels="True">
+                                <Canvas Width="16" Height="16" SnapsToDevicePixels="True">
+                                    <Rectangle Canvas.Left="0" Canvas.Top="1" Width="16" Height="15" Fill="#FF006600" Stroke="#FF000000" StrokeThickness="1" StrokeMiterLimit="4" StrokeStartLineCap="Square" StrokeEndLineCap="Square"/>
+                                    <Path Stroke="#FF00FF00" StrokeThickness="1" StrokeMiterLimit="4" StrokeLineJoin="Miter" StrokeStartLineCap="Flat" StrokeEndLineCap="Flat" Data="M 0.40000001 12.999979 C 3.4 12.999979 2.4 3.000021 5.4 3.000021 8.4 3.000021 7.4 12.999979 10.4 12.999979 13.4 12.999979 12.4 3.000021 15.4 3.000021"/>
+                                    <Rectangle Canvas.Left="0" Canvas.Top="10" Width="1" Height="5" Fill="#FF000000"/>
+                                    <Rectangle Canvas.Left="15" Canvas.Top="2" Width="1" Height="5" Fill="#FF000000"/>
+                                </Canvas>
+                            </Viewbox>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </GeometryDrawing.Brush>
+            </GeometryDrawing>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>

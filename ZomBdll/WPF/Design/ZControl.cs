@@ -31,6 +31,7 @@ namespace System451.Communication.Dashboard.WPF.Design
         public string Name { get; private set; }
         public string Description { get; set; }
         public Type Type { get; internal set; }
-        public ImageSource Icon { get; set; }
+        public ImageSource Icon { get; internal set; }
+        public string IconName { get; set; }
     }
 }

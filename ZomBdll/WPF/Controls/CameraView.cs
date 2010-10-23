@@ -22,13 +22,14 @@ using System.Windows.Controls;
 using System451.Communication.Dashboard.Net.Video;
 using System.Windows.Media.Imaging;
 using System.IO;
+using System.ComponentModel;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
     /// <summary>
     /// Interaction logic for CameraView.xaml
     /// </summary>
-    [Design.ZomBControl("Camera View Control", Description = "This shows you what the camera sees, and any targets its reporting")]
+    [Design.ZomBControl("Camera View Control", Description = "This shows you what the camera sees, and any targets its reporting", IconName="CameraViewIcon")]
     [TemplatePart(Name = "PART_img", Type = typeof(Image))]
     [TemplatePart(Name = "PART_refresh", Type = typeof(UIElement))]
     public class CameraView : ZomBGLControl
@@ -70,7 +71,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             videoSource.Start();
         }
 
-        [Design.ZomBDesignable(DisplayName = "Team #")]
+        [Design.ZomBDesignable(DisplayName = "Team #"), Category("Misc"), Description("Your team number. This is used to create the IP address of the camera")]
         public int TeamNumber
         {
             get { return (int)GetValue(TeamNumberProperty); }
@@ -109,7 +110,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             DependencyProperty.Register("TeamNumber", typeof(int), typeof(CameraView), new UIPropertyMetadata(0, TeamUpdated));
 
 
-        [Design.ZomBDesignable(DisplayName = "Show Reset")]
+        [Design.ZomBDesignable(DisplayName = "Show Reset"), Category("Appearance"), Description("Should we show the reset button?")]
         public bool ShowReset
         {
             get { return (bool)GetValue(ShowResetProperty); }

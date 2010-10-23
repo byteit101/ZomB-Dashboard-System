@@ -22,4 +22,23 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <DrawingImage x:Key="CameraViewIcon">
+        <DrawingImage.Drawing>
+            <GeometryDrawing Geometry="M 0 0 16 0 16 16 0 16 z">
+                <GeometryDrawing.Brush>
+                    <VisualBrush Viewbox="0 0 16 16" ViewboxUnits="Absolute">
+                        <VisualBrush.Visual>
+                            <Viewbox>
+                                <Canvas Width="16" Height="16">
+                                    <Path Fill="#FFFFFFFF" Stroke="#FF000000" StrokeThickness="1" StrokeMiterLimit="4" StrokeLineJoin="Miter" Data="M 1 8 C 4 1 12 1 15 8 12 15 4 15 1 8 z"/>
+                                    <Path Fill="#FFFF0000" Data="M 11 8 A 3 5 0 1 1 5 8 3 5 0 1 1 11 8 z"/>
+                                    <Path Fill="#FF000000" Data="M 10 8 C 10 9.1045697 9.1045697 10 8 10 6.8954303 10 6 9.1045697 6 8 6 6.8954305 6.8954303 6 8 6 9.1045697 6 10 6.8954305 10 8 z"/>
+                                </Canvas>
+                            </Viewbox>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </GeometryDrawing.Brush>
+            </GeometryDrawing>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>

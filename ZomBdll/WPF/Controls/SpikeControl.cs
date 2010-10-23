@@ -34,7 +34,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
     [TemplatePart(Name = "PART_Rect")]
-    [Design.ZomBControl("Spike Control", Description = "This is a tri-state control, forward, reverse, or off")]
+    [Design.ZomBControl("Spike Control", Description = "This is a tri-state control, forward, reverse, or off", IconName = "SpikeControlIcon")]
     public class SpikeControl : ZomBGLControl
     {
         Rectangle PART_Rect;

@@ -36,7 +36,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
-    [Design.ZomBControl("X Shaker", Description = "This will send the shake command to a Direct X controller")]
+    [Design.ZomBControl("X Shaker", Description = "This will send the shake command to a Direct X controller", IconName = "xShakeIcon")]
     public class xShake : ZomBGLControl
     {
         GamepadState pad;

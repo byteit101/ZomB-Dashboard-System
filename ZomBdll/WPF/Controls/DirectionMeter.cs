@@ -33,7 +33,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
-    [Design.ZomBControl("Direction Meter", Description = "This shows 360 degrees, helpful for direction")]
+    [Design.ZomBControl("Direction Meter", Description = "This shows 360 degrees, helpful for direction", IconName="DirectionMeterIcon")]
     public class DirectionMeter : ZomBGLControl, IValueConverter
     {
         static DirectionMeter()

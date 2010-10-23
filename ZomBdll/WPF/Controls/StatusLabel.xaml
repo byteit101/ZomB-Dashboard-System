@@ -13,4 +13,17 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <DrawingImage x:Key="StatusLabelIcon">
+        <DrawingImage.Drawing>
+            <GeometryDrawing Geometry="M 0 0 16 0 16 16 0 16 z">
+                <GeometryDrawing.Brush>
+                    <VisualBrush>
+                        <VisualBrush.Visual>
+                            <TextBlock Text="abc" />
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </GeometryDrawing.Brush>
+            </GeometryDrawing>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>

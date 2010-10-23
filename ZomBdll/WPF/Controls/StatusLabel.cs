@@ -24,7 +24,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for StatusLabel.xaml
     /// </summary>
-    [Design.ZomBControl("Status Label", Description = "This shows a raw value for a control, and is a nice label")]
+    [Design.ZomBControl("Status Label", Description = "This shows a raw value for a control, and is a nice label", IconName="StatusLabelIcon")]
     public class StatusLabel : ZomBGLControl
     {
         static StatusLabel()

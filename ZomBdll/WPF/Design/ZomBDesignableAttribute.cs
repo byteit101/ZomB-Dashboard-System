@@ -19,7 +19,7 @@ using System;
 
 namespace System451.Communication.Dashboard.WPF.Design
 {
-    [global::System.AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = true)]
+    [global::System.AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
     public sealed class ZomBDesignableAttribute : Attribute
     {
         public ZomBDesignableAttribute() { }

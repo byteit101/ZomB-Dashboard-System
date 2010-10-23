@@ -47,10 +47,12 @@ namespace System451.Communication.Dashboard
 
             public static IEnumerable<ZomBControlAttribute> GetZomBDesignableInfos(IEnumerable<Type> types)
             {
-                return (from t in types let info = (t.GetCustomAttributes(typeof(ZomBControlAttribute), false)[0] as ZomBControlAttribute)
+                return (from t in types
+                        let info = (t.GetCustomAttributes(typeof(ZomBControlAttribute), false)[0] as ZomBControlAttribute)
                         where (((info.Type = t) != null) &&
-                        ((info.Icon = info.Icon ?? (ImageSource)System.Windows.Application.Current.FindResource("DefaultControlImage")) != null))
-                        orderby info.Name select info);
+                        ((info.Icon = (ImageSource)System.Windows.Application.Current.FindResource(info.IconName ?? "DefaultControlImage")) != null))
+                        orderby info.Name
+                        select info);
             }
 
             public static object Inflate(Type t)

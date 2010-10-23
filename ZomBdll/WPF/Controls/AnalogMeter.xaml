@@ -57,4 +57,26 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <DrawingImage x:Key="AnalogMeterIcon">
+        <DrawingImage.Drawing>
+            <GeometryDrawing Geometry="M 0 0 16 0 16 16 0 16 z">
+                <GeometryDrawing.Brush>
+                    <VisualBrush Viewbox="0 0 16 16" ViewboxUnits="Absolute">
+                        <VisualBrush.Visual>
+                            <Viewbox>
+                                <Canvas Width="16" Height="16">
+                                    <Path Fill="#FFA6F89C" Stroke="#FF000000" StrokeThickness="1" StrokeMiterLimit="4" StrokeLineJoin="Miter" StrokeStartLineCap="Flat" StrokeEndLineCap="Flat" Data="M 1 12.5 C 1 0.5 15 0.5 15 12.5 L 1 12.5 z"/>
+                                    <Path Stroke="#FF000000" StrokeThickness="1" StrokeMiterLimit="4" StrokeLineJoin="Miter" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Data="M 3 8.5 C 5 9.5 5 9.5 5 9.5"/>
+                                    <Path Stroke="#FF000000" StrokeThickness="1" StrokeMiterLimit="4" StrokeLineJoin="Miter" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Data="M 13 8.5 C 11 9.5 11 9.5 11 9.5"/>
+                                    <Path Stroke="#FF000000" StrokeThickness="1" StrokeLineJoin="Miter" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Data="M 8 5.5 8 8.5"/>
+                                    <Path Stroke="#FF000000" StrokeThickness="1" StrokeLineJoin="Miter" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Data="M 5 6.5 6 8.5"/>
+                                    <Path Stroke="#FF000000" StrokeThickness="1" StrokeLineJoin="Miter" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Data="M 11 6.5 10 8.5"/>
+                                </Canvas>
+                            </Viewbox>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </GeometryDrawing.Brush>
+            </GeometryDrawing>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>

@@ -34,7 +34,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// Interaction logic for DataGraph.xaml
     /// </summary>
     [TemplatePart(Name = "PART_PathGeo", Type = typeof(GeometryDrawing))]
-    [Design.ZomBControl("Data Graph", Description="This shows -1 to 1 over time, useful for almost everything")]
+    [Design.ZomBControl("Data Graph", Description = "This shows -1 to 1 over time, useful for almost everything", IconName="DataGraphIcon")]
     public class DataGraph : ZomBGLControl, IValueConverter
     {
         GeometryDrawing PathGeo;
