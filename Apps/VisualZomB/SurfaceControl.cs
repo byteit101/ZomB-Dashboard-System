@@ -64,7 +64,6 @@ namespace System451.Communication.Dashboard.ViZ
             sizer = base.GetTemplateChild("PART_Resize") as Control;
             prophld = base.GetTemplateChild("PART_props") as StackPanel;
             mnu = base.GetTemplateChild("PART_ctxMenu") as ContextMenu;
-            mnu.ContextMenuClosing += new ContextMenuEventHandler(mnu_ContextMenuClosing);
             if (Control != null)
             {
                 if (Double.IsNaN(Control.Width) || Double.IsNaN(Control.Height))
@@ -72,42 +71,6 @@ namespace System451.Communication.Dashboard.ViZ
                     sizer.Visibility = Visibility.Collapsed;
                 }
                 loadCtx(Control);
-            }
-        }
-
-        void mnu_ContextMenuClosing(object sender, ContextMenuEventArgs e)
-        {
-            SaveProps();
-        }
-
-        private void SaveProps()
-        {
-            foreach (var item in prophld.Children)
-            {
-                if (item is StackPanel && (item as StackPanel).Tag != null)
-                {
-                    var pi = (((item as StackPanel).Tag as Control).Tag as PropertyInfo);
-                    if (pi.PropertyType.IsValueType)
-                    {
-                        if (pi.PropertyType == typeof(bool))
-                        {
-                            pi.SetValue(Control, ((item as StackPanel).Tag as CheckBox).IsChecked, null);
-                        }
-                        else if (pi.PropertyType == typeof(int))
-                        {
-                            //TODO: better support
-                            pi.SetValue(Control, int.Parse(((item as StackPanel).Tag as TextBox).Text), null);
-                        }
-                        else if (pi.PropertyType.IsEnum)
-                        {
-                            pi.SetValue(Control, Enum.Parse(pi.PropertyType, ((item as StackPanel).Tag as ComboBox).Text), null);
-                        }
-                    }
-                    else
-                    {
-                        pi.SetValue(Control, ((item as StackPanel).Tag as TextBox).Text, null);
-                    }
-                }
             }
         }
 
@@ -176,46 +139,14 @@ namespace System451.Communication.Dashboard.ViZ
             }
         }
 
-        void SurfaceControl_Unchecked(object sender, RoutedEventArgs e)
-        {
-            ((sender as CheckBox).Tag as PropertyInfo).SetValue(Control, false, null);
-        }
-
-        void SurfaceControl_Checked(object sender, RoutedEventArgs e)
-        {
-            ((sender as CheckBox).Tag as PropertyInfo).SetValue(Control, true, null);
-        }
-
         public Dictionary<string, string> GetProps()
         {
             var ret = new Dictionary<string, string>();
-            foreach (var item in prophld.Children)
+            foreach (var item in proplist)
             {
-                if (item is StackPanel && (item as StackPanel).Tag != null)
+                foreach (var p in item.Value)
                 {
-                    var pi = (((item as StackPanel).Tag as Control).Tag as PropertyInfo);
-                    string va = null;
-                    if (pi.PropertyType.IsValueType)
-                    {
-                        if (pi.PropertyType == typeof(bool))
-                        {
-                            va = ((item as StackPanel).Tag as CheckBox).IsChecked.ToString();
-                        }
-                        else if (pi.PropertyType == typeof(int))
-                        {
-                            //TODO: better support
-                            va = ((item as StackPanel).Tag as TextBox).Text;
-                        }
-                        else if (pi.PropertyType.IsEnum)
-                        {
-                            va = ((item as StackPanel).Tag as ComboBox).Text;
-                        }
-                    }
-                    else
-                    {
-                        va = ((item as StackPanel).Tag as TextBox).Text;
-                    }
-                    ret.Add((((item as StackPanel).Tag as Control).Tag as PropertyInfo).Name, va);
+                    ret.Add(p.Name, p.Value.ToString());
                 }
             }
             return ret;

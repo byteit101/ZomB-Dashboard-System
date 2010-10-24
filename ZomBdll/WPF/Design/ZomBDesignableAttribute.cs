@@ -53,5 +53,15 @@ namespace System451.Communication.Dashboard.WPF.Design
         /// The name of the Property
         /// </summary>
         public string PropertyName { get; private set; }
+
+        /// <summary>
+        /// The category of the Property
+        /// </summary>
+        public string Category { get; set; }
+
+        /// <summary>
+        /// The description of the Property
+        /// </summary>
+        public string Description { get; set; }
     }
 }

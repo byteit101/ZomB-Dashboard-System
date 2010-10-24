@@ -48,7 +48,10 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 string r = Property.Name;
                 foreach (var at in Property.GetCustomAttributes(typeof(ZomBDesignableAttribute), true))
-                    r = (at as ZomBDesignableAttribute).DisplayName ?? r;
+                    return (at as ZomBDesignableAttribute).DisplayName ?? r;
+                foreach (var at in Object.GetType().GetCustomAttributes(typeof(ZomBDesignablePropertyAttribute), true))
+                    if ((at as ZomBDesignablePropertyAttribute).PropertyName == Property.Name)
+                    return (at as ZomBDesignablePropertyAttribute).DisplayName ?? r;
                 return r;
             }
         }
@@ -62,7 +65,10 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 string r = "Misc";
                 foreach (var at in Property.GetCustomAttributes(typeof(CategoryAttribute), true))
-                    r = (at as CategoryAttribute).Category ?? r;
+                    return (at as CategoryAttribute).Category ?? r;
+                foreach (var at in Object.GetType().GetCustomAttributes(typeof(ZomBDesignablePropertyAttribute), true))
+                    if ((at as ZomBDesignablePropertyAttribute).PropertyName == Property.Name)
+                        return (at as ZomBDesignablePropertyAttribute).Category ?? r;
                 return r;
             }
         }
@@ -76,7 +82,10 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 string r = Name;
                 foreach (var at in Property.GetCustomAttributes(typeof(DescriptionAttribute), true))
-                    r = (at as DescriptionAttribute).Description ?? r;
+                    return (at as DescriptionAttribute).Description ?? r;
+                foreach (var at in Object.GetType().GetCustomAttributes(typeof(ZomBDesignablePropertyAttribute), true))
+                    if ((at as ZomBDesignablePropertyAttribute).PropertyName == Property.Name) 
+                        return (at as ZomBDesignablePropertyAttribute).Description ?? r;
                 return r;
             }
         }
@@ -91,6 +100,9 @@ namespace System451.Communication.Dashboard.ViZ
                 uint r = 0;
                 foreach (var at in Property.GetCustomAttributes(typeof(ZomBDesignableAttribute), true))
                     r = (at as ZomBDesignableAttribute).Index;
+                foreach (var at in Object.GetType().GetCustomAttributes(typeof(ZomBDesignablePropertyAttribute), true))
+                    if ((at as ZomBDesignablePropertyAttribute).PropertyName == Property.Name) 
+                        r = (at as ZomBDesignablePropertyAttribute).Index;
                 if (r == 0)
                     r = uint.MaxValue / 2;
                 return r;
@@ -104,12 +116,12 @@ namespace System451.Communication.Dashboard.ViZ
         {
             get
             {
-                bool r = false;
                 foreach (var at in Property.GetCustomAttributes(typeof(ZomBDesignableAttribute), true))
-                    r = (at as ZomBDesignableAttribute).Dynamic;
+                    return (at as ZomBDesignableAttribute).Dynamic;
                 foreach (var at in Object.GetType().GetCustomAttributes(typeof(ZomBDesignablePropertyAttribute), true))
-                    r = (at as ZomBDesignablePropertyAttribute).Dynamic||r;
-                return r;
+                    if ((at as ZomBDesignablePropertyAttribute).PropertyName == Property.Name)
+                        return (at as ZomBDesignablePropertyAttribute).Dynamic;
+                return false;
             }
         }
 
@@ -221,7 +233,11 @@ namespace System451.Communication.Dashboard.ViZ
                             (itm.Children[1] as TextBox).IsReadOnly = true;
                         }
                         else
-                        (itm.Children[1] as TextBox).Text = Value.ToString();
+                        {
+                            (itm.Children[1] as TextBox).Text = Value.ToString();
+                            (itm.Children[1] as TextBox).TextChanged += delegate(object sender, TextChangedEventArgs e) { Value = (sender as TextBox).Text; };
+
+                        }
                     }
                     else if (Type.IsEnum)
                     {

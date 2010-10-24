@@ -30,8 +30,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// WPF Base ZomB Control
     /// </summary>
-    [Design.ZomBDesignableProperty("Width", Dynamic = true)]
-    [Design.ZomBDesignableProperty("Height", Dynamic = true)]
+    [Design.ZomBDesignableProperty("Width", Dynamic = true, Category = "Layout")]
+    [Design.ZomBDesignableProperty("Height", Dynamic = true, Category = "Layout")]
     public class ZomBGLControl : Control, IZomBControl
     {
         DashboardDataHub localDDH;

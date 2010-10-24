@@ -393,16 +393,14 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 sb.Append("<ZomB:");
                 sb.Append(((SurfaceControl)item).Control.GetType().Name);
-                sb.Append(" Width=\"");
-                sb.Append(((SurfaceControl)item).Width);
-                sb.Append("\" Height=\"");
-                sb.Append(((SurfaceControl)item).Height);
-                sb.Append("\" Canvas.Top=\"");
+                sb.Append(" Canvas.Top=\"");
                 sb.Append(Canvas.GetTop(item as UIElement));
                 sb.Append("\" Canvas.Left=\"");
                 sb.Append(Canvas.GetLeft(item as UIElement));
                 foreach (KeyValuePair<string, string> cprops in ((SurfaceControl)item).GetProps())
                 {
+                    if (cprops.Value == "")
+                        continue;
                     sb.Append("\" ");
                     sb.Append(cprops.Key);
                     sb.Append("=\"");
