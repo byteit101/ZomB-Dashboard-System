@@ -22,6 +22,7 @@ using System451.Communication.Dashboard.WPF.Design;
 using System.Reflection;
 using System.Collections.Generic;
 using System;
+using System.Windows.Data;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -99,6 +100,7 @@ namespace System451.Communication.Dashboard.ViZ
             if (prophld == null)
                 return;
             prophld.Children.Clear();
+            bool toped=false, lefted=false;
             foreach (var category in proplist)
             {
                 var lb = new Label();
@@ -108,9 +110,41 @@ namespace System451.Communication.Dashboard.ViZ
                 category.Value.Sort();
                 foreach (var itm in category.Value)
                 {
+                    if (category.Key == "Layout")
+                    {
+                        if (!lefted && string.Compare("Left", itm.Name) < 0)
+                            prophld.Children.Add(GetTLBox(false));
+                        if (!toped && string.Compare("Top", itm.Name) < 0)
+                            prophld.Children.Add(GetTLBox(true));
+                    }
                     prophld.Children.Add(itm.GetEntry());
                 }
             }
+        }
+
+        private FrameworkElement GetTLBox(bool top)
+        {
+            var Name = "Left: ";
+            var rprop = Canvas.LeftProperty;
+            if (top)
+            {
+                Name = "Top: ";
+                rprop = Canvas.TopProperty;
+            }
+            var itm = new StackPanel();
+            itm.Orientation = Orientation.Horizontal;
+            itm.Children.Add(new TextBlock());
+            (itm.Children[0] as TextBlock).Text = Name;
+            itm.Children.Add(new TextBox());
+            (itm.Children[1] as TextBox).Width = 50.0;
+            Binding bind = new Binding();
+            bind.Mode = BindingMode.TwoWay;
+            bind.Source = this;
+            bind.Path = new PropertyPath(rprop);
+            bind.Converter = new StringValueConverter();
+            (itm.Children[1] as TextBox).SetBinding(TextBox.TextProperty, bind);
+            itm.Margin = new Thickness(1);
+            return itm;
         }
 
         private void LoadPropList(object ctrl)
