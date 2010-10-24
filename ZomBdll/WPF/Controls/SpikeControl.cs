@@ -35,6 +35,9 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// </summary>
     [TemplatePart(Name = "PART_Rect")]
     [Design.ZomBControl("Spike Control", Description = "This is a tri-state control, forward, reverse, or off", IconName = "SpikeControlIcon")]
+    [Design.ZomBDesignableProperty("Foreground")]
+    [Design.ZomBDesignableProperty("Background")]
+    [Design.ZomBDesignableProperty("BorderBrush")]
     public class SpikeControl : ZomBGLControl
     {
         Rectangle PART_Rect;

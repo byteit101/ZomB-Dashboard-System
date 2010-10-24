@@ -34,6 +34,10 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
     [Design.ZomBControl("Analog Meter", Description = "This shows 0-1024, useful for analog inputs", IconName="AnalogMeterIcon")]
+    [Design.ZomBDesignableProperty("Foreground")]
+    [Design.ZomBDesignableProperty("Background")]
+    [Design.ZomBDesignableProperty("BorderBrush")]
+    [Design.ZomBDesignableProperty("BorderThickness")]
     public class AnalogMeter : ZomBGLControl, IValueConverter
     {
         static AnalogMeter()

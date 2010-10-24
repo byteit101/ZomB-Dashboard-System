@@ -25,6 +25,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
     [TemplatePart(Name = "PART_Rect", Type = typeof(Rectangle)), Design.ZomBControl("Alert Control", Description = "This is a square version of the OnOffControl, and shows a true/false value", IconName="AlertControlIcon")]
+    [Design.ZomBDesignableProperty("Foreground")]
+    [Design.ZomBDesignableProperty("Background")]
     public class AlertControl : ZomBGLControl
     {
         Rectangle PART_Rect;

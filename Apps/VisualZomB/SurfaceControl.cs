@@ -33,7 +33,7 @@ namespace System451.Communication.Dashboard.ViZ
         Control sizer;
         ContextMenu mnu;
         StackPanel prophld;
-        Dictionary<string, List<PropertyElement>> proplist;
+        SortedDictionary<string, List<PropertyElement>> proplist;
 
         static SurfaceControl()
         {
@@ -131,61 +131,48 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void loadCtx(object ctrl)
         {
+            if (proplist == null)
+                LoadPropList(ctrl);
             if (prophld == null)
                 return;
-            //TODO: class stuff
+            prophld.Children.Clear();
+            foreach (var category in proplist)
+            {
+                var lb = new Label();
+                lb.Content = category.Key;
+                lb.Style = (Style)lb.FindResource("PropCatStyle");
+                prophld.Children.Add(lb);
+                category.Value.Sort();
+                foreach (var itm in category.Value)
+                {
+                    prophld.Children.Add(itm.GetEntry());
+                }
+            }
+        }
+
+        private void LoadPropList(object ctrl)
+        {
+            proplist = new SortedDictionary<string, List<PropertyElement>>(new CategoryComparer());
             foreach (var prop in ctrl.GetType().GetProperties())
             {
                 foreach (var at in prop.GetCustomAttributes(typeof(ZomBDesignableAttribute), true))
                 {
-                    var zat = (at as ZomBDesignableAttribute);
-                    var itm = new StackPanel();
-                    itm.Orientation = Orientation.Horizontal;
-                    itm.Children.Add(new TextBlock());
-                    (itm.Children[0] as TextBlock).Text = (zat.DisplayName ?? prop.Name) + ": ";
-                    if (prop.PropertyType.IsValueType)
-                    {
-                        if (prop.PropertyType == typeof(bool))
-                        {
-                            itm.Children.Add(new CheckBox());
-                            (itm.Children[1] as CheckBox).IsChecked = (bool)prop.GetValue(Control, null);
-                            (itm.Children[1] as CheckBox).Checked += new RoutedEventHandler(SurfaceControl_Checked);
-                            (itm.Children[1] as CheckBox).Unchecked += new RoutedEventHandler(SurfaceControl_Unchecked);
-                            FocusManager.SetIsFocusScope((itm.Children[1] as CheckBox), false);
-                            (itm.Children[1] as CheckBox).Focusable = false;
-                        }
-                        else if (prop.PropertyType == typeof(int))
-                        {
-                            //TODO: better support
-                            itm.Children.Add(new TextBox());
-                            (itm.Children[1] as TextBox).Width = 50.0;
-                            (itm.Children[1] as TextBox).Text = prop.GetValue(Control, null).ToString();
-                        }
-                        else if (prop.PropertyType.IsEnum)
-                        {
-                            itm.Children.Add(new ComboBox());
-                            foreach (var item in Enum.GetNames(prop.PropertyType))
-                            {
-                                (itm.Children[1] as ComboBox).Items.Add(item);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        itm.Children.Add(new TextBox());
-                        (itm.Children[1] as TextBox).Width = 100.0;
-                        (itm.Children[1] as TextBox).Text = prop.GetValue(Control, null).ToString();
-                    }
-                    (itm.Children[1] as Control).Tag = prop;
-                    itm.Tag = itm.Children[1];
-                    itm.Margin = new Thickness(1);
-                    if (zat.Index > 0)
-                    {
-                        prophld.Children.Insert(Math.Min((int)zat.Index - 1, prophld.Children.Count), itm);
-                    }
-                    else
-                        prophld.Children.Add(itm);
-                }
+                    PropertyElement pe = new PropertyElement(ctrl, prop);
+
+                    if (!proplist.ContainsKey(pe.Category))
+                        proplist.Add(pe.Category, new List<PropertyElement>());
+
+                    proplist[pe.Category].Add(pe);
+                }                
+            }
+            foreach (var at in ctrl.GetType().GetCustomAttributes(typeof(ZomBDesignablePropertyAttribute), true))
+            {
+                PropertyElement pe = new PropertyElement(ctrl, (at as ZomBDesignablePropertyAttribute).PropertyName);
+
+                if (!proplist.ContainsKey(pe.Category))
+                    proplist.Add(pe.Category, new List<PropertyElement>());
+
+                proplist[pe.Category].Add(pe);
             }
         }
 

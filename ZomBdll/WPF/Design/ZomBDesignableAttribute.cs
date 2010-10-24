@@ -20,7 +20,7 @@ using System;
 namespace System451.Communication.Dashboard.WPF.Design
 {
     [global::System.AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
-    public sealed class ZomBDesignableAttribute : Attribute
+    public class ZomBDesignableAttribute : Attribute
     {
         public ZomBDesignableAttribute() { }
 
@@ -33,5 +33,25 @@ namespace System451.Communication.Dashboard.WPF.Design
         /// The 1 based index of position in the list. Do not use 1.
         /// </summary>
         public uint Index { get; set; }
+
+        /// <summary>
+        /// Is this property updated via the design surface?
+        /// </summary>
+        public bool Dynamic { get; set; }
+    }
+
+    [global::System.AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = true)]
+    public sealed class ZomBDesignablePropertyAttribute : ZomBDesignableAttribute
+    {
+        /// <summary>
+        /// Create a new ZomBDesignableAttribute on a property
+        /// </summary>
+        /// <param name="propertyName">The name of the property</param>
+        public ZomBDesignablePropertyAttribute(string propertyName) { PropertyName = propertyName; }
+
+        /// <summary>
+        /// The name of the Property
+        /// </summary>
+        public string PropertyName { get; private set; }
     }
 }
