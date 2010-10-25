@@ -279,6 +279,9 @@ namespace System451.Communication.Dashboard.ViZ
             SnapLine topside = new SnapLine { x1 = 0, x2 = curObj.Width, color = Colors.Blue, y1 = -1, y2 = .5 };
             SnapLine bottomside = new SnapLine { x1 = 0, x2 = curObj.Width, color = Colors.Blue, y1 = -1, y2 = curObj.Height+.5 };
 
+            SnapLine leftdist = new SnapLine { x1 = -SnapGridHelper.SnapDistance, x2 = 0, color = Colors.LightBlue, y1 = 0, y2 = -1 };
+            SnapLine rightdist = new SnapLine { x1 = curObj.Width, x2 = curObj.Width + SnapGridHelper.SnapDistance, color = Colors.LightBlue, y1 = 0, y2 = -1 };
+
             foreach (Control other in ZDash.Children)
             {
                 if (other == curObj)
@@ -292,6 +295,10 @@ namespace System451.Communication.Dashboard.ViZ
                         leftside.y1 = Math.Min(leftside.y1, Canvas.GetTop(other) - Canvas.GetTop(curObj));
                         leftside.y2 = Math.Max(leftside.y2, Canvas.GetTop(other) + other.Height - (Canvas.GetTop(curObj)));
                     }
+                    if (SnapGridHelper.SnapableDistanceLeft(curObj, other))
+                    {
+                        leftdist.y1 = leftdist.y2 = Math.Round(SnapGridHelper.SnapableDistanceLeftRightY(curObj, other)) + .5;
+                    }
                 }
                 if ((dir & SnapGridDirections.Right) == SnapGridDirections.Right)
                 {
@@ -300,6 +307,10 @@ namespace System451.Communication.Dashboard.ViZ
                         rightside.x1 = rightside.x2;
                         rightside.y1 = Math.Min(rightside.y1, Canvas.GetTop(other) - Canvas.GetTop(curObj));
                         rightside.y2 = Math.Max(rightside.y2, Canvas.GetTop(other) + other.Height - (Canvas.GetTop(curObj)));
+                    }
+                    if (SnapGridHelper.SnapableDistanceRight(curObj, other))
+                    {
+                        rightdist.y1 = rightdist.y2 = Math.Round(SnapGridHelper.SnapableDistanceLeftRightY(curObj, other)) + .5;
                     }
                 }
                 if ((dir & SnapGridDirections.Y) == SnapGridDirections.Y)
@@ -330,6 +341,11 @@ namespace System451.Communication.Dashboard.ViZ
                 curObj.SetSnap(topside);
             if (bottomside.y1 == bottomside.y2)
                 curObj.SetSnap(bottomside);
+
+            if (leftdist.y1 == leftdist.y2)
+                curObj.SetSnap(leftdist);
+            if (rightdist.y1 == rightdist.y2)
+                curObj.SetSnap(rightdist);
 
             curObj.DrawSnaps();
         }

@@ -48,6 +48,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         public SurfaceControl()
         {
+            this.SnapsToDevicePixels = true;
             this.Focusable = true;
             FocusManager.SetIsFocusScope(this, false);
             this.Focusable = true;
@@ -78,6 +79,7 @@ namespace System451.Communication.Dashboard.ViZ
                 loadCtx(Control);
             }
         }
+
         protected override void OnRender(DrawingContext drawingContext)
         {
             foreach (var snap in snaps)
@@ -92,8 +94,6 @@ namespace System451.Communication.Dashboard.ViZ
             snaps.Add(snap);
         }
 
-        private static Action EmptyDelegate = delegate() { };
-
         public void DrawSnaps()
         {
             Snapers = null;
@@ -105,8 +105,6 @@ namespace System451.Communication.Dashboard.ViZ
             snaps.Clear();
         }
 
-
-
         private Collection<SnapLine> Snapers
         {
             get { return (Collection<SnapLine>)GetValue(SnapersProperty); }
@@ -114,7 +112,7 @@ namespace System451.Communication.Dashboard.ViZ
         }
 
         // Using a DependencyProperty as the backing store for Snapers.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty SnapersProperty =
+        private static readonly DependencyProperty SnapersProperty =
             DependencyProperty.Register("Snapers", typeof(Collection<SnapLine>), typeof(SurfaceControl), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 
         /// <summary>
