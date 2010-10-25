@@ -12,6 +12,7 @@ namespace System451.Communication.Dashboard.ViZ
     {
         public const double SnapableWithinDistance = 0.5;
         public const double SnapDistance = 10;
+        public const double SnapableForceDistance = 3;
 
         public static Func<Control, Control, double> SnapDistanceLeftLeft = (current, other) => (Left(other) - Left(current));
         public static Func<Control, Control, double> SnapDistanceLeftRight = (current, other) => (Right(other) - Left(current));
@@ -49,6 +50,17 @@ namespace System451.Communication.Dashboard.ViZ
             (current, other) => (-SnapableDistanceEqu(new Point(Top(current), Left(current)), new Point(Top(other), Right(other)), new Point(Bottom(current), Left(current)), new Point(Bottom(other), Right(other)))) - Left(current);
 
 
+        public static Func<Control, Control, double> SnapableForceDistanceLeft =
+            (current, other) => (Math.Abs(SnapDistanceLeftRight(current, other) + SnapDistance));
+        public static Func<Control, Control, double> SnapableForceDistanceRight =
+            (current, other) => (Math.Abs(SnapDistanceRightLeft(current, other) - SnapDistance));
+        public static Func<Control, Control, double> SnapableForceDistanceTop =
+            (current, other) => (Math.Abs(SnapDistanceTopBottom(current, other) + SnapDistance));
+        public static Func<Control, Control, double> SnapableForceDistanceBottom =
+            (current, other) => (Math.Abs(SnapDistanceBottomTop(current, other) - SnapDistance));
+        
+
+
         public static Func<Control, double> Right = (ctrl) => (Canvas.GetLeft(ctrl) + ctrl.Width);
         public static Func<Control, double> Left = (ctrl) => Canvas.GetLeft(ctrl);
         public static Func<Control, double> Top = (ctrl) => Canvas.GetTop(ctrl);
@@ -74,6 +86,30 @@ namespace System451.Communication.Dashboard.ViZ
         public double x2 { get; set; }
         public double y2 { get; set; }
         public Color color { get; set; }
+    }
+
+    public class SnapGridDistance : IComparable<SnapGridDistance>
+    {
+        public SnapGridDistance() { }
+        public SnapType Type { get; set; }
+        public SnapGridDirections Location { get; set; }
+        public double Distance { get; set; }
+        public Control other { get; set; }
+
+        #region IComparable<SnapGridDistance> Members
+
+        public int CompareTo(SnapGridDistance other)
+        {
+            return Distance.CompareTo(other.Distance);
+        }
+
+        #endregion
+    }
+
+    public enum SnapType
+    {
+        Equal,
+        Distance
     }
 
     public enum SnapGridDirections

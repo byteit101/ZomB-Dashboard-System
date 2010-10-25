@@ -227,7 +227,7 @@ namespace System451.Communication.Dashboard.ViZ
                         Vector mv = e.GetPosition(ZDash) - dndopoint;
                         Canvas.SetLeft((UIElement)origSrc, Math.Min(Math.Max(0, opoint.X + mv.X), ZDash.Width - (origSrc as SurfaceControl).Width));
                         Canvas.SetTop((UIElement)origSrc, Math.Min(Math.Max(0, opoint.Y + mv.Y), ZDash.Height - (origSrc as SurfaceControl).Height));
-                        ShowSnaps(SnapGridDirections.All);
+                        ShowSnaps(SnapGridDirections.All, (x) => Canvas.SetLeft(curObj, x), (y) => Canvas.SetTop(curObj, y), (r) => Canvas.SetLeft(curObj,r - SnapGridHelper.Right(curObj) + SnapGridHelper.Left(curObj)), (b) => Canvas.SetTop(curObj,b - SnapGridHelper.Bottom(curObj) + SnapGridHelper.Top(curObj)));
                     }
                     break;
                 case CurrentDrag.Resize:
@@ -236,7 +236,7 @@ namespace System451.Communication.Dashboard.ViZ
                         var sc = (origSrc as SurfaceControl);
                         sc.Width = Math.Min(Math.Max(0, opoint.X + mv.X), ZDash.Width - Canvas.GetLeft((UIElement)origSrc));
                         sc.Height = Math.Min(Math.Max(0, opoint.Y + mv.Y), ZDash.Height - Canvas.GetTop((UIElement)origSrc)); ;
-                        ShowSnaps(SnapGridDirections.Right|SnapGridDirections.Bottom);
+                        ShowSnaps(SnapGridDirections.Right | SnapGridDirections.Bottom, null, null, r => curObj.Width = r - SnapGridHelper.Left(curObj), b => curObj.Height = b - SnapGridHelper.Top(curObj));
                     }
                     break;
                 case CurrentDrag.None:
@@ -271,9 +271,16 @@ namespace System451.Communication.Dashboard.ViZ
 
         #region Snapping
 
-        private void ShowSnaps(SnapGridDirections dir)
+        /// <summary>
+        /// Snaping code. Be careful, it has a bad bite.
+        /// </summary>
+        /// <param name="dir">Directions to look for the snapping code that could bite your finger off</param>
+        private void ShowSnaps(SnapGridDirections dir, Action<double> leftModifier, Action<double> topModifier, Action<double> rightModifier, Action<double> bottomModifier)
         {
             curObj.ClearSnap();
+            List<SnapGridDistance> dist = new List<SnapGridDistance>();
+            double lastDistance;
+
             SnapLine leftside = new SnapLine { x1 = -1, x2 = 0.5, color = Colors.Blue, y1 = 0, y2 = curObj.Height };
             SnapLine rightside = new SnapLine { x1 = -1, x2 = curObj.Width+.5, color = Colors.Blue, y1 = 0, y2 = curObj.Height };
             SnapLine topside = new SnapLine { x1 = 0, x2 = curObj.Width, color = Colors.Blue, y1 = -1, y2 = .5 };
@@ -284,6 +291,7 @@ namespace System451.Communication.Dashboard.ViZ
             SnapLine topdist = new SnapLine { x1 = 0, x2 = -1, color = Colors.LightBlue, y1 = -SnapGridHelper.SnapDistance, y2 = 0 };
             SnapLine bottomdist = new SnapLine { x1 = 0, x2 = -1, color = Colors.LightBlue, y1 = curObj.Height + SnapGridHelper.SnapDistance, y2 = curObj.Height };
 
+            //Main code //TODO: better comment
             foreach (Control other in ZDash.Children)
             {
                 if (other == curObj)
@@ -301,6 +309,10 @@ namespace System451.Communication.Dashboard.ViZ
                     {
                         leftdist.y1 = leftdist.y2 = Math.Round(SnapGridHelper.SnapableDistanceLeftRightY(curObj, other)) + .5;
                     }
+                    else if ((lastDistance = SnapGridHelper.SnapableForceDistanceLeft(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    {
+                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.X, Type = SnapType.Distance, other=other });
+                    }
                 }
                 if ((dir & SnapGridDirections.Right) == SnapGridDirections.Right)
                 {
@@ -313,6 +325,10 @@ namespace System451.Communication.Dashboard.ViZ
                     if (SnapGridHelper.SnapableDistanceRight(curObj, other))
                     {
                         rightdist.y1 = rightdist.y2 = Math.Round(SnapGridHelper.SnapableDistanceLeftRightY(curObj, other)) + .5;
+                    }
+                    else if ((lastDistance = SnapGridHelper.SnapableForceDistanceRight(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    {
+                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Right, Type = SnapType.Distance, other = other });
                     }
                 }
                 if ((dir & SnapGridDirections.Y) == SnapGridDirections.Y)
@@ -327,6 +343,10 @@ namespace System451.Communication.Dashboard.ViZ
                     {
                         topdist.x1 = topdist.x2 = Math.Round(SnapGridHelper.SnapableDistanceTopBottomX(curObj, other)) + .5;
                     }
+                    else if ((lastDistance = SnapGridHelper.SnapableForceDistanceTop(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    {
+                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Y, Type = SnapType.Distance, other = other });
+                    }
                 }
                 if ((dir & SnapGridDirections.Bottom) == SnapGridDirections.Bottom)
                 {
@@ -340,8 +360,81 @@ namespace System451.Communication.Dashboard.ViZ
                     {
                         bottomdist.x1 = bottomdist.x2 = Math.Round(SnapGridHelper.SnapableDistanceTopBottomX(curObj, other)) + .5;
                     }
+                    else if ((lastDistance = SnapGridHelper.SnapableForceDistanceBottom(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    {
+                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Bottom, Type = SnapType.Distance, other = other });
+                    }
                 }
             }
+
+            //Snap to code
+            bool top = false, left = false, bottom = false, right = false;
+            dist.Sort();
+            foreach (SnapGridDistance item in dist)
+            {
+                switch (item.Location)
+                {
+                    case SnapGridDirections.X:
+                        if (!left)
+                        {
+                            left = true;
+                            if (leftModifier != null)
+                            {
+                                if (item.Type == SnapType.Distance)
+                                {
+                                    leftModifier(SnapGridHelper.Right(item.other) + SnapGridHelper.SnapDistance);
+                                    leftdist.y1 = leftdist.y2 = Math.Round(SnapGridHelper.SnapableDistanceLeftRightY(curObj, item.other)) + .5;
+                                }
+                            }
+                        }
+                        break;
+                    case SnapGridDirections.Y:
+                        if (!top)
+                        {
+                            top = true;
+                            if (topModifier != null)
+                            {
+                                if (item.Type == SnapType.Distance)
+                                {
+                                    topModifier(SnapGridHelper.Bottom(item.other) + SnapGridHelper.SnapDistance);
+                                    topdist.x1 = topdist.x2 = Math.Round(SnapGridHelper.SnapableDistanceTopBottomX(curObj, item.other)) + .5;
+                                }
+                            }
+                        }
+                        break;
+                    case SnapGridDirections.Right:
+                        if (!right)
+                        {
+                            right = true;
+                            if (rightModifier != null)
+                            {
+                                if (item.Type == SnapType.Distance)
+                                {
+                                    rightModifier(SnapGridHelper.Left(item.other) - SnapGridHelper.SnapDistance);
+                                    rightdist.y1 = rightdist.y2 = Math.Round(SnapGridHelper.SnapableDistanceLeftRightY(curObj, item.other)) + .5;
+                                }
+                            }
+                        }
+                        break;
+                    case SnapGridDirections.Bottom:
+                        if (!bottom)
+                        {
+                            bottom = true;
+                            if (bottomModifier != null)
+                            {
+                                if (item.Type == SnapType.Distance)
+                                {
+                                    bottomModifier(SnapGridHelper.Top(item.other) - SnapGridHelper.SnapDistance);
+                                    bottomdist.x1 = bottomdist.x2 = Math.Round(SnapGridHelper.SnapableDistanceTopBottomX(curObj, item.other)) + .5;
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        throw new InvalidOperationException("Enum not it!");
+                }
+            }
+
 
             if (leftside.x1 == leftside.x2)
                 curObj.SetSnap(leftside);
