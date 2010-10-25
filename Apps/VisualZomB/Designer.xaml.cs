@@ -305,6 +305,10 @@ namespace System451.Communication.Dashboard.ViZ
                         leftside.y1 = Math.Min(leftside.y1, Canvas.GetTop(other) - Canvas.GetTop(curObj));
                         leftside.y2 = Math.Max(leftside.y2, Canvas.GetTop(other) + other.Height - (Canvas.GetTop(curObj)));
                     }
+                    else if ((lastDistance = SnapGridHelper.SnapableForceLeft(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    {
+                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.X, Type = SnapType.Equal, other = other });
+                    }
                     if (SnapGridHelper.SnapableDistanceLeft(curObj, other))
                     {
                         leftdist.y1 = leftdist.y2 = Math.Round(SnapGridHelper.SnapableDistanceLeftRightY(curObj, other)) + .5;
@@ -321,6 +325,10 @@ namespace System451.Communication.Dashboard.ViZ
                         rightside.x1 = rightside.x2;
                         rightside.y1 = Math.Min(rightside.y1, Canvas.GetTop(other) - Canvas.GetTop(curObj));
                         rightside.y2 = Math.Max(rightside.y2, Canvas.GetTop(other) + other.Height - (Canvas.GetTop(curObj)));
+                    }
+                    else if ((lastDistance = SnapGridHelper.SnapableForceRight(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    {
+                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Right, Type = SnapType.Equal, other = other });
                     }
                     if (SnapGridHelper.SnapableDistanceRight(curObj, other))
                     {
@@ -339,6 +347,10 @@ namespace System451.Communication.Dashboard.ViZ
                         topside.x1 = Math.Min(topside.x1, Canvas.GetLeft(other) - Canvas.GetLeft(curObj));
                         topside.x2 = Math.Max(topside.x2, Canvas.GetLeft(other) + other.Width - (Canvas.GetLeft(curObj)));
                     }
+                    else if ((lastDistance = SnapGridHelper.SnapableForceTop(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    {
+                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Y, Type = SnapType.Equal, other = other });
+                    }
                     if (SnapGridHelper.SnapableDistanceTop(curObj, other))
                     {
                         topdist.x1 = topdist.x2 = Math.Round(SnapGridHelper.SnapableDistanceTopBottomX(curObj, other)) + .5;
@@ -355,6 +367,10 @@ namespace System451.Communication.Dashboard.ViZ
                         bottomside.y1 = bottomside.y2;
                         bottomside.x1 = Math.Min(bottomside.x1, Canvas.GetLeft(other) - Canvas.GetLeft(curObj));
                         bottomside.x2 = Math.Max(bottomside.x2, Canvas.GetLeft(other) + other.Width - (Canvas.GetLeft(curObj)));
+                    }
+                    else if ((lastDistance = SnapGridHelper.SnapableForceBottom(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    {
+                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Bottom, Type = SnapType.Equal, other = other });
                     }
                     if (SnapGridHelper.SnapableDistanceBottom(curObj, other))
                     {
@@ -385,6 +401,13 @@ namespace System451.Communication.Dashboard.ViZ
                                     leftModifier(SnapGridHelper.Right(item.other) + SnapGridHelper.SnapDistance);
                                     leftdist.y1 = leftdist.y2 = Math.Round(SnapGridHelper.SnapableDistanceLeftRightY(curObj, item.other)) + .5;
                                 }
+                                else
+                                {
+                                    leftModifier(SnapGridHelper.Right(item.other));
+                                    leftside.x1 = leftside.x2;
+                                    leftside.y1 = Math.Min(leftside.y1, Canvas.GetTop(item.other) - Canvas.GetTop(curObj));
+                                    leftside.y2 = Math.Max(leftside.y2, Canvas.GetTop(item.other) + item.other.Height - (Canvas.GetTop(curObj)));
+                                }
                             }
                         }
                         break;
@@ -398,6 +421,13 @@ namespace System451.Communication.Dashboard.ViZ
                                 {
                                     topModifier(SnapGridHelper.Bottom(item.other) + SnapGridHelper.SnapDistance);
                                     topdist.x1 = topdist.x2 = Math.Round(SnapGridHelper.SnapableDistanceTopBottomX(curObj, item.other)) + .5;
+                                }
+                                else
+                                {
+                                    topModifier(SnapGridHelper.Bottom(item.other));
+                                    topside.y1 = topside.y2;
+                                    topside.x1 = Math.Min(topside.x1, Canvas.GetLeft(item.other) - Canvas.GetLeft(curObj));
+                                    topside.x2 = Math.Max(topside.x2, Canvas.GetLeft(item.other) + item.other.Width - (Canvas.GetLeft(curObj)));
                                 }
                             }
                         }
@@ -413,6 +443,13 @@ namespace System451.Communication.Dashboard.ViZ
                                     rightModifier(SnapGridHelper.Left(item.other) - SnapGridHelper.SnapDistance);
                                     rightdist.y1 = rightdist.y2 = Math.Round(SnapGridHelper.SnapableDistanceLeftRightY(curObj, item.other)) + .5;
                                 }
+                                else
+                                {
+                                    rightModifier(SnapGridHelper.Left(item.other));
+                                    rightside.x1 = rightside.x2;
+                                    rightside.y1 = Math.Min(rightside.y1, Canvas.GetTop(item.other) - Canvas.GetTop(curObj));
+                                    rightside.y2 = Math.Max(rightside.y2, Canvas.GetTop(item.other) + item.other.Height - (Canvas.GetTop(curObj)));
+                                }
                             }
                         }
                         break;
@@ -426,6 +463,13 @@ namespace System451.Communication.Dashboard.ViZ
                                 {
                                     bottomModifier(SnapGridHelper.Top(item.other) - SnapGridHelper.SnapDistance);
                                     bottomdist.x1 = bottomdist.x2 = Math.Round(SnapGridHelper.SnapableDistanceTopBottomX(curObj, item.other)) + .5;
+                                }
+                                else
+                                {
+                                    bottomModifier(SnapGridHelper.Top(item.other));
+                                    bottomside.y1 = bottomside.y2;
+                                    bottomside.x1 = Math.Min(bottomside.x1, Canvas.GetLeft(item.other) - Canvas.GetLeft(curObj));
+                                    bottomside.x2 = Math.Max(bottomside.x2, Canvas.GetLeft(item.other) + item.other.Width - (Canvas.GetLeft(curObj)));
                                 }
                             }
                         }
