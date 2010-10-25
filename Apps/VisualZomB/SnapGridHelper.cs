@@ -40,7 +40,14 @@ namespace System451.Communication.Dashboard.ViZ
             (current, other) => (Math.Abs(SnapDistanceRightLeft(current, other) - SnapDistance) < SnapableWithinDistance);
         public static Func<Control, Control, double> SnapableDistanceLeftRightY =
             (current, other) => (-SnapableDistanceEqu(new Point(Left(current), Top(current)), new Point(Right(other), Top(other)), new Point(Left(current), Bottom(current)), new Point(Right(other), Bottom(other)))) - Top(current);
-        
+
+        public static Func<Control, Control, bool> SnapableDistanceTop =
+            (current, other) => (Math.Abs(SnapDistanceTopBottom(current, other) + SnapDistance) < SnapableWithinDistance);
+        public static Func<Control, Control, bool> SnapableDistanceBottom =
+            (current, other) => (Math.Abs(SnapDistanceBottomTop(current, other) - SnapDistance) < SnapableWithinDistance);
+        public static Func<Control, Control, double> SnapableDistanceTopBottomX =
+            (current, other) => (-SnapableDistanceEqu(new Point(Top(current), Left(current)), new Point(Top(other), Right(other)), new Point(Bottom(current), Left(current)), new Point(Bottom(other), Right(other)))) - Left(current);
+
 
         public static Func<Control, double> Right = (ctrl) => (Canvas.GetLeft(ctrl) + ctrl.Width);
         public static Func<Control, double> Left = (ctrl) => Canvas.GetLeft(ctrl);
@@ -52,7 +59,7 @@ namespace System451.Communication.Dashboard.ViZ
         public static Func<Point, Point, double> SnapableDistanceEquB =
             (current, other) => (current.X * SnapableDistanceEquM(current, other) - current.Y);
         public static Func<Point, Point, Point, Point, double> SnapableDistanceEquX =
-            (current1, other1, current2, other2) => ((SnapableDistanceEquB(current2, other1) - SnapableDistanceEquB(current1, other2))/(SnapableDistanceEquM(current1, other2) - SnapableDistanceEquM(current2, other1)));
+            (current1, other1, current2, other2) => ((SnapableDistanceEquB(current2, other1) - SnapableDistanceEquB(current1, other2)) / (SnapableDistanceEquM(current1, other2) - SnapableDistanceEquM(current2, other1)));
         public static Func<Point, Point, Point, Point, double> SnapableDistanceEqu =
             (current1, other1, current2, other2) => (SnapableDistanceEquM(current1, other2) * SnapableDistanceEquX(current1, other1, current2, other2) + SnapableDistanceEquB(current1, other2));
     }
