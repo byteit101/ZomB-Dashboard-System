@@ -224,7 +224,7 @@ namespace System451.Communication.Dashboard.ViZ
                         Vector mv = e.GetPosition(ZDash) - dndopoint;
                         Canvas.SetLeft((UIElement)origSrc, Math.Min(Math.Max(0, opoint.X + mv.X), ZDash.Width - (origSrc as SurfaceControl).Width));
                         Canvas.SetTop((UIElement)origSrc, Math.Min(Math.Max(0, opoint.Y + mv.Y), ZDash.Height - (origSrc as SurfaceControl).Height));
-                        ShowSnaps(SnapGridDirections.X | SnapGridDirections.Y);
+                        ShowSnaps(SnapGridDirections.All);
                     }
                     break;
                 case CurrentDrag.Resize:
@@ -272,6 +272,7 @@ namespace System451.Communication.Dashboard.ViZ
             curObj.ClearSnap();
             SnapLine leftside = new SnapLine { x1 = -1, x2 = 0.5, color = Colors.Blue, y1 = 0, y2 = curObj.Height };
             SnapLine topside = new SnapLine { x1 = 0, x2 = curObj.Width, color = Colors.Blue, y1 = -1, y2 = .5 };
+            SnapLine bottomside = new SnapLine { x1 = 0, x2 = curObj.Width, color = Colors.Blue, y1 = -1, y2 = curObj.Height+.5 };
 
             foreach (Control other in ZDash.Children)
             {
@@ -296,12 +297,23 @@ namespace System451.Communication.Dashboard.ViZ
                         topside.x2 = Math.Max(topside.x2, Canvas.GetLeft(other) + other.Width - (Canvas.GetLeft(curObj)));
                     }
                 }
+                if ((dir & SnapGridDirections.Bottom) == SnapGridDirections.Bottom)
+                {
+                    if (SnapGridHelper.SnapableBottom(curObj, other))
+                    {
+                        bottomside.y1 = bottomside.y2;
+                        bottomside.x1 = Math.Min(bottomside.x1, Canvas.GetLeft(other) - Canvas.GetLeft(curObj));
+                        bottomside.x2 = Math.Max(bottomside.x2, Canvas.GetLeft(other) + other.Width - (Canvas.GetLeft(curObj)));
+                    }
+                }
             }
 
             if (leftside.x1 == leftside.x2)
                 curObj.SetSnap(leftside);
             if (topside.y1 == topside.y2)
                 curObj.SetSnap(topside);
+            if (bottomside.y1 == bottomside.y2)
+                curObj.SetSnap(bottomside);
 
             curObj.DrawSnaps();
         }

@@ -23,6 +23,13 @@ namespace System451.Communication.Dashboard.ViZ
             (current, other) => ((Canvas.GetTop(other) + other.Height) - Canvas.GetTop(current));
         public static Func<Control, Control, bool> SnapableTop =
             (current, other) => (Math.Abs(SnapDistaceTopTop(current, other)) < SnapableDistance || Math.Abs(SnapDistaceTopBottom(current, other)) < SnapableDistance);
+        
+        public static Func<Control, Control, double> SnapDistaceBottomBottom =
+            (current, other) => ((Canvas.GetTop(other) + other.Height) - (Canvas.GetTop(current)+current.Height));
+        public static Func<Control, Control, double> SnapDistaceBottomTop =
+            (current, other) => (Canvas.GetTop(other) - (Canvas.GetTop(current)+current.Height));
+        public static Func<Control, Control, bool> SnapableBottom =
+            (current, other) => (Math.Abs(SnapDistaceBottomBottom(current, other)) < SnapableDistance || Math.Abs(SnapDistaceBottomTop(current, other)) < SnapableDistance);
     }
 
     public class SnapLine
@@ -39,9 +46,10 @@ namespace System451.Communication.Dashboard.ViZ
 
     public enum SnapGridDirections
     {
-        X=0x1,
-        Y=0x2,
-        R=0x4,
-        L=0x8
+        X = 0x1,
+        Y = 0x2,
+        Right = 0x4,
+        Bottom = 0x8,
+        All = 0xF
     }
 }
