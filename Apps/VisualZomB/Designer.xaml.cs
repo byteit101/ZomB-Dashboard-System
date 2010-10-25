@@ -53,6 +53,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         Toolbox tbx;
         ListBox listBox1;
+        bool topped = false;
 
         public Designer()
         {
@@ -67,7 +68,11 @@ namespace System451.Communication.Dashboard.ViZ
 
         void Designer_Initialized(object sender, EventArgs e)
         {
-            this.Top = 5;
+            if (!topped)
+            {
+                topped = true;
+                this.Top = 5;
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -201,9 +206,13 @@ namespace System451.Communication.Dashboard.ViZ
 
         #region Designer Surface
 
+        #region Move and Resize
+
         private void ScrollViewer_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             cd = CurrentDrag.None;
+            curObj.ClearSnap();
+            curObj.DrawSnaps();
         }
 
         private void ScrollViewer_MouseMove(object sender, MouseEventArgs e)
@@ -215,6 +224,7 @@ namespace System451.Communication.Dashboard.ViZ
                         Vector mv = e.GetPosition(ZDash) - dndopoint;
                         Canvas.SetLeft((UIElement)origSrc, Math.Min(Math.Max(0, opoint.X + mv.X), ZDash.Width - (origSrc as SurfaceControl).Width));
                         Canvas.SetTop((UIElement)origSrc, Math.Min(Math.Max(0, opoint.Y + mv.Y), ZDash.Height - (origSrc as SurfaceControl).Height));
+                        ShowSnaps(SnapGridDirections.X | SnapGridDirections.Y);
                     }
                     break;
                 case CurrentDrag.Resize:
@@ -255,6 +265,53 @@ namespace System451.Communication.Dashboard.ViZ
             }
         }
 
+        #region Snapping
+
+        private void ShowSnaps(SnapGridDirections dir)
+        {
+            curObj.ClearSnap();
+            SnapLine leftside = new SnapLine { x1 = -1, x2 = 0.5, color = Colors.Blue, y1 = 0, y2 = curObj.Height };
+            SnapLine topside = new SnapLine { x1 = 0, x2 = curObj.Width, color = Colors.Blue, y1 = -1, y2 = .5 };
+
+            foreach (Control other in ZDash.Children)
+            {
+                if (other == curObj)
+                    continue;
+
+                if ((dir & SnapGridDirections.X) == SnapGridDirections.X)
+                {
+                    if (SnapGridHelper.SnapableLeft(curObj, other))
+                    {
+                        leftside.x1 = leftside.x2;
+                        leftside.y1 = Math.Min(leftside.y1, Canvas.GetTop(other) - Canvas.GetTop(curObj));
+                        leftside.y2 = Math.Max(leftside.y2, Canvas.GetTop(other) + other.Height - (Canvas.GetTop(curObj)));
+                    }
+                }
+                if ((dir & SnapGridDirections.Y) == SnapGridDirections.Y)
+                {
+                    if (SnapGridHelper.SnapableTop(curObj, other))
+                    {
+                        topside.y1 = topside.y2;
+                        topside.x1 = Math.Min(topside.x1, Canvas.GetLeft(other) - Canvas.GetLeft(curObj));
+                        topside.x2 = Math.Max(topside.x2, Canvas.GetLeft(other) + other.Width - (Canvas.GetLeft(curObj)));
+                    }
+                }
+            }
+
+            if (leftside.x1 == leftside.x2)
+                curObj.SetSnap(leftside);
+            if (topside.y1 == topside.y2)
+                curObj.SetSnap(topside);
+
+            curObj.DrawSnaps();
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Selection
+
         private void Select(SurfaceControl sl)
         {
             curObj = sl;
@@ -280,6 +337,9 @@ namespace System451.Communication.Dashboard.ViZ
             UpdateSelected();
         }
 
+        #endregion
+
+        #region ZIndex
 
         private void CommandBinding_MoveTop_Executed(object sender, ExecutedRoutedEventArgs e)
         {
@@ -323,6 +383,10 @@ namespace System451.Communication.Dashboard.ViZ
             }
         }
 
+        #endregion
+
+        #region Other
+
         private void ZDash_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.RightButton == MouseButtonState.Pressed)
@@ -350,6 +414,8 @@ namespace System451.Communication.Dashboard.ViZ
                 curObj = null;
             }
         }
+
+        #endregion
 
         #endregion
 

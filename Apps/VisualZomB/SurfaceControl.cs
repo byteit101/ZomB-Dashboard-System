@@ -23,6 +23,9 @@ using System.Reflection;
 using System.Collections.Generic;
 using System;
 using System.Windows.Data;
+using System.Windows.Media;
+using System.Collections.ObjectModel;
+using System.Windows.Threading;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -35,6 +38,7 @@ namespace System451.Communication.Dashboard.ViZ
         ContextMenu mnu;
         StackPanel prophld;
         SortedDictionary<string, List<PropertyElement>> proplist;
+        Collection<SnapLine> snaps = new Collection<SnapLine>();
 
         static SurfaceControl()
         {
@@ -74,6 +78,44 @@ namespace System451.Communication.Dashboard.ViZ
                 loadCtx(Control);
             }
         }
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            foreach (var snap in snaps)
+            {
+                drawingContext.DrawLine(new Pen(new SolidColorBrush(snap.color), 1.0), new Point(snap.x1, snap.y1), new Point(snap.x2, snap.y2));
+            }
+            base.OnRender(drawingContext);
+        }
+        
+        public void SetSnap(SnapLine snap)
+        {
+            snaps.Add(snap);
+        }
+
+        private static Action EmptyDelegate = delegate() { };
+
+        public void DrawSnaps()
+        {
+            Snapers = null;
+            Snapers = snaps;
+        }
+
+        public void ClearSnap()
+        {
+            snaps.Clear();
+        }
+
+
+
+        private Collection<SnapLine> Snapers
+        {
+            get { return (Collection<SnapLine>)GetValue(SnapersProperty); }
+            set { SetValue(SnapersProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Snapers.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SnapersProperty =
+            DependencyProperty.Register("Snapers", typeof(Collection<SnapLine>), typeof(SurfaceControl), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 
         /// <summary>
         /// The control we are designing
@@ -110,6 +152,7 @@ namespace System451.Communication.Dashboard.ViZ
                 category.Value.Sort();
                 foreach (var itm in category.Value)
                 {
+                    //Sneak in the Canvas.Left and Canvas.Top into the property editors
                     if (category.Key == "Layout")
                     {
                         if (!lefted && string.Compare("Left", itm.Name) < 0)
