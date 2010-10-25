@@ -1,0 +1,21 @@
+<Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ZomB="clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB" Height="400" Width="1024">
+  <ZomB:DirectionMeter Canvas.Top="10" Canvas.Left="10" Name="dir" Background="#FFB0E0E6" BorderBrush="#FFCD5C5C" BorderThickness="1,1,1,1" Foreground="#FF0000FF" Height="100" Width="100" />
+  <ZomB:DirectionMeter Canvas.Top="10" Canvas.Left="120" Name="dir2" Background="#FFB0E0E6" BorderBrush="#FFCD5C5C" BorderThickness="1,1,1,1" Foreground="#FF0000FF" Height="100" Width="100" />
+  <ZomB:OnOffControl Canvas.Top="10" Canvas.Left="230" Name="GO" Background="#FFFF0000" Foreground="#FF008000" Height="100" Width="100" />
+  <ZomB:DataGraph Canvas.Top="120" Canvas.Left="10" Name="grph" Background="#FF000000" BorderBrush="#FF008000" Foreground="#FF00FF00" Height="126" Width="320" />
+  <ZomB:DataGraph Canvas.Top="256" Canvas.Left="10" Name="grph2" Background="#FF000000" BorderBrush="#FF008000" Foreground="#FF00FF00" Height="134" Width="320" />
+  <TextBox Name="tn" Canvas.Top="9" Canvas.Left="448" Width="50" />
+  <ZomB:CameraView Canvas.Top="40" Canvas.Left="340" Name="cam" Height="240" Width="320" TeamNumber="{Binding ElementName=tn, Path=Text}" />
+  <ZomB:AnalogMeter Canvas.Top="290" Canvas.Left="562" Name="anl3" Background="#FF98FB98" BorderBrush="#FF000000" BorderThickness="1,1,1,1" Foreground="#FF2F4F4F" Height="50" Width="100" />
+  <ZomB:AnalogMeter Canvas.Top="290" Canvas.Left="452" Name="anl2" Background="#FF98FB98" BorderBrush="#FF000000" BorderThickness="1,1,1,1" Foreground="#FF2F4F4F" Height="50" Width="100" />
+  <ZomB:AnalogMeter Canvas.Top="290" Canvas.Left="342" Name="anl1" Background="#FF98FB98" BorderBrush="#FF000000" BorderThickness="1,1,1,1" Foreground="#FF2F4F4F" Height="50" Width="100" />
+  <ZomB:SpeedMeter Canvas.Top="10" Canvas.Left="662" Name="left" Background="#FFD2B48C" Height="71" Width="150" />
+  <ZomB:SpeedMeter Canvas.Top="10" Canvas.Left="822" Name="right" Background="#FFD2B48C" Height="71" Width="150" />
+  <ZomB:SpikeControl Canvas.Top="20" Canvas.Left="982" Name="spike1" Background="#FFFF0000" BorderBrush="#FF000000" Foreground="#FF008000" Height="20" Width="20" />
+  <ZomB:SpikeControl Canvas.Top="50" Canvas.Left="982" Name="spike2" Background="#FFFF0000" BorderBrush="#FF000000" Foreground="#FF008000" Height="20" Width="20" />
+  <ZomB:OnOffControl Canvas.Top="80" Canvas.Left="982" Name="sw1" Background="#FFFF0000" Foreground="#FF008000" Height="20" Width="20" />
+  <ZomB:OnOffControl Canvas.Top="110" Canvas.Left="982" Name="sw2" Background="#FFFF0000" Foreground="#FF008000" Height="20" Width="20" />
+  <ZomB:ValueMeter Canvas.Top="130" Canvas.Left="670" Name="bat" Background="#FFFFFFFF" BorderBrush="#FF000000" BorderThickness="1,1,1,1" Foreground="#FFCD853F" Height="210" Width="114" />
+  <ZomB:StatusLabel Canvas.Top="231" Canvas.Left="689" ControlName="bat" Foreground="#FF000000" StringValue="0.00" />
+  <ZomB:xShake Canvas.Top="221.861666666667" Canvas.Left="863" Name="shake" Background="#FFEEEEEE" Height="43" Width="43" GamepadNumber="0" />
+</Canvas>
