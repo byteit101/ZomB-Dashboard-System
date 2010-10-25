@@ -211,8 +211,11 @@ namespace System451.Communication.Dashboard.ViZ
         private void ScrollViewer_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             cd = CurrentDrag.None;
-            curObj.ClearSnap();
-            curObj.DrawSnaps();
+            if (curObj != null)
+            {
+                curObj.ClearSnap();
+                curObj.DrawSnaps();
+            }
         }
 
         private void ScrollViewer_MouseMove(object sender, MouseEventArgs e)
@@ -233,6 +236,7 @@ namespace System451.Communication.Dashboard.ViZ
                         var sc = (origSrc as SurfaceControl);
                         sc.Width = Math.Min(Math.Max(0, opoint.X + mv.X), ZDash.Width - Canvas.GetLeft((UIElement)origSrc));
                         sc.Height = Math.Min(Math.Max(0, opoint.Y + mv.Y), ZDash.Height - Canvas.GetTop((UIElement)origSrc)); ;
+                        ShowSnaps(SnapGridDirections.Right|SnapGridDirections.Bottom);
                     }
                     break;
                 case CurrentDrag.None:
@@ -271,6 +275,7 @@ namespace System451.Communication.Dashboard.ViZ
         {
             curObj.ClearSnap();
             SnapLine leftside = new SnapLine { x1 = -1, x2 = 0.5, color = Colors.Blue, y1 = 0, y2 = curObj.Height };
+            SnapLine rightside = new SnapLine { x1 = -1, x2 = curObj.Width+.5, color = Colors.Blue, y1 = 0, y2 = curObj.Height };
             SnapLine topside = new SnapLine { x1 = 0, x2 = curObj.Width, color = Colors.Blue, y1 = -1, y2 = .5 };
             SnapLine bottomside = new SnapLine { x1 = 0, x2 = curObj.Width, color = Colors.Blue, y1 = -1, y2 = curObj.Height+.5 };
 
@@ -286,6 +291,15 @@ namespace System451.Communication.Dashboard.ViZ
                         leftside.x1 = leftside.x2;
                         leftside.y1 = Math.Min(leftside.y1, Canvas.GetTop(other) - Canvas.GetTop(curObj));
                         leftside.y2 = Math.Max(leftside.y2, Canvas.GetTop(other) + other.Height - (Canvas.GetTop(curObj)));
+                    }
+                }
+                if ((dir & SnapGridDirections.Right) == SnapGridDirections.Right)
+                {
+                    if (SnapGridHelper.SnapableRight(curObj, other))
+                    {
+                        rightside.x1 = rightside.x2;
+                        rightside.y1 = Math.Min(rightside.y1, Canvas.GetTop(other) - Canvas.GetTop(curObj));
+                        rightside.y2 = Math.Max(rightside.y2, Canvas.GetTop(other) + other.Height - (Canvas.GetTop(curObj)));
                     }
                 }
                 if ((dir & SnapGridDirections.Y) == SnapGridDirections.Y)
@@ -310,6 +324,8 @@ namespace System451.Communication.Dashboard.ViZ
 
             if (leftside.x1 == leftside.x2)
                 curObj.SetSnap(leftside);
+            if (rightside.x1 == rightside.x2)
+                curObj.SetSnap(rightside);
             if (topside.y1 == topside.y2)
                 curObj.SetSnap(topside);
             if (bottomside.y1 == bottomside.y2)

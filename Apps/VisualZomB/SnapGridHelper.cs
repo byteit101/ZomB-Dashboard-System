@@ -16,6 +16,13 @@ namespace System451.Communication.Dashboard.ViZ
             (current, other) => ((Canvas.GetLeft(other) + other.Width) - Canvas.GetLeft(current));
         public static Func<Control, Control, bool> SnapableLeft =
             (current, other) => (Math.Abs(SnapDistaceLeftLeft(current, other)) < SnapableDistance || Math.Abs(SnapDistaceLeftRight(current, other)) < SnapableDistance);
+        
+        public static Func<Control, Control, double> SnapDistaceRightRight =
+                    (current, other) => ((Canvas.GetLeft(other) + other.Width) - (Canvas.GetLeft(current)+current.Width));
+        public static Func<Control, Control, double> SnapDistaceRightLeft =
+            (current, other) => (Canvas.GetLeft(other) - (Canvas.GetLeft(current) + current.Width));
+        public static Func<Control, Control, bool> SnapableRight =
+            (current, other) => (Math.Abs(SnapDistaceRightRight(current, other)) < SnapableDistance || Math.Abs(SnapDistaceRightLeft(current, other)) < SnapableDistance);
 
         public static Func<Control, Control, double> SnapDistaceTopTop =
             (current, other) => (Canvas.GetTop(other) - Canvas.GetTop(current));
