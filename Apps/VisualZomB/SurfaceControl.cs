@@ -221,7 +221,7 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 foreach (var p in item.Value)
                 {
-                    ret.Add(p.Name, p.Value.ToString());
+                    ret.Add(p.Property.Name, p.Value.ToString());
                 }
             }
             return ret;
