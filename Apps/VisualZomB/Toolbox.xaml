@@ -1,7 +1,7 @@
 ﻿<Window x:Class="System451.Communication.Dashboard.ViZ.Toolbox"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Toolbox" Height="100" Width="525" ShowInTaskbar="False" WindowStyle="ToolWindow" Topmost="True" SnapsToDevicePixels="True" MinWidth="150" MinHeight="150">
+    Title="Toolbox" Height="100" Width="525" ShowInTaskbar="False" WindowStyle="ToolWindow" SnapsToDevicePixels="True" MinWidth="150" MinHeight="150">
     <Window.Resources>
         <Style TargetType="{x:Type ListBoxItem}">
             <Style.Triggers>
