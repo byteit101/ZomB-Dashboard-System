@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ZomB="clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB"
         xmlns:loc="clr-namespace:System451.Communication.Dashboard.ViZ"
-    Title="ZomB Designer" Height="488" Width="1238" SnapsToDevicePixels="True" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+    AllowsTransparency="True" Background="Transparent" WindowStyle="None" Title="ZomB Designer" Height="410" Width="1030" SnapsToDevicePixels="True" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Window.CommandBindings>
         <CommandBinding Command="Play" Executed="CommandBinding_Play_Executed" />
         <CommandBinding Command="Save" Executed="CommandBinding_Save_Executed" />
@@ -18,23 +18,20 @@
         <KeyBinding Key="S" Command="Save" Modifiers="Ctrl"/>
     </Window.InputBindings>
 
-    <DockPanel>
-        <DockPanel FocusManager.IsFocusScope="False" Name="toolBar1" SnapsToDevicePixels="True" DockPanel.Dock="Top" LastChildFill="False" VerticalAlignment="Center" Background="Gainsboro">
-            <Button Margin="1" Command="Save">Save</Button>
-            <Button Margin="1" Command="Play">Run</Button>
-        </DockPanel>
-        
-        <StackPanel Name="hider" DockPanel.Dock="Bottom" Visibility="Collapsed" Focusable="False"></StackPanel>
-        <ScrollViewer Name="Scrlview" Background="LightGray" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
-                          PreviewMouseLeftButtonUp="ScrollViewer_MouseLeftButtonUp" PreviewMouseMove="ScrollViewer_MouseMove"
-                           FocusManager.IsFocusScope="False">
-            <loc:DropShadowChrome Width="1024" Height="400">
-                <Canvas Width="1024" Height="400" Background="White" Name="ZDash" AllowDrop="True" Drop="ZDash_Drop" 
+    <Canvas>
+        <loc:DropShadowChrome Canvas.Top="1" Canvas.Left="1" Width="1024" Height="400">
+            <Canvas Width="1024" Height="400" Background="White" Name="ZDash" AllowDrop="True" Drop="ZDash_Drop" 
                     DragEnter="ZDash_DragEnter" PreviewMouseLeftButtonDown="ZDash_MouseLeftButtonDown"
                         PreviewMouseRightButtonDown="ZDash_PreviewMouseRightButtonDown"
+                        PreviewMouseLeftButtonUp="ScrollViewer_MouseLeftButtonUp" PreviewMouseMove="ScrollViewer_MouseMove"
                     Focusable="True" FocusManager.IsFocusScope="True">
-                </Canvas>
-            </loc:DropShadowChrome>
-        </ScrollViewer>
-    </DockPanel>
+            </Canvas>
+        </loc:DropShadowChrome>
+        <Menu Margin="2,1" Background="Transparent" Foreground="Gray">
+            <MenuItem Header="V">
+                <MenuItem Header="Save" Command="Save"/>
+                <MenuItem Header="Run" Command="Play"/>
+            </MenuItem>
+        </Menu>
+    </Canvas>
 </Window>

@@ -83,7 +83,13 @@ namespace System451.Communication.Dashboard.ViZ
             tbx.Left = this.Left + (this.ActualWidth / 2.0)-(tbx.Width/2.0);
             tbx.Show();
             tbx.Owner = this;
+            tbx.Closed += new EventHandler(tbx_Closed);
             listBox1.ItemsSource = Reflector.GetZomBDesignableInfos(Reflector.GetZomBDesignableClasses());
+        }
+
+        void tbx_Closed(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         #region AddControl
@@ -217,6 +223,7 @@ namespace System451.Communication.Dashboard.ViZ
                 curObj.ClearSnap();
                 curObj.DrawSnaps();
             }
+            ZDash.ReleaseMouseCapture();
         }
 
         private void ScrollViewer_MouseMove(object sender, MouseEventArgs e)
@@ -248,6 +255,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void ZDash_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            ZDash.CaptureMouse();
             Deselect();
             if (e.LeftButton == MouseButtonState.Pressed)
             {
