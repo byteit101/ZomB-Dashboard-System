@@ -33,5 +33,13 @@
                 <MenuItem Header="Run" Command="Play"/>
             </MenuItem>
         </Menu>
+        <Button Canvas.Top="0" Canvas.Right="5" Content="X" Click="Button_Click">
+            <Button.Template>
+                <ControlTemplate>
+                    <ContentPresenter Margin="3,2" Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}">
+                    </ContentPresenter>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
     </Canvas>
 </Window>

@@ -92,6 +92,11 @@ namespace System451.Communication.Dashboard.ViZ
             this.Close();
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            tbx.Close();
+        }
+
         #region AddControl
 
         private void listBox1_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
