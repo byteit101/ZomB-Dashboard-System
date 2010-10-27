@@ -50,14 +50,23 @@ namespace System451.Communication.Dashboard.ViZ
             (current, other) => (-SnapableDistanceEquX(new Point(Left(current), Top(current)), new Point(Left(other), Bottom(other)), new Point(Right(current), Top(current)), new Point(Right(other), Bottom(other)))) - Left(current);
 
 
-        public static Func<Control, Control, double> SnapableForceLeft =
+        public static Func<Control, Control, double> SnapableForceLeft1 =
             (current, other) => Math.Abs(SnapDistanceLeftRight(current, other));
-        public static Func<Control, Control, double> SnapableForceRight =
+        public static Func<Control, Control, double> SnapableForceRight1 =
             (current, other) => Math.Abs(SnapDistanceRightLeft(current, other));
-        public static Func<Control, Control, double> SnapableForceTop =
+        public static Func<Control, Control, double> SnapableForceTop1 =
             (current, other) => Math.Abs(SnapDistanceTopBottom(current, other));
-        public static Func<Control, Control, double> SnapableForceBottom =
+        public static Func<Control, Control, double> SnapableForceBottom1 =
             (current, other) => Math.Abs(SnapDistanceBottomTop(current, other));
+
+        public static Func<Control, Control, double> SnapableForceLeft2 =
+            (current, other) => Math.Abs(SnapDistanceLeftLeft(current, other));
+        public static Func<Control, Control, double> SnapableForceRight2 =
+            (current, other) => Math.Abs(SnapDistanceRightRight(current, other));
+        public static Func<Control, Control, double> SnapableForceTop2 =
+            (current, other) => Math.Abs(SnapDistanceTopTop(current, other));
+        public static Func<Control, Control, double> SnapableForceBottom2 =
+            (current, other) => Math.Abs(SnapDistanceBottomBottom(current, other));
 
 
         public static Func<Control, Control, double> SnapableForceDistanceLeft =
@@ -121,7 +130,8 @@ namespace System451.Communication.Dashboard.ViZ
 
     public enum SnapType
     {
-        Equal,
+        Equal1,
+        Equal2,
         Distance
     }
 

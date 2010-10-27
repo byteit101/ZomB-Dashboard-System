@@ -296,44 +296,60 @@ namespace System451.Communication.Dashboard.ViZ
 
                 if ((dir & SnapGridDirections.X) == SnapGridDirections.X)
                 {
-                    if ((lastDistance = SnapGridHelper.SnapableForceLeft(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    if ((lastDistance = SnapGridHelper.SnapableForceLeft1(curObj, other)) < SnapGridHelper.SnapableForceDistance)
                     {
-                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.X, Type = SnapType.Equal, other = other });
+                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.X, Type = SnapType.Equal1, other = other });
                     }
-                    if ((lastDistance = SnapGridHelper.SnapableForceDistanceLeft(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    else if ((lastDistance = SnapGridHelper.SnapableForceLeft2(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    {
+                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.X, Type = SnapType.Equal2, other = other });
+                    }
+                    else if ((lastDistance = SnapGridHelper.SnapableForceDistanceLeft(curObj, other)) < SnapGridHelper.SnapableForceDistance)
                     {
                         dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.X, Type = SnapType.Distance, other = other });
                     }
                 }
                 if ((dir & SnapGridDirections.Right) == SnapGridDirections.Right)
                 {
-                    if ((lastDistance = SnapGridHelper.SnapableForceRight(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    if ((lastDistance = SnapGridHelper.SnapableForceRight1(curObj, other)) < SnapGridHelper.SnapableForceDistance)
                     {
-                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Right, Type = SnapType.Equal, other = other });
+                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Right, Type = SnapType.Equal1, other = other });
                     }
-                    if ((lastDistance = SnapGridHelper.SnapableForceDistanceRight(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    else if ((lastDistance = SnapGridHelper.SnapableForceRight2(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    {
+                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Right, Type = SnapType.Equal2, other = other });
+                    }
+                    else if ((lastDistance = SnapGridHelper.SnapableForceDistanceRight(curObj, other)) < SnapGridHelper.SnapableForceDistance)
                     {
                         dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Right, Type = SnapType.Distance, other = other });
                     }
                 }
                 if ((dir & SnapGridDirections.Y) == SnapGridDirections.Y)
                 {
-                    if ((lastDistance = SnapGridHelper.SnapableForceTop(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    if ((lastDistance = SnapGridHelper.SnapableForceTop1(curObj, other)) < SnapGridHelper.SnapableForceDistance)
                     {
-                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Y, Type = SnapType.Equal, other = other });
+                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Y, Type = SnapType.Equal1, other = other });
                     }
-                    if ((lastDistance = SnapGridHelper.SnapableForceDistanceTop(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    else if ((lastDistance = SnapGridHelper.SnapableForceTop2(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    {
+                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Y, Type = SnapType.Equal2, other = other });
+                    }
+                    else if ((lastDistance = SnapGridHelper.SnapableForceDistanceTop(curObj, other)) < SnapGridHelper.SnapableForceDistance)
                     {
                         dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Y, Type = SnapType.Distance, other = other });
                     }
                 }
                 if ((dir & SnapGridDirections.Bottom) == SnapGridDirections.Bottom)
                 {
-                    if ((lastDistance = SnapGridHelper.SnapableForceBottom(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    if ((lastDistance = SnapGridHelper.SnapableForceBottom1(curObj, other)) < SnapGridHelper.SnapableForceDistance)
                     {
-                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Bottom, Type = SnapType.Equal, other = other });
+                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Bottom, Type = SnapType.Equal1, other = other });
                     }
-                    if ((lastDistance = SnapGridHelper.SnapableForceDistanceBottom(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    else if ((lastDistance = SnapGridHelper.SnapableForceBottom2(curObj, other)) < SnapGridHelper.SnapableForceDistance)
+                    {
+                        dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Bottom, Type = SnapType.Equal2, other = other });
+                    }
+                    else if ((lastDistance = SnapGridHelper.SnapableForceDistanceBottom(curObj, other)) < SnapGridHelper.SnapableForceDistance)
                     {
                         dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Bottom, Type = SnapType.Distance, other = other });
                     }
@@ -360,9 +376,13 @@ namespace System451.Communication.Dashboard.ViZ
                                 {
                                     leftModifier(SnapGridHelper.Right(item.other) + SnapGridHelper.SnapDistance);
                                 }
-                                else
+                                else if (item.Type == SnapType.Equal1)
                                 {
                                     leftModifier(SnapGridHelper.Right(item.other));
+                                }
+                                else
+                                {
+                                    leftModifier(SnapGridHelper.Left(item.other));
                                 }
                             }
                         }
@@ -392,9 +412,13 @@ namespace System451.Communication.Dashboard.ViZ
                                 {
                                     topModifier(SnapGridHelper.Bottom(item.other) + SnapGridHelper.SnapDistance);
                                 }
-                                else
+                                else if (item.Type == SnapType.Equal1)
                                 {
                                     topModifier(SnapGridHelper.Bottom(item.other));
+                                }
+                                else
+                                {
+                                    topModifier(SnapGridHelper.Top(item.other));
                                 }
                             }
                         }
@@ -424,9 +448,13 @@ namespace System451.Communication.Dashboard.ViZ
                                 {
                                     rightModifier(SnapGridHelper.Left(item.other) - SnapGridHelper.SnapDistance);
                                 }
-                                else
+                                else if (item.Type == SnapType.Equal1)
                                 {
                                     rightModifier(SnapGridHelper.Left(item.other));
+                                }
+                                else
+                                {
+                                    rightModifier(SnapGridHelper.Right(item.other));
                                 }
                             }
                         }
@@ -456,9 +484,13 @@ namespace System451.Communication.Dashboard.ViZ
                                 {
                                     bottomModifier(SnapGridHelper.Top(item.other) - SnapGridHelper.SnapDistance);
                                 }
-                                else
+                                else if (item.Type == SnapType.Equal1)
                                 {
                                     bottomModifier(SnapGridHelper.Top(item.other));
+                                }
+                                else
+                                {
+                                    bottomModifier(SnapGridHelper.Bottom(item.other));
                                 }
                             }
                         }
