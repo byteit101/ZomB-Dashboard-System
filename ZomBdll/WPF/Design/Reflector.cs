@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
+using System.Windows.Forms;
 
 namespace System451.Communication.Dashboard
 {
@@ -28,21 +29,51 @@ namespace System451.Communication.Dashboard
         {
             public static IEnumerable<Type> GetZomBDesignableClasses()
             {
-                var retTypes = new List<Type>();
-                var asms = AppDomain.CurrentDomain.GetAssemblies();
-                foreach (var asm in asms)
+                bool tried = false;
+                retry:
+                try
                 {
-                    var types = asm.GetTypes();
-                    foreach (var type in types)
+                    var retTypes = new List<Type>();
+                    var asms = AppDomain.CurrentDomain.GetAssemblies();
+                    foreach (var asm in asms)
                     {
-                        foreach (var atr in type.GetCustomAttributes(typeof(ZomBControlAttribute), false))
+                        var types = asm.GetTypes();
+                        foreach (var type in types)
                         {
-                            retTypes.Add(type);
-                            break;
+                            foreach (var atr in type.GetCustomAttributes(typeof(ZomBControlAttribute), false))
+                            {
+                                retTypes.Add(type);
+                                break;
+                            }
                         }
                     }
+                    return retTypes;
                 }
-                return retTypes;
+                catch (Exception ex)
+                {
+                    if (!tried)
+                    {
+                        //need to load modules
+                        Utils.AutoExtractor.Extract(System451.Communication.Dashboard.Utils.AutoExtractor.Files.All);
+                        tried = true;
+                        goto retry;
+                    }
+                    else
+                    {
+                        //darn, need to restart
+                        if (System.Windows.Forms.MessageBox.Show("An exception occured while searching for controls. This may be caused by a failure to properly load modules. If this is the first time you get this error message, it is reccomended to restart. Would you like to restart?"
+                            , "Error", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Error, System.Windows.Forms.MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+                        {
+                            Application.Restart();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Aborting: "+ex.ToString());
+                            Application.Exit();
+                        }
+                    }
+                    return null;
+                }
             }
 
             public static IEnumerable<ZomBControlAttribute> GetZomBDesignableInfos(IEnumerable<Type> types)
