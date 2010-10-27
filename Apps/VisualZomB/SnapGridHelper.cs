@@ -47,7 +47,7 @@ namespace System451.Communication.Dashboard.ViZ
         public static Func<Control, Control, bool> SnapableDistanceBottom =
             (current, other) => (Math.Abs(SnapDistanceBottomTop(current, other) - SnapDistance) < SnapableWithinDistance);
         public static Func<Control, Control, double> SnapableDistanceTopBottomX =
-            (current, other) => (-SnapableDistanceEqu(new Point(Top(current), Left(current)), new Point(Top(other), Right(other)), new Point(Bottom(current), Left(current)), new Point(Bottom(other), Right(other)))) - Left(current);
+            (current, other) => (-SnapableDistanceEquX(new Point(Left(current), Top(current)), new Point(Left(other), Bottom(other)), new Point(Right(current), Top(current)), new Point(Right(other), Bottom(other)))) - Left(current);
 
 
         public static Func<Control, Control, double> SnapableForceLeft =
