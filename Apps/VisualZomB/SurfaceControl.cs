@@ -131,6 +131,21 @@ namespace System451.Communication.Dashboard.ViZ
         static void ControlChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             (o as SurfaceControl).loadCtx(e.NewValue);
+            (o as SurfaceControl).SetSize();
+        }
+
+        private void SetSize()
+        {
+            Control.SizeChanged += new SizeChangedEventHandler(Control_SizeChanged);
+        }
+
+        void Control_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (e.NewSize != new Size(ActualWidth, ActualHeight))
+            {
+                this.Width = e.NewSize.Width;
+                this.Height = e.NewSize.Height;
+            }
         }
 
         private void loadCtx(object ctrl)

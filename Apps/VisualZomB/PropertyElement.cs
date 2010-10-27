@@ -230,7 +230,6 @@ namespace System451.Communication.Dashboard.ViZ
                             bind.Path = new PropertyPath(GetRealProperty());
                             bind.Converter = new StringValueConverter();
                             (itm.Children[1] as TextBox).SetBinding(TextBox.TextProperty, bind);
-                            (itm.Children[1] as TextBox).IsReadOnly = true;
                         }
                         else
                         {
