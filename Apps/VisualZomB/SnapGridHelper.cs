@@ -12,7 +12,7 @@ namespace System451.Communication.Dashboard.ViZ
     {
         public const double SnapableWithinDistance = 0.5;
         public const double SnapDistance = 10;
-        public const double SnapableForceDistance = 3;
+        public const double SnapableForceDistance = 5.1;
 
         public static Func<Control, Control, double> SnapDistanceLeftLeft = (current, other) => (Left(other) - Left(current));
         public static Func<Control, Control, double> SnapDistanceLeftRight = (current, other) => (Right(other) - Left(current));
@@ -96,6 +96,9 @@ namespace System451.Communication.Dashboard.ViZ
         public double x2 { get; set; }
         public double y2 { get; set; }
         public Color color { get; set; }
+
+        public static Color DistanceLineColor = Colors.LightBlue;
+        public static Color EqualLineColor = Colors.Blue;
     }
 
     public class SnapGridDistance : IComparable<SnapGridDistance>
