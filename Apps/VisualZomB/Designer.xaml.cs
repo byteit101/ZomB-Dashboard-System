@@ -742,6 +742,11 @@ namespace System451.Communication.Dashboard.ViZ
         }
 
         #endregion
+
+        private void Rectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
     }
     public static class ExtensionsBit
     {

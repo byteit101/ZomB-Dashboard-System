@@ -18,7 +18,7 @@
         <KeyBinding Key="S" Command="Save" Modifiers="Ctrl"/>
     </Window.InputBindings>
 
-    <Canvas>
+    <Canvas Name="LayoutCvs">
         <loc:DropShadowChrome Canvas.Top="1" Canvas.Left="1" Width="1024" Height="400">
             <Canvas Width="1024" Height="400" Background="White" Name="ZDash" AllowDrop="True" Drop="ZDash_Drop" 
                     DragEnter="ZDash_DragEnter" PreviewMouseLeftButtonDown="ZDash_MouseLeftButtonDown"
@@ -27,19 +27,73 @@
                     Focusable="True" FocusManager.IsFocusScope="True">
             </Canvas>
         </loc:DropShadowChrome>
-        <Menu Margin="2,1" Background="Transparent" Foreground="Gray">
-            <MenuItem Header="V">
-                <MenuItem Header="Save" Command="Save"/>
-                <MenuItem Header="Run" Command="Play"/>
-            </MenuItem>
-        </Menu>
-        <Button Canvas.Top="0" Canvas.Right="5" Content="X" Click="Button_Click">
-            <Button.Template>
-                <ControlTemplate>
-                    <ContentPresenter Margin="3,2" Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}">
-                    </ContentPresenter>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
+        
+        <Grid Canvas.Top="1" Width="{Binding Path=ActualWidth, ElementName=LayoutCvs}" >
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" SnapsToDevicePixels="True">
+                <StackPanel.Background>
+                    <DrawingBrush>
+                        <DrawingBrush.Drawing>
+                            <GeometryDrawing  Geometry="M 0,0 C 0,10 0,20 10,20 L 40,20 C 50,20 50,10 50,0 z">
+                                <GeometryDrawing.Brush>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#eee" Offset="0" />
+                                        <GradientStop Color="#ddd" Offset="1" />
+                                    </LinearGradientBrush>
+                                </GeometryDrawing.Brush>
+                                <GeometryDrawing.Pen>
+                                    <Pen Thickness="1">
+                                        <Pen.Brush>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Color="#999" Offset="0" />
+                                                <GradientStop Color="#666" Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Pen.Brush>
+                                    </Pen>
+                                </GeometryDrawing.Pen>
+                            </GeometryDrawing>
+                        </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                </StackPanel.Background>
+                <Menu Margin="2,1" Background="Transparent">
+                    <MenuItem Header="V">
+                        <MenuItem.Template>
+                            <ControlTemplate TargetType="{x:Type MenuItem}">
+                                <Grid SnapsToDevicePixels="true">
+                                    <ContentPresenter SnapsToDevicePixels="True" ContentSource="Header" />
+                                    <Popup x:Name="PART_Popup" AllowsTransparency="true" HorizontalOffset="-2" IsOpen="{Binding Path=IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" VerticalOffset="-3" Focusable="false">
+                                        <ContentControl  IsTabStop="false" Template="{DynamicResource {ComponentResourceKey ResourceId=SubmenuContent, TypeInTargetAssembly={x:Type FrameworkElement}}}">
+                                            <ItemsPresenter Margin="2" SnapsToDevicePixels="True"/>
+                                        </ContentControl>
+                                    </Popup>
+                                </Grid>
+                            </ControlTemplate>
+                        </MenuItem.Template>
+                        <MenuItem Header="Save" Command="Save"/>
+                        <MenuItem Header="Run" Command="Play"/>
+                    </MenuItem>
+                </Menu>
+                <Rectangle Width="20" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown" SnapsToDevicePixels="True">
+                    <Rectangle.Fill>
+                        <DrawingBrush TileMode="Tile" Viewbox="0 0 4 4" ViewboxUnits="Absolute" Viewport="0 0 4 4" ViewportUnits="Absolute">
+                            <DrawingBrush.Drawing>
+                                <GeometryDrawing Geometry="M 3,2 A 1,1 0 1 1 1,2 1,1 0 1 1 3,2 z" Brush="White" >
+                                    <GeometryDrawing.Pen>
+                                        <Pen Brush="Gray" Thickness="1" />
+                                    </GeometryDrawing.Pen>
+                                </GeometryDrawing>
+                            </DrawingBrush.Drawing>
+                        </DrawingBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Button Content="X"  Click="Button_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <ContentPresenter Margin="3,2" Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}">
+                            </ContentPresenter>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+        </Grid>
     </Canvas>
 </Window>
