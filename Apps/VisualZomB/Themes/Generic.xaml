@@ -39,7 +39,21 @@
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
+                        <Button Width="3" Height="{TemplateBinding ActualHeight}" VerticalAlignment="Stretch" Canvas.Right="-1" Canvas.Top="0" Name="PART_Resize_r" Cursor="SizeWE">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Rectangle Fill="Transparent"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
                         <Button Height="3" Width="{TemplateBinding ActualWidth}" HorizontalAlignment="Stretch" Canvas.Left="0" Canvas.Top="-1" Name="PART_Resize_t" Cursor="SizeNS">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Rectangle Fill="Transparent"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <Button Height="3" Width="{TemplateBinding ActualWidth}" HorizontalAlignment="Stretch" Canvas.Left="0" Canvas.Bottom="-1" Name="PART_Resize_b" Cursor="SizeNS">
                             <Button.Template>
                                 <ControlTemplate>
                                     <Rectangle Fill="Transparent"/>
@@ -60,6 +74,20 @@
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
+                        <Button Width="10" Height="10" Canvas.Right="-5" Opacity="0" Canvas.Top="-5" Name="PART_Resize_tr" Cursor="SizeNESW">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Rectangle Fill="Black"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <Button Width="10" Height="10" Canvas.Left="-5" Opacity="0" Canvas.Bottom="-5" Name="PART_Resize_bl" Cursor="SizeNESW">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Rectangle Fill="Black"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
                         <Border Canvas.Top="0" Width="200" Canvas.Right="-205" Name="part_propborder" Visibility="Hidden" Background="LightBlue" BorderBrush="Black" BorderThickness="1" SnapsToDevicePixels="True" CornerRadius="5" Padding="3">
                             <StackPanel Name="PART_props">
                             </StackPanel>
@@ -69,17 +97,23 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Opacity" Value="1" TargetName="PART_Resize"/>
                             <Setter Property="Opacity" Value="1" TargetName="PART_Resize_tl"/>
+                            <Setter Property="Opacity" Value="1" TargetName="PART_Resize_bl"/>
+                            <Setter Property="Opacity" Value="1" TargetName="PART_Resize_tr"/>
                             <Setter Property="Opacity" Value="0.5" TargetName="Part_border"/>
                         </Trigger>
                         <Trigger Property="IsKeyboardFocusWithin" Value="True">
                             <Setter Property="Opacity" Value="1" TargetName="PART_Resize"/>
                             <Setter Property="Opacity" Value="1" TargetName="PART_Resize_tl"/>
+                            <Setter Property="Opacity" Value="1" TargetName="PART_Resize_bl"/>
+                            <Setter Property="Opacity" Value="1" TargetName="PART_Resize_tr"/>
                             <Setter Property="Opacity" Value="0.5" TargetName="Part_border"/>
                             <Setter Property="Visibility" Value="Visible" TargetName="part_propborder"/>
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
                             <Setter Property="Opacity" Value="1" TargetName="PART_Resize"/>
                             <Setter Property="Opacity" Value="1" TargetName="PART_Resize_tl"/>
+                            <Setter Property="Opacity" Value="1" TargetName="PART_Resize_bl"/>
+                            <Setter Property="Opacity" Value="1" TargetName="PART_Resize_tr"/>
                             <Setter Property="Opacity" Value="0.5" TargetName="Part_border"/>
                             <Setter Property="Visibility" Value="Visible" TargetName="part_propborder"/>
                         </Trigger>

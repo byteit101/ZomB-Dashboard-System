@@ -34,7 +34,7 @@ namespace System451.Communication.Dashboard.ViZ
     [TemplatePart(Name = "PART_props")]
     public class SurfaceControl : Control
     {
-        Control sizer, tlsize, lsize, tsize;
+        Control sizer, tlsize, lsize, tsize, trsize, blsize, rsize, bsize;
         ContextMenu mnu;
         StackPanel prophld;
         SortedDictionary<string, List<PropertyElement>> proplist;
@@ -71,6 +71,10 @@ namespace System451.Communication.Dashboard.ViZ
             tlsize = base.GetTemplateChild("PART_Resize_tl") as Control;
             lsize = base.GetTemplateChild("PART_Resize_l") as Control;
             tsize = base.GetTemplateChild("PART_Resize_t") as Control;
+            trsize = base.GetTemplateChild("PART_Resize_tr") as Control;
+            blsize = base.GetTemplateChild("PART_Resize_bl") as Control;
+            rsize = base.GetTemplateChild("PART_Resize_r") as Control;
+            bsize = base.GetTemplateChild("PART_Resize_b") as Control;
             prophld = base.GetTemplateChild("PART_props") as StackPanel;
             mnu = base.GetTemplateChild("PART_ctxMenu") as ContextMenu;
             if (Control != null)
@@ -262,6 +266,22 @@ namespace System451.Communication.Dashboard.ViZ
             if (elm == tsize || elm.TemplatedParent == tsize)
             {
                 return Designer.CurrentDragMove.Y;
+            }
+            if (elm == trsize || elm.TemplatedParent == trsize)
+            {
+                return Designer.CurrentDragMove.Y | Designer.CurrentDragMove.Width;
+            }
+            if (elm == blsize || elm.TemplatedParent == blsize)
+            {
+                return Designer.CurrentDragMove.X | Designer.CurrentDragMove.Height;
+            }
+            if (elm == bsize || elm.TemplatedParent == bsize)
+            {
+                return Designer.CurrentDragMove.Height;
+            }
+            if (elm == rsize || elm.TemplatedParent == rsize)
+            {
+                return Designer.CurrentDragMove.Width;
             }
             return Designer.CurrentDragMove.None;
         }
