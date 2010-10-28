@@ -31,6 +31,21 @@
                             </ContextMenu>
                         </Canvas.ContextMenu>
                         <Border Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Name="Part_border" BorderThickness="2" BorderBrush="Blue" Opacity="0"></Border>
+
+                        <Button Width="3" Height="{TemplateBinding ActualHeight}" VerticalAlignment="Stretch" Canvas.Left="-1" Canvas.Top="0" Name="PART_Resize_l" Cursor="SizeWE">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Rectangle Fill="Transparent"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <Button Height="3" Width="{TemplateBinding ActualWidth}" HorizontalAlignment="Stretch" Canvas.Left="0" Canvas.Top="-1" Name="PART_Resize_t" Cursor="SizeNS">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Rectangle Fill="Transparent"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
                         <Button Width="10" Height="10" Canvas.Right="-5" Opacity="0" Canvas.Bottom="-5" Name="PART_Resize" Cursor="SizeNWSE">
                             <Button.Template>
                                 <ControlTemplate>

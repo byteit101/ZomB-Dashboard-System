@@ -269,8 +269,8 @@ namespace System451.Communication.Dashboard.ViZ
                         }
                         if (cdm == (CurrentDragMove.Height | CurrentDragMove.Width))
                             ShowSnaps(SnapGridDirections.Right | SnapGridDirections.Bottom, null, null, r => curObj.Width = r - SnapGridHelper.Left(curObj), b => curObj.Height = b - SnapGridHelper.Top(curObj));
-                        else if (cdm == (CurrentDragMove.X | CurrentDragMove.Y))
-                            ShowSnaps(SnapGridDirections.X | SnapGridDirections.Y, x => { sc.Width = Canvas.GetLeft(sc) + sc.Width - x; Canvas.SetLeft(sc, x); }, y => { sc.Height = Canvas.GetTop(sc) + sc.Height - y; Canvas.SetTop(sc, y); }, null, null);
+                        else if (cdm == (CurrentDragMove.X | CurrentDragMove.Y) || cdm == CurrentDragMove.X || cdm == CurrentDragMove.Y)
+                            ShowSnaps(((SnapGridDirections)cdm), x => { sc.Width = Canvas.GetLeft(sc) + sc.Width - x; Canvas.SetLeft(sc, x); }, y => { sc.Height = Canvas.GetTop(sc) + sc.Height - y; Canvas.SetTop(sc, y); }, null, null);
                     }
                     break;
                 case CurrentDrag.None:

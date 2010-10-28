@@ -34,7 +34,7 @@ namespace System451.Communication.Dashboard.ViZ
     [TemplatePart(Name = "PART_props")]
     public class SurfaceControl : Control
     {
-        Control sizer, tlsize;
+        Control sizer, tlsize, lsize, tsize;
         ContextMenu mnu;
         StackPanel prophld;
         SortedDictionary<string, List<PropertyElement>> proplist;
@@ -69,6 +69,8 @@ namespace System451.Communication.Dashboard.ViZ
             base.OnApplyTemplate();
             sizer = base.GetTemplateChild("PART_Resize") as Control;
             tlsize = base.GetTemplateChild("PART_Resize_tl") as Control;
+            lsize = base.GetTemplateChild("PART_Resize_l") as Control;
+            tsize = base.GetTemplateChild("PART_Resize_t") as Control;
             prophld = base.GetTemplateChild("PART_props") as StackPanel;
             mnu = base.GetTemplateChild("PART_ctxMenu") as ContextMenu;
             if (Control != null)
@@ -252,6 +254,14 @@ namespace System451.Communication.Dashboard.ViZ
             if (elm == tlsize || elm.TemplatedParent == tlsize)
             {
                 return Designer.CurrentDragMove.X | Designer.CurrentDragMove.Y;
+            }
+            if (elm == lsize || elm.TemplatedParent == lsize)
+            {
+                return Designer.CurrentDragMove.X;
+            }
+            if (elm == tsize || elm.TemplatedParent == tsize)
+            {
+                return Designer.CurrentDragMove.Y;
             }
             return Designer.CurrentDragMove.None;
         }
