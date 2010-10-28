@@ -31,12 +31,10 @@ namespace System451.Communication.Dashboard.ViZ
 {
     [TemplatePart(Name = "PART_Resize")]
     [TemplatePart(Name = "PART_ctxMenu")]
-    [TemplatePart(Name = "PART_props")]
     public class SurfaceControl : Control
     {
         Control sizer, tlsize, lsize, tsize, trsize, blsize, rsize, bsize;
         ContextMenu mnu;
-        StackPanel prophld;
         SortedDictionary<string, List<PropertyElement>> proplist;
         Collection<SnapLine> snaps = new Collection<SnapLine>();
 
@@ -75,15 +73,14 @@ namespace System451.Communication.Dashboard.ViZ
             blsize = base.GetTemplateChild("PART_Resize_bl") as Control;
             rsize = base.GetTemplateChild("PART_Resize_r") as Control;
             bsize = base.GetTemplateChild("PART_Resize_b") as Control;
-            prophld = base.GetTemplateChild("PART_props") as StackPanel;
             mnu = base.GetTemplateChild("PART_ctxMenu") as ContextMenu;
             if (Control != null)
             {
                 if (Double.IsNaN(Control.Width) || Double.IsNaN(Control.Height))
                 {
-                    sizer.Visibility = Visibility.Collapsed;
+                    tlsize.Visibility = lsize.Visibility = tsize.Visibility = trsize.Visibility
+                        = blsize.Visibility = rsize.Visibility = bsize.Visibility = sizer.Visibility = Visibility.Collapsed;
                 }
-                loadCtx(Control);
             }
         }
 
@@ -137,7 +134,6 @@ namespace System451.Communication.Dashboard.ViZ
 
         static void ControlChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            (o as SurfaceControl).loadCtx(e.NewValue);
             (o as SurfaceControl).SetSize();
         }
 
@@ -155,7 +151,7 @@ namespace System451.Communication.Dashboard.ViZ
             }
         }
 
-        private void loadCtx(object ctrl)
+        private void loadCtx(Panel prophld, object ctrl)
         {
             if (proplist == null)
                 LoadPropList(ctrl);
@@ -284,6 +280,11 @@ namespace System451.Communication.Dashboard.ViZ
                 return Designer.CurrentDragMove.Width;
             }
             return Designer.CurrentDragMove.None;
+        }
+
+        public void PopulateProperties(Panel propHolder)
+        {
+            loadCtx(propHolder, Control);
         }
     }
 }

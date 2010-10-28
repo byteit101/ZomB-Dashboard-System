@@ -60,7 +60,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         Toolbox tbx;
         ListBox listBox1;
-        bool topped = false;
+        Panel propHolder;
 
         public Designer()
         {
@@ -70,16 +70,9 @@ namespace System451.Communication.Dashboard.ViZ
             listBox1.PreviewMouseLeftButtonDown+=listBox1_PreviewMouseLeftButtonDown;
             listBox1.PreviewMouseUp+=listBox1_PreviewMouseUp;
             listBox1.PreviewMouseMove+=listBox1_PreviewMouseMove;
-            this.Activated += new EventHandler(Designer_Initialized);
-        }
-
-        void Designer_Initialized(object sender, EventArgs e)
-        {
-            if (!topped)
-            {
-                topped = true;
-                this.Top = 5;
-            }
+            propHolder = tbx.PropertyBox;
+            this.Top = (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height <= 600) ? 0 : 10;
+            this.Left = (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width / 2.0) - this.Width / 2.0;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -585,6 +578,8 @@ namespace System451.Communication.Dashboard.ViZ
         {
             if (curObj != null)
             {
+                propHolder.Children.Clear();
+                curObj.PopulateProperties(propHolder);
             }
         }
 
