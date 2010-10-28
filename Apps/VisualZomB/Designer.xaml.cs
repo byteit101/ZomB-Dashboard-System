@@ -45,10 +45,16 @@ namespace System451.Communication.Dashboard.ViZ
         {
             None, Move, Resize
         }
-        Point dndopoint, opoint;
+        [Flags]
+        public enum CurrentDragMove
+        {
+            None = 0x0, X = 0x1, Y = 0x2, Width = 0x4, Height = 0x8
+        }
+        Point dndopoint, opoint, oxpoint;
         object origSrc;
         bool lbdragging = false;
         CurrentDrag cd = CurrentDrag.None;
+        CurrentDragMove cdm = CurrentDragMove.None;
 
         SurfaceControl curObj;
 
@@ -247,9 +253,24 @@ namespace System451.Communication.Dashboard.ViZ
                     {
                         Vector mv = e.GetPosition(ZDash) - dndopoint;
                         var sc = (origSrc as SurfaceControl);
+                        if (cdm.Flagged(CurrentDragMove.Width))
                         sc.Width = Math.Min(Math.Max(0, opoint.X + mv.X), ZDash.Width - Canvas.GetLeft((UIElement)origSrc));
+                        if (cdm.Flagged(CurrentDragMove.Height))
                         sc.Height = Math.Min(Math.Max(0, opoint.Y + mv.Y), ZDash.Height - Canvas.GetTop((UIElement)origSrc)); ;
-                        ShowSnaps(SnapGridDirections.Right | SnapGridDirections.Bottom, null, null, r => curObj.Width = r - SnapGridHelper.Left(curObj), b => curObj.Height = b - SnapGridHelper.Top(curObj));
+                        if (cdm.Flagged(CurrentDragMove.X))
+                        {
+                            Canvas.SetLeft(sc, Math.Min(Math.Max(0, oxpoint.X + mv.X), Canvas.GetLeft(sc) + sc.Width));
+                            sc.Width = Math.Min(Math.Max(0, opoint.X - mv.X), ZDash.Width - Canvas.GetLeft((UIElement)origSrc));
+                        }
+                        if (cdm.Flagged(CurrentDragMove.Y))
+                        {
+                            Canvas.SetTop(sc, Math.Min(Math.Max(0, oxpoint.Y + mv.Y), Canvas.GetTop(sc) + sc.Height));
+                            sc.Height = Math.Min(Math.Max(0, opoint.Y - mv.Y), ZDash.Height - Canvas.GetTop((UIElement)origSrc)); ;
+                        }
+                        if (cdm == (CurrentDragMove.Height | CurrentDragMove.Width))
+                            ShowSnaps(SnapGridDirections.Right | SnapGridDirections.Bottom, null, null, r => curObj.Width = r - SnapGridHelper.Left(curObj), b => curObj.Height = b - SnapGridHelper.Top(curObj));
+                        else if (cdm == (CurrentDragMove.X | CurrentDragMove.Y))
+                            ShowSnaps(SnapGridDirections.X | SnapGridDirections.Y, x => { sc.Width = Canvas.GetLeft(sc) + sc.Width - x; Canvas.SetLeft(sc, x); }, y => { sc.Height = Canvas.GetTop(sc) + sc.Height - y; Canvas.SetTop(sc, y); }, null, null);
                     }
                     break;
                 case CurrentDrag.None:
@@ -260,17 +281,19 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void ZDash_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ZDash.CaptureMouse();
             Deselect();
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                if (e.OriginalSource is Button || VisualTreeHelper.GetParent((DependencyObject)e.OriginalSource) is Button || VisualTreeHelper.GetParent(VisualTreeHelper.GetParent((DependencyObject)e.OriginalSource)) is Button) //resize, TODO: add PART_xxx detection
+                if (e.OriginalSource is Button || ((FrameworkElement)e.OriginalSource).TemplatedParent is Button) //resize, TODO: add PART_xxx detection
                 {
                     cd = CurrentDrag.Resize;
                     dndopoint = e.GetPosition(ZDash);
                     origSrc = FindAnchestor<SurfaceControl>((DependencyObject)e.OriginalSource);
+                    cdm = (origSrc as SurfaceControl).GetResizeDirection(e.OriginalSource as FrameworkElement);
                     opoint = new Point((origSrc as FrameworkElement).Width, (origSrc as FrameworkElement).Height);
+                    oxpoint = new Point(Canvas.GetLeft(origSrc as FrameworkElement), Canvas.GetTop(origSrc as FrameworkElement));
                     Select(origSrc as SurfaceControl);
+                    ZDash.CaptureMouse();
                 }
                 else if (e.OriginalSource is SurfaceControl || VisualTreeHelper.GetParent((DependencyObject)e.OriginalSource) is SurfaceControl) //resize, TODO: add PART_xxx detection
                 {
@@ -279,6 +302,7 @@ namespace System451.Communication.Dashboard.ViZ
                     origSrc = FindAnchestor<SurfaceControl>((DependencyObject)e.OriginalSource);
                     opoint = new Point(Canvas.GetLeft((UIElement)origSrc), Canvas.GetTop((UIElement)origSrc));
                     Select(origSrc as SurfaceControl);
+                    ZDash.CaptureMouse();
                 }
             }
         }
@@ -720,5 +744,12 @@ namespace System451.Communication.Dashboard.ViZ
         }
 
         #endregion
+    }
+    public static class ExtensionsBit
+    {
+        public static bool Flagged(this Designer.CurrentDragMove ths, Designer.CurrentDragMove value)
+        {
+            return (ths & value) == value;
+        }
     }
 }
