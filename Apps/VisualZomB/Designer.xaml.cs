@@ -742,6 +742,11 @@ namespace System451.Communication.Dashboard.ViZ
         {
             this.DragMove();
         }
+
+        private void CommandBinding_Deploy_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            ZomBBuilder.BuildZomBString(Export(), @"C:\Program Files\FRC Dashboard\Dashboard.exe");
+        }
     }
     public static class ExtensionsBit
     {

@@ -7,10 +7,12 @@
     <Window.CommandBindings>
         <CommandBinding Command="Play" Executed="CommandBinding_Play_Executed" />
         <CommandBinding Command="Save" Executed="CommandBinding_Save_Executed" />
+        <CommandBinding Command="SaveAs" Executed="CommandBinding_Deploy_Executed" />
         <CommandBinding Command="MoveLeft" Executed="CommandBinding_MoveTop_Executed" />
         <CommandBinding Command="MoveUp" Executed="CommandBinding_MoveUp_Executed" />
         <CommandBinding Command="MoveDown" Executed="CommandBinding_MoveDown_Executed" />
         <CommandBinding Command="MoveRight" Executed="CommandBinding_MoveBottom_Executed" />
+        <CommandBinding Command="Delete" Executed="CommandBinding_Delete_Executed" />
         <CommandBinding Command="Delete" Executed="CommandBinding_Delete_Executed" />
     </Window.CommandBindings>
     <Window.InputBindings>
@@ -69,6 +71,7 @@
                             </ControlTemplate>
                         </MenuItem.Template>
                         <MenuItem Header="Save" Command="Save"/>
+                        <MenuItem Header="Deploy" Command="SaveAs"/>
                         <MenuItem Header="Run" Command="Play"/>
                     </MenuItem>
                 </Menu>
