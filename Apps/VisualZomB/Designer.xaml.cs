@@ -745,7 +745,12 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void CommandBinding_Deploy_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            ZomBBuilder.BuildZomBString(Export(), @"C:\Program Files\FRC Dashboard\Dashboard.exe");
+            if (ZomBBuilder.BuildZomBString(Export(), @"C:\Program Files\FRC Dashboard\Dashboard.exe"))
+            {
+                MessageBox.Show(@"Success! Dashboard.exe written to C:\Program Files\FRC Dashboard\Dashboard.exe");
+            }
+            else
+                MessageBox.Show("Error building exe");
         }
     }
     public static class ExtensionsBit

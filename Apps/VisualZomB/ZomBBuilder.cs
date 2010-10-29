@@ -13,11 +13,13 @@ namespace System451.Communication.Dashboard.ViZ
 {
     public static class ZomBBuilder
     {
-        public static void BuildZomBString(string zaml, string path)
+        public static bool BuildZomBString(string zaml, string path)
         {
+            File.Copy(Assembly.LoadWithPartialName("ZomB").Location, Path.GetDirectoryName(path) + "\\ZomB.dll", true);
+            if (!File.Exists(path))
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
             var cs = new CSharpCodeProvider().CreateCompiler();
             CompilerParameters pam = new CompilerParameters();
-            File.Copy(Assembly.LoadWithPartialName("ZomB").Location, Path.GetDirectoryName(path) + "\\ZomB.dll", true);
             pam.ReferencedAssemblies.Add("System.dll");
             pam.ReferencedAssemblies.Add(Assembly.LoadWithPartialName("PresentationCore").Location);
             pam.ReferencedAssemblies.Add(Assembly.LoadWithPartialName("PresentationFramework").Location);
@@ -44,6 +46,9 @@ namespace System451.Communication.Dashboard.ViZ
             var res = cs.CompileAssemblyFromSource(pam, src);
             if (res.Errors.HasErrors)
                 System.Windows.Forms.MessageBox.Show("Generation failed: " + res.Errors.ToString());
+            else
+                return true;
+            return false;
         }
     }
 }
