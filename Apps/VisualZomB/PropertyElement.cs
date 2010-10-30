@@ -162,6 +162,13 @@ namespace System451.Communication.Dashboard.ViZ
                         return;
                     }
                 }
+                if (Type == typeof(double))
+                    value = double.Parse(value.ToString());
+                if (Type == typeof(int))
+                    value = int.Parse(value.ToString());
+                if (Type.IsEnum)
+                    value = Enum.Parse(Type, value.ToString());
+
                 Property.SetValue(Object, value, null);
             }
         }
@@ -240,10 +247,17 @@ namespace System451.Communication.Dashboard.ViZ
                 else if (Type.IsEnum)
                 {
                     itm.Children.Add(new ComboBox());
+                    (itm.Children[1] as ComboBox).Width = 90;
                     foreach (var item in Enum.GetNames(Type))
                     {
                         (itm.Children[1] as ComboBox).Items.Add(item);
+                        if (item == Value.ToString())
+                        {
+                            (itm.Children[1] as ComboBox).SelectedValue = item;
+                        }
                     }
+                    (itm.Children[1] as ComboBox).SelectionChanged+=delegate(object sender, SelectionChangedEventArgs e) { try { Value = (sender as ComboBox).SelectedValue; } catch { } };
+            
                 }
                 else if (Type == typeof(Brush))
                 {

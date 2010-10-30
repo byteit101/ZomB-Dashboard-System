@@ -81,7 +81,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         static void TeamUpdated(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             CameraView am = (o as CameraView);
-            am.videoSource = new WPILibTcpVideoSource((int)e.NewValue);
+            am.videoSource = ((am.VideoSource == DefaultVideoSource.WPILibTcpStream) ? (IDashboardVideoDataSource)new WPILibTcpVideoSource((int)e.NewValue) : ((am.VideoSource == DefaultVideoSource.Webcam) ? (IDashboardVideoDataSource)new WebCamVideoSource() : null));
             am.videoSource.NewImageRecieved += new NewImageDataRecievedEventHandler(am.videoSource_NewImageRecieved);
             am.videoSource.Start();
         }
@@ -120,5 +120,17 @@ namespace System451.Communication.Dashboard.WPF.Controls
         // Using a DependencyProperty as the backing store for ShowReset.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowResetProperty =
             DependencyProperty.Register("ShowReset", typeof(bool), typeof(CameraView), new UIPropertyMetadata(true, ResetVischanged));
+
+
+        [Design.ZomBDesignable(DisplayName = "Source"), Category("Behavior"), Description("What are we looking at?")]
+        public DefaultVideoSource VideoSource
+        {
+            get { return (DefaultVideoSource)GetValue(VideoSourceProperty); }
+            set { SetValue(VideoSourceProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for VideoSource.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty VideoSourceProperty =
+            DependencyProperty.Register("VideoSource", typeof(DefaultVideoSource), typeof(CameraView), new UIPropertyMetadata(DefaultVideoSource.WPILibTcpStream, TeamUpdated));
     }
 }
