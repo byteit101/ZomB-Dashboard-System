@@ -15,15 +15,15 @@ namespace System451.Communication.Dashboard.ViZ
     {
         public static bool BuildZomBString(string zaml, string path)
         {
-            File.Copy(Assembly.LoadWithPartialName("ZomB").Location, Path.GetDirectoryName(path) + "\\ZomB.dll", true);
+            File.Copy(Assembly.Load("ZomB").Location, Path.GetDirectoryName(path) + "\\ZomB.dll", true);
             if (!File.Exists(path))
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
-            var cs = new CSharpCodeProvider().CreateCompiler();
+            var cs = CodeDomProvider.CreateProvider("CSharp");
             CompilerParameters pam = new CompilerParameters();
             pam.ReferencedAssemblies.Add("System.dll");
-            pam.ReferencedAssemblies.Add(Assembly.LoadWithPartialName("PresentationCore").Location);
-            pam.ReferencedAssemblies.Add(Assembly.LoadWithPartialName("PresentationFramework").Location);
-            pam.ReferencedAssemblies.Add(Assembly.LoadWithPartialName("WindowsBase").Location);
+            pam.ReferencedAssemblies.Add(Assembly.Load("PresentationCore, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35").Location);
+            pam.ReferencedAssemblies.Add(Assembly.Load("PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35").Location);
+            pam.ReferencedAssemblies.Add(Assembly.Load("WindowsBase, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35").Location);
             pam.ReferencedAssemblies.Add(Path.GetDirectoryName(path) + "\\ZomB.dll");
             pam.OutputAssembly = path;
             pam.GenerateExecutable = true;
