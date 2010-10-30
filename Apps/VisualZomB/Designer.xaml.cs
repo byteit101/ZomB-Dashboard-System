@@ -757,14 +757,17 @@ namespace System451.Communication.Dashboard.ViZ
                 sb.Append(Canvas.GetTop(item as UIElement));
                 sb.Append("\" Canvas.Left=\"");
                 sb.Append(Canvas.GetLeft(item as UIElement));
-                foreach (KeyValuePair<string, string> cprops in ((SurfaceControl)item).GetProps())
+                foreach (KeyValuePair<string, PropertyElement> cprops in ((SurfaceControl)item).GetProps())
                 {
-                    if (cprops.Value == "")
+                    if ((cprops.Value.Designer != null && cprops.Value.Designer.IsDefaultValue()) || cprops.Value.Value.ToString() == "" || (cprops.Value.Designer != null && cprops.Value.Designer.GetValue() == ""))
                         continue;
                     sb.Append("\" ");
                     sb.Append(cprops.Key);
                     sb.Append("=\"");
-                    sb.Append(cprops.Value);
+                    if (cprops.Value.Designer != null)
+                        sb.Append(cprops.Value.Designer.GetValue());
+                    else
+                        sb.Append(cprops.Value.Value.ToString());
                 }
                 sb.Append("\" />");
             }

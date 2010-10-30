@@ -8,12 +8,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Globalization;
+using System451.Communication.Dashboard.ViZ.Design;
+using System.ComponentModel;
 
 namespace System451.Communication.Dashboard.ViZ
 {
-    public class BrushDesigner : IDesigner
+    public class BrushDesigner : DesignerBase
     {
-        public FrameworkElement GetProperyField(object obj, PropertyInfo property)
+        private ComboBox comb;
+        public override FrameworkElement GetProperyField()
         {
             StackPanel sp = new StackPanel();
             sp.Orientation = Orientation.Horizontal;
@@ -21,7 +24,7 @@ namespace System451.Communication.Dashboard.ViZ
             cb.Width = 90;
             cb.IsTextSearchEnabled = true;
             cb.IsEditable = true;
-            object cvalue = property.GetValue(obj, null);
+            object cvalue = Property.GetValue(Object, null);
             foreach (var item in typeof(Brushes).GetProperties())
             {
                 cb.Items.Add(item.Name);
@@ -35,14 +38,26 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 cb.Text = cvalue.ToString();
             }
-            cb.AddHandler(TextBox.TextChangedEvent, new TextChangedEventHandler(delegate { try { property.SetValue(obj, new BrushConverter().ConvertFrom(null, CultureInfo.CurrentCulture, cb.Text), null); } catch { } }));
+            cb.AddHandler(TextBox.TextChangedEvent, new TextChangedEventHandler(delegate { try { Property.SetValue(Object, new BrushConverter().ConvertFrom(null, CultureInfo.CurrentCulture, cb.Text), null); } catch { } }));
+            comb = cb;
             sp.Children.Add(cb);
             return sp;
         }
+
+        public override bool IsExpanded()
+        {
+            return false;
+        }
+
+        public override string GetValue()
+        {
+            return comb.Text;
+        }
     }
-    public class ColorDesigner : IDesigner
+    public class ColorDesigner : DesignerBase
     {
-        public FrameworkElement GetProperyField(object obj, PropertyInfo property)
+        ComboBox comb;
+        public override FrameworkElement GetProperyField()
         {
             StackPanel sp = new StackPanel();
             sp.Orientation = Orientation.Horizontal;
@@ -50,7 +65,7 @@ namespace System451.Communication.Dashboard.ViZ
             cb.Width = 90;
             cb.IsTextSearchEnabled = true;
             cb.IsEditable = true;
-            object cvalue = property.GetValue(obj, null);
+            object cvalue = Property.GetValue(Object, null);
             foreach (var item in typeof(Colors).GetProperties())
             {
                 cb.Items.Add(item.Name);
@@ -64,9 +79,20 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 cb.Text = cvalue.ToString();
             }
-            cb.AddHandler(TextBox.TextChangedEvent, new TextChangedEventHandler(delegate { try { property.SetValue(obj, new ColorConverter().ConvertFrom(null, CultureInfo.CurrentCulture, cb.Text), null); } catch { } }));
+            cb.AddHandler(TextBox.TextChangedEvent, new TextChangedEventHandler(delegate { try { Property.SetValue(Object, new ColorConverter().ConvertFrom(null, CultureInfo.CurrentCulture, cb.Text), null); } catch { } }));
+            comb = cb;
             sp.Children.Add(cb);
             return sp;
+        }
+
+        public override bool IsExpanded()
+        {
+            return false;
+        }
+
+        public override string GetValue()
+        {
+            return comb.Text;
         }
     }
 }

@@ -9,6 +9,10 @@ namespace System451.Communication.Dashboard.WPF.Design
 {
     public interface IDesigner
     {
-        FrameworkElement GetProperyField(object obj, PropertyInfo property);
+        void Initialize(object obj, PropertyInfo property);
+        FrameworkElement GetProperyField();
+        bool IsDefaultValue();
+        bool IsExpanded();
+        string GetValue();
     }
 }

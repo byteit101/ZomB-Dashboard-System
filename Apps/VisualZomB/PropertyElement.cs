@@ -138,6 +138,11 @@ namespace System451.Communication.Dashboard.ViZ
         }
 
         /// <summary>
+        /// Gets the type Designer
+        /// </summary>
+        public IDesigner Designer { get; private set; }
+
+        /// <summary>
         /// Gets or sets the value of the Property
         /// </summary>
         public object Value
@@ -261,11 +266,11 @@ namespace System451.Communication.Dashboard.ViZ
                 }
                 else if (Type == typeof(Brush))
                 {
-                    itm.Children.Add(new BrushDesigner().GetProperyField(Object, Property));
+                    itm.Children.Add(GetDesignerField(typeof(BrushDesigner)));
                 }
                 else if (Type == typeof(Color))
                 {
-                    itm.Children.Add(new ColorDesigner().GetProperyField(Object, Property));
+                    itm.Children.Add(GetDesignerField(typeof(ColorDesigner)));
                 }
                 else
                 {
@@ -286,6 +291,27 @@ namespace System451.Communication.Dashboard.ViZ
             }
             else
                 throw new NullReferenceException("Object and Property must not be null");
+        }
+
+        private FrameworkElement GetDesignerField(Type type)
+        {
+            if (Designer == null)
+            {
+                var o = Activator.CreateInstance(type);
+                if (o is IDesigner)
+                {
+                    IDesigner d = o as IDesigner;
+                    d.Initialize(Object, Property);
+                    Designer = d;
+                }
+            }
+            if (Designer != null)
+            {
+                var r = Designer.GetProperyField();
+                r.Tag = Designer;
+                return r;
+            }
+            return null;
         }
 
         private object GetRealProperty()

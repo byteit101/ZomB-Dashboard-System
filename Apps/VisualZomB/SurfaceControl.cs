@@ -232,14 +232,14 @@ namespace System451.Communication.Dashboard.ViZ
             }
         }
 
-        public Dictionary<string, string> GetProps()
+        public Dictionary<string, PropertyElement> GetProps()
         {
-            var ret = new Dictionary<string, string>();
+            var ret = new Dictionary<string, PropertyElement>();
             foreach (var item in proplist)
             {
                 foreach (var p in item.Value)
                 {
-                    ret.Add(p.Property.Name, p.Value.ToString());
+                    ret.Add(p.Property.Name, p);
                 }
             }
             return ret;
