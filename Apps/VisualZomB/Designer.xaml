@@ -7,6 +7,7 @@
     <Window.CommandBindings>
         <CommandBinding Command="Play" Executed="CommandBinding_Play_Executed" />
         <CommandBinding Command="Save" Executed="CommandBinding_Save_Executed" />
+        <CommandBinding Command="Open" Executed="CommandBinding_Open_Executed" />
         <CommandBinding Command="SaveAs" Executed="CommandBinding_Deploy_Executed" />
         <CommandBinding Command="MoveLeft" Executed="CommandBinding_MoveTop_Executed" />
         <CommandBinding Command="MoveUp" Executed="CommandBinding_MoveUp_Executed" />
@@ -70,6 +71,7 @@
                                 </Grid>
                             </ControlTemplate>
                         </MenuItem.Template>
+                        <MenuItem Header="Open" Command="Open"/>
                         <MenuItem Header="Save" Command="Save"/>
                         <MenuItem Header="Deploy" Command="SaveAs"/>
                         <MenuItem Header="Run" Command="Play"/>

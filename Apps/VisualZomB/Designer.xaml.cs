@@ -189,6 +189,16 @@ namespace System451.Communication.Dashboard.ViZ
         private void AddControl(ZomBControlAttribute info, Point point)
         {
             Control fe = Reflector.Inflate(info.Type) as Control;
+            AddControl(fe,point);
+        }
+
+        private void AddControl(Control ctrl)
+        {
+            AddControl(ctrl, new Point(Canvas.GetLeft(ctrl), Canvas.GetTop(ctrl)));
+        }
+
+        private void AddControl(Control fe, Point point)
+        {
             var sc = new SurfaceControl();
             sc.Control = fe;
             sc.Width = fe.Width;
@@ -202,7 +212,6 @@ namespace System451.Communication.Dashboard.ViZ
                 sc.Height = 25;//fe.ActualHeight;
             }
             ZDash.Children.Add(sc);
-            //hider.Children.Add(fe);
             Canvas.SetTop(sc, point.Y);
             Canvas.SetLeft(sc, point.X);
             Select(sc);
@@ -686,6 +695,34 @@ namespace System451.Communication.Dashboard.ViZ
         private void CommandBinding_Save_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             SaveApp();
+        }
+
+        private void CommandBinding_Open_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dlg = new System.Windows.Forms.OpenFileDialog();
+            dlg.DefaultExt = ".zaml";
+            dlg.SupportMultiDottedExtensions = true;
+            dlg.Filter = "ZomB App Markup Files (*.zaml)|*.zaml;*.xaml|All Files|*.*";
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                Canvas cvs = XamlReader.Load(dlg.OpenFile()) as Canvas;
+                if (cvs == null)
+                    return;
+                List<Control> lc = new List<Control>(cvs.Children.Count);
+                foreach (UIElement item in cvs.Children)
+                {
+                    if (item is IZomBControl)
+                    {
+                        lc.Add((Control)item);
+                    }
+                }
+                ZDash.Children.Clear();
+                foreach (var item in lc)
+                {
+                    cvs.Children.Remove(item);
+                    AddControl(item);
+                }
+            }
         }
 
         private void SaveApp()
