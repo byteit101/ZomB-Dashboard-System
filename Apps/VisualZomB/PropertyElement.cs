@@ -249,6 +249,10 @@ namespace System451.Communication.Dashboard.ViZ
                 {
                     itm.Children.Add(new BrushDesigner().GetProperyField(Object, Property));
                 }
+                else if (Type == typeof(Color))
+                {
+                    itm.Children.Add(new ColorDesigner().GetProperyField(Object, Property));
+                }
                 else
                 {
                     itm.Children.Add(new TextBox());
