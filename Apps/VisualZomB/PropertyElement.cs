@@ -280,6 +280,7 @@ namespace System451.Communication.Dashboard.ViZ
 
                 }
                 itm.Tag = this;
+                itm.ToolTip = Description;
                 itm.Margin = new Thickness(1);
                 return itm;
             }
