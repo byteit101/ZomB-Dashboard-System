@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Markup;
 using System.Globalization;
+using System.Windows.Media;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -207,57 +208,46 @@ namespace System451.Communication.Dashboard.ViZ
                 itm.Orientation = Orientation.Horizontal;
                 itm.Children.Add(new TextBlock());
                 (itm.Children[0] as TextBlock).Text = Name + ": ";
-                if (Type.IsValueType)
+                if (Type == typeof(bool))
                 {
-                    if (Type == typeof(bool))
+                    itm.Children.Add(new CheckBox());
+                    (itm.Children[1] as CheckBox).IsChecked = (bool)Value;
+                    (itm.Children[1] as CheckBox).Checked += delegate { Value = true; };
+                    (itm.Children[1] as CheckBox).Unchecked += delegate { Value = false; };
+                    (itm.Children[1] as CheckBox).Focusable = false;
+                }
+                else if (Type == typeof(int) || Type == typeof(double))
+                {
+                    //TODO: better support
+                    itm.Children.Add(new TextBox());
+                    (itm.Children[1] as TextBox).Width = 50.0;
+                    if (Dynamic)
                     {
-                        itm.Children.Add(new CheckBox());
-                        (itm.Children[1] as CheckBox).IsChecked = (bool)Value;
-                        (itm.Children[1] as CheckBox).Checked += delegate { Value = true; };
-                        (itm.Children[1] as CheckBox).Unchecked += delegate { Value = false; };
-                        (itm.Children[1] as CheckBox).Focusable = false;
-                    }
-                    else if (Type == typeof(int) || Type == typeof(double))
-                    {
-                        //TODO: better support
-                        itm.Children.Add(new TextBox());
-                        (itm.Children[1] as TextBox).Width = 50.0;
-                        if (Dynamic)
-                        {
-                            Binding bind = new Binding();
-                            bind.Mode = BindingMode.TwoWay;
-                            bind.Source = Object;
-                            bind.Path = new PropertyPath(GetRealProperty());
-                            bind.Converter = new StringValueConverter();
-                            (itm.Children[1] as TextBox).SetBinding(TextBox.TextProperty, bind);
-                        }
-                        else
-                        {
-                            (itm.Children[1] as TextBox).Text = Value.ToString();
-                            (itm.Children[1] as TextBox).TextChanged += delegate(object sender, TextChangedEventArgs e) { Value = (sender as TextBox).Text; };
-
-                        }
-                    }
-                    else if (Type.IsEnum)
-                    {
-                        itm.Children.Add(new ComboBox());
-                        foreach (var item in Enum.GetNames(Type))
-                        {
-                            (itm.Children[1] as ComboBox).Items.Add(item);
-                        }
+                        Binding bind = new Binding();
+                        bind.Mode = BindingMode.TwoWay;
+                        bind.Source = Object;
+                        bind.Path = new PropertyPath(GetRealProperty());
+                        bind.Converter = new StringValueConverter();
+                        (itm.Children[1] as TextBox).SetBinding(TextBox.TextProperty, bind);
                     }
                     else
                     {
-                        itm.Children.Add(new TextBox());
-                        (itm.Children[1] as TextBox).Width = 100.0;
-                        try
-                        {
-                            (itm.Children[1] as TextBox).Text = Value.ToString();
-                        }
-                        catch { }//Null value
+                        (itm.Children[1] as TextBox).Text = Value.ToString();
                         (itm.Children[1] as TextBox).TextChanged += delegate(object sender, TextChangedEventArgs e) { Value = (sender as TextBox).Text; };
 
                     }
+                }
+                else if (Type.IsEnum)
+                {
+                    itm.Children.Add(new ComboBox());
+                    foreach (var item in Enum.GetNames(Type))
+                    {
+                        (itm.Children[1] as ComboBox).Items.Add(item);
+                    }
+                }
+                else if (Type == typeof(Brush))
+                {
+                    itm.Children.Add(new BrushDesigner().GetProperyField(Object, Property));
                 }
                 else
                 {
@@ -269,7 +259,7 @@ namespace System451.Communication.Dashboard.ViZ
                     }
                     catch { }//Null value
                     (itm.Children[1] as TextBox).TextChanged += delegate(object sender, TextChangedEventArgs e) { Value = (sender as TextBox).Text; };
-                        
+
                 }
                 itm.Tag = this;
                 itm.Margin = new Thickness(1);

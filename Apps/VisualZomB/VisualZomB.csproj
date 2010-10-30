@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CategoryComparer.cs" />
+    <Compile Include="ColorDesigner.cs" />
     <Compile Include="DropShadowChrome.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
