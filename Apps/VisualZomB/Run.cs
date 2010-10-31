@@ -18,7 +18,7 @@
 using System.IO;
 using System.Text;
 using System.Windows.Markup;
-using System451.Communication.Dashboard.WPF;
+using System451.Communication.Dashboard.WPF.Controls;
 
 namespace System451.Communication.Dashboard.ViZ
 {

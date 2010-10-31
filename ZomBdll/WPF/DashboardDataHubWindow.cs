@@ -21,8 +21,9 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
+using System.Windows.Media;
 
-namespace System451.Communication.Dashboard.WPF
+namespace System451.Communication.Dashboard.WPF.Controls
 {
     public class DashboardDataHubWindow : Window
     {
@@ -65,6 +66,7 @@ namespace System451.Communication.Dashboard.WPF
 
             this.Loaded += delegate
             {
+                this.InvalidPacketAction = (InvalidPacketActions)(Content as DependencyObject).GetValue(InvalidPacketActionProperty);
                 if (!DesignerProperties.GetIsInDesignMode(this))
                     ReloadControls();
             };
@@ -208,6 +210,26 @@ namespace System451.Communication.Dashboard.WPF
             {
                 dashboardDataHub1.InvalidPacketAction = value;
             }
+        }
+
+        public static InvalidPacketActions GetInvalidPacketAction(DependencyObject obj)
+        {
+            return (InvalidPacketActions)obj.GetValue(InvalidPacketActionProperty);
+        }
+
+        public static void SetInvalidPacketAction(DependencyObject obj, InvalidPacketActions value)
+        {
+            obj.SetValue(InvalidPacketActionProperty, value);
+        }
+
+        // Using a DependencyProperty as the backing store for InvalidPacketAction.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty InvalidPacketActionProperty =
+            DependencyProperty.RegisterAttached("InvalidPacketAction", typeof(InvalidPacketActions), typeof(DashboardDataHubWindow), new UIPropertyMetadata(InvalidPacketActionChanged));
+
+        //Ultimate hack!
+        private static void InvalidPacketActionChanged(DependencyObject dpo, DependencyPropertyChangedEventArgs e)
+        {
+            dpo.SetValue(InvalidPacketActionProperty, e.NewValue);
         }
 
         private void DashboardDataHubForm_Load(object sender, EventArgs e)

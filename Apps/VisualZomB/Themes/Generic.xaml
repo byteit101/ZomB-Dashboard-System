@@ -97,13 +97,6 @@
                             <Setter Property="Opacity" Value="1" TargetName="PART_Resize_tr"/>
                             <Setter Property="Opacity" Value="0.5" TargetName="Part_border"/>
                         </Trigger>
-                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                            <Setter Property="Opacity" Value="1" TargetName="PART_Resize"/>
-                            <Setter Property="Opacity" Value="1" TargetName="PART_Resize_tl"/>
-                            <Setter Property="Opacity" Value="1" TargetName="PART_Resize_bl"/>
-                            <Setter Property="Opacity" Value="1" TargetName="PART_Resize_tr"/>
-                            <Setter Property="Opacity" Value="0.5" TargetName="Part_border"/>
-                        </Trigger>
                         <Trigger Property="IsFocused" Value="True">
                             <Setter Property="Opacity" Value="1" TargetName="PART_Resize"/>
                             <Setter Property="Opacity" Value="1" TargetName="PART_Resize_tl"/>

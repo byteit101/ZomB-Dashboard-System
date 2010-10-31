@@ -56,6 +56,7 @@ namespace System451.Communication.Dashboard.ViZ
         bool lbdragging = false;
         CurrentDrag cd = CurrentDrag.None;
         CurrentDragMove cdm = CurrentDragMove.None;
+        List<FrameworkElement> designerProps = new List<FrameworkElement>(2);
 
         SurfaceControl curObj;
 
@@ -68,16 +69,42 @@ namespace System451.Communication.Dashboard.ViZ
             InitializeComponent();
             tbx = new Toolbox();
             listBox1 = tbx.ToolListBox;
-            listBox1.PreviewMouseLeftButtonDown+=listBox1_PreviewMouseLeftButtonDown;
-            listBox1.PreviewMouseUp+=listBox1_PreviewMouseUp;
-            listBox1.PreviewMouseMove+=listBox1_PreviewMouseMove;
+            listBox1.PreviewMouseLeftButtonDown += listBox1_PreviewMouseLeftButtonDown;
+            listBox1.PreviewMouseUp += listBox1_PreviewMouseUp;
+            listBox1.PreviewMouseMove += listBox1_PreviewMouseMove;
             propHolder = tbx.PropertyBox;
             this.Top = (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height <= 600) ? 0 : 10;
             this.Left = (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width / 2.0) - this.Width / 2.0;
-            DoubleAnimation VizLogoani = new DoubleAnimation(1, 0, new Duration(new TimeSpan(0,0,3)));
+            DoubleAnimation VizLogoani = new DoubleAnimation(1, 0, new Duration(new TimeSpan(0, 0, 3)));
             VizLogoani.BeginTime = new TimeSpan(0, 0, 2);
-            VizLogoani.Completed+=delegate{ LayoutCvs.Children.Remove(ViZLogo); };
+            VizLogoani.Completed += delegate { LayoutCvs.Children.Remove(ViZLogo); };
             ViZLogo.BeginAnimation(Image.OpacityProperty, VizLogoani);
+
+            //Create our properties
+            var lb = new Label();
+            lb.Content = "Dashboard Data Hub";
+            lb.Style = (Style)lb.FindResource("PropCatStyle");
+            designerProps.Add(lb);
+            designerProps.Add(new StackPanel());
+            (designerProps[1] as StackPanel).Orientation = Orientation.Horizontal;
+            (designerProps[1] as StackPanel).Children.Add(new Label());
+            ((designerProps[1] as StackPanel).Children[0] as Label).Content = "Invalid Packets:";
+            (designerProps[1] as StackPanel).Children.Add(new ComboBox());
+            var cb = ((designerProps[1] as StackPanel).Children[1] as ComboBox);
+            cb.Width = 90;
+            foreach (var item in Enum.GetNames(typeof(InvalidPacketActions)))
+            {
+                cb.Items.Add(item);
+                if (item == "Ignore")
+                {
+                    cb.SelectedValue = item;
+                }
+            }
+            propHolder.Children.Clear();
+            foreach (var item in designerProps)
+            {
+                propHolder.Children.Add(item);
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -595,6 +622,14 @@ namespace System451.Communication.Dashboard.ViZ
                 propHolder.Children.Clear();
                 curObj.PopulateProperties(propHolder);
             }
+            else
+            {
+                propHolder.Children.Clear();
+                foreach (var item in designerProps)
+                {
+                    propHolder.Children.Add(item);
+                }
+            }
         }
 
         private void Deselect()
@@ -752,7 +787,8 @@ namespace System451.Communication.Dashboard.ViZ
 
         private string Export()
         {
-            StringBuilder sb = new StringBuilder("<Canvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:ZomB=\"clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB\" Height=\"400\" Width=\"1024\">");
+            StringBuilder sb = new StringBuilder("<Canvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:ZomB=\"clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB\" Height=\"400\" Width=\"1024\" ZomB:DashboardDataHubWindow.InvalidPacketAction=\"");
+            sb.Append(((designerProps[1] as StackPanel).Children[1] as ComboBox).SelectedValue);sb.Append("\">");
             List<KeyValuePair<string, PropertyElement>> attached = new List<KeyValuePair<string, PropertyElement>>();
 
             foreach (var item in LogicalTreeHelper.GetChildren(ZDash))
