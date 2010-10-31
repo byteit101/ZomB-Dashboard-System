@@ -15,8 +15,11 @@
                                     </VisualBrush.Visual>
                                 </VisualBrush>
                             </Canvas.Background>
+                            <Viewbox Stretch="Fill" Canvas.Top="0" Canvas.Left="0" Width="{TemplateBinding ActualWidth}" Height="{TemplateBinding ActualHeight}">
+                                <Canvas ClipToBounds="True" Name="PART_targets" Width="1" Height="1" />
+                            </Viewbox>
                             <Button Name="PART_refresh" Canvas.Left="0" Canvas.Bottom="0" Width="10" Height="10" />
-                            </Canvas>
+                        </Canvas>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

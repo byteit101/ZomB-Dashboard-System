@@ -7,7 +7,7 @@ using System.Windows;
 using System.Reflection;
 using System.ComponentModel;
 
-namespace System451.Communication.Dashboard.ViZ.Design
+namespace System451.Communication.Dashboard.WPF.Controls.Designers
 {
     public abstract class DesignerBase : IDesigner
     {
@@ -44,7 +44,10 @@ namespace System451.Communication.Dashboard.ViZ.Design
             return false;
         }
 
-        public abstract bool IsExpanded();
+        public virtual bool IsExpanded()
+        {
+            return false;
+        }
 
         public virtual string GetValue()
         {
@@ -62,6 +65,15 @@ namespace System451.Communication.Dashboard.ViZ.Design
             if (dp == null)
                 return Property.Name;
             return dp;
+        }
+
+        protected T GetVaueAsType<T>() where T : class
+        {
+            return Property.GetValue(Object, null) as T;
+        }
+        protected void Set(object value)
+        {
+            Property.SetValue(Object, value, null);
         }
     }
 }

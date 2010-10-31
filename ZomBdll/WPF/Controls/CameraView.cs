@@ -23,20 +23,26 @@ using System451.Communication.Dashboard.Net.Video;
 using System.Windows.Media.Imaging;
 using System.IO;
 using System.ComponentModel;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
     /// <summary>
     /// Interaction logic for CameraView.xaml
     /// </summary>
-    [Design.ZomBControl("Camera View Control", Description = "This shows you what the camera sees, and any targets its reporting", IconName="CameraViewIcon")]
+    [Design.ZomBControl("Camera View Control", Description = "This shows you what the camera sees, and any targets its reporting", IconName = "CameraViewIcon")]
     [TemplatePart(Name = "PART_img", Type = typeof(Image))]
     [TemplatePart(Name = "PART_refresh", Type = typeof(UIElement))]
-    public class CameraView : ZomBGLControl
+    [TemplatePart(Name = "PART_targets", Type = typeof(Panel))]
+    public class CameraView : ZomBGLControl, IZomBControlGroup
     {
         Image PART_img;
         IDashboardVideoDataSource videoSource;
         UIElement PART_refresh;
+        CameraTargetUI tars;
         static CameraView()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(CameraView),
@@ -48,6 +54,9 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.SnapsToDevicePixels = true;
             this.Width = 320;
             this.Height = 240;
+            tars = new CameraTargetUI();
+            tars.Width = 1;
+            tars.Height = 1;
         }
 
         public override void UpdateControl(string value)
@@ -61,6 +70,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             base.OnApplyTemplate();
             PART_img = base.GetTemplateChild("PART_img") as Image;
             PART_refresh = base.GetTemplateChild("PART_refresh") as UIElement;
+            (base.GetTemplateChild("PART_targets") as Panel).Children.Add(tars);
             PART_refresh.PreviewMouseLeftButtonUp += new System.Windows.Input.MouseButtonEventHandler(PART_refresh_PreviewMouseLeftButtonUp);
             PART_refresh.Visibility = ((ShowReset) ? Visibility.Visible : Visibility.Collapsed);
         }
@@ -89,8 +99,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
         static void ResetVischanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             CameraView am = (o as CameraView);
-            if (am.PART_refresh!=null)
-            am.PART_refresh.Visibility = (((bool)e.NewValue)? Visibility.Visible: Visibility.Collapsed);
+            if (am.PART_refresh != null)
+                am.PART_refresh.Visibility = (((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed);
         }
 
         private void videoSource_NewImageRecieved(object sender, NewImageDataRecievedEventArgs e)
@@ -132,5 +142,242 @@ namespace System451.Communication.Dashboard.WPF.Controls
         // Using a DependencyProperty as the backing store for VideoSource.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty VideoSourceProperty =
             DependencyProperty.Register("VideoSource", typeof(DefaultVideoSource), typeof(CameraView), new UIPropertyMetadata(DefaultVideoSource.WPILibTcpStream, TeamUpdated));
+
+        #region IZomBControlGroup Members
+
+        public ZomBControlCollection GetControls()
+        {
+            if (tars == null)
+            {
+                return null;
+            }
+            else
+            {
+                return tars.Targets;
+            }
+        }
+
+        #endregion
+
+
+        [Design.ZomBDesignable(), Category("ZomB"), Description("What targets will we be looking for?")]
+        public CameraTargetCollection Targets
+        {
+            get
+            {
+                try
+                {
+                    var cc = converttargs(tars.Targets);
+                    cc.ItemAdded += delegate { tars.SetTargets(cc.Select(x => (x as IZomBControl))); };
+                    return cc;
+                }
+                catch { }
+                return null;
+            }
+            set
+            {
+                tars.SetTargets(value.Select(x => (x as IZomBControl)));
+            }
+        }
+
+        private CameraTargetCollection converttargs(ZomBControlCollection inv)
+        {
+            CameraTargetCollection ctc = new CameraTargetCollection();
+            foreach (var item in inv)
+            {
+                ctc.Add(item as CameraTarget);
+            }
+            return ctc;
+        }
+
+        public static void tchangecallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            var t = o as CameraView;
+            if (t.tars != null)
+                t.tars.SetTargets(t.Targets);
+        }
+    }
+    [Design.Designer(typeof(Designers.CameraTargetCollectionDesigner))]
+    public class CameraTargetCollection : Collection<CameraTarget>
+    {
+        protected override void InsertItem(int index, CameraTarget item)
+        {
+            base.InsertItem(index, item);
+            if (ItemAdded != null)
+            {
+                ItemAdded(this, new EventArgs());
+            }
+        }
+        public event EventHandler ItemAdded;
+    }
+
+    public class CameraTargetUI : Panel
+    {
+        ZomBControlCollection targets = new ZomBControlCollection();
+        DrawingVisual dv = new DrawingVisual();
+
+        public CameraTargetUI()
+        {
+            using (DrawingContext dc = dv.RenderOpen())
+            {
+                dc.DrawRectangle(Brushes.Transparent, null, new Rect(0, 0, 1, 1));
+            }
+        }
+
+        public ZomBControlCollection Targets { get { return targets; } }
+
+        protected override int VisualChildrenCount
+        {
+            get
+            {
+                return targets.Count+1;
+            }
+        }
+
+        protected override Visual GetVisualChild(int index)
+        {
+            if (index == targets.Count)
+            {
+                return dv;
+            }
+            return (CameraTarget)targets[index];
+        }
+
+        public void AddTarget(CameraTarget targ)
+        {
+            targets.Add(targ);
+
+            AddVisualChild(targ);
+            AddLogicalChild(targ);
+        }
+
+        public void RemoveTarget(CameraTarget targ)
+        {
+            targets.Remove(targ);
+
+            RemoveVisualChild(targ);
+            RemoveLogicalChild(targ);
+        }
+
+        public void SetTargets(CameraTargetCollection p)
+        {
+            foreach (var item in targets)
+            {
+                RemoveTarget(item as CameraTarget);
+            }
+            foreach (var item in p)
+            {
+                AddTarget(item);
+            }
+        }
+
+        public void SetTargets(IEnumerable<IZomBControl> p)
+        {
+            foreach (var item in targets)
+            {
+                RemoveTarget(item as CameraTarget);
+            }
+            foreach (var item in p)
+            {
+                AddTarget(item as CameraTarget);
+            }
+        }
+    }
+
+    public class CameraTarget : DrawingVisual, IZomBControl
+    {
+        Pen border;
+        public Pen Border
+        {
+            get { return border; }
+            set
+            {
+                if (border != value)
+                {
+                    border = value;
+                    Render();
+                }
+            }
+        }
+
+        Brush fill;
+        public Brush Fill
+        {
+            get { return fill; }
+            set
+            {
+                if (fill != value)
+                {
+                    fill = value;
+                    Render();
+                }
+            }
+        }
+
+        Rect target;
+        public Rect Target
+        {
+            get { return target; }
+            set
+            {
+                if (target != value)
+                {
+                    target = value;
+                    Render();
+                }
+            }
+        }
+        delegate void Empty();
+
+        private void Render()
+        {
+            if (Dispatcher.Thread != System.Threading.Thread.CurrentThread)
+                Dispatcher.Invoke(new Empty(Render), null);
+            using (DrawingContext dc = RenderOpen())
+            {
+                dc.DrawRectangle(Fill, Border, Target);
+            }
+        }
+
+        private Rect RectParse(string value)
+        {
+            Rect rf = new Rect();
+            if (value != null && value != "")
+            {
+                try{
+                    value = value.Substring(0, value.IndexOf('o'));
+                }catch{}
+                try
+                {
+                    //format widthxheigth+xpos,ypos
+                    rf.Width = double.Parse(value.Substring(0, value.IndexOf('x')));
+                    rf.Height = double.Parse(value.Substring(value.IndexOf('x') + 1, (value.IndexOf('+') - (value.IndexOf('x') + 1))));
+                    rf.X = double.Parse(value.Substring(value.IndexOf('+') + 1, (value.IndexOf(',') - (value.IndexOf('+') + 1))));
+                    rf.Y = double.Parse(value.Substring(value.IndexOf(',') + 1));
+                }
+                catch { }//bad, empty rect
+            }
+            return rf;
+        }
+        #region IZomBControl Members
+
+        public bool IsMultiWatch
+        {
+            get { return false; }
+        }
+
+        public string ControlName { get; set; }
+
+        public void UpdateControl(string value)
+        {
+            Target = RectParse(value);
+        }
+
+        public void ControlAdded(object sender, ZomBControlAddedEventArgs e)
+        {
+            //great, don't care
+        }
+
+        #endregion
     }
 }

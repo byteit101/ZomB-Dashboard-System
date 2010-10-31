@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Markup;
 using System.Globalization;
 using System.Windows.Media;
+using System451.Communication.Dashboard.WPF.Design.DesignUtils;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -143,6 +144,17 @@ namespace System451.Communication.Dashboard.ViZ
         public IDesigner Designer { get; private set; }
 
         /// <summary>
+        /// Gets the Designer Type
+        /// </summary>
+        private Type DesignerType
+        {
+            get
+            {
+                return DesignUtils.GetDesignerType(Property.PropertyType);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the value of the Property
         /// </summary>
         public object Value
@@ -261,28 +273,26 @@ namespace System451.Communication.Dashboard.ViZ
                             (itm.Children[1] as ComboBox).SelectedValue = item;
                         }
                     }
-                    (itm.Children[1] as ComboBox).SelectionChanged+=delegate(object sender, SelectionChangedEventArgs e) { try { Value = (sender as ComboBox).SelectedValue; } catch { } };
-            
-                }
-                else if (Type == typeof(Brush))
-                {
-                    itm.Children.Add(GetDesignerField(typeof(BrushDesigner)));
-                }
-                else if (Type == typeof(Color))
-                {
-                    itm.Children.Add(GetDesignerField(typeof(ColorDesigner)));
+                    (itm.Children[1] as ComboBox).SelectionChanged += delegate(object sender, SelectionChangedEventArgs e) { try { Value = (sender as ComboBox).SelectedValue; } catch { } };
                 }
                 else
                 {
-                    itm.Children.Add(new TextBox());
-                    (itm.Children[1] as TextBox).Width = 100.0;
-                    try
+                    Type tod = DesignerType;
+                    if (tod != null)
                     {
-                        (itm.Children[1] as TextBox).Text = Value.ToString();
+                        itm.Children.Add(GetDesignerField(tod));
                     }
-                    catch { }//Null value
-                    (itm.Children[1] as TextBox).TextChanged += delegate(object sender, TextChangedEventArgs e) { Value = (sender as TextBox).Text; };
-
+                    else
+                    {
+                        itm.Children.Add(new TextBox());
+                        (itm.Children[1] as TextBox).Width = 100.0;
+                        try
+                        {
+                            (itm.Children[1] as TextBox).Text = Value.ToString();
+                        }
+                        catch { }//Null value
+                        (itm.Children[1] as TextBox).TextChanged += delegate(object sender, TextChangedEventArgs e) { Value = (sender as TextBox).Text; };
+                    }
                 }
                 itm.Tag = this;
                 itm.ToolTip = Description;

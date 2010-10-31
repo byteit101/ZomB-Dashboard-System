@@ -8,10 +8,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Globalization;
-using System451.Communication.Dashboard.ViZ.Design;
 using System.ComponentModel;
+using System451.Communication.Dashboard.WPF.Controls.Designers;
 
-namespace System451.Communication.Dashboard.ViZ
+namespace System451.Communication.Dashboard.WPF.Design
 {
     public class BrushDesigner : DesignerBase
     {
@@ -42,11 +42,6 @@ namespace System451.Communication.Dashboard.ViZ
             comb = cb;
             sp.Children.Add(cb);
             return sp;
-        }
-
-        public override bool IsExpanded()
-        {
-            return false;
         }
 
         public override string GetValue()
@@ -83,11 +78,6 @@ namespace System451.Communication.Dashboard.ViZ
             comb = cb;
             sp.Children.Add(cb);
             return sp;
-        }
-
-        public override bool IsExpanded()
-        {
-            return false;
         }
 
         public override string GetValue()

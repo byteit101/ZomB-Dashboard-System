@@ -134,6 +134,7 @@ namespace System451.Communication.Dashboard.WPF
         public void ReloadControls()
         {
             AddControls(this);
+            Start();
         }
 
         /// <summary>

@@ -117,7 +117,14 @@ namespace System451.Communication.Dashboard.WPF.Controls
         [Design.ZomBDesignable(DisplayName = "Name", Index=1)]
         virtual public string ControlName
         {
-            get { return (string)GetValue(NameProperty); }
+            get
+            {
+                try { return (string)GetValue(NameProperty); }
+                catch
+                {/*wrong thread*/
+                    return Dispatcher.Invoke(new Func<string>(() => ControlName)).ToString();
+                }
+            }
             set { SetValue(NameProperty, value); }
         }
 

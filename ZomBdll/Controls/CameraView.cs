@@ -186,9 +186,9 @@ namespace System451.Communication.Dashboard
 
                         using (Brush br = new SolidBrush(TargetFillColor))
                         {
-                            foreach (KeyValuePair<string, IZomBControl> ttarget in Targets)
+                            foreach (IZomBControl ttarget in Targets)
                             {
-                                TargetInfo target = (TargetInfo)(ttarget.Value);
+                                TargetInfo target = (TargetInfo)(ttarget);
                                 if (!target.Target.IsEmpty)
                                 {
                                     PointF[] pts = new PointF[] { new PointF(target.Target.Top, target.Target.Left),

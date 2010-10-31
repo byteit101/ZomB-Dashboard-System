@@ -748,6 +748,7 @@ namespace System451.Communication.Dashboard.ViZ
         private string Export()
         {
             StringBuilder sb = new StringBuilder("<Canvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:ZomB=\"clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB\" Height=\"400\" Width=\"1024\">");
+            List<KeyValuePair<string, PropertyElement>> attached = new List<KeyValuePair<string, PropertyElement>>();
 
             foreach (var item in LogicalTreeHelper.GetChildren(ZDash))
             {
@@ -761,6 +762,11 @@ namespace System451.Communication.Dashboard.ViZ
                 {
                     if ((cprops.Value.Designer != null && cprops.Value.Designer.IsDefaultValue()) || cprops.Value.Value.ToString() == "" || (cprops.Value.Designer != null && cprops.Value.Designer.GetValue() == ""))
                         continue;
+                    if (cprops.Value.Designer != null && cprops.Value.Designer.IsExpanded())
+                    {
+                        attached.Add(cprops);
+                        continue;
+                    }
                     sb.Append("\" ");
                     sb.Append(cprops.Key);
                     sb.Append("=\"");
@@ -769,6 +775,30 @@ namespace System451.Communication.Dashboard.ViZ
                     else
                         sb.Append(cprops.Value.Value.ToString());
                 }
+                if (attached.Count > 0)
+                {
+                    string ctrlNom = ((SurfaceControl)item).Control.GetType().Name;
+                    sb.Append("\">");
+                    foreach (var aprop in attached)
+                    {
+                        sb.Append("<ZomB:");
+                        sb.Append(ctrlNom);
+                        sb.Append(".");
+                        sb.Append(aprop.Key);
+                        sb.Append(">");
+                        sb.Append(aprop.Value.Designer.GetValue());
+                        sb.Append("</ZomB:");
+                        sb.Append(ctrlNom);
+                        sb.Append(".");
+                        sb.Append(aprop.Key);
+                        sb.Append(">");
+                    }
+                    attached.Clear();
+                    sb.Append("</ZomB:");
+                    sb.Append(ctrlNom);
+                    sb.Append(">");
+                }
+                else
                 sb.Append("\" />");
             }
 

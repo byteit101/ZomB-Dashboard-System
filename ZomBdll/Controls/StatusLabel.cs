@@ -50,7 +50,7 @@ namespace System451.Communication.Dashboard.Controls
             xmove.ControlUpdated += new ControlUpdatedDelegate(xmove_ControlUpdated);
             YMoveName = "lbly1";
             ymove.ControlUpdated += new ControlUpdatedDelegate(ymove_ControlUpdated);
-            innerCollection.Add("lbl", label);
+            innerCollection.Add(label);
             this.XMax = 100f;
             this.XMin = 0f;
             this.XVMax = 100f;
@@ -239,16 +239,16 @@ namespace System451.Communication.Dashboard.Controls
         [DefaultValue(false), Category("ZomB"), Description("Can this control move sideways (x axis)")]
         public bool MovesOnX
         {
-            get { return innerCollection.ContainsKey("xmove"); }
+            get { return innerCollection.Contains(xmove); }
             set
             {
-                if (value && (!innerCollection.ContainsKey("xmove")))
+                if (value && (!innerCollection.Contains(xmove)))
                 {
-                    innerCollection.Add("xmove", xmove);
+                    innerCollection.Add(xmove);
                 }
-                else if ((!value) && (innerCollection.ContainsKey("xmove")))
+                else if ((!value) && (innerCollection.Contains(xmove)))
                 {
-                    innerCollection.Remove("xmove");
+                    innerCollection.Remove(xmove);
                 }
             }
         }
@@ -259,16 +259,16 @@ namespace System451.Communication.Dashboard.Controls
         [DefaultValue(false), Category("ZomB"), Description("Can this control move up and down (y axis)")]
         public bool MovesOnY
         {
-            get { return innerCollection.ContainsKey("ymove"); }
+            get { return innerCollection.Contains(ymove); }
             set
             {
-                if (value && (!innerCollection.ContainsKey("ymove")))
+                if (value && (!innerCollection.Contains(ymove)))
                 {
-                    innerCollection.Add("ymove", ymove);
+                    innerCollection.Add(ymove);
                 }
-                else if ((!value) && (innerCollection.ContainsKey("ymove")))
+                else if ((!value) && (innerCollection.Contains(ymove)))
                 {
-                    innerCollection.Remove("ymove");
+                    innerCollection.Remove(ymove);
                 }
             }
         }

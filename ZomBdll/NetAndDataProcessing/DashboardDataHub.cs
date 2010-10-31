@@ -104,9 +104,9 @@ namespace System451.Communication.Dashboard
             if (!zomBgroups.Contains(controlgroup))
             {
                 zomBgroups.Add(controlgroup);
-                foreach (KeyValuePair<string, IZomBControl> item in controlgroup.GetControls())
+                foreach (IZomBControl item in controlgroup.GetControls())
                 {
-                    item.Value.ControlAdded(this, new ZomBControlAddedEventArgs(this));
+                    item.ControlAdded(this, new ZomBControlAddedEventArgs(this));
                 }
             }
         }
@@ -169,7 +169,7 @@ namespace System451.Communication.Dashboard
                 int i = 0;
                 try
                 {
-                    if (StartSource != StartSources.Manual)
+                    if (StartSource != StartSources.Manual && DataSrcs.Count==0) //TODO: re-evaluate the best way to do this
                     {
                         //Auto setup the sources
                         ClearSources();
@@ -395,9 +395,9 @@ namespace System451.Communication.Dashboard
             //Process the GroupControls
             foreach (IZomBControlGroup group in zomBgroups)
             {
-                foreach (KeyValuePair<string, IZomBControl> item in group.GetControls())
+                foreach (IZomBControl item in group.GetControls())
                 {
-                    ProcessControl(item.Value, e.NewData);
+                    ProcessControl(item, e.NewData);
                 }
             }
         }

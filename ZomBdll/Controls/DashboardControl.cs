@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System451.Communication.Dashboard.Utils;
+using System.Collections.ObjectModel;
 
 namespace System451.Communication.Dashboard
 {
@@ -293,7 +294,7 @@ namespace System451.Communication.Dashboard
     /// <summary>
     /// Easily manage a bunch of virtual or physical IZomBcontrols by name
     /// </summary>
-    public class ZomBControlCollection : Dictionary<string, IZomBControl>
+    public class ZomBControlCollection : Collection<IZomBControl>
     {
         /// <summary>
         /// Create a new ZomBControlCollection
