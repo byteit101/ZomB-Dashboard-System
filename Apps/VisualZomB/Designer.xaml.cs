@@ -36,6 +36,7 @@ using System451.Communication.Dashboard.WPF;
 using System451.Communication.Dashboard.WPF.Controls;
 using System451.Communication.Dashboard.WPF.Design;
 using System.Collections.ObjectModel;
+using System.Windows.Media.Animation;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -73,6 +74,10 @@ namespace System451.Communication.Dashboard.ViZ
             propHolder = tbx.PropertyBox;
             this.Top = (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height <= 600) ? 0 : 10;
             this.Left = (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width / 2.0) - this.Width / 2.0;
+            DoubleAnimation VizLogoani = new DoubleAnimation(1, 0, new Duration(new TimeSpan(0,0,3)));
+            VizLogoani.BeginTime = new TimeSpan(0, 0, 2);
+            VizLogoani.Completed+=delegate{ LayoutCvs.Children.Remove(ViZLogo); };
+            ViZLogo.BeginAnimation(Image.OpacityProperty, VizLogoani);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
