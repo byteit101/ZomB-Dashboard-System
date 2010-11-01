@@ -205,6 +205,10 @@
     <Compile Include="WPF\Controls\Designer\CameraDesignerWindow.xaml.cs">
       <DependentUpon>CameraDesignerWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\Controls\Designer\ColorControl.xaml.cs">
+      <DependentUpon>ColorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\Controls\Designer\ColorControlColorSeperator.cs" />
     <Compile Include="WPF\Controls\Designer\ColorDesigner.cs" />
     <Compile Include="WPF\Controls\Designer\DesignerBase.cs" />
     <Compile Include="WPF\Controls\ValueMeter.cs" />
@@ -351,6 +355,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="WPF\Controls\Designer\CameraDesignerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF\Controls\Designer\ColorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

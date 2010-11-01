@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="System451.Communication.Dashboard.WPF.Controls.Designer.ColorControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:System451.Communication.Dashboard.WPF.Controls.Designer"
+    Height="100" Width="400">
+    <UserControl.Resources>
+        <loc:ColorControlColorSeperator x:Key="cconv" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Rectangle Grid.RowSpan="4" Name="colorPrev" Stroke="Black" Margin="10" SnapsToDevicePixels="True" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Self}}">
+            <Rectangle.Fill>
+                <MultiBinding Converter="{StaticResource cconv}" Mode="TwoWay">
+                    <Binding Path="Value" ElementName="slr" />
+                    <Binding Path="Value" ElementName="slg" />
+                    <Binding Path="Value" ElementName="slb" />
+                    <Binding Path="Value" ElementName="sla" />
+                </MultiBinding>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Label Name="lr" Grid.Column="1" Grid.Row="0" Content="Red:" VerticalAlignment="Center" />
+        <Label Name="lg" Grid.Column="1" Grid.Row="1" Content="Green:" VerticalAlignment="Center" />
+        <Label Name="lb" Grid.Column="1" Grid.Row="2" Content="Blue:" VerticalAlignment="Center" />
+        <Label Name="la" Grid.Column="1" Grid.Row="3" Content="Alpha:" VerticalAlignment="Center" />
+        <Slider Name="slr" Grid.Column="2" Grid.Row="0" Margin="2,0" VerticalAlignment="Center" Minimum="0" Maximum="255" TickFrequency="1" IsSnapToTickEnabled="True" />
+        <Slider Name="slg" Grid.Column="2" Grid.Row="1" Margin="2,0" VerticalAlignment="Center" Minimum="0" Maximum="255" TickFrequency="1" IsSnapToTickEnabled="True" />
+        <Slider Name="slb" Grid.Column="2" Grid.Row="2" Margin="2,0" VerticalAlignment="Center" Minimum="0" Maximum="255" TickFrequency="1" IsSnapToTickEnabled="True" />
+        <Slider Name="sla" Grid.Column="2" Grid.Row="3" Margin="2,0" VerticalAlignment="Center" Minimum="0" Maximum="255" TickFrequency="1" IsSnapToTickEnabled="True" />
+        <TextBox Name="tbr" Grid.Column="3" Grid.Row="0" Width="50" VerticalAlignment="Center" Margin="3,0" Text="{Binding Path=Value, Mode=TwoWay, ElementName=slr, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox Name="tbg" Grid.Column="3" Grid.Row="1" Width="50" VerticalAlignment="Center" Margin="3,0" Text="{Binding Path=Value, Mode=TwoWay, ElementName=slg, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox Name="tbb" Grid.Column="3" Grid.Row="2" Width="50" VerticalAlignment="Center" Margin="3,0" Text="{Binding Path=Value, Mode=TwoWay, ElementName=slb, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox Name="tba" Grid.Column="3" Grid.Row="3" Width="50" VerticalAlignment="Center" Margin="3,0" Text="{Binding Path=Value, Mode=TwoWay, ElementName=sla, UpdateSourceTrigger=PropertyChanged}" />
+    </Grid>
+</UserControl>
