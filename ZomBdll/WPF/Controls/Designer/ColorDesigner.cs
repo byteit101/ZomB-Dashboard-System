@@ -77,9 +77,32 @@ namespace System451.Communication.Dashboard.WPF.Design
             UpdateCombo();
         }
 
+        public override bool IsExpanded()
+        {
+            return !(Property.GetValue(Object, null) is SolidColorBrush);
+        }
+
         public override string GetValue()
         {
-            return comb.Text;
+            if (!IsExpanded())
+                return comb.Text;
+            else
+            {
+                //TODO: add others
+                //must be linear gradient
+                LinearGradientBrush lb = (Property.GetValue(Object, null) as LinearGradientBrush);
+                StringBuilder s = new StringBuilder("<LinearGradientBrush StartPoint=\"0,0\" EndPoint=\"1,0\">");
+                foreach (var item in lb.GradientStops)
+                {
+                    s.Append("<GradientStop Offset=\"");
+                    s.Append(item.Offset);
+                    s.Append("\" Color=\"");
+                    s.Append(item.Color.ToString());
+                    s.Append("\" />");
+                }
+                s.Append("</LinearGradientBrush>");
+                return s.ToString();
+            }
         }
     }
     public class ColorDesigner : DesignerBase

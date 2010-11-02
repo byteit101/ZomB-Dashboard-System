@@ -6,15 +6,20 @@
     Height="300" Width="451">
     <DockPanel>
         <loc:ColorControl DockPanel.Dock="Top" x:Name="ColorPicker" Width="Auto" />
-        <TabControl Margin="5">
-            <TabItem Header="Solid Color">
+        <TabControl Margin="5" Name="tc">
+            <TabItem Header="Solid Color" RequestBringIntoView="TabItem_RequestBringIntoView">
                 <Label Margin="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" Content="{Binding Path=Color, ElementName=ColorPicker}">
                 <Label.Background>
                     <SolidColorBrush Color="{Binding Path=Color, ElementName=ColorPicker}" />
                 </Label.Background>
                 </Label>
             </TabItem>
-            <TabItem Header="Linear Gradient">My, you think you can find what you want here, hm? (Hint: find it in the future)</TabItem>
+            <TabItem Header="Linear Gradient" Name="LinGradTab" RequestBringIntoView="TabItemlg_RequestBringIntoView">
+                <Canvas Name="LinGradient">
+                    <Button Click="left_gradclick">Left</Button>
+                    <Button Canvas.Right="0" Click="right_gradclick">Right</Button>
+                </Canvas>
+            </TabItem>
         </TabControl>
     </DockPanel>
 </Window>

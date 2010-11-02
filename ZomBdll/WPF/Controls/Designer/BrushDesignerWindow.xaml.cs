@@ -38,29 +38,91 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
     public partial class BrushDesignerWindow : Window
     {
         Brush b;
+        bool lefting = true;
+        enum Mode
+        {
+            Solid, LinearGradient
+        };
+        Mode cmode = Mode.Solid;
+        int gradIndex = 0;
+        Action<Brush> setv;
         public BrushDesignerWindow(object obj, PropertyInfo prop)
         {
             InitializeComponent();
             b = prop.GetValue(obj, null) as Brush;
+            setv = (x)=>prop.SetValue(obj, x, null);
             if (b.IsFrozen)
             {
                 b = b.Clone();
-                prop.SetValue(obj, b, null);
+                setv(b);
+            }
+            if (b is SolidColorBrush)
+            {
+                cmode = Mode.Solid;
+            }
+            else if (b is LinearGradientBrush)
+            {
+                cmode = Mode.LinearGradient;
             }
         }
 
         private void Window_Initialized(object sender, EventArgs e)
         {
             ColorPicker.ColorChanged += ColorControl_ColorChanged;
-            if (b is SolidColorBrush)
+            if (cmode == Mode.Solid)
+            {
                 ColorPicker.Color = (b as SolidColorBrush).Color;
+            }
+            else if (cmode == Mode.LinearGradient)
+            {
+                LinGradient.Background = b;
+                left_gradclick(sender, null);
+                tc.SelectedItem = LinGradTab;
+            }
         }
 
         private void ColorControl_ColorChanged(object sender, RoutedEventArgs e)
         {
-            if (true)
+            if (cmode== Mode.Solid)
             {
                 (b as SolidColorBrush).Color = ColorPicker.Color;
+            }
+            else if (cmode == Mode.LinearGradient)
+            {
+                (b as LinearGradientBrush).GradientStops[gradIndex].Color = ColorPicker.Color;
+            }
+        }
+
+        private void left_gradclick(object sender, RoutedEventArgs e)
+        {
+            gradIndex = 0;
+            ColorPicker.Color = (b as LinearGradientBrush).GradientStops[0].Color;
+        }
+
+        private void right_gradclick(object sender, RoutedEventArgs e)
+        {
+            gradIndex = 1;
+            ColorPicker.Color = (b as LinearGradientBrush).GradientStops[1].Color;
+        }
+
+        private void TabItem_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
+        {
+            if (b is LinearGradientBrush)
+            {
+                b = new SolidColorBrush((b as LinearGradientBrush).GradientStops[0].Color);
+                setv(b);
+                cmode = Mode.Solid;
+            }
+        }
+
+        private void TabItemlg_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
+        {
+            if (b is SolidColorBrush)
+            {
+                b = new LinearGradientBrush((b as SolidColorBrush).Color, (b as SolidColorBrush).Color, 0);
+                setv(b);
+                LinGradient.Background = b;
+                cmode = Mode.LinearGradient;
             }
         }
     }
