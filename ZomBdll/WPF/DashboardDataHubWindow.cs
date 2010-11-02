@@ -71,26 +71,13 @@ namespace System451.Communication.Dashboard.WPF.Controls
                     ReloadControls();
             };
 
-            /*if (Environment.UserName == "Driver" || DesignMode)
+            if (Environment.UserName == "Driver")
             {
-                this.FormBorderStyle = FormBorderStyle.None;
-                if (!DesignMode)
-                {
-                    this.StartPosition = FormStartPosition.Manual;
-                }
-                else
-                {
-                    this.StartPosition = FormStartPosition.WindowsDefaultLocation;
-                }
-                this.ControlBox = false;
-                this.ClientSize = DefaultSize;
+                this.WindowStyle = WindowStyle.None;
+                this.WindowStartupLocation = WindowStartupLocation.Manual;
+                this.Left=0;
+                this.Top=0;
             }
-            else
-            {
-                this.FormBorderStyle = FormBorderStyle.FixedSingle;
-                this.StartPosition = FormStartPosition.WindowsDefaultLocation;
-                this.ControlBox = true;
-            }*/
             dashboardDataHub1.StartSource = StartSources.DashboardPacket;
             dashboardDataHub1.InvalidPacketAction = InvalidPacketActions.Ignore;
             GC.KeepAlive(mutex);
