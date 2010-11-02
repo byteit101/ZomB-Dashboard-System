@@ -1,0 +1,20 @@
+﻿<Window x:Class="System451.Communication.Dashboard.WPF.Controls.Designer.BrushDesignerWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="clr-namespace:System451.Communication.Dashboard.WPF.Controls.Designer"
+    Loaded="Window_Initialized"
+    Height="300" Width="451">
+    <DockPanel>
+        <loc:ColorControl DockPanel.Dock="Top" x:Name="ColorPicker" Width="Auto" />
+        <TabControl Margin="5">
+            <TabItem Header="Solid Color">
+                <Label Margin="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" Content="{Binding Path=Color, ElementName=ColorPicker}">
+                <Label.Background>
+                    <SolidColorBrush Color="{Binding Path=Color, ElementName=ColorPicker}" />
+                </Label.Background>
+                </Label>
+            </TabItem>
+            <TabItem Header="Linear Gradient">My, you think you can find what you want here, hm? (Hint: find it in the future)</TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

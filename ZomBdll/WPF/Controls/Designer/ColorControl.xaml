@@ -22,10 +22,10 @@
         <Rectangle Grid.RowSpan="4" Name="colorPrev" Stroke="Black" Margin="10" SnapsToDevicePixels="True" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Self}}">
             <Rectangle.Fill>
                 <MultiBinding Converter="{StaticResource cconv}" Mode="TwoWay">
-                    <Binding Path="Value" ElementName="slr" />
-                    <Binding Path="Value" ElementName="slg" />
-                    <Binding Path="Value" ElementName="slb" />
-                    <Binding Path="Value" ElementName="sla" />
+                    <Binding Path="Value" ElementName="slr" Mode="TwoWay" />
+                    <Binding Path="Value" ElementName="slg" Mode="TwoWay" />
+                    <Binding Path="Value" ElementName="slb" Mode="TwoWay" />
+                    <Binding Path="Value" ElementName="sla" Mode="TwoWay" />
                 </MultiBinding>
             </Rectangle.Fill>
         </Rectangle>

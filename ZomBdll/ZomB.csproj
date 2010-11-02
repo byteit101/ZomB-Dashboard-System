@@ -201,6 +201,9 @@
     </Compile>
     <Compile Include="WPF\Controls\AlertControl.cs" />
     <Compile Include="WPF\Controls\CameraView.cs" />
+    <Compile Include="WPF\Controls\Designer\BrushDesignerWindow.xaml.cs">
+      <DependentUpon>BrushDesignerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\Controls\Designer\CameraDesigner.cs" />
     <Compile Include="WPF\Controls\Designer\CameraDesignerWindow.xaml.cs">
       <DependentUpon>CameraDesignerWindow.xaml</DependentUpon>
@@ -351,6 +354,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="WPF\Controls\CameraView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controls\Designer\BrushDesignerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
