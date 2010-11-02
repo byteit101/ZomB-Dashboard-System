@@ -30,7 +30,7 @@ namespace System451.Communication.Dashboard.ViZ
             pam.CompilerOptions = "/t:winexe";//hide console
             string src = @"namespace System451.g
 {
-    class ZApp : System451.Communication.Dashboard.WPF.DashboardDataHubWindow
+    class ZApp : System451.Communication.Dashboard.WPF.Controls.DashboardDataHubWindow
     {
         public ZApp()
         {

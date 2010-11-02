@@ -751,7 +751,7 @@ namespace System451.Communication.Dashboard.ViZ
                 List<Control> lc = new List<Control>(cvs.Children.Count);
                 foreach (UIElement item in cvs.Children)
                 {
-                    if (item is IZomBControl)
+                    if (item.GetType().GetCustomAttributes(typeof(ZomBControlAttribute), true).Length > 0)
                     {
                         lc.Add((Control)item);
                     }
