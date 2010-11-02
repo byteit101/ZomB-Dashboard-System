@@ -270,11 +270,15 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 }
 
                 //If panel or has other controls, find those
-                foreach (var sub in LogicalTreeHelper.GetChildren((DependencyObject)item))
+                try
                 {
-                    AddControls((DependencyObject)item);
-                    break;
+                    foreach (var sub in LogicalTreeHelper.GetChildren((DependencyObject)item))
+                    {
+                        AddControls((DependencyObject)item);
+                        break;
+                    }
                 }
+                catch { /*No children or not a DepObj*/ }
             }
         }
     }

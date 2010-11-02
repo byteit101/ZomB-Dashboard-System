@@ -493,7 +493,7 @@ namespace System451.Communication.Dashboard
         /// </summary>
         public static void ExitZomB()
         {
-            Application.Exit();
+            Environment.Exit(0);//Kill regardless of race (WPF or WinForms)
         }
 
         /// <summary>

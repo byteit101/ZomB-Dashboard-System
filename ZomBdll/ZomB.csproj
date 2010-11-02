@@ -224,6 +224,9 @@
     <Compile Include="WPF\Controls\OnOffControl.cs" />
     <Compile Include="WPF\Controls\DirectionMeter.cs">
     </Compile>
+    <Compile Include="WPF\Controls\ZomBButton.xaml.cs">
+      <DependentUpon>ZomBButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\Controls\ZomBGLControl.cs" />
     <Compile Include="WPF\DashboardDataHubWindow.cs" />
     <Compile Include="WPF\Design\IDesigner.cs" />
@@ -404,6 +407,10 @@
     <Page Include="WPF\Controls\DirectionMeter.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controls\ZomBButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF\Controls\ZomBGLControl.xaml">
       <Generator>MSBuild:Compile</Generator>
