@@ -291,12 +291,12 @@
     <Content Include="CREDITS.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="ext\SlimDX.dll">
+    <None Include="SlimDX.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="ext\WebCam_Capture\%40PSC_ReadMe_1339_10.txt" />
     <Content Include="ext\WebCam_Capture\CAMERA.ICO" />
-    <None Include="ext\x64\SlimDX x64.dll">
+    <None Include="SlimDX x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="Graph.ico" />
@@ -420,6 +420,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ext\x64\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
