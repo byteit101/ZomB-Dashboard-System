@@ -13,7 +13,7 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="235" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <ListBox Grid.Column="0" Name="ToolListBox" x:FieldModifier="public" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled">

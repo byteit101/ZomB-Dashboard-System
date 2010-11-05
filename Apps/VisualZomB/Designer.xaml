@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ZomB="clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB"
         xmlns:loc="clr-namespace:System451.Communication.Dashboard.ViZ"
-    AllowsTransparency="True" Background="Transparent" WindowStyle="None" Title="ZomB Designer" Height="410" Width="1030" SnapsToDevicePixels="True" Loaded="Window_Loaded" WindowStartupLocation="Manual">
+    AllowsTransparency="True" Background="Transparent" WindowStyle="None" Title="ZomB Designer" Height="404" Width="1028" SnapsToDevicePixels="True" Loaded="Window_Loaded" WindowStartupLocation="Manual">
     <Window.CommandBindings>
         <CommandBinding Command="Play" Executed="CommandBinding_Play_Executed" />
         <CommandBinding Command="Save" Executed="CommandBinding_Save_Executed" />
@@ -14,14 +14,15 @@
         <CommandBinding Command="MoveDown" Executed="CommandBinding_MoveDown_Executed" />
         <CommandBinding Command="MoveRight" Executed="CommandBinding_MoveBottom_Executed" />
         <CommandBinding Command="Delete" Executed="CommandBinding_Delete_Executed" />
-        <CommandBinding Command="Delete" Executed="CommandBinding_Delete_Executed" />
     </Window.CommandBindings>
     <Window.InputBindings>
-        <KeyBinding Key="F5" Command="Play"/>
-        <KeyBinding Key="S" Command="Save" Modifiers="Ctrl"/>
+        <KeyBinding Key="F5" Command="Play" />
+        <KeyBinding Key="F6" Command="SaveAs" />
+        <KeyBinding Modifiers="Ctrl" Key="S" Command="Save" />
+        <KeyBinding Modifiers="Ctrl" Key="O" Command="Open" />
     </Window.InputBindings>
-
-    <Canvas Name="LayoutCvs">
+    <ScrollViewer Name="Scrlview" Background="Transparent" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Canvas Name="LayoutCvs" Width="1028" Height="404">
         <loc:DropShadowChrome Canvas.Top="1" Canvas.Left="1" Width="1024" Height="400">
             <Canvas Width="1024" Height="400" Background="White" Name="ZDash" AllowDrop="True" Drop="ZDash_Drop" 
                     DragEnter="ZDash_DragEnter" PreviewMouseLeftButtonDown="ZDash_MouseLeftButtonDown"
@@ -30,7 +31,7 @@
                     Focusable="True" FocusManager.IsFocusScope="True">
             </Canvas>
         </loc:DropShadowChrome>
-        
+
         <Grid Canvas.Top="1" Width="{Binding Path=ActualWidth, ElementName=LayoutCvs}" >
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" SnapsToDevicePixels="True">
                 <StackPanel.Background>
@@ -110,4 +111,5 @@
             </Image.Source>
         </Image>
     </Canvas>
+        </ScrollViewer>
 </Window>
