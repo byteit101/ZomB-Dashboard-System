@@ -24,4 +24,17 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <DrawingImage x:Key="ZomBButtonIcon">
+        <DrawingImage.Drawing>
+            <GeometryDrawing Geometry="M 0 0 16 0 16 16 0 16 z">
+                <GeometryDrawing.Brush>
+                    <VisualBrush Stretch="Uniform">
+                        <VisualBrush.Visual>
+                            <Button>ZomB</Button>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </GeometryDrawing.Brush>
+            </GeometryDrawing>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>
