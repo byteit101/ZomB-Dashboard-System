@@ -291,10 +291,14 @@
     <Content Include="CREDITS.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="ext\SlimDX.dll" />
+    <None Include="ext\SlimDX.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="ext\WebCam_Capture\%40PSC_ReadMe_1339_10.txt" />
     <Content Include="ext\WebCam_Capture\CAMERA.ICO" />
-    <None Include="ext\x64\SlimDX.dll" />
+    <None Include="ext\x64\SlimDX x64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Graph.ico" />
     <Content Include="ext\InTheHand.Net.Personal.dll">
     </Content>
