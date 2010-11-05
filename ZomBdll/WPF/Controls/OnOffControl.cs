@@ -63,7 +63,9 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             if (PART_Rect != null)
             {
-                PART_Rect.Fill = BoolValue ? Foreground : Background;
+                Binding b = new Binding(BoolValue ? "Foreground" : "Background");
+                b.Source = this;
+                PART_Rect.SetBinding(Ellipse.FillProperty, b);
             }
         }
 

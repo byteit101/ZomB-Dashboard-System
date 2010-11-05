@@ -61,7 +61,9 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             if (PART_Rect != null)
             {
-                PART_Rect.Fill = Value == SpikePositions.Forward ? Foreground : Value == SpikePositions.Reverse ? Background : BorderBrush;
+                Binding b = new Binding(Value == SpikePositions.Forward ? "Foreground" : Value == SpikePositions.Reverse ? "Background" : "BorderBrush");
+                b.Source = this;
+                PART_Rect.SetBinding(Rectangle.FillProperty, b);
             }
         }
 

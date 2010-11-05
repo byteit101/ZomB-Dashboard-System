@@ -18,6 +18,7 @@
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Data;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -54,7 +55,9 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             if (PART_Rect != null)
             {
-                PART_Rect.Fill = BoolValue ? Foreground : Background;
+                Binding b = new Binding(BoolValue ? "Foreground" : "Background");
+                b.Source = this;
+                PART_Rect.SetBinding(Rectangle.FillProperty, b);
             }
         }
 
