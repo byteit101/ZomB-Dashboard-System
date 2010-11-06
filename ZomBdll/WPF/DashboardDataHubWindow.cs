@@ -89,6 +89,12 @@ namespace System451.Communication.Dashboard.WPF.Controls
                     mutex.Close();
                 }
                 catch { }
+                try
+                {
+                    dashboardDataHub1.Stop();
+                    GC.Collect();
+                }
+                catch { }
             };
         }
 
@@ -97,6 +103,11 @@ namespace System451.Communication.Dashboard.WPF.Controls
             try
             {
                 mutex.Close();
+            }
+            catch { }
+            try
+            {
+                dashboardDataHub1.Stop();
             }
             catch { }
         }

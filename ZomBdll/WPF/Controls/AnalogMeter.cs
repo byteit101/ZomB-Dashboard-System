@@ -27,6 +27,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -38,7 +39,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     [Design.ZomBDesignableProperty("Background")]
     [Design.ZomBDesignableProperty("BorderBrush")]
     [Design.ZomBDesignableProperty("BorderThickness")]
-    public class AnalogMeter : ZomBGLControl, IValueConverter
+    public class AnalogMeter : ZomBGLControl, IMultiValueConverter
     {
         static AnalogMeter()
         {
@@ -83,6 +84,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             am.StringValue = am.DoubleValue.ToString();
         }
 
+        [Design.ZomBDesignable(), Description("The maximum value we are going to get."), Category("Behavior")]
         public double Max
         {
             get { return (double)GetValue(MaxProperty); }
@@ -94,7 +96,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             DependencyProperty.Register("Max", typeof(double), typeof(AnalogMeter), new UIPropertyMetadata(1024.0, new PropertyChangedCallback(AnalogMeter.MaxUpdated)));
 
 
-
+        [Design.ZomBDesignable(), Description("The minimum value we are going to get."), Category("Behavior")]
         public double Min
         {
             get { return (double)GetValue(MinProperty); }
@@ -105,12 +107,15 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public static readonly DependencyProperty MinProperty =
             DependencyProperty.Register("Min", typeof(double), typeof(AnalogMeter), new UIPropertyMetadata(0.0, new PropertyChangedCallback(AnalogMeter.MinUpdated)));
 
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object[] value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return Math.Max(-90, Math.Min(((Math.Max(this.Min, Math.Min((double)value, this.Max)) - this.Min) / (this.Max - this.Min) * 180) - 90, 90));
+            var ths = value[0] as AnalogMeter;
+            if (ths == null)
+                return null;
+            return Math.Max(-90, Math.Min(((Math.Max(ths.Min, Math.Min((double)value[1], ths.Max)) - ths.Min) / (ths.Max - ths.Min) * 180) - 90, 90));
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotImplementedException();
         }

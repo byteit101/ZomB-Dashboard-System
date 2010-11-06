@@ -32,7 +32,14 @@
                                                     <GeometryGroup FillRule="Nonzero">
                                                         <PathGeometry>
                                                             <PathGeometry.Transform>
-                                                                <RotateTransform CenterX="25" CenterY="25" Angle="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DoubleValue, Converter={StaticResource AnalogMeterValueLimiter2}}"/>
+                                                                <RotateTransform CenterX="25" CenterY="25">
+                                                                    <RotateTransform.Angle>
+                                                                        <MultiBinding Converter="{StaticResource AnalogMeterValueLimiter2}">
+                                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" />
+                                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="DoubleValue" />
+                                                                        </MultiBinding>
+                                                                    </RotateTransform.Angle>
+                                                                </RotateTransform>
                                                             </PathGeometry.Transform>
                                                             <PathFigure StartPoint="24.7,25" >
                                                                 <LineSegment Point="24.7,1"/>

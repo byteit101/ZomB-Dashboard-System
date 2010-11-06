@@ -38,7 +38,6 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
     public partial class BrushDesignerWindow : Window
     {
         Brush b;
-        bool lefting = true;
         enum Mode
         {
             Solid, LinearGradient

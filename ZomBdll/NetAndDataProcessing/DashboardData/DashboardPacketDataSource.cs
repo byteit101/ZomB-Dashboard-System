@@ -61,6 +61,7 @@ namespace System451.Communication.Dashboard.Net
                     catch (Exception ex)
                     {
                         DoError(ex);
+                        return;
                     }
                 }
                 try
@@ -87,9 +88,15 @@ namespace System451.Communication.Dashboard.Net
                     Thread.Sleep(500);
                     if (backThread.IsAlive)
                         backThread.Abort();
+                    cRIOConnection.Close();
                 }
                 catch
                 {
+                    try
+                    {
+                        cRIOConnection.Close();
+                    }
+                    catch { }
                 }
             }
         }
@@ -162,17 +169,16 @@ namespace System451.Communication.Dashboard.Net
                 {
                     IPEndPoint RIPend = null;
                     //Recieve the data
+                    while (cRIOConnection.Available < 1018 && isrunning) { Thread.Sleep(2); }
+                    if (!isrunning)
+                    {
+                        cRIOConnection.Close();
+                        return;
+                    }
                     byte[] buffer = cRIOConnection.Receive(ref RIPend);
                     string Output;
 
                     //Convert
-                    //this works, and is proven
-                    //Output="";
-                    //for (int cnr = 0; cnr < buffer.Length; cnr++)
-                    //{
-                    //    Output += ((buffer[cnr] != 0) ? ((char)buffer[cnr]).ToString() : "");
-                    //}
-                    //this needs to be tested, but should work
                     Output = UTF8Encoding.UTF8.GetString(buffer);
 
                     //Find segment of data
@@ -220,6 +226,7 @@ namespace System451.Communication.Dashboard.Net
                 catch (ThreadAbortException)
                 {
                     isrunning = false;
+                    cRIOConnection.Close();
                     return;
                 }
                 catch (Exception ex)
@@ -231,6 +238,11 @@ namespace System451.Communication.Dashboard.Net
                         isrunning = false;
                         DoError(new Exception("10 consecutive errors were encountered, stopping DashboardDataHub"));
                         isrunning = false;
+                        try
+                        {
+                            cRIOConnection.Close();
+                        }
+                        catch { }
                         return;
                     }
                 }

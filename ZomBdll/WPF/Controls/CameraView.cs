@@ -344,9 +344,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
             Rect rf = new Rect();
             if (value != null && value != "")
             {
-                try{
-                    value = value.Substring(0, value.IndexOf('o'));
-                }catch{}
                 try
                 {
                     //format widthxheigth+xpos,ypos

@@ -38,8 +38,28 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         public string StringValue
         {
-            get { return (string)GetValue(StringValueProperty); }
-            set { SetValue(StringValueProperty, value); }
+            get
+            {
+                try
+                {
+                    return (string)GetValue(StringValueProperty);
+                }
+                catch
+                {/*wrong thread*/
+                    return Dispatcher.Invoke(new Func<string>(() => StringValue)).ToString();
+                }
+            }
+            set
+            {
+                try
+                {
+                    SetValue(StringValueProperty, value);
+                }
+                catch
+                {/*wrong thread*/
+                    Dispatcher.Invoke(new Action<string>((s) => StringValue = value), value);
+                }
+            }
         }
 
         // Using a DependencyProperty as the backing store for StringValue.  This enables animation, styling, binding, etc...
@@ -49,8 +69,28 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         public int IntValue
         {
-            get { return (int)GetValue(IntValueProperty); }
-            set { SetValue(IntValueProperty, value); }
+            get
+            {
+                try
+                {
+                    return (int)GetValue(IntValueProperty);
+                }
+                catch
+                {/*wrong thread*/
+                    return (int)Dispatcher.Invoke(new Func<int>(() => IntValue));
+                }
+            }
+            set
+            {
+                try
+                {
+                    SetValue(IntValueProperty, value);
+                }
+                catch
+                {/*wrong thread*/
+                    Dispatcher.Invoke(new Action<int>((s) => IntValue = value), value);
+                }
+            }
         }
 
         // Using a DependencyProperty as the backing store for IntValue.  This enables animation, styling, binding, etc...
@@ -61,8 +101,28 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         public double DoubleValue
         {
-            get { return (double)GetValue(DoubleValueProperty); }
-            set { SetValue(DoubleValueProperty, value); }
+            get
+            {
+                try
+                {
+                    return (double)GetValue(DoubleValueProperty);
+                }
+                catch
+                {/*wrong thread*/
+                    return (double)Dispatcher.Invoke(new Func<double>(() => DoubleValue));
+                }
+            }
+            set
+            {
+                try
+                {
+                    SetValue(DoubleValueProperty, value);
+                }
+                catch
+                {/*wrong thread*/
+                    Dispatcher.Invoke(new Action<double>((s) => DoubleValue = value), value);
+                }
+            }
         }
 
         // Using a DependencyProperty as the backing store for DoubleValue.  This enables animation, styling, binding, etc...
@@ -72,8 +132,28 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         public bool BoolValue
         {
-            get { return (bool)GetValue(BoolValueProperty); }
-            set { SetValue(BoolValueProperty, value); }
+            get
+            {
+                try
+                {
+                    return (bool)GetValue(BoolValueProperty);
+                }
+                catch
+                {/*wrong thread*/
+                    return (bool)Dispatcher.Invoke(new Func<bool>(() => BoolValue));
+                }
+            }
+            set
+            {
+                try
+                {
+                    SetValue(BoolValueProperty, value);
+                }
+                catch
+                {/*wrong thread*/
+                    Dispatcher.Invoke(new Action<bool>((s) => BoolValue = value), value);
+                }
+            }
         }
 
         // Using a DependencyProperty as the backing store for BoolValue.  This enables animation, styling, binding, etc...
@@ -119,13 +199,26 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             get
             {
-                try { return (string)GetValue(NameProperty); }
+                try
+                {
+                    return (string)GetValue(NameProperty);
+                }
                 catch
                 {/*wrong thread*/
                     return Dispatcher.Invoke(new Func<string>(() => ControlName)).ToString();
                 }
             }
-            set { SetValue(NameProperty, value); }
+            set
+            {
+                try
+                {
+                    SetValue(NameProperty, value);
+                }
+                catch
+                {/*wrong thread*/
+                    Dispatcher.Invoke(new Action<string>((s) => ControlName = value), value);
+                }
+            }
         }
 
         /// <summary>
