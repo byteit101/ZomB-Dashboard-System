@@ -25,6 +25,8 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System451.Communication.Dashboard.Net;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace System451.Communication.Dashboard
 {
@@ -36,6 +38,7 @@ namespace System451.Communication.Dashboard
     {
         public event InvalidPacketRecievedEventHandler InvalidPacketRecieved;
         public event ErrorEventHandler OnError;
+        Dispatcher main;
 
         bool havestatus = false;
         Collection<IDashboardDataSource> DataSrcs = new Collection<IDashboardDataSource>();
@@ -53,16 +56,23 @@ namespace System451.Communication.Dashboard
         {
             ClearSources();
             RegisterDashboardPacketSource();//Default
+            main = Dispatcher.CurrentDispatcher;
         }
 
         void src_OnError(object sender, ErrorEventArgs e)
         {
+            if (main.Thread != Thread.CurrentThread)
+                main.Invoke(new Utils.VoidFunction(() => src_OnError(sender, e)), null);
             if (this.OnError != null)
                 OnError(sender, e);
+            else
+                DoError(e.GetException());
         }
 
         void src_InvalidPacketRecieved(object sender, InvalidPacketRecievedEventArgs e)
         {
+            if (main.Thread != Thread.CurrentThread)
+                main.Invoke(new Utils.VoidFunction(() => src_InvalidPacketRecieved(sender, e)), null);
             if (this.InvalidPacketRecieved != null)
                 InvalidPacketRecieved(sender, e);
         }
@@ -369,6 +379,8 @@ namespace System451.Communication.Dashboard
 
         void src_NewStatusRecieved(object sender, NewStatusRecievedEventArgs e)
         {
+            if (main.Thread != Thread.CurrentThread)
+                main.Invoke(new Utils.VoidFunction(() => src_NewStatusRecieved(sender, e)), null);
             //Process the Monitors
             foreach (IZomBMonitor monitor in zomBmonitors)
             {
@@ -379,6 +391,8 @@ namespace System451.Communication.Dashboard
 
         void src_NewDataRecieved(object sender, NewDataRecievedEventArgs e)
         {
+            if (main.Thread != Thread.CurrentThread)
+                main.Invoke(new Utils.VoidFunction(() => src_NewDataRecieved(sender, e)), null);
             //Process the Monitors
             foreach (IZomBMonitor monitor in zomBmonitors)
             {

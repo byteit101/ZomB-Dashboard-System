@@ -31,7 +31,6 @@ namespace System451.Communication.Dashboard
         {
             ZomBControlCollection targs = new ZomBControlCollection();
             Image view;
-            private delegate void UpdaterDelegate(object sender, NewImageDataRecievedEventArgs e);
 
             IDashboardVideoDataSource videoSource;
 
@@ -134,7 +133,7 @@ namespace System451.Communication.Dashboard
             {
                 if (this.InvokeRequired)
                 {
-                    this.Invoke(new UpdaterDelegate(videoSource_NewImageRecieved), sender, e);
+                    this.Invoke(new NewImageDataRecievedEventHandler(videoSource_NewImageRecieved), sender, e);
                 }
                 else
                 {

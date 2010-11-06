@@ -174,7 +174,7 @@ namespace System451.Communication.Dashboard.Controls
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new cupd(ymove_ControlUpdated), sender, e);
+                this.Invoke(new ControlUpdatedDelegate(ymove_ControlUpdated), sender, e);
             }
             else
                 //Scale virtual to real
@@ -185,19 +185,18 @@ namespace System451.Communication.Dashboard.Controls
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new cupd(xmove_ControlUpdated), sender, e);
+                this.Invoke(new ControlUpdatedDelegate(xmove_ControlUpdated), sender, e);
             }
             else
                 //Scale virtual to real
                 this.Location = new Point((int)(((float.Parse(e.Value) - XVMin) / (XVMax - XVMin)) * (XMax - XMin) + XMin), this.Location.Y);
         }
 
-        private delegate void cupd(object sender, ZomBControlUpdatedEventArgs e);
         void label_ControlUpdated(object sender, ZomBControlUpdatedEventArgs e)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new cupd(label_ControlUpdated), sender, e);
+                this.Invoke(new ControlUpdatedDelegate(label_ControlUpdated), sender, e);
             }
             else
                 this.Text = e.Value;

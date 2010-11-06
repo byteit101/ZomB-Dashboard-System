@@ -327,12 +327,11 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 }
             }
         }
-        delegate void Empty();
 
         private void Render()
         {
             if (Dispatcher.Thread != System.Threading.Thread.CurrentThread)
-                Dispatcher.Invoke(new Empty(Render), null);
+                Dispatcher.Invoke(new Utils.VoidFunction(Render), null);
             using (DrawingContext dc = RenderOpen())
             {
                 dc.DrawRectangle(Fill, Border, Target);

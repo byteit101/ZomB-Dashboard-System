@@ -25,6 +25,5 @@ namespace System451.Communication.Dashboard
         public delegate void VoidFunction();
         public delegate void StringFunction(string value);
         public delegate void BytesFunction(byte[] value);
-        public delegate void SenderEventArgsFunction(object sender, EventArgs e);
     }
 }
