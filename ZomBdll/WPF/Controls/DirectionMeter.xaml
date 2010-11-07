@@ -39,16 +39,23 @@
                                                     <GeometryGroup FillRule="Nonzero">
                                                         <PathGeometry>
                                                             <PathGeometry.Transform>
-                                                                <RotateTransform CenterX="25" CenterY="25" Angle="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DoubleValue, Converter={StaticResource DirectionMeterLmt}}"/>
+                                                                <RotateTransform CenterX="25" CenterY="25">
+                                                                    <RotateTransform.Angle>
+                                                                        <MultiBinding Converter="{StaticResource DirectionMeterLmt}">
+                                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" />
+                                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="DoubleValue" />
+                                                                        </MultiBinding>
+                                                                    </RotateTransform.Angle>
+                                                                </RotateTransform>
                                                             </PathGeometry.Transform>
-                                                                <PathFigure StartPoint="24.7,25" >
-                                                                    <LineSegment Point="24.7,1"/>
-                                                                    <LineSegment Point="23.5,1.1"/>
-                                                                    <LineSegment Point="25,-2"/>
-                                                                    <LineSegment Point="26.5,1.1"/>
-                                                                    <LineSegment Point="25.3,1"/>
-                                                                    <LineSegment Point="25.3,25"/>
-                                                                </PathFigure>
+                                                            <PathFigure StartPoint="24.7,25" >
+                                                                <LineSegment Point="24.7,1"/>
+                                                                <LineSegment Point="23.5,1.1"/>
+                                                                <LineSegment Point="25,-2"/>
+                                                                <LineSegment Point="26.5,1.1"/>
+                                                                <LineSegment Point="25.3,1"/>
+                                                                <LineSegment Point="25.3,25"/>
+                                                            </PathFigure>
                                                         </PathGeometry>
                                                         <EllipseGeometry Center="25,25" RadiusX="1" RadiusY="1"/>
                                                     </GeometryGroup>

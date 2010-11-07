@@ -27,6 +27,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -38,7 +39,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     [Design.ZomBDesignableProperty("Background")]
     [Design.ZomBDesignableProperty("BorderBrush")]
     [Design.ZomBDesignableProperty("BorderThickness")]
-    public class DirectionMeter : ZomBGLControl, IValueConverter
+    public class DirectionMeter : ZomBGLControl, IMultiValueConverter
     {
         static DirectionMeter()
         {
@@ -83,6 +84,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             am.StringValue = am.DoubleValue.ToString();
         }
 
+        [Design.ZomBDesignable(), Description("The maximum value we are going to get."), Category("Behavior")]
         public double Max
         {
             get { return (double)GetValue(MaxProperty); }
@@ -91,10 +93,10 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         // Using a DependencyProperty as the backing store for Max.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MaxProperty =
-            DependencyProperty.Register("Max", typeof(double), typeof(DirectionMeter), new UIPropertyMetadata(1024.0, new PropertyChangedCallback(DirectionMeter.MaxUpdated)));
+            DependencyProperty.Register("Max", typeof(double), typeof(DirectionMeter), new FrameworkPropertyMetadata(360.0, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(DirectionMeter.MaxUpdated)));
 
 
-
+        [Design.ZomBDesignable(), Description("The minimum value we are going to get."), Category("Behavior")]
         public double Min
         {
             get { return (double)GetValue(MinProperty); }
@@ -103,14 +105,17 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         // Using a DependencyProperty as the backing store for Min.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MinProperty =
-            DependencyProperty.Register("Min", typeof(double), typeof(DirectionMeter), new UIPropertyMetadata(0.0, new PropertyChangedCallback(DirectionMeter.MinUpdated)));
+            DependencyProperty.Register("Min", typeof(double), typeof(DirectionMeter), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(DirectionMeter.MinUpdated)));
 
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object[] value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return value;// Math.Max(-90, Math.Min(((Math.Max(this.Min, Math.Min((double)value, this.Max)) - this.Min) / (this.Max - this.Min) * 180) - 90, 90));
+            var ths = value[0] as DirectionMeter;
+            if (ths == null)
+                return null;
+            return ((((double)value[1] - ths.Min) / (ths.Max - ths.Min)) * 360.0);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotImplementedException();
         }
