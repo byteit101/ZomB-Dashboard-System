@@ -27,6 +27,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -76,17 +77,19 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         private void Regenerate()
         {
+            if (PathGeo == null)
+                return;
             var pf = new PathFigure();
             int x = 0;
             foreach (var y in vals)
             {
                 if (x == 0)
                 {
-                    pf.StartPoint = new Point(++x/2.0, y*-10.0+10.0);
+                    pf.StartPoint = new Point(++x / 2.0, Neutralize(y));
                 }
                 else
                 {
-                    pf.Segments.Add(new LineSegment(new Point(++x/2.0, y*-10.0+10.0), true));
+                    pf.Segments.Add(new LineSegment(new Point(++x / 2.0, Neutralize(y)), true));
                 }
             }
             var pgo = new PathGeometry();
@@ -94,12 +97,53 @@ namespace System451.Communication.Dashboard.WPF.Controls
             PathGeo.Geometry=pgo;
         }
 
+        private double Neutralize(double y)
+        {
+            return 20 - (((y - Min) / (Max - Min)) * 20.0);
+        }
+
+
+
+        [Design.ZomBDesignable(), Description("The maximum value we are going to get."), Category("Behavior")]
+        public double Max
+        {
+            get { return (double)GetValue(MaxProperty); }
+            set { SetValue(MaxProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Max.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MaxProperty =
+            DependencyProperty.Register("Max", typeof(double), typeof(DataGraph), new UIPropertyMetadata(1.00, new PropertyChangedCallback(MaxUpdated)));
+
+
+        [Design.ZomBDesignable(), Description("The minimum value we are going to get."), Category("Behavior")]
+        public double Min
+        {
+            get { return (double)GetValue(MinProperty); }
+            set { SetValue(MinProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Min.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MinProperty =
+            DependencyProperty.Register("Min", typeof(double), typeof(DataGraph), new UIPropertyMetadata(-1.0, new PropertyChangedCallback(MinUpdated)));
+
+        static void MaxUpdated(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            (o as DataGraph).Regenerate();
+        }
+
+        static void MinUpdated(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            (o as DataGraph).Regenerate();
+        }
+
 
         #region IValueConverter Members
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return (25.0 / (double)value);
+            //thickness
+            return (1 / ((double)value / 50.0));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
