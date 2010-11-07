@@ -179,14 +179,18 @@ namespace System451.Communication.Dashboard.ViZ
                         return;
                     }
                 }
-                if (Type == typeof(double))
-                    value = double.Parse(value.ToString());
-                if (Type == typeof(int))
-                    value = int.Parse(value.ToString());
-                if (Type.IsEnum)
-                    value = Enum.Parse(Type, value.ToString());
+                try
+                {
+                    if (Type == typeof(double))
+                        value = double.Parse(value.ToString());
+                    if (Type == typeof(int))
+                        value = int.Parse(value.ToString());
+                    if (Type.IsEnum)
+                        value = Enum.Parse(Type, value.ToString());
 
-                Property.SetValue(Object, value, null);
+                    Property.SetValue(Object, value, null);
+                }
+                catch { }//Invalid format
             }
         }
 
