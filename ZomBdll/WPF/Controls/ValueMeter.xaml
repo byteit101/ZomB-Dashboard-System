@@ -10,7 +10,13 @@
                     <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
                         <Rectangle Fill="{TemplateBinding Foreground}" RenderTransformOrigin="0 1">
                             <Rectangle.RenderTransform>
-                                <ScaleTransform ScaleY="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DoubleValue, Converter={StaticResource Scl}}">
+                                <ScaleTransform>
+                                    <ScaleTransform.ScaleY>
+                                        <MultiBinding Converter="{StaticResource Scl}">
+                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" />
+                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="DoubleValue" />
+                                        </MultiBinding>
+                                    </ScaleTransform.ScaleY>
                                 </ScaleTransform>
                             </Rectangle.RenderTransform>
                         </Rectangle>

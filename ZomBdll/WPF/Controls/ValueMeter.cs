@@ -20,6 +20,8 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Data;
 using System;
+using System.Globalization;
+using System.ComponentModel;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -31,7 +33,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     [Design.ZomBDesignableProperty("Background")]
     [Design.ZomBDesignableProperty("BorderBrush")]
     [Design.ZomBDesignableProperty("BorderThickness")]
-    public class ValueMeter : ZomBGLControl, IValueConverter
+    public class ValueMeter : ZomBGLControl, IMultiValueConverter
     {
         static ValueMeter()
         {
@@ -49,14 +51,40 @@ namespace System451.Communication.Dashboard.WPF.Controls
             BorderThickness = new Thickness(1);
         }
 
-        #region IValueConverter Members
 
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        [Design.ZomBDesignable(), Description("The maximum value we are going to get."), Category("Behavior")]
+        public double Max
         {
-            return Math.Min(Math.Max((((double)value) + 1) / 2.0, 0), 1);
+            get { return (double)GetValue(MaxProperty); }
+            set { SetValue(MaxProperty, value); }
         }
 
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        // Using a DependencyProperty as the backing store for Max.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MaxProperty =
+            DependencyProperty.Register("Max", typeof(double), typeof(ValueMeter), new FrameworkPropertyMetadata(1.0, FrameworkPropertyMetadataOptions.AffectsRender));
+
+
+        [Design.ZomBDesignable(), Description("The minimum value we are going to get."), Category("Behavior")]
+        public double Min
+        {
+            get { return (double)GetValue(MinProperty); }
+            set { SetValue(MinProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Min.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MinProperty =
+            DependencyProperty.Register("Min", typeof(double), typeof(ValueMeter), new FrameworkPropertyMetadata(-1.0, FrameworkPropertyMetadataOptions.AffectsRender));
+
+
+        #region IValueConverter Members
+
+        public object Convert(object[] value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var ths = value[0] as ValueMeter;
+            return Math.Min(Math.Max((((double)value[1] - ths.Min) / (ths.Max - ths.Min)), 0), 1);
+        }
+
+        public object[] ConvertBack(object value, Type[] targetType, object parameter, CultureInfo culture)
         {
             throw new System.NotImplementedException();
         }
