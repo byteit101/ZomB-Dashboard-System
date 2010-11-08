@@ -51,7 +51,13 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return ((double)value)*90-90;
+            if (parameter.ToString() == "2")
+            {
+                if (((double)value) * 90<-25)
+                    return ((double)value) * 90 - 91;
+                return ((double)value) * 90 - 150;
+            }
+            return ((double)value) * 90 - 90;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

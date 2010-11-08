@@ -9,13 +9,13 @@
                 <ControlTemplate TargetType="{x:Type ZomB:TacoMeter}">
                     <Border Padding="{TemplateBinding Padding}">
                         <Viewbox>
-                            <Grid>
-                                <Image Stretch="Fill" Source="pack://application:,,,/ZomB;Component/Resources/tacoempty.png" />
-                                <Image Stretch="Fill" Source="pack://application:,,,/ZomB;Component/Resources/tacofull.png">
+                            <Canvas Width="675" Height="291">
+                                <Image Width="675" Height="291" Source="pack://application:,,,/ZomB;Component/Resources/tacoempty.png" />
+                                <Image Width="675" Height="291" Source="pack://application:,,,/ZomB;Component/Resources/tacofull.png">
                                     <Image.OpacityMask>
-                                        <DrawingBrush>
+                                        <DrawingBrush Viewport="0 0 675 291" ViewportUnits="Absolute">
                                             <DrawingBrush.Transform>
-                                                <RotateTransform CenterX="337.5" CenterY="291" Angle="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DoubleValue, Converter={StaticResource Rotor}}" />
+                                                <RotateTransform CenterX="337.5" CenterY="291" Angle="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DoubleValue, Converter={StaticResource Rotor}, ConverterParameter=1}" />
                                             </DrawingBrush.Transform>
                                             <DrawingBrush.Drawing>
                                                 <GeometryDrawing Geometry="M 0 291 337.5 291 337.5 0 0 0 z" Brush="Black" />
@@ -23,7 +23,19 @@
                                         </DrawingBrush>
                                     </Image.OpacityMask>
                                 </Image>
-                            </Grid>
+                                <Image Width="675" Height="291" Source="pack://application:,,,/ZomB;Component/Resources/tacofull.png">
+                                    <Image.OpacityMask>
+                                        <DrawingBrush Viewport="0 0 675 291" ViewportUnits="Absolute">
+                                            <DrawingBrush.Transform>
+                                                <RotateTransform CenterX="337.5" CenterY="291" Angle="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DoubleValue, Converter={StaticResource Rotor}, ConverterParameter=2}" />
+                                            </DrawingBrush.Transform>
+                                            <DrawingBrush.Drawing>
+                                                <GeometryDrawing Geometry="M 0 291 337.5 291 337.5 0 0 0 z" Brush="Black" />
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Image.OpacityMask>
+                                </Image>
+                            </Canvas>
                         </Viewbox>
                     </Border>
                 </ControlTemplate>
