@@ -27,6 +27,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -34,7 +35,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// Interaction logic for TacoMeter.xaml
     /// </summary>
     [Design.ZomBControl("Taco Meter", Description = "This shows -1 to 1, useful for eating", IconName="TacoMeterIcon")]
-    public class TacoMeter : ZomBGLControl, IValueConverter
+    public class TacoMeter : ZomBGLControl, IMultiValueConverter
     {
         static TacoMeter()
         {
@@ -47,20 +48,45 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.Width = 150;
             this.Height = 100;
         }
-
-
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        
+        [Design.ZomBDesignable(), Description("The maximum value we are going to get."), Category("Behavior")]
+        public double Max
         {
-            if (parameter.ToString() == "2")
-            {
-                if (((double)value) * 90<-25)
-                    return ((double)value) * 90 - 91;
-                return ((double)value) * 90 - 150;
-            }
-            return ((double)value) * 90 - 90;
+            get { return (double)GetValue(MaxProperty); }
+            set { SetValue(MaxProperty, value); }
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        // Using a DependencyProperty as the backing store for Max.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MaxProperty =
+            DependencyProperty.Register("Max", typeof(double), typeof(TacoMeter), new FrameworkPropertyMetadata(1.0, FrameworkPropertyMetadataOptions.AffectsRender));
+        
+        [Design.ZomBDesignable(), Description("The minimum value we are going to get."), Category("Behavior")]
+        public double Min
+        {
+            get { return (double)GetValue(MinProperty); }
+            set { SetValue(MinProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Min.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MinProperty =
+            DependencyProperty.Register("Min", typeof(double), typeof(TacoMeter), new FrameworkPropertyMetadata(-1.0, FrameworkPropertyMetadataOptions.AffectsRender));
+
+        public object Convert(object[] value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            var ths = value[0] as TacoMeter;
+            double v = (double)value[1];
+            v = (v - ths.Min) / (ths.Max - ths.Min);
+            v = (v - 0.5) * 180.0;
+            if (parameter.ToString() == "2")
+            {
+                if (v < -25)
+                    return v - 91;
+                return v - 150;
+            }
+            return v - 90;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotImplementedException();
         }

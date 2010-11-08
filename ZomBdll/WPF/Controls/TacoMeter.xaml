@@ -15,7 +15,14 @@
                                     <Image.OpacityMask>
                                         <DrawingBrush Viewport="0 0 675 291" ViewportUnits="Absolute">
                                             <DrawingBrush.Transform>
-                                                <RotateTransform CenterX="337.5" CenterY="291" Angle="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DoubleValue, Converter={StaticResource Rotor}, ConverterParameter=1}" />
+                                                <RotateTransform CenterX="337.5" CenterY="291">
+                                                    <RotateTransform.Angle>
+                                                        <MultiBinding Converter="{StaticResource Rotor}" ConverterParameter="1">
+                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" />
+                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="DoubleValue" />
+                                                        </MultiBinding>
+                                                    </RotateTransform.Angle>
+                                                </RotateTransform>
                                             </DrawingBrush.Transform>
                                             <DrawingBrush.Drawing>
                                                 <GeometryDrawing Geometry="M 0 291 337.5 291 337.5 0 0 0 z" Brush="Black" />
@@ -27,7 +34,14 @@
                                     <Image.OpacityMask>
                                         <DrawingBrush Viewport="0 0 675 291" ViewportUnits="Absolute">
                                             <DrawingBrush.Transform>
-                                                <RotateTransform CenterX="337.5" CenterY="291" Angle="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DoubleValue, Converter={StaticResource Rotor}, ConverterParameter=2}" />
+                                                <RotateTransform CenterX="337.5" CenterY="291">
+                                                    <RotateTransform.Angle>
+                                                        <MultiBinding Converter="{StaticResource Rotor}" ConverterParameter="2">
+                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" />
+                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="DoubleValue" />
+                                                        </MultiBinding>
+                                                    </RotateTransform.Angle>
+                                                </RotateTransform>
                                             </DrawingBrush.Transform>
                                             <DrawingBrush.Drawing>
                                                 <GeometryDrawing Geometry="M 0 291 337.5 291 337.5 0 0 0 z" Brush="Black" />
