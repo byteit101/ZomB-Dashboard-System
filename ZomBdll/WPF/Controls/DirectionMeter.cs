@@ -69,21 +69,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
             DoubleValue = d;
         }
 
-        static void MaxUpdated(DependencyObject o, DependencyPropertyChangedEventArgs e)
-        {
-            DirectionMeter am = (o as DirectionMeter);
-            am.DoubleValue = Math.Max(am.Min, Math.Min(am.DoubleValue, (double)e.OldValue));
-            am.IntValue = (int)am.DoubleValue;
-            am.StringValue = am.DoubleValue.ToString();
-        }
-        static void MinUpdated(DependencyObject o, DependencyPropertyChangedEventArgs e)
-        {
-            DirectionMeter am = (o as DirectionMeter);
-            am.DoubleValue = Math.Max((double)e.OldValue, Math.Min(am.DoubleValue, am.Max));
-            am.IntValue = (int)am.DoubleValue;
-            am.StringValue = am.DoubleValue.ToString();
-        }
-
         [Design.ZomBDesignable(), Description("The maximum value we are going to get."), Category("Behavior")]
         public double Max
         {
@@ -93,7 +78,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         // Using a DependencyProperty as the backing store for Max.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MaxProperty =
-            DependencyProperty.Register("Max", typeof(double), typeof(DirectionMeter), new FrameworkPropertyMetadata(360.0, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(DirectionMeter.MaxUpdated)));
+            DependencyProperty.Register("Max", typeof(double), typeof(DirectionMeter), new FrameworkPropertyMetadata(360.0, FrameworkPropertyMetadataOptions.AffectsRender));
 
 
         [Design.ZomBDesignable(), Description("The minimum value we are going to get."), Category("Behavior")]
@@ -105,7 +90,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         // Using a DependencyProperty as the backing store for Min.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MinProperty =
-            DependencyProperty.Register("Min", typeof(double), typeof(DirectionMeter), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(DirectionMeter.MinUpdated)));
+            DependencyProperty.Register("Min", typeof(double), typeof(DirectionMeter), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsRender));
 
         public object Convert(object[] value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

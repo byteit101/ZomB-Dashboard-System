@@ -34,11 +34,17 @@
                                 <Image.OpacityMask>
                                     <DrawingBrush>
                                         <DrawingBrush.Transform>
-                                            <RotateTransform CenterX="50" CenterY="100" Angle="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DoubleValue, Converter={StaticResource AngleBinder}, ConverterParameter=l}"/>
+                                            <RotateTransform CenterX="50" CenterY="100">
+                                                    <RotateTransform.Angle>
+                                                        <MultiBinding Converter="{StaticResource AngleBinder}" ConverterParameter="l">
+                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" />
+                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="DoubleValue" />
+                                                        </MultiBinding>
+                                                    </RotateTransform.Angle>
+                                                </RotateTransform>
                                         </DrawingBrush.Transform>
                                         <DrawingBrush.Drawing>
                                             <GeometryDrawing Brush="Black" Geometry="M 50,0 50,50 100,50 0,50 0,0 z" />
-
                                         </DrawingBrush.Drawing>
                                     </DrawingBrush>
                                 </Image.OpacityMask>
@@ -58,11 +64,17 @@
                                 <Image.OpacityMask>
                                     <DrawingBrush>
                                         <DrawingBrush.Transform>
-                                            <RotateTransform CenterX="50" CenterY="100" Angle="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DoubleValue, Converter={StaticResource AngleBinder}, ConverterParameter=l2}"/>
+                                            <RotateTransform CenterX="50" CenterY="100">
+                                                    <RotateTransform.Angle>
+                                                        <MultiBinding Converter="{StaticResource AngleBinder}" ConverterParameter="l2">
+                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" />
+                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="DoubleValue" />
+                                                        </MultiBinding>
+                                                    </RotateTransform.Angle>
+                                                </RotateTransform>
                                         </DrawingBrush.Transform>
                                         <DrawingBrush.Drawing>
                                             <GeometryDrawing Brush="Black" Geometry="M 50,0 50,50 100,50 0,50 0,0 z" />
-
                                         </DrawingBrush.Drawing>
                                     </DrawingBrush>
                                 </Image.OpacityMask>
@@ -82,7 +94,14 @@
                                 <Image.OpacityMask>
                                     <DrawingBrush>
                                         <DrawingBrush.Transform>
-                                            <RotateTransform CenterX="50" CenterY="100" Angle="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DoubleValue, Converter={StaticResource AngleBinder}, ConverterParameter=r}"/>
+                                            <RotateTransform CenterX="50" CenterY="100">
+                                                    <RotateTransform.Angle>
+                                                        <MultiBinding Converter="{StaticResource AngleBinder}" ConverterParameter="r">
+                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" />
+                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="DoubleValue" />
+                                                        </MultiBinding>
+                                                    </RotateTransform.Angle>
+                                                </RotateTransform>
                                         </DrawingBrush.Transform>
                                         <DrawingBrush.Drawing>
                                             <GeometryDrawing Brush="Black" Geometry="M 50,0 50,50 100,50 100,0 0,0 100,0 z" />
@@ -105,7 +124,14 @@
                                 <Image.OpacityMask>
                                     <DrawingBrush>
                                         <DrawingBrush.Transform>
-                                            <RotateTransform CenterX="50" CenterY="100" Angle="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DoubleValue, Converter={StaticResource AngleBinder}, ConverterParameter=r2}"/>
+                                            <RotateTransform CenterX="50" CenterY="100">
+                                                    <RotateTransform.Angle>
+                                                        <MultiBinding Converter="{StaticResource AngleBinder}" ConverterParameter="r2">
+                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" />
+                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="DoubleValue" />
+                                                        </MultiBinding>
+                                                    </RotateTransform.Angle>
+                                                </RotateTransform>
                                         </DrawingBrush.Transform>
                                         <DrawingBrush.Drawing>
                                             <GeometryDrawing Brush="Black" Geometry="M 50,0 50,50 100,50 100,0 0,0 100,0 z" />
@@ -128,8 +154,15 @@
                                 <Image.OpacityMask>
                                     <DrawingBrush>
                                         <DrawingBrush.Transform>
-                                            <TranslateTransform  X="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DoubleValue, Converter={StaticResource AngleBinder}, ConverterParameter=sh}"/>
-                                        </DrawingBrush.Transform>
+                                            <TranslateTransform>
+                                                    <TranslateTransform.X>
+                                                        <MultiBinding Converter="{StaticResource AngleBinder}" ConverterParameter="sh">
+                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" />
+                                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="DoubleValue" />
+                                                        </MultiBinding>
+                                                    </TranslateTransform.X>
+                                                    </TranslateTransform>
+                                            </DrawingBrush.Transform>
                                         <DrawingBrush.Drawing>
                                             <GeometryDrawing Brush="Black" Geometry="M 50,0 50,50 100,50 100,0 0,0 100,0 z" />
                                         </DrawingBrush.Drawing>

@@ -27,15 +27,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
     /// <summary>
     /// Interaction logic for SpeedMeter.xaml
     /// </summary>
-    [Design.ZomBControl("Speed Meter", Description = "This shows -1 to 1, useful for any thing, but helpful for motors and joystick inputs", IconName="SpeedMeterIcon")]
+    [Design.ZomBControl("Speed Meter", Description = "This shows -1 to 1, useful for any thing, but helpful for motors and joystick inputs", IconName = "SpeedMeterIcon")]
     [Design.ZomBDesignableProperty("Background")]
-    public class SpeedMeter : ZomBGLControl, IValueConverter
+    public class SpeedMeter : ZomBGLControl, IMultiValueConverter
     {
         static SpeedMeter()
         {
@@ -52,21 +53,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.Height = 50;
         }
 
-        static void MaxUpdated(DependencyObject o, DependencyPropertyChangedEventArgs e)
-        {
-            SpeedMeter am = (o as SpeedMeter);
-            am.DoubleValue = Math.Max(am.Min, Math.Min(am.DoubleValue, (double)e.OldValue));
-            am.IntValue = (int)am.DoubleValue;
-            am.StringValue = am.DoubleValue.ToString();
-        }
-        static void MinUpdated(DependencyObject o, DependencyPropertyChangedEventArgs e)
-        {
-            SpeedMeter am = (o as SpeedMeter);
-            am.DoubleValue = Math.Max((double)e.OldValue, Math.Min(am.DoubleValue, am.Max));
-            am.IntValue = (int)am.DoubleValue;
-            am.StringValue = am.DoubleValue.ToString();
-        }
-
+        [Design.ZomBDesignable(), Description("The maximum value we are going to get."), Category("Behavior")]
         public double Max
         {
             get { return (double)GetValue(MaxProperty); }
@@ -75,10 +62,10 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         // Using a DependencyProperty as the backing store for Max.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MaxProperty =
-            DependencyProperty.Register("Max", typeof(double), typeof(SpeedMeter), new UIPropertyMetadata(1.0, new PropertyChangedCallback(SpeedMeter.MaxUpdated)));
+            DependencyProperty.Register("Max", typeof(double), typeof(SpeedMeter), new FrameworkPropertyMetadata(1.0, FrameworkPropertyMetadataOptions.AffectsRender));
 
 
-
+        [Design.ZomBDesignable(), Description("The minimum value we are going to get."), Category("Behavior")]
         public double Min
         {
             get { return (double)GetValue(MinProperty); }
@@ -87,16 +74,17 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         // Using a DependencyProperty as the backing store for Min.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MinProperty =
-            DependencyProperty.Register("Min", typeof(double), typeof(SpeedMeter), new UIPropertyMetadata(-1.0, new PropertyChangedCallback(SpeedMeter.MinUpdated)));
+            DependencyProperty.Register("Min", typeof(double), typeof(SpeedMeter), new FrameworkPropertyMetadata(-1.0, FrameworkPropertyMetadataOptions.AffectsRender));
 
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object[] value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            var r= Math.Max(-90, Math.Min(((Math.Max(this.Min, Math.Min((double)value, this.Max)) - this.Min) / (this.Max - this.Min) * 180) - 90, 90));
+            var ths = value[0] as SpeedMeter;
+            var r = Math.Max(-90, Math.Min((((double)value[1] - ths.Min) / (ths.Max - ths.Min) * 180) - 90, 90));
             if (parameter.ToString() == "l")
             {
                 if (r <= 0)
                 {
-                    return -90;
+                    return -90.0;
                 }
                 else
                 {
@@ -107,7 +95,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             {
                 if (r <= 0)
                 {
-                    return -90;
+                    return -90.0;
                 }
                 else
                 {
@@ -118,7 +106,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             {
                 if (r >= 0)
                 {
-                    return 90;
+                    return 90.0;
                 }
                 else
                 {
@@ -129,29 +117,29 @@ namespace System451.Communication.Dashboard.WPF.Controls
             {
                 if (r >= 0)
                 {
-                    return 90;
+                    return 90.0;
                 }
                 else
                 {
-                    return r / 6;
+                    return r / 6.0;
                 }
             }
             else if (parameter.ToString() == "sh")
             {
                 if (r > 0)
                 {
-                    return -50;
+                    return -50.0;
                 }
                 else
                 {
-                    return 0;
+                    return 0.0;
                 }
             }
             else
                 return r;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotImplementedException();
         }
