@@ -36,6 +36,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(xShake),
             new FrameworkPropertyMetadata(typeof(xShake)));
+            StringValueProperty.OverrideMetadata(typeof(xShake), new FrameworkPropertyMetadata(false, valChange));
         }
 
         public xShake()
@@ -44,11 +45,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.Background = Brushes.Wheat;
             this.Width = 10;
             this.Height = 10;
-            try
-            {
-                StringValueProperty.OverrideMetadata(typeof(xShake), new FrameworkPropertyMetadata(false, valChange));
-            }
-            catch { }
         }
 
         [Design.ZomBDesignable(DisplayName = "Controller #"), Description("The Gamepad Number")]
@@ -72,9 +68,10 @@ namespace System451.Communication.Dashboard.WPF.Controls
             return Math.Max(0, Math.Min(3, (int)e));
         }
 
-        private void valChange(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        private static void valChange(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            if (pad != null)
+            var s = sender as xShake;
+            if (s.pad != null)
             {
                 float l, r;
                 if ((e.NewValue as string).Contains(";"))
@@ -100,7 +97,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
                         l = r = 0;
                     }
                 }
-                pad.Vibrate(l, r);
+                s.pad.Vibrate(l, r);
             }
         }
     }
