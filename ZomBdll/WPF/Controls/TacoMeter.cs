@@ -16,25 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.ComponentModel;
+using System.Windows;
+using System.Windows.Data;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
     /// <summary>
     /// Interaction logic for TacoMeter.xaml
     /// </summary>
-    [Design.ZomBControl("Taco Meter", Description = "This shows -1 to 1, useful for eating", IconName="TacoMeterIcon")]
+    [Design.ZomBControl("Taco Meter", Description = "This shows -1 to 1, useful for eating", IconName = "TacoMeterIcon")]
     public class TacoMeter : ZomBGLControl, IMultiValueConverter
     {
         static TacoMeter()
@@ -48,7 +39,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.Width = 150;
             this.Height = 100;
         }
-        
+
         [Design.ZomBDesignable(), Description("The maximum value we are going to get."), Category("Behavior")]
         public double Max
         {
@@ -59,7 +50,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         // Using a DependencyProperty as the backing store for Max.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MaxProperty =
             DependencyProperty.Register("Max", typeof(double), typeof(TacoMeter), new FrameworkPropertyMetadata(1.0, FrameworkPropertyMetadataOptions.AffectsRender));
-        
+
         [Design.ZomBDesignable(), Description("The minimum value we are going to get."), Category("Behavior")]
         public double Min
         {

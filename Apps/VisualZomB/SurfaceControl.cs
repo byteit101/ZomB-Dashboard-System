@@ -15,17 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System451.Communication.Dashboard.WPF.Design;
-using System.Reflection;
-using System.Collections.Generic;
-using System;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
-using System.Collections.ObjectModel;
-using System.Windows.Threading;
+using System451.Communication.Dashboard.WPF.Design;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -92,7 +90,7 @@ namespace System451.Communication.Dashboard.ViZ
             }
             base.OnRender(drawingContext);
         }
-        
+
         public void SetSnap(SnapLine snap)
         {
             snaps.Add(snap);
@@ -158,7 +156,7 @@ namespace System451.Communication.Dashboard.ViZ
             if (prophld == null)
                 return;
             prophld.Children.Clear();
-            bool toped=false, lefted=false;
+            bool toped = false, lefted = false;
             foreach (var category in proplist)
             {
                 var lb = new Label();
@@ -219,7 +217,7 @@ namespace System451.Communication.Dashboard.ViZ
                         proplist.Add(pe.Category, new List<PropertyElement>());
 
                     proplist[pe.Category].Add(pe);
-                }                
+                }
             }
             foreach (var at in ctrl.GetType().GetCustomAttributes(typeof(ZomBDesignablePropertyAttribute), true))
             {

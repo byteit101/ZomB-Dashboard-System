@@ -16,14 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using System.Collections.ObjectModel;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -194,7 +191,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         /// The control name
         /// </summary>
         [Browsable(false), Category("ZomB"), Description("What this control will get the value of from the packet Data")]
-        [Design.ZomBDesignable(DisplayName = "Name", Index=1)]
+        [Design.ZomBDesignable(DisplayName = "Name", Index = 1)]
         virtual public string ControlName
         {
             get
@@ -282,7 +279,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             {
                 return ((double)value) * (double.Parse(parameter.ToString()));
             }
-            
+
             return value;
         }
 

@@ -16,20 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System451.Communication.Dashboard.Libs.Xbox360Controller;
 using System451.Communication.Dashboard.Utils;
-using System.ComponentModel;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -60,7 +51,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             catch { }
         }
 
-        [Design.ZomBDesignable(DisplayName="Controller #"), Description("The Gamepad Number")]
+        [Design.ZomBDesignable(DisplayName = "Controller #"), Description("The Gamepad Number")]
         public int GamepadNumber
         {
             get { return (int)GetValue(GamepadNumberProperty); }

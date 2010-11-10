@@ -17,17 +17,10 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.ComponentModel;
+using System.Windows;
+using System.Windows.Data;
+using System.Windows.Media;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -35,7 +28,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// Interaction logic for DataGraph.xaml
     /// </summary>
     [TemplatePart(Name = "PART_PathGeo", Type = typeof(GeometryDrawing))]
-    [Design.ZomBControl("Data Graph", Description = "This shows -1 to 1 over time, useful for almost everything", IconName="DataGraphIcon")]
+    [Design.ZomBControl("Data Graph", Description = "This shows -1 to 1 over time, useful for almost everything", IconName = "DataGraphIcon")]
     [Design.ZomBDesignableProperty("Foreground")]
     [Design.ZomBDesignableProperty("Background")]
     [Design.ZomBDesignableProperty("BorderBrush")]
@@ -94,7 +87,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             }
             var pgo = new PathGeometry();
             pgo.Figures.Add(pf);
-            PathGeo.Geometry=pgo;
+            PathGeo.Geometry = pgo;
         }
 
         private double Neutralize(double y)

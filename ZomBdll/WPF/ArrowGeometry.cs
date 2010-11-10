@@ -16,10 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Media;
 using System.Windows;
+using System.Windows.Media;
 
 namespace System451.Communication.Dashboard.WPF
 {
@@ -58,8 +56,8 @@ namespace System451.Communication.Dashboard.WPF
             Point t = (location.TopLeft + (Vector)location.BottomRight);
             Point m = new Point(t.X / 2.0, t.Y / 2.0);
 
-            Point z = new Point(t.X / 2.0+(Math.Sin(degree*degreeToRadian)*((location.Right-location.Left)/2)),
-                                 t.Y / 2.0 -(Math.Cos(degree * degreeToRadian) * ((location.Bottom - location.Top) / 2)));
+            Point z = new Point(t.X / 2.0 + (Math.Sin(degree * degreeToRadian) * ((location.Right - location.Left) / 2)),
+                                 t.Y / 2.0 - (Math.Cos(degree * degreeToRadian) * ((location.Bottom - location.Top) / 2)));
 
             StreamGeometry g = new StreamGeometry();
             using (StreamGeometryContext dc = g.Open())
@@ -76,7 +74,7 @@ namespace System451.Communication.Dashboard.WPF
                 dc.LineTo((p.Figures[0].Segments[0] as PolyLineSegment).Points[2], true, true);
             }
             g.Freeze();
-            return new GeometryDrawing(color, new Pen(color, width),g);
+            return new GeometryDrawing(color, new Pen(color, width), g);
         }
     }
 }

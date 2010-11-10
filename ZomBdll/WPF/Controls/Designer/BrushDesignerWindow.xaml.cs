@@ -16,19 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Reflection;
+using System.Windows;
+using System.Windows.Media;
 
 namespace System451.Communication.Dashboard.WPF.Controls.Designer
 {
@@ -49,7 +39,7 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
         {
             InitializeComponent();
             b = prop.GetValue(obj, null) as Brush;
-            setv = (x)=>prop.SetValue(obj, x, null);
+            setv = (x) => prop.SetValue(obj, x, null);
             if (b.IsFrozen)
             {
                 b = b.Clone();
@@ -82,7 +72,7 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
 
         private void ColorControl_ColorChanged(object sender, RoutedEventArgs e)
         {
-            if (cmode== Mode.Solid)
+            if (cmode == Mode.Solid)
             {
                 (b as SolidColorBrush).Color = ColorPicker.Color;
             }

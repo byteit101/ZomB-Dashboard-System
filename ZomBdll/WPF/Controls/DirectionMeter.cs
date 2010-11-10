@@ -16,25 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.ComponentModel;
+using System.Windows;
+using System.Windows.Data;
+using System.Windows.Media;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
     /// <summary>
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
-    [Design.ZomBControl("Direction Meter", Description = "This shows 360 degrees, helpful for direction", IconName="DirectionMeterIcon")]
+    [Design.ZomBControl("Direction Meter", Description = "This shows 360 degrees, helpful for direction", IconName = "DirectionMeterIcon")]
     [Design.ZomBDesignableProperty("Foreground")]
     [Design.ZomBDesignableProperty("Background")]
     [Design.ZomBDesignableProperty("BorderBrush")]

@@ -24,13 +24,11 @@
                                                     <Pen Brush="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderBrush}" Thickness="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness, Converter={StaticResource ThicknessDoublerZomB}, ConverterParameter=2}"  />
                                                 </GeometryDrawing.Pen>
                                             </GeometryDrawing>
-                                            <GeometryDrawing 
-                                                             Geometry="M0,25 50,25M25,0 25,50">
+                                            <GeometryDrawing Geometry="M0,25 50,25M25,0 25,50">
                                                 <GeometryDrawing.Pen>
                                                     <Pen Brush="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background}" Thickness="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness, Converter={StaticResource ThicknessDoublerZomB}, ConverterParameter=2}" />
                                                 </GeometryDrawing.Pen>
                                             </GeometryDrawing>
-                                            
                                             <GeometryDrawing Brush="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Foreground}">
                                                 <GeometryDrawing.Pen>
                                                     <Pen Brush="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Foreground}" Thickness="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness, Converter={StaticResource ThicknessDoublerZomB}, ConverterParameter=2}" />

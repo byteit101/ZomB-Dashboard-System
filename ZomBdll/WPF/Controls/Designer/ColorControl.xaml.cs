@@ -16,19 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Globalization;
 
 namespace System451.Communication.Dashboard.WPF.Controls.Designer
 {
@@ -57,7 +49,7 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
 
         // Using a DependencyProperty as the backing store for Color.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ColorProperty =
-            DependencyProperty.Register("Color", typeof(Color), typeof(ColorControl), new UIPropertyMetadata(new Color(),pcc));
+            DependencyProperty.Register("Color", typeof(Color), typeof(ColorControl), new UIPropertyMetadata(new Color(), pcc));
 
 
 

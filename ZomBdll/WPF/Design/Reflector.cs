@@ -18,8 +18,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Media;
 using System.Windows.Forms;
+using System.Windows.Media;
 
 namespace System451.Communication.Dashboard
 {
@@ -30,7 +30,7 @@ namespace System451.Communication.Dashboard
             public static IEnumerable<Type> GetZomBDesignableClasses()
             {
                 bool tried = false;
-                retry:
+            retry:
                 try
                 {
                     var retTypes = new List<Type>();
@@ -68,7 +68,7 @@ namespace System451.Communication.Dashboard
                         }
                         else
                         {
-                            MessageBox.Show("Aborting: "+ex.ToString());
+                            MessageBox.Show("Aborting: " + ex.ToString());
                             Application.Exit();
                         }
                     }

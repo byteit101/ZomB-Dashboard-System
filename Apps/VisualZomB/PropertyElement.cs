@@ -1,15 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
-using System451.Communication.Dashboard.WPF.Design;
+﻿/*
+ * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
+ * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
 using System.ComponentModel;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Markup;
-using System.Globalization;
-using System.Windows.Media;
+using System451.Communication.Dashboard.WPF.Design;
 using System451.Communication.Dashboard.WPF.Design.DesignUtils;
 
 namespace System451.Communication.Dashboard.ViZ
@@ -53,7 +65,7 @@ namespace System451.Communication.Dashboard.ViZ
                     return (at as ZomBDesignableAttribute).DisplayName ?? r;
                 foreach (var at in Object.GetType().GetCustomAttributes(typeof(ZomBDesignablePropertyAttribute), true))
                     if ((at as ZomBDesignablePropertyAttribute).PropertyName == Property.Name)
-                    return (at as ZomBDesignablePropertyAttribute).DisplayName ?? r;
+                        return (at as ZomBDesignablePropertyAttribute).DisplayName ?? r;
                 return r;
             }
         }
@@ -86,7 +98,7 @@ namespace System451.Communication.Dashboard.ViZ
                 foreach (var at in Property.GetCustomAttributes(typeof(DescriptionAttribute), true))
                     return (at as DescriptionAttribute).Description ?? r;
                 foreach (var at in Object.GetType().GetCustomAttributes(typeof(ZomBDesignablePropertyAttribute), true))
-                    if ((at as ZomBDesignablePropertyAttribute).PropertyName == Property.Name) 
+                    if ((at as ZomBDesignablePropertyAttribute).PropertyName == Property.Name)
                         return (at as ZomBDesignablePropertyAttribute).Description ?? r;
                 return r;
             }
@@ -103,7 +115,7 @@ namespace System451.Communication.Dashboard.ViZ
                 foreach (var at in Property.GetCustomAttributes(typeof(ZomBDesignableAttribute), true))
                     r = (at as ZomBDesignableAttribute).Index;
                 foreach (var at in Object.GetType().GetCustomAttributes(typeof(ZomBDesignablePropertyAttribute), true))
-                    if ((at as ZomBDesignablePropertyAttribute).PropertyName == Property.Name) 
+                    if ((at as ZomBDesignablePropertyAttribute).PropertyName == Property.Name)
                         r = (at as ZomBDesignablePropertyAttribute).Index;
                 if (r == 0)
                     r = uint.MaxValue / 2;
@@ -168,7 +180,7 @@ namespace System451.Communication.Dashboard.ViZ
                 var tc = Property.PropertyType.GetCustomAttributes(typeof(TypeConverterAttribute), true);
                 if (tc.Length > 0)
                 {
-                    string tcname=(tc[0] as TypeConverterAttribute).ConverterTypeName;
+                    string tcname = (tc[0] as TypeConverterAttribute).ConverterTypeName;
                     TypeConverter tcv = System.Type.GetType(tcname).GetConstructor(Type.EmptyTypes).Invoke(null) as TypeConverter;
                     try
                     {

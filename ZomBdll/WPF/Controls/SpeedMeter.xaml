@@ -9,32 +9,32 @@
                 <ControlTemplate TargetType="{x:Type ZomB:SpeedMeter}">
                     <Border Padding="{TemplateBinding Padding}">
                         <Viewbox>
-                        <Grid>
-                            <Image Stretch="Fill">
-                                <Image.OpacityMask>
-                                    <DrawingBrush>
-                                        <DrawingBrush.Drawing>
-                                            <GeometryDrawing Brush="Black" Geometry="M 50,0 C 30.8,0 13.4,11.3 0.4,29.5 L 13.5,49 C 23,36 36,27.9 50,27.9 63.9,27.9 76.7,35.9 86.3,49 L 100,29.4 C 86.5,11.3 69,0 50,0" />
-                                        </DrawingBrush.Drawing>
-                                    </DrawingBrush>
-                                </Image.OpacityMask>
-                                <Image.Source>
-                                    <DrawingImage>
-                                        <DrawingImage.Drawing>
-                                            <GeometryDrawing Geometry="M 50,0 C 30.8,0 13.4,11.3 0.4,29.5 L 13.5,49 C 23,36 36,27.9 50,27.9 63.9,27.9 76.7,35.9 86.3,49 L 100,29.4 C 86.5,11.3 69,0 50,0" >
-                                                <GeometryDrawing.Brush>
-                                                    <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Background" />
-                                                </GeometryDrawing.Brush>
-                                            </GeometryDrawing>
-                                        </DrawingImage.Drawing>
-                                    </DrawingImage>
-                                </Image.Source>
-                            </Image>
-                            <Image Stretch="Fill" Margin="3,2,3,3">
-                                <Image.OpacityMask>
-                                    <DrawingBrush>
-                                        <DrawingBrush.Transform>
-                                            <RotateTransform CenterX="50" CenterY="100">
+                            <Grid>
+                                <Image Stretch="Fill">
+                                    <Image.OpacityMask>
+                                        <DrawingBrush>
+                                            <DrawingBrush.Drawing>
+                                                <GeometryDrawing Brush="Black" Geometry="M 50,0 C 30.8,0 13.4,11.3 0.4,29.5 L 13.5,49 C 23,36 36,27.9 50,27.9 63.9,27.9 76.7,35.9 86.3,49 L 100,29.4 C 86.5,11.3 69,0 50,0" />
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Image.OpacityMask>
+                                    <Image.Source>
+                                        <DrawingImage>
+                                            <DrawingImage.Drawing>
+                                                <GeometryDrawing Geometry="M 50,0 C 30.8,0 13.4,11.3 0.4,29.5 L 13.5,49 C 23,36 36,27.9 50,27.9 63.9,27.9 76.7,35.9 86.3,49 L 100,29.4 C 86.5,11.3 69,0 50,0" >
+                                                    <GeometryDrawing.Brush>
+                                                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Background" />
+                                                    </GeometryDrawing.Brush>
+                                                </GeometryDrawing>
+                                            </DrawingImage.Drawing>
+                                        </DrawingImage>
+                                    </Image.Source>
+                                </Image>
+                                <Image Stretch="Fill" Margin="3,2,3,3">
+                                    <Image.OpacityMask>
+                                        <DrawingBrush>
+                                            <DrawingBrush.Transform>
+                                                <RotateTransform CenterX="50" CenterY="100">
                                                     <RotateTransform.Angle>
                                                         <MultiBinding Converter="{StaticResource AngleBinder}" ConverterParameter="l">
                                                             <Binding RelativeSource="{RelativeSource TemplatedParent}" />
@@ -42,29 +42,29 @@
                                                         </MultiBinding>
                                                     </RotateTransform.Angle>
                                                 </RotateTransform>
-                                        </DrawingBrush.Transform>
-                                        <DrawingBrush.Drawing>
-                                            <GeometryDrawing Brush="Black" Geometry="M 50,0 50,50 100,50 0,50 0,0 z" />
-                                        </DrawingBrush.Drawing>
-                                    </DrawingBrush>
-                                </Image.OpacityMask>
-                                <Image.Source>
-                                    <DrawingImage>
-                                        <DrawingImage.Drawing>
-                                            <GeometryDrawing Geometry="M 48,2.2 C 30,2.7 13,15 2.8,30 6.5,35 10,41 14,45 25,31 44,22 62,28 72,31 80,38 86,46 89,40 95,34 97,29 85,14 68,1.3 48,2.2 z" >
-                                                <GeometryDrawing.Brush>
-                                                    <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Foreground" />
-                                                </GeometryDrawing.Brush>
-                                            </GeometryDrawing>
-                                        </DrawingImage.Drawing>
-                                    </DrawingImage>
-                                </Image.Source>
-                            </Image>
-                            <Image Stretch="Fill" Margin="3,2,3,3">
-                                <Image.OpacityMask>
-                                    <DrawingBrush>
-                                        <DrawingBrush.Transform>
-                                            <RotateTransform CenterX="50" CenterY="100">
+                                            </DrawingBrush.Transform>
+                                            <DrawingBrush.Drawing>
+                                                <GeometryDrawing Brush="Black" Geometry="M 50,0 50,50 100,50 0,50 0,0 z" />
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Image.OpacityMask>
+                                    <Image.Source>
+                                        <DrawingImage>
+                                            <DrawingImage.Drawing>
+                                                <GeometryDrawing Geometry="M 48,2.2 C 30,2.7 13,15 2.8,30 6.5,35 10,41 14,45 25,31 44,22 62,28 72,31 80,38 86,46 89,40 95,34 97,29 85,14 68,1.3 48,2.2 z" >
+                                                    <GeometryDrawing.Brush>
+                                                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Foreground" />
+                                                    </GeometryDrawing.Brush>
+                                                </GeometryDrawing>
+                                            </DrawingImage.Drawing>
+                                        </DrawingImage>
+                                    </Image.Source>
+                                </Image>
+                                <Image Stretch="Fill" Margin="3,2,3,3">
+                                    <Image.OpacityMask>
+                                        <DrawingBrush>
+                                            <DrawingBrush.Transform>
+                                                <RotateTransform CenterX="50" CenterY="100">
                                                     <RotateTransform.Angle>
                                                         <MultiBinding Converter="{StaticResource AngleBinder}" ConverterParameter="l2">
                                                             <Binding RelativeSource="{RelativeSource TemplatedParent}" />
@@ -72,29 +72,29 @@
                                                         </MultiBinding>
                                                     </RotateTransform.Angle>
                                                 </RotateTransform>
-                                        </DrawingBrush.Transform>
-                                        <DrawingBrush.Drawing>
-                                            <GeometryDrawing Brush="Black" Geometry="M 50,0 50,50 100,50 0,50 0,0 z" />
-                                        </DrawingBrush.Drawing>
-                                    </DrawingBrush>
-                                </Image.OpacityMask>
-                                <Image.Source>
-                                    <DrawingImage>
-                                        <DrawingImage.Drawing>
-                                            <GeometryDrawing Geometry="M 48,2.2 C 30,2.7 13,15 2.8,30 6.5,35 10,41 14,45 25,31 44,22 62,28 72,31 80,38 86,46 89,40 95,34 97,29 85,14 68,1.3 48,2.2 z" >
-                                                <GeometryDrawing.Brush>
-                                                    <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Foreground" />
-                                                </GeometryDrawing.Brush>
-                                            </GeometryDrawing>
-                                        </DrawingImage.Drawing>
-                                    </DrawingImage>
-                                </Image.Source>
-                            </Image>
-                            <Image Stretch="Fill" Margin="3,2,3,3">
-                                <Image.OpacityMask>
-                                    <DrawingBrush>
-                                        <DrawingBrush.Transform>
-                                            <RotateTransform CenterX="50" CenterY="100">
+                                            </DrawingBrush.Transform>
+                                            <DrawingBrush.Drawing>
+                                                <GeometryDrawing Brush="Black" Geometry="M 50,0 50,50 100,50 0,50 0,0 z" />
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Image.OpacityMask>
+                                    <Image.Source>
+                                        <DrawingImage>
+                                            <DrawingImage.Drawing>
+                                                <GeometryDrawing Geometry="M 48,2.2 C 30,2.7 13,15 2.8,30 6.5,35 10,41 14,45 25,31 44,22 62,28 72,31 80,38 86,46 89,40 95,34 97,29 85,14 68,1.3 48,2.2 z" >
+                                                    <GeometryDrawing.Brush>
+                                                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Foreground" />
+                                                    </GeometryDrawing.Brush>
+                                                </GeometryDrawing>
+                                            </DrawingImage.Drawing>
+                                        </DrawingImage>
+                                    </Image.Source>
+                                </Image>
+                                <Image Stretch="Fill" Margin="3,2,3,3">
+                                    <Image.OpacityMask>
+                                        <DrawingBrush>
+                                            <DrawingBrush.Transform>
+                                                <RotateTransform CenterX="50" CenterY="100">
                                                     <RotateTransform.Angle>
                                                         <MultiBinding Converter="{StaticResource AngleBinder}" ConverterParameter="r">
                                                             <Binding RelativeSource="{RelativeSource TemplatedParent}" />
@@ -102,29 +102,29 @@
                                                         </MultiBinding>
                                                     </RotateTransform.Angle>
                                                 </RotateTransform>
-                                        </DrawingBrush.Transform>
-                                        <DrawingBrush.Drawing>
-                                            <GeometryDrawing Brush="Black" Geometry="M 50,0 50,50 100,50 100,0 0,0 100,0 z" />
-                                        </DrawingBrush.Drawing>
-                                    </DrawingBrush>
-                                </Image.OpacityMask>
-                                <Image.Source>
-                                    <DrawingImage>
-                                        <DrawingImage.Drawing>
-                                            <GeometryDrawing Geometry="M 48,2.2 C 30,2.7 13,15 2.8,30 6.5,35 10,41 14,45 25,31 44,22 62,28 72,31 80,38 86,46 89,40 95,34 97,29 85,14 68,1.3 48,2.2 z" >
-                                                <GeometryDrawing.Brush>
-                                                    <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Foreground" />
-                                                </GeometryDrawing.Brush>
-                                            </GeometryDrawing>
-                                        </DrawingImage.Drawing>
-                                    </DrawingImage>
-                                </Image.Source>
-                            </Image>
-                            <Image Stretch="Fill" Margin="3,2,3,3">
-                                <Image.OpacityMask>
-                                    <DrawingBrush>
-                                        <DrawingBrush.Transform>
-                                            <RotateTransform CenterX="50" CenterY="100">
+                                            </DrawingBrush.Transform>
+                                            <DrawingBrush.Drawing>
+                                                <GeometryDrawing Brush="Black" Geometry="M 50,0 50,50 100,50 100,0 0,0 100,0 z" />
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Image.OpacityMask>
+                                    <Image.Source>
+                                        <DrawingImage>
+                                            <DrawingImage.Drawing>
+                                                <GeometryDrawing Geometry="M 48,2.2 C 30,2.7 13,15 2.8,30 6.5,35 10,41 14,45 25,31 44,22 62,28 72,31 80,38 86,46 89,40 95,34 97,29 85,14 68,1.3 48,2.2 z" >
+                                                    <GeometryDrawing.Brush>
+                                                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Foreground" />
+                                                    </GeometryDrawing.Brush>
+                                                </GeometryDrawing>
+                                            </DrawingImage.Drawing>
+                                        </DrawingImage>
+                                    </Image.Source>
+                                </Image>
+                                <Image Stretch="Fill" Margin="3,2,3,3">
+                                    <Image.OpacityMask>
+                                        <DrawingBrush>
+                                            <DrawingBrush.Transform>
+                                                <RotateTransform CenterX="50" CenterY="100">
                                                     <RotateTransform.Angle>
                                                         <MultiBinding Converter="{StaticResource AngleBinder}" ConverterParameter="r2">
                                                             <Binding RelativeSource="{RelativeSource TemplatedParent}" />
@@ -132,56 +132,56 @@
                                                         </MultiBinding>
                                                     </RotateTransform.Angle>
                                                 </RotateTransform>
-                                        </DrawingBrush.Transform>
-                                        <DrawingBrush.Drawing>
-                                            <GeometryDrawing Brush="Black" Geometry="M 50,0 50,50 100,50 100,0 0,0 100,0 z" />
-                                        </DrawingBrush.Drawing>
-                                    </DrawingBrush>
-                                </Image.OpacityMask>
-                                <Image.Source>
-                                    <DrawingImage>
-                                        <DrawingImage.Drawing>
-                                            <GeometryDrawing Geometry="M 48,2.2 C 30,2.7 13,15 2.8,30 6.5,35 10,41 14,45 25,31 44,22 62,28 72,31 80,38 86,46 89,40 95,34 97,29 85,14 68,1.3 48,2.2 z" >
-                                                <GeometryDrawing.Brush>
-                                                    <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Foreground" />
-                                                </GeometryDrawing.Brush>
-                                            </GeometryDrawing>
-                                        </DrawingImage.Drawing>
-                                    </DrawingImage>
-                                </Image.Source>
-                            </Image>
-                            <Image Stretch="Fill">
-                                <Image.OpacityMask>
-                                    <DrawingBrush>
-                                        <DrawingBrush.Transform>
-                                            <TranslateTransform>
+                                            </DrawingBrush.Transform>
+                                            <DrawingBrush.Drawing>
+                                                <GeometryDrawing Brush="Black" Geometry="M 50,0 50,50 100,50 100,0 0,0 100,0 z" />
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Image.OpacityMask>
+                                    <Image.Source>
+                                        <DrawingImage>
+                                            <DrawingImage.Drawing>
+                                                <GeometryDrawing Geometry="M 48,2.2 C 30,2.7 13,15 2.8,30 6.5,35 10,41 14,45 25,31 44,22 62,28 72,31 80,38 86,46 89,40 95,34 97,29 85,14 68,1.3 48,2.2 z" >
+                                                    <GeometryDrawing.Brush>
+                                                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Foreground" />
+                                                    </GeometryDrawing.Brush>
+                                                </GeometryDrawing>
+                                            </DrawingImage.Drawing>
+                                        </DrawingImage>
+                                    </Image.Source>
+                                </Image>
+                                <Image Stretch="Fill">
+                                    <Image.OpacityMask>
+                                        <DrawingBrush>
+                                            <DrawingBrush.Transform>
+                                                <TranslateTransform>
                                                     <TranslateTransform.X>
                                                         <MultiBinding Converter="{StaticResource AngleBinder}" ConverterParameter="sh">
                                                             <Binding RelativeSource="{RelativeSource TemplatedParent}" />
                                                             <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="DoubleValue" />
                                                         </MultiBinding>
                                                     </TranslateTransform.X>
-                                                    </TranslateTransform>
+                                                </TranslateTransform>
                                             </DrawingBrush.Transform>
-                                        <DrawingBrush.Drawing>
-                                            <GeometryDrawing Brush="Black" Geometry="M 50,0 50,50 100,50 100,0 0,0 100,0 z" />
-                                        </DrawingBrush.Drawing>
-                                    </DrawingBrush>
-                                </Image.OpacityMask>
-                                <Image.Source>
-                                    <DrawingImage>
-                                        <DrawingImage.Drawing>
-                                            <GeometryDrawing Geometry="M 50,0 C 30.8,0 13.4,11.3 0.4,29.5 L 13.5,49 C 23,36 36,27.9 50,27.9 63.9,27.9 76.7,35.9 86.3,49 L 100,29.4 C 86.5,11.3 69,0 50,0" >
-                                                <GeometryDrawing.Brush>
-                                                    <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Background" />
-                                                </GeometryDrawing.Brush>
-                                            </GeometryDrawing>
-                                        </DrawingImage.Drawing>
-                                    </DrawingImage>
-                                </Image.Source>
-                            </Image>
-                        </Grid>
-                            </Viewbox>
+                                            <DrawingBrush.Drawing>
+                                                <GeometryDrawing Brush="Black" Geometry="M 50,0 50,50 100,50 100,0 0,0 100,0 z" />
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Image.OpacityMask>
+                                    <Image.Source>
+                                        <DrawingImage>
+                                            <DrawingImage.Drawing>
+                                                <GeometryDrawing Geometry="M 50,0 C 30.8,0 13.4,11.3 0.4,29.5 L 13.5,49 C 23,36 36,27.9 50,27.9 63.9,27.9 76.7,35.9 86.3,49 L 100,29.4 C 86.5,11.3 69,0 50,0" >
+                                                    <GeometryDrawing.Brush>
+                                                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Background" />
+                                                    </GeometryDrawing.Brush>
+                                                </GeometryDrawing>
+                                            </DrawingImage.Drawing>
+                                        </DrawingImage>
+                                    </Image.Source>
+                                </Image>
+                            </Grid>
+                        </Viewbox>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -201,7 +201,7 @@
                                                 <LinearGradientBrush.GradientStops>
                                                     <GradientStop Color="Red" Offset="0" />
                                                     <GradientStop Color="Green" Offset="1" />
-                                                    </LinearGradientBrush.GradientStops>
+                                                </LinearGradientBrush.GradientStops>
                                             </LinearGradientBrush>
                                         </Path.Fill>
                                     </Path>

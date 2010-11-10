@@ -21,7 +21,6 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
-using System.Windows.Media;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -75,8 +74,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
             {
                 this.WindowStyle = WindowStyle.None;
                 this.WindowStartupLocation = WindowStartupLocation.Manual;
-                this.Left=0;
-                this.Top=0;
+                this.Left = 0;
+                this.Top = 0;
             }
             dashboardDataHub1.StartSource = StartSources.DashboardPacket;
             dashboardDataHub1.InvalidPacketAction = InvalidPacketActions.Ignore;

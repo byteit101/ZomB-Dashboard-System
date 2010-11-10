@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="System451.Communication.Dashboard.WPF.Controls.Designer.ColorControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:loc="clr-namespace:System451.Communication.Dashboard.WPF.Controls.Designer"
+    xmlns:loc="clr-namespace:System451.Communication.Dashboard.WPF.Controls.Designer"
     Height="100" Width="400">
     <UserControl.Resources>
         <loc:ColorControlColorSeperator x:Key="cconv" />

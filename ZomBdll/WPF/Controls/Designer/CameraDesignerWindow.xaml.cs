@@ -1,17 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*
+ * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
+ * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Reflection;
 using System451.Communication.Dashboard.WPF.Design.DesignUtils;
 
 namespace System451.Communication.Dashboard.WPF.Controls.Designer
@@ -29,7 +37,7 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
         public CameraDesignerWindow(CameraView obj)
         {
             Object = obj;
-            zcc=obj.GetControls();
+            zcc = obj.GetControls();
             lastid = zcc.Count;
             InitializeComponent();
             if (zcc.Count > 0)
@@ -43,7 +51,7 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             zcc.Add(new CameraTarget());
             (zcc.Last() as CameraTarget).ControlName = "target" + ++lastid;
             (zcc.Last() as CameraTarget).Border = new Pen(Brushes.Lime, (1.0 / ((Object.Width + Object.Height) / 2.0)));
-            (zcc.Last() as CameraTarget).Fill = new SolidColorBrush(Color.FromArgb(127,0,255,0));
+            (zcc.Last() as CameraTarget).Fill = new SolidColorBrush(Color.FromArgb(127, 0, 255, 0));
             PopulateList();
             ListItems.SelectedIndex = zcc.Count - 1;
         }
@@ -78,7 +86,7 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
                 fillsp.Children.Add(DesignUtils.GetDesignerField(ListItems.SelectedItem, typeof(CameraTarget).GetProperty("Fill")));
                 pensp.Children.Clear();
                 pensp.Children.Add(DesignUtils.GetDesignerField((ListItems.SelectedItem as CameraTarget).Border, typeof(Pen).GetProperty("Brush")));
-                WidthBox.Text = ((ListItems.SelectedItem as CameraTarget).Border.Thickness*((Object.Width+Object.Height)/2.0)).ToString();
+                WidthBox.Text = ((ListItems.SelectedItem as CameraTarget).Border.Thickness * ((Object.Width + Object.Height) / 2.0)).ToString();
                 haltevents = false;
             }
             catch { nameBox.Text = ""; haltevents = false; }
@@ -107,7 +115,7 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             {
                 try
                 {
-                    (zcc[zcc.IndexOf(ListItems.SelectedItem as CameraTarget)] as CameraTarget).Border.Thickness = (double.Parse(WidthBox.Text)/((Object.Width+Object.Height)/2.0));
+                    (zcc[zcc.IndexOf(ListItems.SelectedItem as CameraTarget)] as CameraTarget).Border.Thickness = (double.Parse(WidthBox.Text) / ((Object.Width + Object.Height) / 2.0));
                 }
                 catch { }
             }

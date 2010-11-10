@@ -17,14 +17,13 @@
  */
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
     /// <summary>
     /// Interaction logic for StatusLabel.xaml
     /// </summary>
-    [Design.ZomBControl("Status Label", Description = "This shows a raw value for a control, and is a nice label", IconName="StatusLabelIcon")]
+    [Design.ZomBControl("Status Label", Description = "This shows a raw value for a control, and is a nice label", IconName = "StatusLabelIcon")]
     [Design.ZomBDesignableProperty("Foreground")]
     [Design.ZomBDesignableProperty("StringValue")]
     public class StatusLabel : ZomBGLControl

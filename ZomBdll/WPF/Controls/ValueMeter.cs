@@ -15,20 +15,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Windows.Data;
 using System;
-using System.Globalization;
 using System.ComponentModel;
+using System.Globalization;
+using System.Windows;
+using System.Windows.Data;
+using System.Windows.Media;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
     /// <summary>
     /// Interaction logic for ValueMeter.xaml
     /// </summary>
-    [Design.ZomBControl("Value Meter", Description = "This shows a -1 to 1 value and is useful for total parts things (like battery)", IconName="ValueMeterIcon")]
+    [Design.ZomBControl("Value Meter", Description = "This shows a -1 to 1 value and is useful for total parts things (like battery)", IconName = "ValueMeterIcon")]
     [Design.ZomBDesignableProperty("Foreground")]
     [Design.ZomBDesignableProperty("Background")]
     [Design.ZomBDesignableProperty("BorderBrush")]
@@ -50,7 +49,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
             Foreground = Brushes.Peru;
             BorderThickness = new Thickness(1);
         }
-
 
         [Design.ZomBDesignable(), Description("The maximum value we are going to get."), Category("Behavior")]
         public double Max

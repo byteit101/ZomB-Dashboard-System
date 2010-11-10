@@ -15,19 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
 using System.Text;
-using System451.Communication.Dashboard.WPF.Design;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Globalization;
-using System.ComponentModel;
-using System451.Communication.Dashboard.WPF.Controls.Designers;
 using System451.Communication.Dashboard.WPF.Controls.Designer;
+using System451.Communication.Dashboard.WPF.Controls.Designers;
 
 namespace System451.Communication.Dashboard.WPF.Design
 {

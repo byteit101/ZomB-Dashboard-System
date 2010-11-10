@@ -15,17 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace System451.Communication.Dashboard.WPF.Controls
@@ -33,7 +25,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
-    [TemplatePart(Name = "PART_Rect", Type = typeof(Ellipse)), Design.ZomBControl("On/Off Control", Description = "This is a true/false or yes/no control",IconName="OnOffControlIcon")]
+    [TemplatePart(Name = "PART_Rect", Type = typeof(Ellipse)), Design.ZomBControl("On/Off Control", Description = "This is a true/false or yes/no control", IconName = "OnOffControlIcon")]
     [Design.ZomBDesignableProperty("Foreground")]
     [Design.ZomBDesignableProperty("Background")]
     public class OnOffControl : ZomBGLControl

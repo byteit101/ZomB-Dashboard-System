@@ -20,23 +20,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows;
-using System.Windows.Automation.Peers;
-using System.Windows.Automation.Provider;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml;
-using System451.Communication.Dashboard.WPF;
-using System451.Communication.Dashboard.WPF.Controls;
-using System451.Communication.Dashboard.WPF.Design;
-using System.Collections.ObjectModel;
 using System.Windows.Media.Animation;
+using System451.Communication.Dashboard.WPF.Design;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -82,8 +72,8 @@ namespace System451.Communication.Dashboard.ViZ
             listBox1.PreviewMouseUp += listBox1_PreviewMouseUp;
             listBox1.PreviewMouseMove += listBox1_PreviewMouseMove;
             propHolder = tbx.PropertyBox;
-            this.Top = (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height <= 600) ? -1 : (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height-(this.Height + tbx.Height))/2.0;
-            this.Left = Math.Max(-1.0,(System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width / 2.0) - this.Width / 2.0);
+            this.Top = (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height <= 600) ? -1 : (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height - (this.Height + tbx.Height)) / 2.0;
+            this.Left = Math.Max(-1.0, (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width / 2.0) - this.Width / 2.0);
             DoubleAnimation VizLogoani = new DoubleAnimation(1, 0, new Duration(new TimeSpan(0, 0, 2)));
             VizLogoani.BeginTime = new TimeSpan(0, 0, 1);
             VizLogoani.Completed += delegate { LayoutCvs.Children.Remove(ViZLogo); };
@@ -118,9 +108,8 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            
-            tbx.Top = this.Top + this.ActualHeight-2.0;
-            tbx.Left = this.Left + (this.ActualWidth / 2.0)-(tbx.Width/2.0);
+            tbx.Top = this.Top + this.ActualHeight - 2.0;
+            tbx.Left = this.Left + (this.ActualWidth / 2.0) - (tbx.Width / 2.0);
             tbx.Show();
             tbx.Owner = this;
             tbx.Closed += new EventHandler(tbx_Closed);
@@ -234,7 +223,7 @@ namespace System451.Communication.Dashboard.ViZ
         private void AddControl(ZomBControlAttribute info, Point point)
         {
             Control fe = Reflector.Inflate(info.Type) as Control;
-            AddControl(fe,point);
+            AddControl(fe, point);
         }
 
         private void AddControl(Control ctrl)
@@ -293,7 +282,7 @@ namespace System451.Communication.Dashboard.ViZ
                         Vector mv = e.GetPosition(ZDash) - dndopoint;
                         Canvas.SetLeft((UIElement)origSrc, Math.Min(Math.Max(0, opoint.X + mv.X), ZDash.Width - (origSrc as SurfaceControl).Width));
                         Canvas.SetTop((UIElement)origSrc, Math.Min(Math.Max(0, opoint.Y + mv.Y), ZDash.Height - (origSrc as SurfaceControl).Height));
-                        ShowSnaps(SnapGridDirections.All, (x) => Canvas.SetLeft(curObj, x), (y) => Canvas.SetTop(curObj, y), (r) => Canvas.SetLeft(curObj,r - SnapGridHelper.Right(curObj) + SnapGridHelper.Left(curObj)), (b) => Canvas.SetTop(curObj,b - SnapGridHelper.Bottom(curObj) + SnapGridHelper.Top(curObj)));
+                        ShowSnaps(SnapGridDirections.All, (x) => Canvas.SetLeft(curObj, x), (y) => Canvas.SetTop(curObj, y), (r) => Canvas.SetLeft(curObj, r - SnapGridHelper.Right(curObj) + SnapGridHelper.Left(curObj)), (b) => Canvas.SetTop(curObj, b - SnapGridHelper.Bottom(curObj) + SnapGridHelper.Top(curObj)));
                     }
                     break;
                 case CurrentDrag.Resize:
@@ -301,9 +290,9 @@ namespace System451.Communication.Dashboard.ViZ
                         Vector mv = e.GetPosition(ZDash) - dndopoint;
                         var sc = (origSrc as SurfaceControl);
                         if (cdm.Flagged(CurrentDragMove.Width))
-                        sc.Width = Math.Min(Math.Max(0, opoint.X + mv.X), ZDash.Width - Canvas.GetLeft((UIElement)origSrc));
+                            sc.Width = Math.Min(Math.Max(0, opoint.X + mv.X), ZDash.Width - Canvas.GetLeft((UIElement)origSrc));
                         if (cdm.Flagged(CurrentDragMove.Height))
-                        sc.Height = Math.Min(Math.Max(0, opoint.Y + mv.Y), ZDash.Height - Canvas.GetTop((UIElement)origSrc)); ;
+                            sc.Height = Math.Min(Math.Max(0, opoint.Y + mv.Y), ZDash.Height - Canvas.GetTop((UIElement)origSrc)); ;
                         if (cdm.Flagged(CurrentDragMove.X))
                         {
                             Canvas.SetLeft(sc, Math.Min(Math.Max(0, oxpoint.X + mv.X), Canvas.GetLeft(sc) + sc.Width));
@@ -315,7 +304,7 @@ namespace System451.Communication.Dashboard.ViZ
                             sc.Height = Math.Min(Math.Max(0, opoint.Y - mv.Y), ZDash.Height - Canvas.GetTop((UIElement)origSrc)); ;
                         }
                         ShowSnaps(((SnapGridDirections)cdm), x => { sc.Width = Canvas.GetLeft(sc) + sc.Width - x; Canvas.SetLeft(sc, x); }, y => { sc.Height = Canvas.GetTop(sc) + sc.Height - y; Canvas.SetTop(sc, y); }, r => curObj.Width = r - SnapGridHelper.Left(curObj), b => curObj.Height = b - SnapGridHelper.Top(curObj));
-                        
+
                     }
                     break;
                 case CurrentDrag.None:
@@ -801,7 +790,7 @@ namespace System451.Communication.Dashboard.ViZ
         private string Export()
         {
             StringBuilder sb = new StringBuilder("<Canvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:ZomB=\"clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB\" Height=\"400\" Width=\"1024\" ZomB:DashboardDataHubWindow.InvalidPacketAction=\"");
-            sb.Append(((designerProps[1] as StackPanel).Children[1] as ComboBox).SelectedValue);sb.Append("\">");
+            sb.Append(((designerProps[1] as StackPanel).Children[1] as ComboBox).SelectedValue); sb.Append("\">");
             List<KeyValuePair<string, PropertyElement>> attached = new List<KeyValuePair<string, PropertyElement>>();
 
             foreach (var item in LogicalTreeHelper.GetChildren(ZDash))
@@ -853,7 +842,7 @@ namespace System451.Communication.Dashboard.ViZ
                     sb.Append(">");
                 }
                 else
-                sb.Append("\" />");
+                    sb.Append("\" />");
             }
 
             sb.Append("</Canvas>");

@@ -15,18 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Windows.Controls;
-using System451.Communication.Dashboard.Net.Video;
-using System.Windows.Media.Imaging;
-using System.IO;
-using System.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
-using System;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System451.Communication.Dashboard.Net.Video;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -230,7 +228,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             get
             {
-                return targets.Count+1;
+                return targets.Count + 1;
             }
         }
 
