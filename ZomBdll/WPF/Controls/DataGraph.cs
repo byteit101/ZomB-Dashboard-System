@@ -58,6 +58,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             base.OnApplyTemplate();
             PathGeo = base.GetTemplateChild("PART_PathGeo") as GeometryDrawing;
+            this.Regenerate();//Zombie planaria!
         }
 
         static void newDdb(DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -95,8 +96,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
             return 20 - (((y - Min) / (Max - Min)) * 20.0);
         }
 
-
-
         [Design.ZomBDesignable(), Description("The maximum value we are going to get."), Category("Behavior")]
         public double Max
         {
@@ -107,7 +106,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
         // Using a DependencyProperty as the backing store for Max.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MaxProperty =
             DependencyProperty.Register("Max", typeof(double), typeof(DataGraph), new UIPropertyMetadata(1.00, new PropertyChangedCallback(MaxUpdated)));
-
 
         [Design.ZomBDesignable(), Description("The minimum value we are going to get."), Category("Behavior")]
         public double Min
@@ -129,7 +127,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             (o as DataGraph).Regenerate();
         }
-
 
         #region IValueConverter Members
 
