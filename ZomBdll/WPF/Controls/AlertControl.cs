@@ -35,6 +35,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(AlertControl),
             new FrameworkPropertyMetadata(typeof(AlertControl)));
+            BoolValueProperty.OverrideMetadata(typeof(AlertControl), new FrameworkPropertyMetadata(false, boolchange));
         }
 
         public AlertControl()
@@ -44,20 +45,16 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.SnapsToDevicePixels = true;
             this.Width = 50;
             this.Height = 50;
-            try
-            {
-                BoolValueProperty.OverrideMetadata(typeof(AlertControl), new FrameworkPropertyMetadata(false, boolchange));
-            }
-            catch { }
         }
 
-        private void boolchange(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        private static void boolchange(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            if (PART_Rect != null)
+            var s = sender as AlertControl;
+            if (s.PART_Rect != null)
             {
-                Binding b = new Binding(BoolValue ? "Foreground" : "Background");
-                b.Source = this;
-                PART_Rect.SetBinding(Rectangle.FillProperty, b);
+                Binding b = new Binding(s.BoolValue ? "Foreground" : "Background");
+                b.Source = s;
+                s.PART_Rect.SetBinding(Rectangle.FillProperty, b);
             }
         }
 
@@ -65,7 +62,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             base.OnApplyTemplate();
             PART_Rect = base.GetTemplateChild("PART_Rect") as Rectangle;
-            boolchange(null, new DependencyPropertyChangedEventArgs());
+            boolchange(this, new DependencyPropertyChangedEventArgs());
         }
     }
 }
