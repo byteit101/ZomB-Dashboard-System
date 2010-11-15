@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System451.Communication.Dashboard.WPF.Controls.Designer.PrimitiveControls;
 using System.Windows.Input;
 using System.Windows.Data;
+using System.Windows.Controls;
 
 namespace System451.Communication.Dashboard.WPF.Controls.Designer
 {
@@ -134,8 +135,20 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
 
         private void AddStop(int indx)
         {
-            int pid = 0;
-            
+            //<ZomBp:StopMarker Width="{Binding ElementName=GradientGrid, Path=ActualWidth,
+            //Converter={StaticResource Lefter}}" Canvas.Left="-7" Canvas.Top="-10" x:Name="StopM0" />
+            var sm = new StopMarker();
+            Binding bi = new Binding("ActualWidth");
+            bi.Source = GradientGrid;
+            bi.Converter = Resources["Lefter"] as IValueConverter;
+            sm.SetBinding(StopMarker.WidthProperty, bi);
+            Canvas.SetLeft(sm, -7);
+            Canvas.SetTop(sm, -10);
+            contrls.Add(sm);
+            GradientGrid.Children.Add(sm);
+            (b as LinearGradientBrush).GradientStops.Add(new GradientStop(Colors.Black, 0));
+            sm.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(Stop_Click);
+            sm.ValueChanged += new RoutedPropertyChangedEventHandler<double>(Stop_ValueChanged);
         }
     }
 
@@ -151,7 +164,7 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return ((double)value) - 14;
         }
 
         #endregion
