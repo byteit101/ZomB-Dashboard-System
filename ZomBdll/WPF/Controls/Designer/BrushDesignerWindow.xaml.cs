@@ -135,8 +135,6 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
 
         private void AddStop(int indx)
         {
-            //<ZomBp:StopMarker Width="{Binding ElementName=GradientGrid, Path=ActualWidth,
-            //Converter={StaticResource Lefter}}" Canvas.Left="-7" Canvas.Top="-10" x:Name="StopM0" />
             var sm = new StopMarker();
             Binding bi = new Binding("ActualWidth");
             bi.Source = GradientGrid;
@@ -149,6 +147,18 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             (b as LinearGradientBrush).GradientStops.Add(new GradientStop(Colors.Black, 0));
             sm.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(Stop_Click);
             sm.ValueChanged += new RoutedPropertyChangedEventHandler<double>(Stop_ValueChanged);
+        }
+
+        private void DeleteStopBtn_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteStop(gradIndex);
+        }
+
+        private void DeleteStop(int indx)
+        {
+            (b as LinearGradientBrush).GradientStops.RemoveAt(indx);
+            contrls.RemoveAt(indx);
+            GradientGrid.Children.RemoveAt(indx);
         }
     }
 
