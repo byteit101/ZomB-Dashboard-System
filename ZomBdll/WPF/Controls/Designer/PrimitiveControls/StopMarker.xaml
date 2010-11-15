@@ -1,0 +1,26 @@
+﻿<Canvas x:Class="System451.Communication.Dashboard.WPF.Controls.Designer.PrimitiveControls.StopMarker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             Height="20" Name="par">
+    <Slider Maximum="1" Value="{Binding ElementName=par, Path=Value}" Width="{Binding ElementName=par, Path=ActualWidth}">
+        <Slider.Foreground>
+            <SolidColorBrush Color="{Binding ElementName=par, Path=Forecolor}" />
+        </Slider.Foreground>
+        <Slider.Template>
+            <ControlTemplate>
+                <Track Name="PART_Track">
+                    <Track.Thumb>
+                        <Thumb Foreground="{TemplateBinding Foreground}">
+                            <Thumb.Template>
+                                <ControlTemplate>
+                                    <Polygon Points="0,0 16,0 16,13 8,20 0,13" Stroke="Black" Width="16" Height="20" StrokeThickness="1" Fill="{TemplateBinding Foreground}">
+                                    </Polygon>
+                                </ControlTemplate>
+                            </Thumb.Template>
+                        </Thumb>
+                    </Track.Thumb>
+                </Track>
+            </ControlTemplate>
+        </Slider.Template>
+    </Slider>
+</Canvas>

@@ -2,23 +2,33 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:System451.Communication.Dashboard.WPF.Controls.Designer"
+    xmlns:ZomBp="clr-namespace:System451.Communication.Dashboard.WPF.Controls.Designer.PrimitiveControls"
     Loaded="Window_Initialized"
     Height="300" Width="451">
+    <Window.Resources>
+        <loc:StopMarkerPositionConverter x:Key="Lefter" />
+    </Window.Resources>
     <DockPanel>
         <loc:ColorControl DockPanel.Dock="Top" x:Name="ColorPicker" Width="Auto" />
         <TabControl Margin="5" Name="tc">
             <TabItem Header="Solid Color" RequestBringIntoView="TabItem_RequestBringIntoView">
                 <Label Margin="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" Content="{Binding Path=Color, ElementName=ColorPicker}">
-                <Label.Background>
-                    <SolidColorBrush Color="{Binding Path=Color, ElementName=ColorPicker}" />
-                </Label.Background>
+                    <Label.Background>
+                        <SolidColorBrush Color="{Binding Path=Color, ElementName=ColorPicker}" />
+                    </Label.Background>
                 </Label>
             </TabItem>
             <TabItem Header="Linear Gradient" Name="LinGradTab" RequestBringIntoView="TabItemlg_RequestBringIntoView">
-                <Canvas Name="LinGradient">
-                    <Button Click="left_gradclick">Left</Button>
-                    <Button Canvas.Right="0" Click="right_gradclick">Right</Button>
-                </Canvas>
+                <DockPanel Margin="10 10 10 0">
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" Margin="0 3 0 0" HorizontalAlignment="Center">
+                        <Button Margin="3" Name="AddStopBtn" Click="AddStopBtn_Click">Add Stop</Button>
+                        <Button Margin="3" Name="DeleteStopBtn">Delete Stop</Button>
+                    </StackPanel>
+                    <Canvas Name="GradientGrid">
+                        <ZomBp:StopMarker Width="{Binding ElementName=GradientGrid, Path=ActualWidth, Converter={StaticResource Lefter}}" Canvas.Left="-7" Canvas.Top="-10" x:Name="StopM0" />
+                        <ZomBp:StopMarker Value="1" Width="{Binding ElementName=GradientGrid, Path=ActualWidth, Converter={StaticResource Lefter}}" Canvas.Left="-7" Canvas.Top="-10" x:Name="StopM1" />
+                    </Canvas>
+                </DockPanel>
             </TabItem>
         </TabControl>
     </DockPanel>

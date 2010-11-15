@@ -218,6 +218,9 @@
     <Compile Include="WPF\Controls\Designer\ColorControlColorSeperator.cs" />
     <Compile Include="WPF\Controls\Designer\ColorDesigner.cs" />
     <Compile Include="WPF\Controls\Designer\DesignerBase.cs" />
+    <Compile Include="WPF\Controls\Designer\PrimitiveControls\StopMarker.xaml.cs">
+      <DependentUpon>StopMarker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\Controls\ValueMeter.cs" />
     <Compile Include="WPF\Controls\StatusLabel.cs" />
     <Compile Include="WPF\Controls\DataGraph.cs" />
@@ -393,6 +396,10 @@
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controls\Designer\PrimitiveControls\StopMarker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF\Controls\ValueMeter.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -19,6 +19,10 @@ using System;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
+using System.Collections.Generic;
+using System451.Communication.Dashboard.WPF.Controls.Designer.PrimitiveControls;
+using System.Windows.Input;
+using System.Windows.Data;
 
 namespace System451.Communication.Dashboard.WPF.Controls.Designer
 {
@@ -35,6 +39,7 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
         Mode cmode = Mode.Solid;
         int gradIndex = 0;
         Action<Brush> setv;
+        List<StopMarker> contrls = new List<StopMarker>();
         public BrushDesignerWindow(object obj, PropertyInfo prop)
         {
             InitializeComponent();
@@ -53,6 +58,13 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             {
                 cmode = Mode.LinearGradient;
             }
+            contrls.Add(StopM0);
+            contrls.Add(StopM1);
+            foreach (var item in contrls)
+            {
+                item.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(Stop_Click);
+                item.ValueChanged += new RoutedPropertyChangedEventHandler<double>(Stop_ValueChanged);
+            }
         }
 
         private void Window_Initialized(object sender, EventArgs e)
@@ -64,8 +76,8 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             }
             else if (cmode == Mode.LinearGradient)
             {
-                LinGradient.Background = b;
-                left_gradclick(sender, null);
+                GradientGrid.Background = b;
+                Stop_Click(contrls[0], null);
                 tc.SelectedItem = LinGradTab;
             }
         }
@@ -79,19 +91,19 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             else if (cmode == Mode.LinearGradient)
             {
                 (b as LinearGradientBrush).GradientStops[gradIndex].Color = ColorPicker.Color;
+                contrls[gradIndex].Forecolor = ColorPicker.Color;
             }
         }
 
-        private void left_gradclick(object sender, RoutedEventArgs e)
+        void Stop_Click(object sender, MouseButtonEventArgs e)
         {
-            gradIndex = 0;
-            ColorPicker.Color = (b as LinearGradientBrush).GradientStops[0].Color;
+            gradIndex = contrls.IndexOf(sender as StopMarker);
+            ColorPicker.Color = (b as LinearGradientBrush).GradientStops[gradIndex].Color;
         }
 
-        private void right_gradclick(object sender, RoutedEventArgs e)
+        void Stop_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            gradIndex = 1;
-            ColorPicker.Color = (b as LinearGradientBrush).GradientStops[1].Color;
+            (b as LinearGradientBrush).GradientStops[gradIndex].Offset = (sender as StopMarker).Value;
         }
 
         private void TabItem_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
@@ -110,9 +122,38 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             {
                 b = new LinearGradientBrush((b as SolidColorBrush).Color, (b as SolidColorBrush).Color, 0);
                 setv(b);
-                LinGradient.Background = b;
+                GradientGrid.Background = b;
                 cmode = Mode.LinearGradient;
             }
         }
+
+        private void AddStopBtn_Click(object sender, RoutedEventArgs e)
+        {
+            AddStop(gradIndex);
+        }
+
+        private void AddStop(int indx)
+        {
+            int pid = 0;
+            
+        }
+    }
+
+    public class StopMarkerPositionConverter : IValueConverter
+    {
+
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return ((double)value) + 14;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }
