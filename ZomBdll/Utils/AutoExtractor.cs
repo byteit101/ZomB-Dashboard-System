@@ -17,7 +17,6 @@
  */
 using System.IO;
 using System451.Communication.Dashboard.Properties;
-using System;
 
 namespace System451.Communication.Dashboard
 {
@@ -46,11 +45,12 @@ namespace System451.Communication.Dashboard
                 }
                 if ((files & Files.SlimDX) == Files.SlimDX)
                 {
-                    if (CPU.Is64BitOperatingSystem() && File.Exists("SlimDX x64.dll"))
+                    if (!File.Exists("SlimDX.dll"))
                     {
-                        File.Copy("SlimDX x64.dll", "SlimDX.dll");
-                        File.Delete("SlimDX x64.dll");
-                        //TODO: Do I need to restart or reload?
+                        if (CPU.Is64BitOperatingSystem())
+                            File.WriteAllBytes("SlimDX.dll", Resources.SlimDX64);
+                        else
+                        File.WriteAllBytes("SlimDX.dll", Resources.SlimDX86);
                     }
                 }
             }

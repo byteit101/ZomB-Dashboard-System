@@ -88,6 +88,20 @@ namespace System451.Communication.Dashboard.Properties {
             }
         }
         
+        public static byte[] SlimDX64 {
+            get {
+                object obj = ResourceManager.GetObject("SlimDX64", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        public static byte[] SlimDX86 {
+            get {
+                object obj = ResourceManager.GetObject("SlimDX86", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         public static System.Drawing.Bitmap TacoFull_small2 {
             get {
                 object obj = ResourceManager.GetObject("TacoFull_small2", resourceCulture);
