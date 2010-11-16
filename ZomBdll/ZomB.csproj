@@ -46,6 +46,12 @@
     </DocumentationFile>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>ZomB.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="InTheHand.Net.Personal, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>False</Private>
@@ -313,6 +319,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\brz.bmp" />
+    <None Include="ZomB.snk" />
     <Resource Include="Resources\tacoempty.png" />
     <Resource Include="Resources\camloading.png" />
     <Content Include="Resources\TacoFull-small2.jpg" />
