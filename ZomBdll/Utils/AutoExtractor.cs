@@ -41,7 +41,12 @@ namespace System451.Communication.Dashboard
                 if ((files & Files.InTheHandNative) == Files.InTheHandNative)
                 {
                     if (!File.Exists("32feetWidcomm.dll"))
-                        File.WriteAllBytes("32feetWidcomm.dll", Resources._32feetWidcomm);
+                    {
+                        if (CPU.Is64BitOperatingSystem())
+                            File.WriteAllBytes("32feetWidcomm.dll", Resources._32feetWidcommx64);
+                        else
+                            File.WriteAllBytes("32feetWidcomm.dll", Resources._32feetWidcommx86);
+                    }
                 }
                 if ((files & Files.SlimDX) == Files.SlimDX)
                 {

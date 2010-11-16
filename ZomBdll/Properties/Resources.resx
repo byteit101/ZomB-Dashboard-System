@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="TacoFull_small21" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\tacofull-small2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -142,7 +142,7 @@
   <data name="InTheHand_Net_Personal" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\ext\InTheHand.Net.Personal.dll;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="_32feetWidcomm" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="_32feetWidcommx86" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\ext\32feetWidcomm.dll;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="ZomBZ" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -153,5 +153,9 @@
   </data>
   <data name="SlimDX86" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\ext\slimdx.dll;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="_32feetWidcommx64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\ext\x64\32feetwidcomm.dll;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

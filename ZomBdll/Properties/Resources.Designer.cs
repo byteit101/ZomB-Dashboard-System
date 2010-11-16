@@ -60,9 +60,16 @@ namespace System451.Communication.Dashboard.Properties {
             }
         }
         
-        public static byte[] _32feetWidcomm {
+        public static byte[] _32feetWidcommx64 {
             get {
-                object obj = ResourceManager.GetObject("_32feetWidcomm", resourceCulture);
+                object obj = ResourceManager.GetObject("_32feetWidcommx64", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        public static byte[] _32feetWidcommx86 {
+            get {
+                object obj = ResourceManager.GetObject("_32feetWidcommx86", resourceCulture);
                 return ((byte[])(obj));
             }
         }
