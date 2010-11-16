@@ -4,7 +4,7 @@
     xmlns:loc="clr-namespace:System451.Communication.Dashboard.WPF.Controls.Designer"
     xmlns:ZomBp="clr-namespace:System451.Communication.Dashboard.WPF.Controls.Designer.PrimitiveControls"
     Loaded="Window_Initialized"
-    Height="300" Width="451">
+    Height="300" Width="451" Title="Brush Editor">
     <Window.Resources>
         <loc:StopMarkerPositionConverter x:Key="Lefter" />
     </Window.Resources>
@@ -24,10 +24,7 @@
                         <Button Margin="3" Name="AddStopBtn" Click="AddStopBtn_Click">Add Stop</Button>
                         <Button Margin="3" Name="DeleteStopBtn" Click="DeleteStopBtn_Click">Delete Stop</Button>
                     </StackPanel>
-                    <Canvas Name="GradientGrid">
-                        <ZomBp:StopMarker Width="{Binding ElementName=GradientGrid, Path=ActualWidth, Converter={StaticResource Lefter}}" Canvas.Left="-7" Canvas.Top="-10" x:Name="StopM0" />
-                        <ZomBp:StopMarker Value="1" Width="{Binding ElementName=GradientGrid, Path=ActualWidth, Converter={StaticResource Lefter}}" Canvas.Left="-7" Canvas.Top="-10" x:Name="StopM1" />
-                    </Canvas>
+                    <Canvas Name="GradientGrid" />
                 </DockPanel>
             </TabItem>
         </TabControl>

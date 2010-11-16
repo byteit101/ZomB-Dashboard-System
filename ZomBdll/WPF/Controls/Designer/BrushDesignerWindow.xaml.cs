@@ -59,13 +59,6 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             {
                 cmode = Mode.LinearGradient;
             }
-            contrls.Add(StopM0);
-            contrls.Add(StopM1);
-            foreach (var item in contrls)
-            {
-                item.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(Stop_Click);
-                item.ValueChanged += new RoutedPropertyChangedEventHandler<double>(Stop_ValueChanged);
-            }
         }
 
         private void Window_Initialized(object sender, EventArgs e)
@@ -78,6 +71,12 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             else if (cmode == Mode.LinearGradient)
             {
                 GradientGrid.Background = b;
+                foreach (var item in (b as LinearGradientBrush).GradientStops)
+                {
+                    var sm = GetNewStopMarker(item.Color,item.Offset);
+                    contrls.Add(sm);
+                    GradientGrid.Children.Add(sm);
+                }
                 Stop_Click(contrls[0], null);
                 tc.SelectedItem = LinGradTab;
             }
@@ -124,8 +123,21 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
                 b = new LinearGradientBrush((b as SolidColorBrush).Color, (b as SolidColorBrush).Color, 0);
                 setv(b);
                 GradientGrid.Background = b;
+                GradientGrid.Children.Clear();
+                contrls.Clear();
+                (b as LinearGradientBrush).GradientStops.Changed += new EventHandler(GradientStops_Changed);
+                foreach (var item in (b as LinearGradientBrush).GradientStops)
+                {
+                    var sm = GetNewStopMarker(item.Color, item.Offset);
+                    contrls.Add(sm);
+                    GradientGrid.Children.Add(sm);
+                }
                 cmode = Mode.LinearGradient;
             }
+        }
+
+        void GradientStops_Changed(object sender, EventArgs e)
+        {
         }
 
         private void AddStopBtn_Click(object sender, RoutedEventArgs e)
@@ -135,18 +147,26 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
 
         private void AddStop(int indx)
         {
+            var sm = GetNewStopMarker(Colors.Black, 0);
+            contrls.Add(sm);
+            GradientGrid.Children.Add(sm);
+            (b as LinearGradientBrush).GradientStops.Add(new GradientStop(Colors.Black, 0));
+        }
+
+        private StopMarker GetNewStopMarker(Color c, double off)
+        {
             var sm = new StopMarker();
+            sm.Value = off;
+            sm.Forecolor = c;
             Binding bi = new Binding("ActualWidth");
             bi.Source = GradientGrid;
             bi.Converter = Resources["Lefter"] as IValueConverter;
             sm.SetBinding(StopMarker.WidthProperty, bi);
             Canvas.SetLeft(sm, -7);
             Canvas.SetTop(sm, -10);
-            contrls.Add(sm);
-            GradientGrid.Children.Add(sm);
-            (b as LinearGradientBrush).GradientStops.Add(new GradientStop(Colors.Black, 0));
             sm.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(Stop_Click);
             sm.ValueChanged += new RoutedPropertyChangedEventHandler<double>(Stop_ValueChanged);
+            return sm;
         }
 
         private void DeleteStopBtn_Click(object sender, RoutedEventArgs e)
