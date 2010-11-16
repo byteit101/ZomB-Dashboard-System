@@ -30,9 +30,23 @@ namespace System451.Communication.Dashboard.ViZ
         {
             LoadAssembliesGeneric();
             var args = e.Args;
-            if (args.Length == 1 && File.Exists(args[0]))
+            if (args.Length >0)
             {
-                new Run(File.ReadAllText(args[0])).Show();
+                if (File.Exists(args[0]))
+                    new Run(File.ReadAllText(args[0])).Show();
+                else
+                {
+                    switch (args[0])
+                    {
+                        case "-extract":
+                            Utils.AutoExtractor.Extract(Utils.AutoExtractor.Files.All);
+                            break;
+                        default:
+                            MessageBox.Show("Invalid CLI arguments. Valid arguments:\r\n -extract  Extract all embedded dll's\r\n [fileName]  Run this Zaml file");
+                            new Designer().Show();
+                            break;
+                    }
+                }
             }
             else
                 new Designer().Show();
