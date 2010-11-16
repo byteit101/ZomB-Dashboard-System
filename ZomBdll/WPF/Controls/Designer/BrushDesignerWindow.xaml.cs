@@ -145,12 +145,33 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             AddStop(gradIndex);
         }
 
+        private static Comparison<GradientStop> cgscompare = (x, y) => x.Offset.CompareTo(y.Offset);
+
         private void AddStop(int indx)
         {
-            var sm = GetNewStopMarker(Colors.Black, 0);
+            var gs = (b as LinearGradientBrush).GradientStops;
+            if (indx < 0)
+                indx = 0;
+            if (indx >= gs.Count - 1)
+                indx = gs.Count - 2;//TODO: need at least 2 points
+            List<GradientStop> cs = new List<GradientStop>(gs);
+            cs.Sort(cgscompare);
+            indx = cs.IndexOf(gs[indx]);
+            if (indx < 0)
+                indx = 0;
+            if (indx >= cs.Count - 1)
+                indx = cs.Count - 2;//TODO: need at least 2 points
+            double offset = (cs[indx].Offset + cs[indx + 1].Offset) / 2.0;
+            Color c = ColorMidpoint(cs[indx].Color, cs[indx + 1].Color);
+            var sm = GetNewStopMarker(c, offset);
             contrls.Add(sm);
             GradientGrid.Children.Add(sm);
-            (b as LinearGradientBrush).GradientStops.Add(new GradientStop(Colors.Black, 0));
+            gs.Add(new GradientStop(c, offset));
+        }
+
+        private Color ColorMidpoint(Color c1, Color c2)
+        {
+            return Color.FromArgb((byte)((c1.A + c2.A) / 2), (byte)((c1.R + c2.R) / 2), (byte)((c1.G + c2.G) / 2), (byte)((c1.B + c2.B) / 2));
         }
 
         private StopMarker GetNewStopMarker(Color c, double off)
@@ -176,9 +197,16 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
 
         private void DeleteStop(int indx)
         {
+            if ((b as LinearGradientBrush).GradientStops.Count <= 2)
+                return;//sorry, there must be two or more
             (b as LinearGradientBrush).GradientStops.RemoveAt(indx);
             contrls.RemoveAt(indx);
             GradientGrid.Children.RemoveAt(indx);
+            --indx;
+            if (indx < 0)
+                indx = 0;
+            if (indx > (b as LinearGradientBrush).GradientStops.Count - 1)
+                indx = (b as LinearGradientBrush).GradientStops.Count - 1;
         }
     }
 
