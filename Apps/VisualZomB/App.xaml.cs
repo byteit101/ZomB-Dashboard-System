@@ -18,6 +18,7 @@
 using System.IO;
 using System.Windows;
 using System;
+using System.Diagnostics;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -40,6 +41,11 @@ namespace System451.Communication.Dashboard.ViZ
                     {
                         case "-extract":
                             Utils.AutoExtractor.Extract(Utils.AutoExtractor.Files.All);
+                            break;
+                        case "-install":
+                            Process.Start(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\.NETFramework")
+                                .GetValue("InstallRoot", @"C:\WINDOWS\Microsoft.NET\Framework\").ToString()+"v2.0.50727\\ngen.exe",
+                                "install \"" + Process.GetCurrentProcess().ProcessName + "\"");
                             break;
                         default:
                             MessageBox.Show("Invalid CLI arguments. Valid arguments:\r\n -extract  Extract all embedded dll's\r\n [fileName]  Run this Zaml file");
