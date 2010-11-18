@@ -208,6 +208,18 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             if (indx > (b as LinearGradientBrush).GradientStops.Count - 1)
                 indx = (b as LinearGradientBrush).GradientStops.Count - 1;
         }
+
+        private void Vertical_Checked(object sender, RoutedEventArgs e)
+        {
+            (b as LinearGradientBrush).EndPoint = new Point(0, 1);
+            Horizontal.IsChecked = false;
+        }
+
+        private void Horizontal_Checked(object sender, RoutedEventArgs e)
+        {
+            (b as LinearGradientBrush).EndPoint = new Point(1, 0);
+            Vertical.IsChecked = false;
+        }
     }
 
     public class StopMarkerPositionConverter : IValueConverter

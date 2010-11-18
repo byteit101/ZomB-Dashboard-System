@@ -23,6 +23,10 @@
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" Margin="0 3 0 0" HorizontalAlignment="Center">
                         <Button Margin="3" Name="AddStopBtn" Click="AddStopBtn_Click">Add Stop</Button>
                         <Button Margin="3" Name="DeleteStopBtn" Click="DeleteStopBtn_Click">Delete Stop</Button>
+                            <StackPanel Margin="3" Orientation="Horizontal">
+                            <ToggleButton Name="Horizontal" Content="Horizontal" Checked="Horizontal_Checked" />
+                            <ToggleButton Name="Vertical" Content="Vertical" Margin="6,0,0,0" Checked="Vertical_Checked" />
+                            </StackPanel>
                     </StackPanel>
                     <Canvas Name="GradientGrid" />
                 </DockPanel>
