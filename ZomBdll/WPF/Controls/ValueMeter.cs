@@ -32,7 +32,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     [Design.ZomBDesignableProperty("Background")]
     [Design.ZomBDesignableProperty("BorderBrush")]
     [Design.ZomBDesignableProperty("BorderThickness")]
-    public class ValueMeter : ZomBGLControl, IMultiValueConverter
+    public class ValueMeter : ZomBGLControl, IMultiValueConverter, IZomBDataControl
     {
         static ValueMeter()
         {
@@ -85,6 +85,64 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public object[] ConvertBack(object value, Type[] targetType, object parameter, CultureInfo culture)
         {
             throw new System.NotImplementedException();
+        }
+
+        #endregion
+
+        #region IZomBDataControl Members
+
+        public event ZomBDataControlUpdatedEventHandler DataUpdated;
+
+        bool dce = false;
+        public bool DataControlEnabled
+        {
+            get
+            {
+                return dce;
+            }
+            set
+            {
+                if (dce != value)
+                {
+                    dce = value;
+                    if (dce)
+                    {
+                        this.MouseLeftButtonUp += AlertControl_MouseLeftButtonUp;
+                        this.MouseMove += ValueMeter_MouseMove;
+                        this.MouseLeftButtonDown += ValueMeter_MouseLeftButtonDown;
+                    }
+                    else
+                    {
+                        this.MouseLeftButtonUp -= AlertControl_MouseLeftButtonUp;
+                        this.MouseMove -= ValueMeter_MouseMove;
+                        this.MouseLeftButtonDown -= ValueMeter_MouseLeftButtonDown;
+                    }
+                }
+            }
+        }
+
+        bool draggin = false;
+
+        void ValueMeter_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            draggin = true;
+            this.CaptureMouse();
+        }
+
+        void ValueMeter_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (draggin)
+            {
+                DoubleValue = Math.Max(Min, Math.Min(Max, (1 - e.GetPosition(this).Y / this.ActualHeight) * (this.Max - this.Min) + this.Min));
+                if (DataUpdated != null)
+                    DataUpdated(this, new ZomBDataControlUpdatedEventArgs(ControlName, DoubleValue.ToString()));
+            }
+        }
+
+        void AlertControl_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            draggin = false;
+            ReleaseMouseCapture();
         }
 
         #endregion
