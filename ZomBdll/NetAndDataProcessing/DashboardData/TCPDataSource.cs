@@ -39,12 +39,22 @@ namespace System451.Communication.Dashboard.Net
 
         public TCPDataSource(int team)
         {
-            TeamNumber = team;
+            IPAddress = IPAddress.Parse("10." + ((int)(team / 100)) + "." + ((int)(team % 100)) + ".2");
             Port = DefaultPort;
         }
         public TCPDataSource(int team, int port)
         {
-            TeamNumber = team;
+            IPAddress = IPAddress.Parse("10." + ((int)(team / 100)) + "." + ((int)(team % 100)) + ".2");
+            Port = port;
+        }
+        public TCPDataSource(IPAddress addr)
+        {
+            IPAddress = addr;
+            Port = DefaultPort;
+        }
+        public TCPDataSource(IPAddress addr, int port)
+        {
+            IPAddress = addr;
             Port = port;
         }
         ~TCPDataSource()
@@ -53,13 +63,24 @@ namespace System451.Communication.Dashboard.Net
         }
 
         public int Port { get; private set; }
-        public int TeamNumber { get; private set; }
-        public IPAddress cRIOIPAddress
+        private int teamNumber;
+        [Obsolete]
+        public int TeamNumber
         {
             get
             {
-                return IPAddress.Parse("10." + ((int)(TeamNumber / 100)) + "." + ((int)(TeamNumber % 100)) + ".2");
+                return teamNumber;
             }
+            set
+            {
+                teamNumber = value;
+                IPAddress = IPAddress.Parse("10." + ((int)(teamNumber / 100)) + "." + ((int)(teamNumber % 100)) + ".2");
+            }
+        }
+        public IPAddress IPAddress
+        {
+            get;
+            set;
         }
 
         #region IDashboardDataSource Members
@@ -181,8 +202,13 @@ namespace System451.Communication.Dashboard.Net
             {
                 try
                 {
-                    cRIOConnection.Connect(cRIOIPAddress, Port);
+                    cRIOConnection.Connect(IPAddress, Port);
                     zb = cRIOConnection.GetStream();
+                    break;
+                }
+                catch (SocketException)
+                {
+                    //Nohbdy is around
                 }
                 catch (ThreadAbortException)
                 {
@@ -247,7 +273,7 @@ namespace System451.Communication.Dashboard.Net
                                     NewDataRecieved(this, new NewDataRecievedEventArgs(kys));
                                 kys = new Dictionary<string, string>();
                             }
-                            if (!implicitSend)
+                            if (last == 0x00)
                                 continue;
                         }
                         if (last == -1)

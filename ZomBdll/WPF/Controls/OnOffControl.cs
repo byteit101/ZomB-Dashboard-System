@@ -97,7 +97,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             BoolValue = !BoolValue;
             if (DataUpdated != null)
-                DataUpdated(this, new ZomBDataControlUpdatedEventArgs(BoolValue.ToString()));
+                DataUpdated(this, new ZomBDataControlUpdatedEventArgs(ControlName, BoolValue.ToString()));
         }
 
         #endregion

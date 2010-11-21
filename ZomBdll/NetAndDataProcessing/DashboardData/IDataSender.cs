@@ -19,38 +19,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
-namespace System451.Communication.Dashboard
+namespace System451.Communication.Dashboard.Net
 {
-    public interface IZomBDataControl
+    public interface IDataSender
     {
-        event ZomBDataControlUpdatedEventHandler DataUpdated;
-        bool DataControlEnabled
-        {
-            get;
-            set;
-        }
-    }
-
-    public delegate void ZomBDataControlUpdatedEventHandler(object sender, ZomBDataControlUpdatedEventArgs e);
-
-    public class ZomBDataControlUpdatedEventArgs : EventArgs
-    {
-        public ZomBDataControlUpdatedEventArgs(string newname, string newvalue)
-        {
-            Name = newname;
-            Value = newvalue;
-        }
-
-        public string Name
-        {
-            get;
-            private set;
-        }
-        public string Value
-        {
-            get;
-            private set;
-        }
+        void Start();
+        void Stop();
+        void Send(string name, string value);
+        event ErrorEventHandler OnError;
     }
 }

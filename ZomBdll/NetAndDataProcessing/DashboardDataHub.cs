@@ -23,10 +23,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
-using System.Windows.Forms;
-using System451.Communication.Dashboard.Net;
-using System.Windows.Threading;
 using System.Threading;
+using System.Windows.Forms;
+using System.Windows.Threading;
+using System451.Communication.Dashboard.Net;
 
 namespace System451.Communication.Dashboard
 {
@@ -42,6 +42,7 @@ namespace System451.Communication.Dashboard
 
         bool havestatus = false;
         Collection<IDashboardDataSource> DataSrcs = new Collection<IDashboardDataSource>();
+        Collection<IDataSender> DataSnd = new Collection<IDataSender>();
 
         Collection<IZomBControl> zomBcontrols = new Collection<IZomBControl>();
         Collection<IZomBControlGroup> zomBgroups = new Collection<IZomBControlGroup>();
@@ -109,6 +110,8 @@ namespace System451.Communication.Dashboard
                 zomBcontrols.Add(control);
                 control.ControlAdded(this, new ZomBControlAddedEventArgs(this));
             }
+            if (control is IZomBDataControl)
+                Add(control as IZomBDataControl);
         }
 
         /// <summary>
@@ -140,6 +143,16 @@ namespace System451.Communication.Dashboard
         }
 
         /// <summary>
+        /// Adds a new ZomB data control.
+        /// </summary>
+        /// <param name="control">The control to add. If this is already in the data hub, it will be ignored</param>
+        public void Add(IZomBDataControl control)
+        {
+            control.DataUpdated += control_DataUpdated;
+            control.DataControlEnabled = true;
+        }
+
+        /// <summary>
         /// Removes a ZomB control.
         /// </summary>
         /// <param name="control">The control to remove.</param>
@@ -149,6 +162,8 @@ namespace System451.Communication.Dashboard
             {
                 zomBcontrols.Remove(control);
             }
+            if (control is IZomBDataControl)
+                Remove(control as IZomBDataControl);
         }
 
         /// <summary>
@@ -172,6 +187,30 @@ namespace System451.Communication.Dashboard
             if (zomBmonitors.Contains(monitor))
             {
                 zomBmonitors.Remove(monitor);
+            }
+        }
+
+        /// <summary>
+        /// Removes a new ZomB data control.
+        /// </summary>
+        /// <param name="control">The control to remove.</param>
+        public void Remove(IZomBDataControl control)
+        {
+            try
+            {
+                control.DataControlEnabled = false;
+                control.DataUpdated -= control_DataUpdated;
+            }
+            catch
+            {
+            }
+        }
+
+        void control_DataUpdated(object sender, ZomBDataControlUpdatedEventArgs e)
+        {
+            foreach (var item in DataSnd)
+            {
+                item.Send(e.Name, e.Value);
             }
         }
 
@@ -205,11 +244,28 @@ namespace System451.Communication.Dashboard
                     }
                     Running = false;
                 }
+                i = 0;
+                try
+                {
+                    for (; i < DataSnd.Count; i++)
+                    {
+                        DataSnd[i].Start();
+                    }
+                    Running = true;
+                }
+                catch
+                {
+                    for (; i <= 0; i--)
+                    {
+                        DataSnd[i].Stop();
+                    }
+                    Running = false;
+                }
             }
         }
 
         /// <summary>
-        /// stop the SCR and any associated srcs
+        /// stop the SRC and any associated srcs
         /// </summary>
         /// <param name="item">The src</param>
         protected void StopSrc(IDashboardDataSource item)
@@ -305,7 +361,9 @@ namespace System451.Communication.Dashboard
                         DataSrcs.Add(src);
                         return true;
                     }
-                    catch { }
+                    catch
+                    {
+                    }
                 }
             }
             return false;
@@ -321,6 +379,47 @@ namespace System451.Communication.Dashboard
             if (!Running)
             {
                 DataSrcs.Clear();
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Register a new IDataSender. This adds it to the collection and uses it
+        /// You must not be running the DDH to add successfully
+        /// </summary>
+        /// <param name="src">The sender to add</param>
+        /// <returns>True on success, false otherwise</returns>
+        public bool RegisterSender(IDataSender src)
+        {
+            if (!Running && src != null)
+            {
+                if (!DataSnd.Contains(src))
+                {
+                    src.OnError += new ErrorEventHandler(src_OnError);
+                    try
+                    {
+                        DataSnd.Add(src);
+                        return true;
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Clears the current senders
+        /// You must not be running the DDH to clear successfully
+        /// </summary>
+        /// <returns>true on success, false otherwise</returns>
+        public bool ClearSenders()
+        {
+            if (!Running)
+            {
+                DataSnd.Clear();
                 return true;
             }
             return false;
