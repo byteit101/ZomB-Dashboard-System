@@ -31,7 +31,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     [Design.ZomBDesignableProperty("Foreground")]
     [Design.ZomBDesignableProperty("Background")]
     [Design.ZomBDesignableProperty("BorderBrush")]
-    public class SpikeControl : ZomBGLControl
+    public class SpikeControl : ZomBGLControl, IZomBDataControl
     {
         Rectangle PART_Rect;
         static SpikeControl()
@@ -90,5 +90,53 @@ namespace System451.Communication.Dashboard.WPF.Controls
             DependencyProperty.Register("Value", typeof(SpikePositions), typeof(SpikeControl),
             new FrameworkPropertyMetadata(SpikePositions.Off, boolchanges));
 
+        #region IZomBDataControl Members
+
+        public event ZomBDataControlUpdatedEventHandler DataUpdated;
+
+        bool dce = false;
+        public bool DataControlEnabled
+        {
+            get
+            {
+                return dce;
+            }
+            set
+            {
+                if (dce != value)
+                {
+                    dce = value;
+                    if (dce)
+                    {
+                        this.MouseLeftButtonUp += AlertControl_MouseLeftButtonUp;
+                    }
+                    else
+                    {
+                        this.MouseLeftButtonUp -= AlertControl_MouseLeftButtonUp;
+                    }
+                }
+            }
+        }
+
+        void AlertControl_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            switch (Value)
+            {
+                case SpikePositions.Forward:
+                    Value = SpikePositions.Off;
+                    break;
+                case SpikePositions.Off:
+                    Value = SpikePositions.Reverse;
+                    break;
+                case SpikePositions.Reverse:
+                default:
+                    Value = SpikePositions.Forward;
+                    break;
+            }
+            if (DataUpdated != null)
+                DataUpdated(this, new ZomBDataControlUpdatedEventArgs(ControlName, ((int)Value).ToString()));
+        }
+
+        #endregion
     }
 }
