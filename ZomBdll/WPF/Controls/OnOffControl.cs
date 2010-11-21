@@ -28,7 +28,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     [TemplatePart(Name = "PART_Rect", Type = typeof(Ellipse)), Design.ZomBControl("On/Off Control", Description = "This is a true/false or yes/no control", IconName = "OnOffControlIcon")]
     [Design.ZomBDesignableProperty("Foreground")]
     [Design.ZomBDesignableProperty("Background")]
-    public class OnOffControl : ZomBGLControl
+    public class OnOffControl : ZomBGLControl, IZomBDataControl
     {
         Ellipse PART_Rect;
         static OnOffControl()
@@ -64,5 +64,42 @@ namespace System451.Communication.Dashboard.WPF.Controls
             PART_Rect = base.GetTemplateChild("PART_Rect") as Ellipse;
             boolchange(this, new DependencyPropertyChangedEventArgs());
         }
+
+        #region IZomBDataControl Members
+
+        public event ZomBDataControlUpdatedEventHandler DataUpdated;
+
+        bool dce = false;
+        public bool DataControlEnabled
+        {
+            get
+            {
+                return dce;
+            }
+            set
+            {
+                if (dce != value)
+                {
+                    dce = value;
+                    if (dce)
+                    {
+                        this.MouseLeftButtonUp += AlertControl_MouseLeftButtonUp;
+                    }
+                    else
+                    {
+                        this.MouseLeftButtonUp -= AlertControl_MouseLeftButtonUp;
+                    }
+                }
+            }
+        }
+
+        void AlertControl_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            BoolValue = !BoolValue;
+            if (DataUpdated != null)
+                DataUpdated(this, new ZomBDataControlUpdatedEventArgs(BoolValue.ToString()));
+        }
+
+        #endregion
     }
 }
