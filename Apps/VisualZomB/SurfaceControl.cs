@@ -36,10 +36,29 @@ namespace System451.Communication.Dashboard.ViZ
         SortedDictionary<string, List<PropertyElement>> proplist;
         Collection<SnapLine> snaps = new Collection<SnapLine>();
 
+        static ContextMenu ctm = new ContextMenu();
+
         static SurfaceControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(SurfaceControl),
                 new FrameworkPropertyMetadata(typeof(SurfaceControl)));
+            var i = new MenuItem();
+            i.Header = "Set Binding...";
+            i.Click += new RoutedEventHandler(i_Click);
+            ctm.Items.Add(i);
+        }
+
+        static void i_Click(object sender, RoutedEventArgs e)
+        {
+            var ea = ((e.Source as FrameworkElement).Parent as ContextMenu).Tag;
+            Point p= ((sender as FrameworkElement).Parent as ContextMenu).TranslatePoint(new Point(0,0), ea as UIElement);
+            DependencyObject d = (ea as UIElement).InputHitTest(p) as DependencyObject;
+            while (!(d is StackPanel))
+            {
+                d = VisualTreeHelper.GetParent(d as UIElement);
+            }
+            var pe = (d as FrameworkElement).Tag as PropertyElement;
+            pe.EditBinding(Designer.getDesigner().ZDash.Children);
         }
 
         public SurfaceControl()
@@ -155,7 +174,9 @@ namespace System451.Communication.Dashboard.ViZ
                 LoadPropList(ctrl);
             if (prophld == null)
                 return;
+            ctm.Tag = prophld;
             prophld.Children.Clear();
+            prophld.ContextMenu = ctm;
             bool toped = false, lefted = false;
             foreach (var category in proplist)
             {

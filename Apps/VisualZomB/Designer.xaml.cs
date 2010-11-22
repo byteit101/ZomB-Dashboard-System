@@ -54,8 +54,11 @@ namespace System451.Communication.Dashboard.ViZ
         ListBox listBox1;
         Panel propHolder;
 
+        static Designer dsb;
+
         public Designer()
         {
+            dsb = this;//TODO: enforce 1 only
             InitializeComponent();
             if (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width > 1050)
             {
@@ -170,7 +173,7 @@ namespace System451.Communication.Dashboard.ViZ
         }
 
         // Helper to search up the VisualTree
-        private static T FindAnchestor<T, P>(DependencyObject current) where T : DependencyObject
+        public static T FindAnchestor<T, P>(DependencyObject current) where T : DependencyObject
         {
             do
             {
@@ -183,7 +186,7 @@ namespace System451.Communication.Dashboard.ViZ
             while (current != null);
             return null;
         }
-        private static T FindAnchestor<T>(DependencyObject current) where T : DependencyObject
+        public static T FindAnchestor<T>(DependencyObject current) where T : DependencyObject
         {
             do
             {
@@ -864,6 +867,11 @@ namespace System451.Communication.Dashboard.ViZ
             }
             else
                 MessageBox.Show("Error building exe");
+        }
+
+        public static Designer getDesigner()
+        {
+            return dsb;
         }
     }
     public static class ExtensionsBit

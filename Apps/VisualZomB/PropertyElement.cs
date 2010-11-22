@@ -23,6 +23,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System451.Communication.Dashboard.WPF.Design;
 using System451.Communication.Dashboard.WPF.Design.DesignUtils;
+using System.Collections;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -349,6 +350,11 @@ namespace System451.Communication.Dashboard.ViZ
             if (dp == null)
                 return Property.Name;
             return dp;
+        }
+
+        public void EditBinding(IEnumerable childs)
+        {
+            new BindingDesigner(Object, Property, childs).ShowDialog();
         }
     }
 }
