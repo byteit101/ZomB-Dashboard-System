@@ -109,6 +109,17 @@ namespace System451.Communication.Dashboard.ViZ
             }
         }
 
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+
+            if (Environment.OSVersion.Version.Major >= 6)
+            {
+                if (Utils.AeroGlass.GlassifyWindow(this))
+                    Scrlview.Background = Brushes.Transparent;
+            }
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             tbx.Top = this.Top + this.ActualHeight - 2.0;
