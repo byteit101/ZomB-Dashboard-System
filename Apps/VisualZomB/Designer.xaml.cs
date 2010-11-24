@@ -60,14 +60,14 @@ namespace System451.Communication.Dashboard.ViZ
         {
             dsb = this;//TODO: enforce 1 only
             InitializeComponent();
-            if (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width > 1050)
+            if (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width > 1080)
             {
                 //chromify, we have space
                 this.AllowsTransparency = false;
                 Scrlview.Background = Brushes.LightGray;
                 this.WindowStyle = WindowStyle.SingleBorderWindow;
-                this.Width = 1050;
-                this.Height = 451;
+                this.Width = 1080;
+                this.Height = 470;
             }
             tbx = new Toolbox();
             listBox1 = tbx.ToolListBox;
