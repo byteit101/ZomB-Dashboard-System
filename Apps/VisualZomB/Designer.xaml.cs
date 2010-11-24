@@ -27,6 +27,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System451.Communication.Dashboard.WPF.Design;
+using System.Diagnostics;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -883,6 +884,15 @@ namespace System451.Communication.Dashboard.ViZ
         public static Designer getDesigner()
         {
             return dsb;
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Utils.AutoExtractor.Extract(Utils.AutoExtractor.Files.All);
+            Process.Start(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\.NETFramework")
+                .GetValue("InstallRoot", @"C:\WINDOWS\Microsoft.NET\Framework\").ToString()+"v2.0.50727\\ngen.exe",
+                "install \"" + Process.GetCurrentProcess().MainModule.FileName + "\"");
+            MessageBox.Show("Success!\r\n\r\nPlease restart this application to load the win32 modules.");
         }
     }
     public static class ExtensionsBit
