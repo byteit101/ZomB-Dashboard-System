@@ -26,6 +26,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// Interaction logic for TacoMeter.xaml
     /// </summary>
     [Design.ZomBControl("Taco Meter", Description = "This shows -1 to 1, useful for eating", IconName = "TacoMeterIcon")]
+    [Design.ZomBDesignableProperty("DoubleValue", DisplayName = "Value")]
     public class TacoMeter : ZomBGLControl, IMultiValueConverter
     {
         static TacoMeter()

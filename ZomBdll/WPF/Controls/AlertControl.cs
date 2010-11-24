@@ -28,6 +28,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     [TemplatePart(Name = "PART_Rect", Type = typeof(Rectangle)), Design.ZomBControl("Alert Control", Description = "This is a square version of the OnOffControl, and shows a true/false value", IconName = "AlertControlIcon")]
     [Design.ZomBDesignableProperty("Foreground")]
     [Design.ZomBDesignableProperty("Background")]
+    [Design.ZomBDesignableProperty("BoolValue", DisplayName="Value")]
     public class AlertControl : ZomBGLControl, IZomBDataControl
     {
         Rectangle PART_Rect;

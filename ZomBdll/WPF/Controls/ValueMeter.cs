@@ -32,6 +32,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     [Design.ZomBDesignableProperty("Background")]
     [Design.ZomBDesignableProperty("BorderBrush")]
     [Design.ZomBDesignableProperty("BorderThickness")]
+    [Design.ZomBDesignableProperty("Value", DisplayName = "Value")]
     public class ValueMeter : ZomBGLControl, IMultiValueConverter, IZomBDataControl
     {
         static ValueMeter()
