@@ -36,7 +36,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(xShake),
             new FrameworkPropertyMetadata(typeof(xShake)));
-            StringValueProperty.OverrideMetadata(typeof(xShake), new FrameworkPropertyMetadata(false, valChange));
+            StringValueProperty.OverrideMetadata(typeof(xShake), new UIPropertyMetadata("", valChange));
         }
 
         public xShake()
