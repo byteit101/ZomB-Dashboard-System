@@ -4,7 +4,7 @@
     xmlns:loc="clr-namespace:System451.Communication.Dashboard.WPF.Controls.Designer"
     xmlns:ZomBp="clr-namespace:System451.Communication.Dashboard.WPF.Controls.Designer.PrimitiveControls"
     Loaded="Window_Initialized"
-    Height="300" Width="451" Title="Brush Editor">
+    Height="300" Width="451" Title="Brush Editor" Icon="/ZomB;component/Resources/Colorwheel.ico">
     <Window.Resources>
         <loc:StopMarkerPositionConverter x:Key="Lefter" />
     </Window.Resources>

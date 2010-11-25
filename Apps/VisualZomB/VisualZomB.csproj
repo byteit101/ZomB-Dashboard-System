@@ -42,6 +42,9 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>ViZ.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ZomB.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -153,6 +156,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Designer\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ZomB.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ZomBBinding.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

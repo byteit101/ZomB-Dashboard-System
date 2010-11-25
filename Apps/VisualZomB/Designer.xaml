@@ -3,7 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ZomB="clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB"
         xmlns:loc="clr-namespace:System451.Communication.Dashboard.ViZ"
-    AllowsTransparency="True" Background="Transparent" WindowStyle="None" Title="ZomB Designer" Height="404" Width="1028" SnapsToDevicePixels="True" Loaded="Window_Loaded" WindowStartupLocation="Manual">
+    AllowsTransparency="True" Background="Transparent" WindowStyle="None" Title="ZomB Designer" Height="404" Width="1028" SnapsToDevicePixels="True" Loaded="Window_Loaded" WindowStartupLocation="Manual"
+        Icon="pack://application:,,,/ZomB;component/Resources/ZomB.ico">
     <Window.CommandBindings>
         <CommandBinding Command="Play" Executed="CommandBinding_Play_Executed" />
         <CommandBinding Command="Save" Executed="CommandBinding_Save_Executed" />

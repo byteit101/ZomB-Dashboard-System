@@ -324,6 +324,8 @@
     <None Include="ZomB.snk" />
     <Resource Include="Resources\tacoempty.png" />
     <Resource Include="Resources\camloading.png" />
+    <Resource Include="Resources\Colorwheel.ico" />
+    <Resource Include="Resources\eye.ico" />
     <Content Include="Resources\TacoFull-small2.jpg" />
     <Content Include="Resources\TacoFull-small2.png" />
     <Resource Include="Resources\tacofull.png" />
@@ -331,6 +333,7 @@
     <EmbeddedResource Include="Resources\ZomB text.svg" />
     <EmbeddedResource Include="Resources\ZomBDS.svg" />
     <EmbeddedResource Include="Resources\ZomBDSMini.svg" />
+    <Resource Include="Resources\ZomB.ico" />
     <Content Include="Resources\ZomBWFrame.png" />
     <None Include="Resources\ZomBZ.png" />
     <Content Include="TBB\ZomB text t.png" />
