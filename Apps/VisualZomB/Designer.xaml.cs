@@ -238,6 +238,7 @@ namespace System451.Communication.Dashboard.ViZ
         private void AddControl(ZomBControlAttribute info, Point point)
         {
             Control fe = Reflector.Inflate(info.Type) as Control;
+            fe.Name = "Z" + Guid.NewGuid().ToString("N").Substring(0,16);
             AddControl(fe, point);
         }
 
@@ -812,7 +813,14 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 sb.Append("<ZomB:");
                 sb.Append(((SurfaceControl)item).Control.GetType().Name);
-                sb.Append(" Canvas.Top=\"");
+                if (((SurfaceControl)item).Control.Name != "")
+                {
+                    sb.Append(" Name=\"");
+                    sb.Append(((SurfaceControl)item).Control.Name);
+                    sb.Append("\" Canvas.Top=\"");
+                }
+                else
+                    sb.Append(" Canvas.Top=\"");
                 sb.Append(Canvas.GetTop(item as UIElement));
                 sb.Append("\" Canvas.Left=\"");
                 sb.Append(Canvas.GetLeft(item as UIElement));

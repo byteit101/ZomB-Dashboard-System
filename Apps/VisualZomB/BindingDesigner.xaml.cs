@@ -29,8 +29,13 @@ namespace System451.Communication.Dashboard.ViZ
             InitializeComponent();
             obj = o;
             prop = p;
-            elmbox.ItemsSource = itms;
-            InfoBlock.Text = "Element: " + (o as FrameworkElement).Name + " - {" + o.GetType().Name + "}\r\nProperty: "+p.Name+"\r\nType: "+p.PropertyType.Name;
+            elmbox.ItemsSource = from object i in itms where (i as SurfaceControl).Control.Name!="" select i;
+            var name = "";
+            if (o is IZomBControl)
+                name = (o as IZomBControl).ControlName;
+            else
+                name = (o as FrameworkElement).Name;
+            InfoBlock.Text = "Element: " + name + " - {" + o.GetType().Name + "}\r\nProperty: "+p.Name+"\r\nType: "+p.PropertyType.Name;
         }
 
         private void elmbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -85,7 +90,8 @@ namespace System451.Communication.Dashboard.ViZ
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return (value as SurfaceControl).Control.Name + " - {" + (value as SurfaceControl).Control.GetType().Name + "}";
+            var c = (value as SurfaceControl).Control;
+            return ((c is IZomBControl) ? (c as IZomBControl).ControlName : (c as FrameworkElement).Name) + " - {" + (value as SurfaceControl).Control.GetType().Name + "}";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -128,5 +134,31 @@ namespace System451.Communication.Dashboard.ViZ
         }
 
         #endregion
+    }
+
+    /// <summary>
+    /// Do not use this class except for saving values
+    /// </summary>
+    internal class BoundPropertyDesigner : WPF.Controls.Designers.DesignerBase
+    {
+        public override FrameworkElement GetProperyField() { throw new NotImplementedException("Bindings are not visual!"); }
+
+        public override bool IsDefaultValue() { return false; }
+
+        public override bool IsExpanded() { return true; }
+
+        public override string GetValue()
+        {
+            var dp = DependencyPropertyDescriptor.FromName(Property.Name, Property.DeclaringType, Object.GetType()).DependencyProperty;
+            var dop = Object as FrameworkElement;
+            var be = dop.GetBindingExpression(dp);
+            var sb = new StringBuilder();
+            sb.Append("<Binding Path=\"");
+            sb.Append(be.ParentBinding.Path.Path);
+            sb.Append("\" ElementName=\"");
+            sb.Append((be.ParentBinding.Source as SurfaceControl).Control.Name);
+            sb.Append("\"></Binding>");
+            return sb.ToString();
+        }
     }
 }

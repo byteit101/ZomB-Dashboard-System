@@ -259,6 +259,7 @@ namespace System451.Communication.Dashboard.ViZ
                 foreach (var p in item.Value)
                 {
                     ret.Add(p.Property.Name, p);
+                    p.CheckBinding();
                 }
             }
             return ret;

@@ -356,5 +356,21 @@ namespace System451.Communication.Dashboard.ViZ
         {
             new BindingDesigner(Object, Property, childs).ShowDialog();
         }
+
+        public void CheckBinding()
+        {
+            try
+            {
+                var dp = DependencyPropertyDescriptor.FromName(Property.Name, Property.DeclaringType, Object.GetType()).DependencyProperty;
+                var dop = Object as FrameworkElement;
+                var be = dop.GetBindingExpression(dp);
+                if (be != null && Designer == null)
+                {
+                    Designer = new BoundPropertyDesigner();
+                    Designer.Initialize(Object, Property);
+                }
+            }
+            catch { }
+        }
     }
 }
