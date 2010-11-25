@@ -198,7 +198,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             {
                 try
                 {
-                    return (string)GetValue(NameProperty);
+                    return (string)GetValue(ControlNameProperty);
                 }
                 catch
                 {/*wrong thread*/
@@ -209,7 +209,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             {
                 try
                 {
-                    SetValue(NameProperty, value);
+                    SetValue(ControlNameProperty, value);
                 }
                 catch
                 {/*wrong thread*/
@@ -217,7 +217,9 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 }
             }
         }
-
+        
+        public static readonly DependencyProperty ControlNameProperty = DependencyProperty.Register("ControlName", typeof(string), typeof(ZomBGLControl), new UIPropertyMetadata(""));
+        
         /// <summary>
         /// Updates the control
         /// </summary>

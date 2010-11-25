@@ -248,6 +248,7 @@
     <Compile Include="WPF\DashboardDataHubWindow.cs" />
     <Compile Include="WPF\Design\IDesigner.cs" />
     <Compile Include="WPF\Design\Reflector.cs" />
+    <Compile Include="WPF\Design\ViZBindingParser.cs" />
     <Compile Include="WPF\Design\ZControl.cs" />
     <Compile Include="WPF\Design\ZomBDesignableAttribute.cs" />
   </ItemGroup>
