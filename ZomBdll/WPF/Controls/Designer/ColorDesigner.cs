@@ -85,7 +85,9 @@ namespace System451.Communication.Dashboard.WPF.Design
                 //TODO: add others
                 //must be linear gradient
                 LinearGradientBrush lb = (Property.GetValue(Object, null) as LinearGradientBrush);
-                StringBuilder s = new StringBuilder("<LinearGradientBrush StartPoint=\"0,0\" EndPoint=\"1,0\">");
+                StringBuilder s = new StringBuilder("<LinearGradientBrush StartPoint=\"0,0\" EndPoint=\"");
+                s.Append(lb.EndPoint.ToString());
+                s.Append("\">");
                 foreach (var item in lb.GradientStops)
                 {
                     s.Append("<GradientStop Offset=\"");
