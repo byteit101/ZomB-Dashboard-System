@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.ComponentModel;
 
-namespace System451.Communication.Dashboard.WPF.Design
+namespace System451.Communication.Dashboard.WPF.Controls
 {
     public class ViZBindingParser: IValueConverter
     {
@@ -15,6 +15,34 @@ namespace System451.Communication.Dashboard.WPF.Design
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
+            switch (parameter.ToString()[0])
+            {
+                case 's':
+                    return value.ToString();
+                case 'n':
+                    return targetType.GetMethod("Parse", new Type[]{typeof(string)}).Invoke(null, new object[] { value.ToString() });
+                case 'C':
+                    {
+                        var tc = targetType.GetCustomAttributes(typeof(TypeConverterAttribute), true);
+                        if (tc.Length > 0)
+                        {
+                            string tcname = (tc[0] as TypeConverterAttribute).ConverterTypeName;
+                            TypeConverter tcv = Type.GetType(tcname).GetConstructor(Type.EmptyTypes).Invoke(null) as TypeConverter;
+                            try
+                            {
+                                return tcv.ConvertFrom(null, culture, value);
+                            }
+                            catch
+                            {
+                                return value;
+                            }
+                        }
+                        return value;
+                    }
+                default:
+                    break;
+            }
+
             /*Dictionary<string, string> dic = new Dictionary<string, string>();
             var parms = parameter.ToString().Split(';');
             var spliter = new Regex(@"([A-Za-z]*)=\(([^\)]*)\)");

@@ -14,6 +14,7 @@ using System451.Communication.Dashboard.WPF.Design;
 using System.Reflection;
 using System.Collections;
 using System.ComponentModel;
+using System451.Communication.Dashboard.WPF.Controls;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -80,7 +81,37 @@ namespace System451.Communication.Dashboard.ViZ
             var dpd = DependencyPropertyDescriptor.FromName(prop.Name, prop.DeclaringType, obj.GetType());
             var b = new Binding((((object[])propnamebox.SelectedItem)[0] as PropertyInfo).Name);
             b.Source = elmbox.SelectedItem;
+            if (NoConv.IsChecked==false)
+            {
+                b.Converter = new ViZBindingParser();
+                b.ConverterParameter = getConverterType();
+            }
             (obj as FrameworkElement).SetBinding(dpd.DependencyProperty, b);
+            this.DialogResult = true;
+        }
+
+        private string getConverterType()
+        {
+            char t = 'x';
+            if (NumCov.IsChecked == true)
+                t = 'n';
+            else if (BrushConv.IsChecked == true)
+                t = 'B';
+            else if (StringConv.IsChecked == true)
+                t = 's';
+            else if (TypeConv.IsChecked == true)
+                t = 'C';
+            return t.ToString();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
+        }
+
+        private void DefaultConvert_Changed(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 
@@ -157,7 +188,15 @@ namespace System451.Communication.Dashboard.ViZ
             sb.Append(be.ParentBinding.Path.Path);
             sb.Append("\" ElementName=\"");
             sb.Append((be.ParentBinding.Source as SurfaceControl).Control.Name);
-            sb.Append("\"></Binding>");
+            sb.Append("\">");
+            if (be.ParentBinding.Converter != null)
+            {
+                sb.Append("<Binding.Converter><ZomB:ViZBindingParser /></Binding.Converter>");
+                sb.Append("<Binding.ConverterParameter>");
+                sb.Append(be.ParentBinding.ConverterParameter);
+                sb.Append("</Binding.ConverterParameter>");
+            }
+            sb.Append("</Binding>");
             return sb.ToString();
         }
     }
