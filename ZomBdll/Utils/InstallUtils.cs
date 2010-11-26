@@ -24,7 +24,7 @@ namespace System451.Communication.Dashboard.Utils
     {
         public static Process NGen()
         {
-            return NGen(Process.GetCurrentProcess().ProcessName);
+            return NGen(Process.GetCurrentProcess().MainModule.FileName);
         }
 
         public static Process NGen(string AssemblyPath)
