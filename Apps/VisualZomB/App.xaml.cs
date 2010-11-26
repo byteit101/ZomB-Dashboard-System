@@ -40,12 +40,12 @@ namespace System451.Communication.Dashboard.ViZ
                     switch (args[0])
                     {
                         case "-extract":
-                            Utils.AutoExtractor.Extract(Utils.AutoExtractor.Files.All);
+                            Utils.InstallUtils.ExtractAll();
+                            this.Shutdown();
                             break;
                         case "-install":
-                            Process.Start(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\.NETFramework")
-                                .GetValue("InstallRoot", @"C:\WINDOWS\Microsoft.NET\Framework\").ToString()+"v2.0.50727\\ngen.exe",
-                                "install \"" + Process.GetCurrentProcess().ProcessName + "\"");
+                            Utils.InstallUtils.NGen();
+                            this.Shutdown();
                             break;
                         default:
                             MessageBox.Show("Invalid CLI arguments. Valid arguments:\r\n -extract  Extract all embedded dll's\r\n [fileName]  Run this Zaml file");

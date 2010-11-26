@@ -896,10 +896,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            Utils.AutoExtractor.Extract(Utils.AutoExtractor.Files.All);
-            Process.Start(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\.NETFramework")
-                .GetValue("InstallRoot", @"C:\WINDOWS\Microsoft.NET\Framework\").ToString()+"v2.0.50727\\ngen.exe",
-                "install \"" + Process.GetCurrentProcess().MainModule.FileName + "\"");
+            Utils.InstallUtils.Install();
             MessageBox.Show("Success!\r\n\r\nPlease restart this application to load the win32 modules.");
         }
     }
