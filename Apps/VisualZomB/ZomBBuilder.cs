@@ -44,7 +44,7 @@ namespace System451.Communication.Dashboard.ViZ
     {
         public ZApp()
         {
-            this.Content = System.Windows.Markup.XamlReader.Parse(""" + zaml.Replace("\"", "\\\"") + @""");
+            this.Content = System.Windows.Markup.XamlReader.Parse(""" + zaml.Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n").Replace("\t", "\\t") + @""");
         }
         [System.STAThread]
         static void Main()

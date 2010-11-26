@@ -763,23 +763,28 @@ namespace System451.Communication.Dashboard.ViZ
             dlg.Filter = "ZomB App Markup Files (*.zaml)|*.zaml;*.xaml|All Files|*.*";
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                Canvas cvs = XamlReader.Load(dlg.OpenFile()) as Canvas;
-                if (cvs == null)
-                    return;
-                List<Control> lc = new List<Control>(cvs.Children.Count);
-                foreach (UIElement item in cvs.Children)
+                LoadFile(dlg.FileName);
+            }
+        }
+
+        public void LoadFile(string fileName)
+        {
+            Canvas cvs = XamlReader.Load(new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read)) as Canvas;
+            if (cvs == null)
+                return;
+            List<Control> lc = new List<Control>(cvs.Children.Count);
+            foreach (UIElement item in cvs.Children)
+            {
+                if (item.GetType().GetCustomAttributes(typeof(ZomBControlAttribute), true).Length > 0)
                 {
-                    if (item.GetType().GetCustomAttributes(typeof(ZomBControlAttribute), true).Length > 0)
-                    {
-                        lc.Add((Control)item);
-                    }
+                    lc.Add((Control)item);
                 }
-                ZDash.Children.Clear();
-                foreach (var item in lc)
-                {
-                    cvs.Children.Remove(item);
-                    AddControl(item);
-                }
+            }
+            ZDash.Children.Clear();
+            foreach (var item in lc)
+            {
+                cvs.Children.Remove(item);
+                AddControl(item);
             }
         }
 
@@ -803,7 +808,7 @@ namespace System451.Communication.Dashboard.ViZ
             new Run(zaml).ShowDialog();
         }
 
-        private string Export()
+        public string Export()
         {
             StringBuilder sb = new StringBuilder("<Canvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:ZomB=\"clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB\" Height=\"400\" Width=\"1024\" ZomB:DashboardDataHubWindow.InvalidPacketAction=\"");
             sb.Append(((designerProps[1] as StackPanel).Children[1] as ComboBox).SelectedValue); sb.Append("\">");
