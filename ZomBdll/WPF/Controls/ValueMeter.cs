@@ -48,6 +48,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.Background = Brushes.White;
             BorderBrush = Brushes.Black;
             Foreground = Brushes.Peru;
+            BarWidth = 5.0;
+            BarBrush = Brushes.RoyalBlue;
             BorderThickness = new Thickness(1);
         }
 
@@ -75,11 +77,38 @@ namespace System451.Communication.Dashboard.WPF.Controls
             DependencyProperty.Register("Min", typeof(double), typeof(ValueMeter), new FrameworkPropertyMetadata(-1.0, FrameworkPropertyMetadataOptions.AffectsRender));
 
 
+        [Design.ZomBDesignable(), Description("The width of the bar. Default 5, use 0 for no bar"), Category("Appearance")]
+        public double BarWidth
+        {
+            get { return (double)GetValue(BarWidthProperty); }
+            set { SetValue(BarWidthProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for BarWidth.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty BarWidthProperty =
+            DependencyProperty.Register("BarWidth", typeof(double), typeof(ValueMeter), new FrameworkPropertyMetadata(5.0, FrameworkPropertyMetadataOptions.AffectsRender));
+
+
+        [Design.ZomBDesignable(), Description("The color of the bar."), Category("Appearance")]
+        public Brush BarBrush
+        {
+            get { return (Brush)GetValue(BarBrushProperty); }
+            set { SetValue(BarBrushProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for BarBrush.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty BarBrushProperty =
+            DependencyProperty.Register("BarBrush", typeof(Brush), typeof(ValueMeter), new UIPropertyMetadata(Brushes.RoyalBlue));
+
+
+
         #region IValueConverter Members
 
         public object Convert(object[] value, Type targetType, object parameter, CultureInfo culture)
         {
             var ths = value[0] as ValueMeter;
+            if (parameter != null && parameter.ToString() == "Mov")
+                return 1 - Math.Min(Math.Max((((double)value[1] - ths.Min) / (ths.Max - ths.Min)), 0), 1) - (ths.BarWidth / 100);
             return Math.Min(Math.Max((((double)value[1] - ths.Min) / (ths.Max - ths.Min)), 0), 1);
         }
 
