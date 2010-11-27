@@ -21,6 +21,8 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Controls;
+using System.Windows.Shapes;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -33,12 +35,17 @@ namespace System451.Communication.Dashboard.WPF.Controls
     [Design.ZomBDesignableProperty("BorderBrush")]
     [Design.ZomBDesignableProperty("BorderThickness")]
     [Design.ZomBDesignableProperty("DoubleValue", DisplayName = "Value")]
+    [TemplatePart(Name="PART_Background", Type=typeof(Shape))]
     public class ValueMeter : ZomBGLControl, IMultiValueConverter, IZomBDataControl
     {
+        Shape back = null;
+        bool InHigh = false;
+
         static ValueMeter()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ValueMeter),
             new FrameworkPropertyMetadata(typeof(ValueMeter)));
+            DoubleValueProperty.OverrideMetadata(typeof(ValueMeter), new UIPropertyMetadata(ValueChanged));
         }
 
         public ValueMeter()
@@ -51,6 +58,12 @@ namespace System451.Communication.Dashboard.WPF.Controls
             BarWidth = 5.0;
             BarBrush = Brushes.RoyalBlue;
             BorderThickness = new Thickness(1);
+        }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            back = base.GetTemplateChild("PART_Background") as Shape;
         }
 
         [Design.ZomBDesignable(), Description("The maximum value we are going to get."), Category("Behavior")]
@@ -71,6 +84,30 @@ namespace System451.Communication.Dashboard.WPF.Controls
             get { return (double)GetValue(MinProperty); }
             set { SetValue(MinProperty, value); }
         }
+
+        [Design.ZomBDesignable(), Description("The threshold before we show the high color."), Category("Behavior")]
+        public double HighThreshold
+        {
+            get { return (double)GetValue(HighThresholdProperty); }
+            set { SetValue(HighThresholdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for HighThreshold.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty HighThresholdProperty =
+            DependencyProperty.Register("HighThreshold", typeof(double), typeof(ValueMeter), new UIPropertyMetadata(1.0));
+
+        [Design.ZomBDesignable(), Description("The color we show when we are passed the high threshold."), Category("Behavior")]
+        public Brush HighThresholdBrush
+        {
+            get { return (Brush)GetValue(HighThresholdBrushProperty); }
+            set { SetValue(HighThresholdBrushProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for HighThresholdBrush.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty HighThresholdBrushProperty =
+            DependencyProperty.Register("HighThresholdBrush", typeof(Brush), typeof(ValueMeter), new UIPropertyMetadata(Brushes.Red));
+
+
 
         // Using a DependencyProperty as the backing store for Min.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MinProperty =
@@ -100,6 +137,35 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public static readonly DependencyProperty BarBrushProperty =
             DependencyProperty.Register("BarBrush", typeof(Brush), typeof(ValueMeter), new UIPropertyMetadata(Brushes.RoyalBlue));
 
+
+        static void ValueChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            var t = o as ValueMeter;
+            if (t.back == null)
+                return;
+            if (t.DoubleValue >= t.HighThreshold)
+            {
+                if (!t.InHigh)
+                {
+                    var b = new Binding();
+                    b.Source = t;
+                    b.Path = new PropertyPath(HighThresholdBrushProperty);
+                    t.back.SetBinding(Shape.FillProperty, b);
+                    t.InHigh = true;
+                }
+            }
+            else
+            {
+                if (t.InHigh)
+                {
+                    var b = new Binding();
+                    b.Source = t;
+                    b.Path = new PropertyPath(ForegroundProperty);
+                    t.back.SetBinding(Shape.FillProperty, b);
+                    t.InHigh = false;
+                }
+            }
+        }
 
 
         #region IValueConverter Members

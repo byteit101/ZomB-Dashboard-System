@@ -9,7 +9,7 @@
                 <ControlTemplate TargetType="{x:Type ZomB:ValueMeter}">
                     <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
-                            <Rectangle Fill="{TemplateBinding Foreground}">
+                            <Rectangle Name="PART_Background" Fill="{TemplateBinding Foreground}">
                                 <Rectangle.OpacityMask>
                                     <VisualBrush Viewbox="0 0 1 1" ViewboxUnits="Absolute" Stretch="Fill">
                                         <VisualBrush.Visual>
