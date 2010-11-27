@@ -30,20 +30,19 @@ namespace System451.Communication.Dashboard.WPF.Design
         private ComboBox comb;
         public override FrameworkElement GetProperyField()
         {
-            StackPanel sp = new StackPanel();
-            sp.Orientation = Orientation.Horizontal;
+            DockPanel sp = new DockPanel();
             ComboBox cb = new ComboBox();
-            cb.Width = 90;
             cb.IsTextSearchEnabled = true;
             cb.IsEditable = true;
             comb = cb;
             UpdateCombo();
             comb.AddHandler(TextBox.TextChangedEvent, new TextChangedEventHandler(delegate { try { Property.SetValue(Object, new BrushConverter().ConvertFrom(null, CultureInfo.CurrentCulture, cb.Text), null); } catch { } }));
-            sp.Children.Add(cb);
             Button btn = new Button();
+            DockPanel.SetDock(btn, Dock.Right);
             btn.Content = "...";
             btn.Click += new RoutedEventHandler(OpenBrushDialog);
             sp.Children.Add(btn);
+            sp.Children.Add(cb);
             return sp;
         }
 
@@ -106,10 +105,8 @@ namespace System451.Communication.Dashboard.WPF.Design
         ComboBox comb;
         public override FrameworkElement GetProperyField()
         {
-            StackPanel sp = new StackPanel();
-            sp.Orientation = Orientation.Horizontal;
             ComboBox cb = new ComboBox();
-            cb.Width = 90;
+            cb.HorizontalAlignment = HorizontalAlignment.Stretch;
             cb.IsTextSearchEnabled = true;
             cb.IsEditable = true;
             object cvalue = Property.GetValue(Object, null);
@@ -128,8 +125,7 @@ namespace System451.Communication.Dashboard.WPF.Design
             }
             cb.AddHandler(TextBox.TextChangedEvent, new TextChangedEventHandler(delegate { try { Property.SetValue(Object, new ColorConverter().ConvertFrom(null, CultureInfo.CurrentCulture, cb.Text), null); } catch { } }));
             comb = cb;
-            sp.Children.Add(cb);
-            return sp;
+            return cb;
         }
 
         public override string GetValue()

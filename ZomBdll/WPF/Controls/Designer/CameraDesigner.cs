@@ -30,7 +30,11 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designers
             b = new Button();
             b.Content = " ... ";
             b.Click += new RoutedEventHandler(b_Click);
-            return b;
+            var s = new StackPanel();
+            s.FlowDirection = FlowDirection.RightToLeft;
+            s.Orientation = Orientation.Horizontal;
+            s.Children.Add(b);
+            return s;
         }
 
         void b_Click(object sender, RoutedEventArgs e)
