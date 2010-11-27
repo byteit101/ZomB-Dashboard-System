@@ -232,6 +232,7 @@
     <Compile Include="WPF\Controls\Designer\PrimitiveControls\StopMarker.xaml.cs">
       <DependentUpon>StopMarker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\Controls\FlowPropertyGrid.cs" />
     <Compile Include="WPF\Controls\ValueMeter.cs" />
     <Compile Include="WPF\Controls\StatusLabel.cs" />
     <Compile Include="WPF\Controls\DataGraph.cs" />
