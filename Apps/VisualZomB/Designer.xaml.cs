@@ -47,7 +47,7 @@ namespace System451.Communication.Dashboard.ViZ
         bool lbdragging = false;
         CurrentDrag cd = CurrentDrag.None;
         CurrentDragMove cdm = CurrentDragMove.None;
-        List<FrameworkElement> designerProps = new List<FrameworkElement>(2);
+        List<FrameworkElement> designerProps = new List<FrameworkElement>(4);
 
         SurfaceControl curObj;
 
@@ -88,12 +88,11 @@ namespace System451.Communication.Dashboard.ViZ
             lb.Content = "Dashboard Data Hub";
             lb.Style = (Style)lb.FindResource("PropCatStyle");
             designerProps.Add(lb);
-            designerProps.Add(new StackPanel());
-            (designerProps[1] as StackPanel).Orientation = Orientation.Horizontal;
-            (designerProps[1] as StackPanel).Children.Add(new Label());
-            ((designerProps[1] as StackPanel).Children[0] as Label).Content = "Invalid Packets:";
-            (designerProps[1] as StackPanel).Children.Add(new ComboBox());
-            var cb = ((designerProps[1] as StackPanel).Children[1] as ComboBox);
+            designerProps.Add(new Label());
+            designerProps.Add(new Label());
+            (designerProps[2] as Label).Content = "Invalid Packets:";
+            designerProps.Add(new ComboBox());
+            var cb = (designerProps[3] as ComboBox);
             cb.Width = 90;
             foreach (var item in Enum.GetNames(typeof(InvalidPacketActions)))
             {

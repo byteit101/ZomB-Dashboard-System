@@ -53,7 +53,7 @@ namespace System451.Communication.Dashboard.ViZ
             var ea = ((e.Source as FrameworkElement).Parent as ContextMenu).Tag;
             Point p= ((sender as FrameworkElement).Parent as ContextMenu).TranslatePoint(new Point(0,0), ea as UIElement);
             DependencyObject d = (ea as UIElement).InputHitTest(p) as DependencyObject;
-            while (!(d is StackPanel))
+            while (!(VisualTreeHelper.GetParent(d as UIElement) is WPF.Controls.FlowPropertyGrid))
             {
                 d = VisualTreeHelper.GetParent(d as UIElement);
             }
@@ -184,6 +184,7 @@ namespace System451.Communication.Dashboard.ViZ
                 lb.Content = category.Key;
                 lb.Style = (Style)lb.FindResource("PropCatStyle");
                 prophld.Children.Add(lb);
+                prophld.Children.Add(new Label());//balance it
                 category.Value.Sort();
                 foreach (var itm in category.Value)
                 {
@@ -191,16 +192,26 @@ namespace System451.Communication.Dashboard.ViZ
                     if (category.Key == "Layout")
                     {
                         if (!lefted && string.Compare("Left", itm.Name) < 0)
-                            prophld.Children.Add(GetTLBox(false));
+                        {
+                            var entt = GetTLBox(false);
+                            prophld.Children.Add(entt[0]);
+                            prophld.Children.Add(entt[1]);//TODO: this will break if there is not 2
+                        }
                         if (!toped && string.Compare("Top", itm.Name) < 0)
-                            prophld.Children.Add(GetTLBox(true));
+                        {
+                            var entt = GetTLBox(true);
+                            prophld.Children.Add(entt[0]);
+                            prophld.Children.Add(entt[1]);//TODO: this will break if there is not 2
+                        }
                     }
-                    prophld.Children.Add(itm.GetEntry());
+                    var ent = itm.GetEntry();
+                    prophld.Children.Add(ent[0]);
+                    prophld.Children.Add(ent[1]);//TODO: this will break if there is not 2
                 }
             }
         }
 
-        private FrameworkElement GetTLBox(bool top)
+        private FrameworkElement[] GetTLBox(bool top)
         {
             var Name = "Left: ";
             var rprop = Canvas.LeftProperty;
@@ -209,19 +220,19 @@ namespace System451.Communication.Dashboard.ViZ
                 Name = "Top: ";
                 rprop = Canvas.TopProperty;
             }
-            var itm = new StackPanel();
-            itm.Orientation = Orientation.Horizontal;
-            itm.Children.Add(new TextBlock());
-            (itm.Children[0] as TextBlock).Text = Name;
-            itm.Children.Add(new TextBox());
-            (itm.Children[1] as TextBox).Width = 50.0;
+            var itm = new FrameworkElement[2];
+            itm[0]=(new TextBlock());
+            (itm[0] as TextBlock).Text = Name;
+            (itm[0] as TextBlock).HorizontalAlignment = HorizontalAlignment.Right;
+            itm[1]=(new TextBox());
             Binding bind = new Binding();
             bind.Mode = BindingMode.TwoWay;
             bind.Source = this;
             bind.Path = new PropertyPath(rprop);
             bind.Converter = new StringValueConverter();
-            (itm.Children[1] as TextBox).SetBinding(TextBox.TextProperty, bind);
-            itm.Margin = new Thickness(1);
+            (itm[1] as TextBox).SetBinding(TextBox.TextProperty, bind);
+            itm[0].Tag = itm[1].Tag = null;//TODO: do this
+            itm[0].ToolTip = itm[1].ToolTip = "Edits the location of the control";
             return itm;
         }
 

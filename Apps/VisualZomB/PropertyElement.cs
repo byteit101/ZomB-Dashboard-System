@@ -241,27 +241,25 @@ namespace System451.Communication.Dashboard.ViZ
             return ix;
         }
 
-        public FrameworkElement GetEntry()
+        public FrameworkElement[] GetEntry()
         {
             if (Object != null && Property != null)
             {
-                var itm = new StackPanel();
-                itm.Orientation = Orientation.Horizontal;
-                itm.Children.Add(new TextBlock());
-                (itm.Children[0] as TextBlock).Text = Name + ": ";
+                var itm = new FrameworkElement[2];
+                itm[0]=(new TextBlock());
+                (itm[0] as TextBlock).Text = Name + ": ";
+                (itm[0] as TextBlock).HorizontalAlignment = HorizontalAlignment.Right;
                 if (Type == typeof(bool))
                 {
-                    itm.Children.Add(new CheckBox());
-                    (itm.Children[1] as CheckBox).IsChecked = (bool)Value;
-                    (itm.Children[1] as CheckBox).Checked += delegate { Value = true; };
-                    (itm.Children[1] as CheckBox).Unchecked += delegate { Value = false; };
-                    (itm.Children[1] as CheckBox).Focusable = false;
+                    itm[1]=(new CheckBox());
+                    (itm[1] as CheckBox).IsChecked = (bool)Value;
+                    (itm[1] as CheckBox).Checked += delegate { Value = true; };
+                    (itm[1] as CheckBox).Unchecked += delegate { Value = false; };
+                    (itm[1] as CheckBox).Focusable = false;
                 }
                 else if (Type == typeof(int) || Type == typeof(double))
                 {
-                    //TODO: better support
-                    itm.Children.Add(new TextBox());
-                    (itm.Children[1] as TextBox).Width = 50.0;
+                    itm[1]=(new TextBox());
                     if (Dynamic)
                     {
                         Binding bind = new Binding();
@@ -269,51 +267,48 @@ namespace System451.Communication.Dashboard.ViZ
                         bind.Source = Object;
                         bind.Path = new PropertyPath(GetRealProperty());
                         bind.Converter = new StringValueConverter();
-                        (itm.Children[1] as TextBox).SetBinding(TextBox.TextProperty, bind);
+                        (itm[1] as TextBox).SetBinding(TextBox.TextProperty, bind);
                     }
                     else
                     {
-                        (itm.Children[1] as TextBox).Text = Value.ToString();
-                        (itm.Children[1] as TextBox).TextChanged += delegate(object sender, TextChangedEventArgs e) { Value = (sender as TextBox).Text; };
+                        (itm[1] as TextBox).Text = Value.ToString();
+                        (itm[1] as TextBox).TextChanged += delegate(object sender, TextChangedEventArgs e) { Value = (sender as TextBox).Text; };
 
                     }
                 }
                 else if (Type.IsEnum)
                 {
-                    itm.Children.Add(new ComboBox());
-                    (itm.Children[1] as ComboBox).Width = 90;
+                    itm[1] = (new ComboBox());
                     foreach (var item in Enum.GetNames(Type))
                     {
-                        (itm.Children[1] as ComboBox).Items.Add(item);
+                        (itm[1] as ComboBox).Items.Add(item);
                         if (item == Value.ToString())
                         {
-                            (itm.Children[1] as ComboBox).SelectedValue = item;
+                            (itm[1] as ComboBox).SelectedValue = item;
                         }
                     }
-                    (itm.Children[1] as ComboBox).SelectionChanged += delegate(object sender, SelectionChangedEventArgs e) { try { Value = (sender as ComboBox).SelectedValue; } catch { } };
+                    (itm[1] as ComboBox).SelectionChanged += delegate(object sender, SelectionChangedEventArgs e) { try { Value = (sender as ComboBox).SelectedValue; } catch { } };
                 }
                 else
                 {
                     Type tod = DesignerType;
                     if (tod != null)
                     {
-                        itm.Children.Add(GetDesignerField(tod));
+                        itm[1] = (GetDesignerField(tod));
                     }
                     else
                     {
-                        itm.Children.Add(new TextBox());
-                        (itm.Children[1] as TextBox).Width = 100.0;
+                        itm[1] = (new TextBox());
                         try
                         {
-                            (itm.Children[1] as TextBox).Text = Value.ToString();
+                            (itm[1] as TextBox).Text = Value.ToString();
                         }
                         catch { }//Null value
-                        (itm.Children[1] as TextBox).TextChanged += delegate(object sender, TextChangedEventArgs e) { Value = (sender as TextBox).Text; };
+                        (itm[1] as TextBox).TextChanged += delegate(object sender, TextChangedEventArgs e) { Value = (sender as TextBox).Text; };
                     }
                 }
-                itm.Tag = this;
-                itm.ToolTip = Description;
-                itm.Margin = new Thickness(1);
+                itm[0].Tag = itm[1].Tag = this;
+                itm[0].ToolTip = itm[1].ToolTip = Description;
                 return itm;
             }
             else
