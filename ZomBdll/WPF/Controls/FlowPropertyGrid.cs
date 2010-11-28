@@ -36,6 +36,24 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(FlowPropertyGrid), new FrameworkPropertyMetadata(Orientation.Horizontal, FrameworkPropertyMetadataOptions.AffectsArrange));
 
+        public double LeftCollumnWidth
+        {
+            get { return (double)GetValue(LeftCollumnWidthProperty); }
+            set { SetValue(LeftCollumnWidthProperty, value); }
+        }
+
+        public static readonly DependencyProperty LeftCollumnWidthProperty = DependencyProperty.Register("LeftCollumnWidth", typeof(double), typeof(FlowPropertyGrid), new UIPropertyMetadata(double.NaN));
+        
+        public double RightCollumnWidth
+        {
+            get { return (double)GetValue(RightCollumnWidthProperty); }
+            set { SetValue(RightCollumnWidthProperty, value); }
+        }
+
+        public static readonly DependencyProperty RightCollumnWidthProperty = DependencyProperty.Register("RightCollumnWidth", typeof(double), typeof(FlowPropertyGrid), new UIPropertyMetadata(double.NaN));
+
+
+
         protected override Size MeasureOverride(Size availableSize)
         {
             if (Children.Count < 1)
@@ -61,6 +79,10 @@ namespace System451.Communication.Dashboard.WPF.Controls
             }
             if (maxr == 0)//1 element
                 maxr = maxl;
+            if (LeftCollumnWidth == LeftCollumnWidth)//not NaN
+                maxl = LeftCollumnWidth;
+            if (RightCollumnWidth == RightCollumnWidth)//not NaN
+                maxr = RightCollumnWidth;
             recmaxl = maxl;
             recmaxr = maxr;
             recmaxh = maxh;

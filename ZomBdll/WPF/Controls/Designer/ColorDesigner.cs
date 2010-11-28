@@ -60,7 +60,10 @@ namespace System451.Communication.Dashboard.WPF.Design
             }
             if (cvalue != null)
             {
-                comb.Text = cvalue.ToString();
+                if (cvalue.GetType().IsSubclassOf(typeof(GradientBrush)))
+                    comb.Text = "{Gradient}";
+                else
+                    comb.Text = cvalue.ToString();
             }
         }
 

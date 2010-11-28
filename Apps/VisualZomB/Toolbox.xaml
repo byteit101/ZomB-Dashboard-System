@@ -38,7 +38,7 @@
             </ListBox.ItemsPanel>
         </ListBox>
         <ScrollViewer Margin="2" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
-            <ZomB:FlowPropertyGrid Orientation="Horizontal" Name="PropertyBox" x:FieldModifier="public" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <ZomB:FlowPropertyGrid Orientation="Horizontal" Name="PropertyBox" x:FieldModifier="public" HorizontalAlignment="Left" VerticalAlignment="Top" RightCollumnWidth="110" />
         </ScrollViewer>
     </Grid>
 </Window>

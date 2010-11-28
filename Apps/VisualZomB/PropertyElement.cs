@@ -249,6 +249,7 @@ namespace System451.Communication.Dashboard.ViZ
                 itm[0]=(new TextBlock());
                 (itm[0] as TextBlock).Text = Name + ": ";
                 (itm[0] as TextBlock).HorizontalAlignment = HorizontalAlignment.Right;
+                (itm[0] as TextBlock).VerticalAlignment = VerticalAlignment.Center;
                 if (Type == typeof(bool))
                 {
                     itm[1]=(new CheckBox());
