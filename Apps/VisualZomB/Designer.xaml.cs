@@ -236,17 +236,17 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void AddControl(ZomBControlAttribute info, Point point)
         {
-            Control fe = Reflector.Inflate(info.Type) as Control;
+            FrameworkElement fe = Reflector.Inflate(info.Type) as FrameworkElement;
             fe.Name = "Z" + Guid.NewGuid().ToString("N").Substring(0,16);
             AddControl(fe, point);
         }
 
-        private void AddControl(Control ctrl)
+        private void AddControl(FrameworkElement ctrl)
         {
             AddControl(ctrl, new Point(Canvas.GetLeft(ctrl), Canvas.GetTop(ctrl)));
         }
 
-        private void AddControl(Control fe, Point point)
+        private void AddControl(FrameworkElement fe, Point point)
         {
             var sc = new SurfaceControl();
             sc.Control = fe;

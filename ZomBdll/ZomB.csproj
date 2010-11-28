@@ -237,6 +237,7 @@
     <Compile Include="WPF\Controls\StatusLabel.cs" />
     <Compile Include="WPF\Controls\DataGraph.cs" />
     <Compile Include="WPF\Controls\TacoMeter.cs" />
+    <Compile Include="WPF\Controls\DebugGrid.cs" />
     <Compile Include="WPF\Controls\xShake.cs" />
     <Compile Include="WPF\Controls\SpeedMeter.cs" />
     <Compile Include="WPF\Controls\SpikeControl.cs" />
@@ -392,6 +393,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controls\DebugGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF\Controls\Designer\BrushDesignerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

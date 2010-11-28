@@ -139,15 +139,15 @@ namespace System451.Communication.Dashboard.ViZ
         /// <summary>
         /// The control we are designing
         /// </summary>
-        public Control Control
+        public FrameworkElement Control
         {
-            get { return (Control)GetValue(ControlProperty); }
+            get { return (FrameworkElement)GetValue(ControlProperty); }
             set { SetValue(ControlProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Control.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ControlProperty =
-            DependencyProperty.Register("Control", typeof(Control), typeof(SurfaceControl), new UIPropertyMetadata(null, ControlChanged));
+            DependencyProperty.Register("Control", typeof(FrameworkElement), typeof(SurfaceControl), new UIPropertyMetadata(null, ControlChanged));
 
         static void ControlChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {

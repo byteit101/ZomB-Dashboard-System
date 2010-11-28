@@ -1,0 +1,24 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ZomB="clr-namespace:System451.Communication.Dashboard.WPF.Controls">
+    <DrawingImage x:Key="DebugGridIcon">
+        <DrawingImage.Drawing>
+            <GeometryDrawing Geometry="M 0 0 16 0 16 16 0 16 z">
+                <GeometryDrawing.Brush>
+                    <VisualBrush Viewbox="0 0 16 16" ViewboxUnits="Absolute" Viewport="0 0 .48 .3" TileMode="Tile">
+                        <VisualBrush.Visual>
+                            <Viewbox SnapsToDevicePixels="True">
+                                <Border BorderBrush="Black" BorderThickness="1" SnapsToDevicePixels="True">
+                                <Canvas Width="16" Height="16" SnapsToDevicePixels="True">
+                                    <Canvas.Background>White</Canvas.Background>
+                                </Canvas>
+                                </Border>
+                            </Viewbox>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </GeometryDrawing.Brush>
+            </GeometryDrawing>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+</ResourceDictionary>
