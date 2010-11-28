@@ -103,7 +103,7 @@
                 </Button>
             </StackPanel>
         </Grid>
-        <Image Name="ViZLogo" Opacity="1" Stretch="Fill" Margin="32,90" Width="960" Height="220">
+            <Image Name="ViZLogo" Opacity="1" Stretch="Fill" Margin="32,90" Width="960" Height="220" AllowDrop="True" Drop="ZDash_Drop" DragEnter="ZDash_DragEnter">
             <Image.Source>
                 <DrawingImage>
                     <DrawingImage.Drawing>
