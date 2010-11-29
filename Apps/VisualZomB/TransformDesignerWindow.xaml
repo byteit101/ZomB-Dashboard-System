@@ -1,7 +1,7 @@
-﻿<Window x:Class="System451.Communication.Dashboard.WPF.Controls.Designer.TransformDesignerWindow"
+﻿<Window x:Class="System451.Communication.Dashboard.ViZ.TransformDesignerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:ZomB="clr-namespace:System451.Communication.Dashboard.WPF.Controls"
+        xmlns:ZomB="clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB"
         Title="Transform Designer" SizeToContent="WidthAndHeight" Loaded="Window_Loaded">
     <GroupBox Margin="4">
         <GroupBox.Header>

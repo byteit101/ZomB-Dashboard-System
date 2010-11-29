@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System451.Communication.Dashboard.WPF.Controls.Designer;
 using System.Windows.Media;
 
-namespace System451.Communication.Dashboard.WPF.Design
+namespace System451.Communication.Dashboard.ViZ
 {
     public class TransformDesigner : DesignerBase
     {

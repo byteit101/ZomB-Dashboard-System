@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace System451.Communication.Dashboard.WPF.Controls.Designer
+namespace System451.Communication.Dashboard.ViZ
 {
     /// <summary>
     /// Interaction logic for TransformDesigner.xaml

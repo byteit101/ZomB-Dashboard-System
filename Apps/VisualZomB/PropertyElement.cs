@@ -24,6 +24,7 @@ using System.Windows.Data;
 using System451.Communication.Dashboard.WPF.Design;
 using System451.Communication.Dashboard.WPF.Design.DesignUtils;
 using System.Collections;
+using System.Windows.Media;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -163,6 +164,8 @@ namespace System451.Communication.Dashboard.ViZ
         {
             get
             {
+                if (Property.PropertyType == typeof(Transform))
+                    return typeof(TransformDesigner);
                 return DesignUtils.GetDesignerType(Property.PropertyType);
             }
         }

@@ -232,10 +232,6 @@
     <Compile Include="WPF\Controls\Designer\PrimitiveControls\StopMarker.xaml.cs">
       <DependentUpon>StopMarker.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WPF\Controls\Designer\TransformDesigner.cs" />
-    <Compile Include="WPF\Controls\Designer\TransformDesignerWindow.xaml.cs">
-      <DependentUpon>TransformDesignerWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WPF\Controls\FlowPropertyGrid.cs" />
     <Compile Include="WPF\Controls\ValueMeter.cs" />
     <Compile Include="WPF\Controls\StatusLabel.cs" />
@@ -423,10 +419,6 @@
     <Page Include="WPF\Controls\Designer\PrimitiveControls\StopMarker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WPF\Controls\Designer\TransformDesignerWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="WPF\Controls\ValueMeter.xaml">
       <Generator>MSBuild:Compile</Generator>

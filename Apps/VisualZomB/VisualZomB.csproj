@@ -107,6 +107,10 @@
       <DependentUpon>Designer.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="TransformDesignerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CategoryComparer.cs" />
@@ -131,6 +135,10 @@
     <Compile Include="SurfaceControl.cs" />
     <Compile Include="Toolbox.xaml.cs">
       <DependentUpon>Toolbox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TransformDesigner.cs" />
+    <Compile Include="TransformDesignerWindow.xaml.cs">
+      <DependentUpon>TransformDesignerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ZomBBuilder.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

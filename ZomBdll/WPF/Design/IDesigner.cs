@@ -99,8 +99,6 @@ namespace System451.Communication.Dashboard.WPF.Design
                     return typeof(BrushDesigner);
                 if (type == typeof(Color))
                     return typeof(ColorDesigner);
-                if (type == typeof(Transform))
-                    return typeof(TransformDesigner);
                 foreach (var at in type.GetCustomAttributes(typeof(WPF.Design.DesignerAttribute), true))
                     return (at as WPF.Design.DesignerAttribute).DesignerType;
                 return null;
