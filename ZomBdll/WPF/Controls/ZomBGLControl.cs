@@ -29,6 +29,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// </summary>
     [Design.ZomBDesignableProperty("Width", Dynamic = true, Category = "Layout")]
     [Design.ZomBDesignableProperty("Height", Dynamic = true, Category = "Layout")]
+    [Design.ZomBDesignableProperty("RenderTransform", DisplayName = "Transform")]
+    [Design.ZomBDesignableProperty("RenderTransformOrigin", DisplayName = "Transform Origin", Description = "The location the transform modifies about. In the range 0-1.")]
     public class ZomBGLControl : Control, IZomBControl
     {
         DashboardDataHub localDDH;
