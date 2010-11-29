@@ -8,7 +8,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ZomB:TacoMeter}">
                     <Border Padding="{TemplateBinding Padding}">
-                        <Viewbox>
+                        <Viewbox Stretch="Fill">
                             <Canvas Width="675" Height="291">
                                 <Image Width="675" Height="291" Source="pack://application:,,,/ZomB;Component/Resources/tacoempty.png" />
                                 <Image Width="675" Height="291" Source="pack://application:,,,/ZomB;Component/Resources/tacofull.png">
