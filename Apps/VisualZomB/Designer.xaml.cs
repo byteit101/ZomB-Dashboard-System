@@ -810,7 +810,7 @@ namespace System451.Communication.Dashboard.ViZ
         public string Export()
         {
             StringBuilder sb = new StringBuilder("<Canvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:ZomB=\"clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB\" Height=\"400\" Width=\"1024\" ZomB:DashboardDataHubWindow.InvalidPacketAction=\"");
-            sb.Append(((designerProps[1] as StackPanel).Children[1] as ComboBox).SelectedValue); sb.Append("\">");
+            sb.Append((designerProps[3] as ComboBox).SelectedValue); sb.Append("\">");
             List<KeyValuePair<string, PropertyElement>> attached = new List<KeyValuePair<string, PropertyElement>>();
 
             foreach (var item in LogicalTreeHelper.GetChildren(ZDash))
