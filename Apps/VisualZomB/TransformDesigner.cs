@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System451.Communication.Dashboard.WPF.Controls.Designer;
 using System.Windows.Media;
+using System.Windows.Data;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -48,7 +49,15 @@ namespace System451.Communication.Dashboard.ViZ
             if (ict.GetType() == typeof(RotateTransform))
             {
                 sb.Append("<RotateTransform><RotateTransform.Angle>");
-                sb.Append((ict as RotateTransform).Angle);
+                var be = BindingOperations.GetBindingExpression(ict, RotateTransform.AngleProperty);
+                if (be != null)
+                {
+                    var bpd = new BoundPropertyDesigner();
+                    bpd.Initialize(ict, ict.GetType().GetProperty("Angle"));
+                    sb.Append(bpd.GetValue());
+                }
+                else
+                    sb.Append((ict as RotateTransform).Angle);
                 sb.Append("</RotateTransform.Angle></RotateTransform>");
             }
         }

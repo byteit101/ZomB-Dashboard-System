@@ -32,9 +32,9 @@ namespace System451.Communication.Dashboard.ViZ
             prop = p;
             elmbox.ItemsSource = from object i in itms where (i as SurfaceControl).Control.Name!="" select i;
             var name = "";
-            if (o is IZomBControl)
+            if (o is IZomBControl && (o as IZomBControl).ControlName != "")
                 name = (o as IZomBControl).ControlName;
-            else
+            else if (o is FrameworkElement)
                 name = (o as FrameworkElement).Name;
             InfoBlock.Text = "Element: " + name + " - {" + o.GetType().Name + "}\r\nProperty: "+p.Name+"\r\nType: "+p.PropertyType.Name;
         }
@@ -86,7 +86,7 @@ namespace System451.Communication.Dashboard.ViZ
                 b.Converter = new ViZBindingParser();
                 b.ConverterParameter = getConverterType();
             }
-            (obj as FrameworkElement).SetBinding(dpd.DependencyProperty, b);
+            BindingOperations.SetBinding(obj as DependencyObject, dpd.DependencyProperty, b);
             this.DialogResult = true;
         }
 
@@ -181,8 +181,8 @@ namespace System451.Communication.Dashboard.ViZ
         public override string GetValue()
         {
             var dp = DependencyPropertyDescriptor.FromName(Property.Name, Property.DeclaringType, Object.GetType()).DependencyProperty;
-            var dop = Object as FrameworkElement;
-            var be = dop.GetBindingExpression(dp);
+            var dop = Object as DependencyObject;
+            var be = BindingOperations.GetBindingExpression(dop, dp);
             var sb = new StringBuilder();
             sb.Append("<Binding Path=\"");
             sb.Append(be.ParentBinding.Path.Path);

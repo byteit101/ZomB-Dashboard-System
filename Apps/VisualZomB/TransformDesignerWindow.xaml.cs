@@ -43,5 +43,18 @@ namespace System451.Communication.Dashboard.ViZ
         {
             Object.RenderTransform = new RotateTransform(0);
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //edit binding
+            new BindingDesigner(Object.RenderTransform, Object.RenderTransform.GetType().GetProperty("Angle")
+                , Designer.getDesigner().ZDash.Children).ShowDialog();
+        }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Contains(FixedRotateTab) && Object.RenderTransform is RotateTransform)
+                (Object.RenderTransform as RotateTransform).Angle = (Object.RenderTransform as RotateTransform).Angle;
+        }
     }
 }

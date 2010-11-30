@@ -9,7 +9,7 @@
         </GroupBox.Header>
         <TabControl Name="MainTabs" Height="216" Width="309" Margin="0,4,0,0" IsEnabled="False">
             <TabItem Header="Rotate" Name="RotateTab">
-                <TabControl>
+                <TabControl SelectionChanged="TabControl_SelectionChanged">
                     <TabItem Header="Fixed Rotation" Name="FixedRotateTab">
                         <Grid>
                         <ZomB:DirectionMeter x:Name="FixedRotationDial" />
@@ -17,8 +17,7 @@
                         </Grid>
                     </TabItem>
                     <TabItem Header="Dynamic Rotation" Name="BoundRotateTab">
-                        <TextBlock TextWrapping="Wrap">
-                        Dynamic Rotation rotates the object based on its currently calculated rotation which is calculated by its calculated rotation which is calculated by its calculated rotation which is calculated by its calculated rotation which is calculated by its calculated rotation which is calculated by its calculated rotation which is calculated by its calculated rotation which is calculated by its calculated rotation which is calculated by its calculated rotation which is calculated by its calculated rotation which is calculated by its...  Feature not Avalibe yet</TextBlock>
+                        <Button HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click">Edit Binding</Button>
                     </TabItem>
                 </TabControl>
             </TabItem>
