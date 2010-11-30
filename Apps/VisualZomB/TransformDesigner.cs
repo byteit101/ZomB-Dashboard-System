@@ -38,7 +38,7 @@ namespace System451.Communication.Dashboard.ViZ
         public override string GetValue()
         {
             StringBuilder sb = new StringBuilder();
-            var ict = (Object as UIElement).RenderTransform;
+            var ict = (SurfaceControl.GetSurfaceControlFromControl(Object)).RenderTransform;
             SerializeTransform(ict, sb);
             return sb.ToString();
         }

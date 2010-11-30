@@ -19,10 +19,10 @@ namespace System451.Communication.Dashboard.ViZ
     public partial class TransformDesignerWindow : Window
     {
         private UIElement Object;
-        public TransformDesignerWindow(UIElement Object)
+        public TransformDesignerWindow(UIElement ubject)
         {
             InitializeComponent();
-            this.Object = Object;
+            this.Object = SurfaceControl.GetSurfaceControlFromControl(ubject);
             if (Object.RenderTransform != MatrixTransform.Identity)
             {
                 FixedRotationDial.DoubleValue = (Object.RenderTransform as RotateTransform).Angle;

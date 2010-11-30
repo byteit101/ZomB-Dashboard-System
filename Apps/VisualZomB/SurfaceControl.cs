@@ -24,6 +24,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System451.Communication.Dashboard.WPF.Design;
+using System.ComponentModel;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -37,6 +38,7 @@ namespace System451.Communication.Dashboard.ViZ
         Collection<SnapLine> snaps = new Collection<SnapLine>();
 
         static ContextMenu ctm = new ContextMenu();
+        static Dictionary<object, SurfaceControl> reverseLookupDict = new Dictionary<object, SurfaceControl>();
 
         static SurfaceControl()
         {
@@ -46,6 +48,13 @@ namespace System451.Communication.Dashboard.ViZ
             i.Header = "Set Binding...";
             i.Click += new RoutedEventHandler(i_Click);
             ctm.Items.Add(i);
+        }
+
+        public static SurfaceControl GetSurfaceControlFromControl(object ctrl)
+        {
+            SurfaceControl sc = null;
+            reverseLookupDict.TryGetValue(ctrl, out sc);
+            return sc;
         }
 
         static void i_Click(object sender, RoutedEventArgs e)
@@ -152,6 +161,18 @@ namespace System451.Communication.Dashboard.ViZ
         static void ControlChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             (o as SurfaceControl).SetSize();
+            (o as SurfaceControl).SetTransforms();
+            reverseLookupDict.Add(e.NewValue, (o as SurfaceControl));
+        }
+
+        private void SetTransforms()
+        {
+            DependencyPropertyDescriptor.FromProperty(FrameworkElement.RenderTransformOriginProperty, Control.GetType()).AddValueChanged(Control, new EventHandler(RenderTransformOriginChanged));
+        }
+
+        void RenderTransformOriginChanged(object o, EventArgs e)
+        {
+            this.RenderTransformOrigin = Control.RenderTransformOrigin;
         }
 
         private void SetSize()
