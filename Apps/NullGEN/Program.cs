@@ -34,5 +34,21 @@ namespace NullGEN
                                 "install \"" + Process.GetCurrentProcess().MainModule.FileName + "\"").WaitForExit();
             }
         }
+        static void AppeaseNgen()
+        {
+            //wpf stuff
+            //PreCore
+            if (System.Windows.Media.Brushes.Aqua.CanFreeze)
+            {
+                System.Windows.FrameworkElement fe = null;
+                if (fe == null)
+                    fe = new System.Windows.Controls.Button();
+            }
+            System.Windows.Automation.Provider.NavigateDirection nd = System.Windows.Automation.Provider.NavigateDirection.FirstChild;
+            if (nd != System.Windows.Automation.Provider.NavigateDirection.Parent)
+                nd = System.Windows.Automation.Provider.NavigateDirection.LastChild;
+            Type t = typeof(System.Configuration.Install.AssemblyInstaller);
+
+        }
     }
 }
