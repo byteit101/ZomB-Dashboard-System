@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System.Windows;
+using System.Windows.Input;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -27,6 +28,12 @@ namespace System451.Communication.Dashboard.ViZ
         public Toolbox()
         {
             InitializeComponent();
+        }
+
+        private void PropScroller_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            PropScroller.ScrollToHorizontalOffset(PropScroller.HorizontalOffset - e.Delta);
+            e.Handled = true;
         }
     }
 }
