@@ -37,6 +37,30 @@ namespace System451.Communication.Dashboard.ViZ
             else if (o is FrameworkElement)
                 name = (o as FrameworkElement).Name;
             InfoBlock.Text = "Element: " + name + " - {" + o.GetType().Name + "}\r\nProperty: "+p.Name+"\r\nType: "+p.PropertyType.Name;
+            var dp = DependencyPropertyDescriptor.FromName(p.Name, p.DeclaringType, o.GetType()).DependencyProperty;
+            var dop = o as DependencyObject;
+            var be = BindingOperations.GetBindingExpression(dop, dp);
+            if (be != null)
+            {
+                var itm = be.ParentBinding.Source;
+                if (itm!=null)
+                    itm = SurfaceControl.GetSurfaceControlFromControl(itm);
+                if (itm==null)
+                    itm = (from object elm in elmbox.ItemsSource where (elm as SurfaceControl).Control.Name==be.ParentBinding.ElementName select elm).First();
+                elmbox.SelectedItem = itm;
+                var rs = (from object elm in propnamebox.ItemsSource
+                          where (((object[])elm)[0] as PropertyInfo).Name == be.ParentBinding.Path.Path
+                          select elm);
+                var s = rs.First();
+                int i = 0;
+                foreach (var item in propnamebox.ItemsSource)
+                {
+                    if (((object[])item)[0] == ((object[])s)[0])
+                        break;
+                    i++;
+                }
+                propnamebox.SelectedIndex = i;
+            }
         }
 
         private void elmbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -190,7 +214,7 @@ namespace System451.Communication.Dashboard.ViZ
             if (be.ParentBinding.Source == null)
                 sb.Append(be.ParentBinding.ElementName);
             else
-            sb.Append((be.ParentBinding.Source as SurfaceControl).Control.Name);
+                sb.Append((be.ParentBinding.Source as SurfaceControl).Control.Name);
             sb.Append("\">");
             if (be.ParentBinding.Converter != null)
             {
