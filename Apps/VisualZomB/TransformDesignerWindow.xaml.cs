@@ -19,6 +19,7 @@ namespace System451.Communication.Dashboard.ViZ
     public partial class TransformDesignerWindow : Window
     {
         private UIElement Object;
+        bool init = false;
         public TransformDesignerWindow(UIElement ubject)
         {
             InitializeComponent();
@@ -37,10 +38,12 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 (Object.RenderTransform as RotateTransform).Angle = FixedRotationDial.DoubleValue;
             };
+            init = true;
         }
 
         private void endisable_transformers(object sender, RoutedEventArgs e)
         {
+            if (Object.RenderTransform== MatrixTransform.Identity)
             Object.RenderTransform = new RotateTransform(0);
         }
 
@@ -53,6 +56,8 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (!init)
+                return;
             if (e.AddedItems.Contains(FixedRotateTab) && Object.RenderTransform is RotateTransform)
                 (Object.RenderTransform as RotateTransform).Angle = (Object.RenderTransform as RotateTransform).Angle;
         }

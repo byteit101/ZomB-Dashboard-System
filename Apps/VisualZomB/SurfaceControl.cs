@@ -163,11 +163,13 @@ namespace System451.Communication.Dashboard.ViZ
             (o as SurfaceControl).SetSize();
             (o as SurfaceControl).SetTransforms();
             reverseLookupDict.Add(e.NewValue, (o as SurfaceControl));
+            (o as SurfaceControl).RenderTransform = (o as SurfaceControl).Control.RenderTransform;
         }
 
         private void SetTransforms()
         {
             DependencyPropertyDescriptor.FromProperty(FrameworkElement.RenderTransformOriginProperty, Control.GetType()).AddValueChanged(Control, new EventHandler(RenderTransformOriginChanged));
+            this.RenderTransformOrigin = Control.RenderTransformOrigin;
         }
 
         void RenderTransformOriginChanged(object o, EventArgs e)

@@ -187,6 +187,9 @@ namespace System451.Communication.Dashboard.ViZ
             sb.Append("<Binding Path=\"");
             sb.Append(be.ParentBinding.Path.Path);
             sb.Append("\" ElementName=\"");
+            if (be.ParentBinding.Source == null)
+                sb.Append(be.ParentBinding.ElementName);
+            else
             sb.Append((be.ParentBinding.Source as SurfaceControl).Control.Name);
             sb.Append("\">");
             if (be.ParentBinding.Converter != null)
