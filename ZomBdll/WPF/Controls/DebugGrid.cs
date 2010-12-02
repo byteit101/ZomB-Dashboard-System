@@ -30,6 +30,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     public class DebugGrid : FlowPropertyGrid, IZomBMonitor
     {
         Dictionary<string, TextBlock> elms = new Dictionary<string, TextBlock>();
+        Queue<TextBlock> communists = new Queue<TextBlock>();//Its the reds!
         public DebugGrid()
         {
             this.Orientation = Orientation.Vertical;
@@ -42,6 +43,10 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         public void UpdateData(Dictionary<string, string> data)
         {
+            while (communists.Count>0)
+            {
+                communists.Dequeue().Foreground = Brushes.Black;
+            }
             var ks = from d in data where d.Key.StartsWith("dbg-") select new { Name = d.Key.Substring(4), Data = d.Value };
             foreach (var item in ks)
             {
@@ -53,6 +58,11 @@ namespace System451.Communication.Dashboard.WPF.Controls
                     lbl.Text = item.Name+": ";
                     Children.Add(lbl);
                     Children.Add(elms[item.Name]);
+                }
+                if (elms[item.Name].Text != item.Data)
+                {
+                    elms[item.Name].Foreground = Brushes.Red;
+                    communists.Enqueue(elms[item.Name]);
                 }
                 elms[item.Name].Text = item.Data;
             }
