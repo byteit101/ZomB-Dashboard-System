@@ -7,9 +7,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ZomB:ValueMeter}">
-                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border Name="PART_Background" Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
-                            <Rectangle Name="PART_Background" Fill="{TemplateBinding Foreground}">
+                            <Rectangle Name="PART_Foreground" Fill="{TemplateBinding Foreground}">
                                 <Rectangle.OpacityMask>
                                     <VisualBrush Viewbox="0 0 1 1" ViewboxUnits="Absolute" Stretch="Fill">
                                         <VisualBrush.Visual>
@@ -53,6 +53,7 @@
                                     </VisualBrush>
                                 </Rectangle.Fill>
                             </Rectangle>
+                            <Label Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsLabelVisible, Converter={StaticResource Scl}}" Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DoubleValue, Converter={StaticResource Scl}}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
                     </Border>
                 </ControlTemplate>

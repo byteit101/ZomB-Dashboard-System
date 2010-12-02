@@ -35,11 +35,13 @@ namespace System451.Communication.Dashboard.WPF.Controls
     [Design.ZomBDesignableProperty("BorderBrush")]
     [Design.ZomBDesignableProperty("BorderThickness")]
     [Design.ZomBDesignableProperty("DoubleValue", DisplayName = "Value")]
-    [TemplatePart(Name="PART_Background", Type=typeof(Shape))]
-    public class ValueMeter : ZomBGLControl, IMultiValueConverter, IZomBDataControl
+    [TemplatePart(Name = "PART_Background", Type = typeof(Border))]
+    [TemplatePart(Name = "PART_Foreground", Type = typeof(Shape))]
+    public class ValueMeter : ZomBGLControl, IMultiValueConverter, IZomBDataControl, IValueConverter
     {
-        Shape back = null;
-        bool InHigh = false;
+        Border back = null;
+        Shape fore = null;
+        bool InHigh = false, InLow = false;
 
         static ValueMeter()
         {
@@ -63,7 +65,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            back = base.GetTemplateChild("PART_Background") as Shape;
+            back = base.GetTemplateChild("PART_Background") as Border;
+            fore = base.GetTemplateChild("PART_Foreground") as Shape;
         }
 
         [Design.ZomBDesignable(), Description("The maximum value we are going to get."), Category("Behavior")]
@@ -78,13 +81,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
             DependencyProperty.Register("Max", typeof(double), typeof(ValueMeter), new FrameworkPropertyMetadata(1.0, FrameworkPropertyMetadataOptions.AffectsRender));
 
 
-        [Design.ZomBDesignable(), Description("The minimum value we are going to get."), Category("Behavior")]
-        public double Min
-        {
-            get { return (double)GetValue(MinProperty); }
-            set { SetValue(MinProperty, value); }
-        }
-
         [Design.ZomBDesignable(), Description("The threshold before we show the high color."), Category("Behavior")]
         public double HighThreshold
         {
@@ -96,7 +92,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public static readonly DependencyProperty HighThresholdProperty =
             DependencyProperty.Register("HighThreshold", typeof(double), typeof(ValueMeter), new UIPropertyMetadata(1.0));
 
-        [Design.ZomBDesignable(), Description("The color we show when we are passed the high threshold."), Category("Behavior")]
+        [Design.ZomBDesignable(), Description("The color we show when we are past the high threshold."), Category("Behavior")]
         public Brush HighThresholdBrush
         {
             get { return (Brush)GetValue(HighThresholdBrushProperty); }
@@ -107,8 +103,46 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public static readonly DependencyProperty HighThresholdBrushProperty =
             DependencyProperty.Register("HighThresholdBrush", typeof(Brush), typeof(ValueMeter), new UIPropertyMetadata(Brushes.Red));
 
+        [Design.ZomBDesignable(), Description("The threshold before we show the low color."), Category("Behavior")]
+        public double LowThreshold
+        {
+            get { return (double)GetValue(LowThresholdProperty); }
+            set { SetValue(LowThresholdProperty, value); }
+        }
 
+        // Using a DependencyProperty as the backing store for HighThreshold.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty LowThresholdProperty =
+            DependencyProperty.Register("LowThreshold", typeof(double), typeof(ValueMeter), new UIPropertyMetadata(-1.0));
 
+        [Design.ZomBDesignable(), Description("The color we show when we are past the low threshold."), Category("Behavior")]
+        public Brush LowThresholdBrush
+        {
+            get { return (Brush)GetValue(LowThresholdBrushProperty); }
+            set { SetValue(LowThresholdBrushProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for HighThresholdBrush.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty LowThresholdBrushProperty =
+            DependencyProperty.Register("LowThresholdBrush", typeof(Brush), typeof(ValueMeter), new UIPropertyMetadata(Brushes.Green));
+        
+        public bool IsLabelVisible
+        {
+            get { return (bool)GetValue(IsLabelVisibleProperty); }
+            set { SetValue(IsLabelVisibleProperty, value); }
+        }
+
+        [Design.ZomBDesignable(), Description("The minimum value we are going to get."), Category("Behavior")]
+        public double Min
+        {
+            get { return (double)GetValue(MinProperty); }
+            set { SetValue(MinProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsLabelVisible.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsLabelVisibleProperty =
+            DependencyProperty.Register("IsLabelVisible", typeof(bool), typeof(ValueMeter), new UIPropertyMetadata(true));
+
+        
         // Using a DependencyProperty as the backing store for Min.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MinProperty =
             DependencyProperty.Register("Min", typeof(double), typeof(ValueMeter), new FrameworkPropertyMetadata(-1.0, FrameworkPropertyMetadataOptions.AffectsRender));
@@ -141,7 +175,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         static void ValueChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             var t = o as ValueMeter;
-            if (t.back == null)
+            if (t.back == null || t.fore == null)
                 return;
             if (t.DoubleValue >= t.HighThreshold)
             {
@@ -150,7 +184,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
                     var b = new Binding();
                     b.Source = t;
                     b.Path = new PropertyPath(HighThresholdBrushProperty);
-                    t.back.SetBinding(Shape.FillProperty, b);
+                    t.fore.SetBinding(Shape.FillProperty, b);
                     t.InHigh = true;
                 }
             }
@@ -161,8 +195,30 @@ namespace System451.Communication.Dashboard.WPF.Controls
                     var b = new Binding();
                     b.Source = t;
                     b.Path = new PropertyPath(ForegroundProperty);
-                    t.back.SetBinding(Shape.FillProperty, b);
+                    t.fore.SetBinding(Shape.FillProperty, b);
                     t.InHigh = false;
+                }
+            }
+            if (t.DoubleValue <= t.LowThreshold)
+            {
+                if (!t.InLow)
+                {
+                    var b = new Binding();
+                    b.Source = t;
+                    b.Path = new PropertyPath(LowThresholdBrushProperty);
+                    t.back.SetBinding(Border.BackgroundProperty, b);
+                    t.InLow = true;
+                }
+            }
+            else
+            {
+                if (t.InLow)
+                {
+                    var b = new Binding();
+                    b.Source = t;
+                    b.Path = new PropertyPath(BackgroundProperty);
+                    t.back.SetBinding(Border.BackgroundProperty, b);
+                    t.InLow = false;
                 }
             }
         }
@@ -239,6 +295,22 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             draggin = false;
             ReleaseMouseCapture();
+        }
+
+        #endregion
+
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (targetType == typeof(Visibility))
+                return ((bool)value) ? Visibility.Visible : Visibility.Collapsed;
+            return ((double)value).ToString("F");
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
