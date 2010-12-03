@@ -26,7 +26,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     [Design.ZomBControl("Debug Grid", Description = "This displays variable values debugged with var()", IconName = "DebugGridIcon")]
     [Design.ZomBDesignableProperty("Width", Dynamic = true, Category = "Layout")]
     [Design.ZomBDesignableProperty("Height", Dynamic = true, Category = "Layout")]
-    [Design.ZomBDesignableProperty("Background")]
+    [Design.ZomBDesignableProperty("Background", Category = "Appearance")]
     public class DebugGrid : FlowPropertyGrid, IZomBMonitor
     {
         Dictionary<string, TextBlock> elms = new Dictionary<string, TextBlock>();
