@@ -122,6 +122,7 @@ namespace System451.Communication.Dashboard
                     }
                     if (!saving)
                     {
+                        srm.Close();
                         return;
                     }
                     while (pubicQueue.Count > 0)
@@ -157,7 +158,7 @@ namespace System451.Communication.Dashboard
     namespace Net.Video
     {
         /// <summary>
-        /// Here for the Vido Saver
+        /// Here for the Video Saver
         /// </summary>
         public class BitmapConverter : TypeConverter
         {
@@ -176,12 +177,12 @@ namespace System451.Communication.Dashboard
         }
 
         /// <summary>
-        /// Creates an easy to use class that saves AVI files
+        /// Creates an easy to use class that saves mp4 files (TO BE RENAMED SOON)
         /// </summary>
         public class AviStreamer : IDisposable
         {
-            AviManager mgr;
-            VideoStream vs;
+            Stream vs;
+            StreamReader bs;
 
             /// <summary>
             /// Creates a new AVI Streamer
@@ -191,8 +192,8 @@ namespace System451.Communication.Dashboard
             /// <param name="first">The first frame</param>
             public AviStreamer(string filename, double fps, Bitmap first)
             {
-                mgr = new AviManager(filename, false);
-                vs = mgr.AddVideoStream(false, fps, first);
+                vs = FFmpeg.GetEncoderStream(filename, (int)fps);
+                Add(first);
             }
 
             ~AviStreamer()
@@ -207,8 +208,7 @@ namespace System451.Communication.Dashboard
             {
                 try
                 {
-                    //vs.Close();
-                    mgr.Close();
+                    vs.Close();
                 }
                 catch
                 {
@@ -222,7 +222,17 @@ namespace System451.Communication.Dashboard
             /// <param name="nextFrame">The next frame</param>
             public void Add(Bitmap nextFrame)
             {
-                vs.AddFrame(nextFrame);
+                System.Diagnostics.Debug.Print("Adding...");
+                MemoryStream ms = new MemoryStream();
+                nextFrame.Save(ms, ImageFormat.Jpeg);
+                ms.WriteTo(vs);
+                if (bs != null)
+                {
+                    //if (!bs.EndOfStream)
+                    //{
+                        string line = bs.ReadLine();
+                    //}
+                }
             }
 
             /// <summary>
