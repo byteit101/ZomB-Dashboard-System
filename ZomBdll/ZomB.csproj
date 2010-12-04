@@ -109,13 +109,6 @@
     <Compile Include="DashboardDataHubPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ext\AviFile\AudioStream.cs" />
-    <Compile Include="ext\AviFile\Avi.cs" />
-    <Compile Include="ext\AviFile\AviManager.cs" />
-    <Compile Include="ext\AviFile\AviPlayer.cs" />
-    <Compile Include="ext\AviFile\AviStream.cs" />
-    <Compile Include="ext\AviFile\EditableVideoStream.cs" />
-    <Compile Include="ext\AviFile\VideoStream.cs" />
     <Compile Include="ext\WebCam_Capture\WebCamCapture.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -490,6 +483,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ext\AviFile\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

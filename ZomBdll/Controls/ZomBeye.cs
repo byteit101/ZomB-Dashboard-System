@@ -19,7 +19,6 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using System451.Communication.Dashboard.Libs.AviFile;
 using System451.Communication.Dashboard.Utils;
 
 namespace System451.Communication.Dashboard.Controls
@@ -28,7 +27,8 @@ namespace System451.Communication.Dashboard.Controls
     public partial class ZomBeye : UserControl
     {
         string folder = BTZomBFingerFactory.DefaultLoadLocation;
-        AviPlayer playa = null;
+        //AviPlayer playa = null;
+#warning Implement a video player
         string[] files;
         int index;
         public ZomBeye()
@@ -56,7 +56,7 @@ namespace System451.Communication.Dashboard.Controls
         {
             try
             {
-                playa = null;
+                //playa = null;
                 Playing = false;
                 files = Directory.GetFiles(folder, "*.avi");
                 index = 0;
@@ -70,9 +70,9 @@ namespace System451.Communication.Dashboard.Controls
 
         private void Reload()
         {
-            //playa.Stop();
-            playa = new AviPlayer(new AviManager(files[index], true).GetVideoStream(), pictureBox1, null);
-            playa.Stopped += new EventHandler(playa_Stopped);
+            ////playa.Stop();
+            //playa = new AviPlayer(new AviManager(files[index], true).GetVideoStream(), pictureBox1, null);
+            //playa.Stopped += new EventHandler(playa_Stopped);
         }
 
         void playa_Stopped(object sender, EventArgs e)
@@ -83,7 +83,7 @@ namespace System451.Communication.Dashboard.Controls
                 Play();
                 return;
             }
-            Playing = playa.IsRunning;
+            //Playing = playa.IsRunning;
 
         }
 
@@ -105,11 +105,11 @@ namespace System451.Communication.Dashboard.Controls
 
         public void Play()
         {
-            if (playa != null)
-            {
-                playa.Start();
-                Playing = true;
-            }
+            //if (playa != null)
+            //{
+            //    playa.Start();
+            //    Playing = true;
+            //}
         }
 
         public void PlayPause()
@@ -122,12 +122,12 @@ namespace System451.Communication.Dashboard.Controls
 
         public void Pause()
         {
-            if (playa != null)
-            {
-                Playing = false;
-                playa.Stop();
-                Playing = false;
-            }
+            //if (playa != null)
+            //{
+            //    Playing = false;
+            //    playa.Stop();
+            //    Playing = false;
+            //}
         }
         public bool Playing { get; private set; }
 
