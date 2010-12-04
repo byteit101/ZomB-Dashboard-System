@@ -75,7 +75,7 @@ namespace DefaultDash
         private void startBothToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //Start Saving
-            vss.StartSave(BTZomBFingerFactory.DefaultSaveLocation + "\\Capture" + (DateTime.Now.Ticks.ToString("x")) + ".avi");
+            vss.StartSave(BTZomBFingerFactory.DefaultSaveLocation + "\\Capture" + (DateTime.Now.Ticks.ToString("x")) + ".webm");
         }
 
         private void robotToolStripMenuItem_Click(object sender, EventArgs e)
