@@ -55,7 +55,7 @@ namespace System451.Communication.Dashboard
                         if (CPU.Is64BitOperatingSystem())
                             File.WriteAllBytes("SlimDX.dll", Resources.SlimDX64);
                         else
-                        File.WriteAllBytes("SlimDX.dll", Resources.SlimDX86);
+                            File.WriteAllBytes("SlimDX.dll", Resources.SlimDX86);
                     }
                 }
             }

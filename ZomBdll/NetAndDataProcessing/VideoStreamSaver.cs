@@ -21,53 +21,65 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Text;
 using System.Threading;
-using System451.Communication.Dashboard.Libs.AviFile;
+using System.Windows.Media.Imaging;
+using System451.Communication.Dashboard.Net.Video;
 
 namespace System451.Communication.Dashboard
 {
     namespace Utils
     {
         /// <summary>
-        /// Saves a video
+        /// Saves a video from a data source
         /// </summary>
         public class VideoStreamSaver : IZomBDataSaver
         {
             Queue<string> pubicQueue { get; set; }
             Queue<string> privateQueue { get; set; }
-            Queue<Bitmap> imageQueue { get; set; }
+            Queue<MemoryStream> imageQueue { get; set; }
 
             ISavableZomBData source;
 
             Thread saber;
             bool saving;
+            VideoEncoder srm = null;
 
+            /// <summary>
+            /// Create a new VideoStreamSaver from the specified data source
+            /// </summary>
+            /// <param name="DataSource">The data source we monitor</param>
             public VideoStreamSaver(ISavableZomBData DataSource)
             {
-                this.Add(DataSource);
+                (this as IZomBDataSaver).Add(DataSource);
                 pubicQueue = new Queue<string>();
                 privateQueue = new Queue<string>();
-                imageQueue = new Queue<Bitmap>();
-                PrefixBindings = false;
+                imageQueue = new Queue<MemoryStream>();
                 saber = new Thread(aviSaverbg);
                 saber.IsBackground = true;
                 FPS = 15;
             }
 
+            ~VideoStreamSaver()
+            {
+                if (srm != null)
+                {
+                    try
+                    {
+                        srm.Close();
+                    }
+                    catch { }
+                }
+            }
+
             #region IZomBDataSaver Members
 
             /// <summary>
-            /// Ignore this
+            /// Gets or sets the FPS of the resulting file
             /// </summary>
-            public bool PrefixBindings
-            {
-                get;
-                set;
-            }
+            public float FPS { get; set; }
 
-            public double FPS { get; set; }
-
-            public void Add(ISavableZomBData DataSource)
+            void IZomBDataSaver.Add(ISavableZomBData DataSource)
             {
                 if (source == null)
                 {
@@ -85,6 +97,10 @@ namespace System451.Communication.Dashboard
                     }
             }
 
+            /// <summary>
+            /// Start saving to the specified file
+            /// </summary>
+            /// <param name="file">File to save to. Type inferred from extension</param>
             public void StartSave(string file)
             {
                 if (!saving)
@@ -95,11 +111,9 @@ namespace System451.Communication.Dashboard
                 }
             }
 
-            public void StartSave()
-            {
-
-            }
-
+            /// <summary>
+            /// Close the file and end the save
+            /// </summary>
             public void EndSave()
             {
                 saving = false;
@@ -107,48 +121,52 @@ namespace System451.Communication.Dashboard
 
             private void aviSaverbg(object file)
             {
-                string filename = file.ToString();
-                pubicQueue.Clear();
-                privateQueue.Clear();
-                imageQueue.Clear();
-                saving = true;
-                Net.Video.AviStreamer srm = null;
-                while (saving)
+                try
                 {
-                    Thread.Sleep(750);
-                    while (pubicQueue.Count < 1 && saving)
+
+                    string filename = file.ToString();
+                    pubicQueue.Clear();
+                    privateQueue.Clear();
+                    imageQueue.Clear();
+                    saving = true;
+                    while (saving)
                     {
-                        Thread.Sleep(50);
-                    }
-                    if (!saving)
-                    {
-                        srm.Close();
-                        return;
-                    }
-                    while (pubicQueue.Count > 0)
-                    {
-                        lock (pubicQueue)
+                        Thread.Sleep(750);
+                        while (pubicQueue.Count < 1 && saving)
                         {
-                            privateQueue.Enqueue(pubicQueue.Dequeue());
+                            Thread.Sleep(50);
                         }
+                        if (!saving)
+                        {
+                            return;
+                        }
+                        while (pubicQueue.Count > 0)
+                        {
+                            lock (pubicQueue)
+                            {
+                                privateQueue.Enqueue(pubicQueue.Dequeue());
+                            }
+                        }
+                        Thread.Sleep(50);
+                        while (privateQueue.Count > 0)
+                        {
+                            //We should honor them, but lets not, as we should have a imageconverter
+                            imageQueue.Enqueue(new MemoryStream(Convert.FromBase64String(privateQueue.Dequeue())));
+                        }
+                        if (srm == null)
+                            srm = new VideoEncoder(filename, FPS);
+                        Thread.Sleep(50);
+                        while (imageQueue.Count > 0)
+                        {
+                            srm.Add(imageQueue.Dequeue());
+                        }
+                        Thread.Sleep(500);
                     }
-                    Thread.Sleep(50);
-                    while (privateQueue.Count > 0)
-                    {
-                        //We should honor them, but lets not, as we should have a imageconverter
-                        //imageQueue.Enqueue((Bitmap)source.GetTypeConverter().ConvertFrom(null, System.Globalization.CultureInfo.CurrentCulture, privateQueue.Dequeue(), typeof(Image)));
-                        imageQueue.Enqueue((Bitmap)((new Net.Video.BitmapConverter()).ConvertFromString(privateQueue.Dequeue())));
-                    }
-                    if (srm == null)
-                        srm = new Net.Video.AviStreamer(filename, FPS, imageQueue.Dequeue());
-                    Thread.Sleep(50);
-                    while (imageQueue.Count > 0)
-                    {
-                        srm.Add(imageQueue.Dequeue());
-                    }
-                    Thread.Sleep(500);
                 }
-                srm.Close();
+                finally
+                {
+                    srm.Close();
+                }
             }
 
             #endregion
@@ -166,7 +184,9 @@ namespace System451.Communication.Dashboard
             public string ConvertToString(Image value)
             {
                 MemoryStream imageStream = new MemoryStream();
-                value.Save(imageStream, ImageFormat.Jpeg);
+                EncoderParameters pams = new EncoderParameters(1);
+                pams.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 100L);
+                value.Save(imageStream, VideoEncoder.GetEncoder(ImageFormat.Jpeg), pams);
                 return Convert.ToBase64String(imageStream.ToArray());
             }
             new public Image ConvertFromString(string value)
@@ -177,32 +197,32 @@ namespace System451.Communication.Dashboard
         }
 
         /// <summary>
-        /// Creates an easy to use class that saves mp4 files (TO BE RENAMED SOON)
+        /// Creates an easy to use class that encapsulates FFmpeg video encoding
         /// </summary>
-        public class AviStreamer : IDisposable
+        public class VideoEncoder : IDisposable
         {
             Stream vs;
-            StreamReader bs;
 
             /// <summary>
-            /// Creates a new AVI Streamer
+            /// Creates a new fideo encoder
             /// </summary>
-            /// <param name="filename">The file to save the avi to</param>
+            /// <param name="filename">The file to save to. All FFmpeg file type supported (mp4, avi, wemb, mov, wmv, etc...)</param>
             /// <param name="fps">The framerate</param>
-            /// <param name="first">The first frame</param>
-            public AviStreamer(string filename, double fps, Bitmap first)
+            public VideoEncoder(string filename, float fps)
             {
-                vs = FFmpeg.GetEncoderStream(filename, (int)fps);
-                Add(first);
+                vs = FFmpeg.GetEncoderStream(filename, fps);
             }
 
-            ~AviStreamer()
+            /// <summary>
+            /// Dispose of the encoding stream
+            /// </summary>
+            ~VideoEncoder()
             {
                 Dispose();
             }
 
             /// <summary>
-            /// Dispose of the streamer
+            /// Dispose of the encoding stream
             /// </summary>
             public void Dispose()
             {
@@ -210,10 +230,7 @@ namespace System451.Communication.Dashboard
                 {
                     vs.Close();
                 }
-                catch
-                {
-
-                }
+                catch { }
             }
 
             /// <summary>
@@ -222,25 +239,56 @@ namespace System451.Communication.Dashboard
             /// <param name="nextFrame">The next frame</param>
             public void Add(Bitmap nextFrame)
             {
-                System.Diagnostics.Debug.Print("Adding...");
-                MemoryStream ms = new MemoryStream();
-                nextFrame.Save(ms, ImageFormat.Jpeg);
-                ms.WriteTo(vs);
-                if (bs != null)
-                {
-                    //if (!bs.EndOfStream)
-                    //{
-                        string line = bs.ReadLine();
-                    //}
-                }
+                EncoderParameters pams = new EncoderParameters(1);
+                pams.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 100L);
+                nextFrame.Save(vs, GetEncoder(ImageFormat.Jpeg), pams);
             }
 
             /// <summary>
-            /// Save and close the AVI file
+            /// Add another frame
+            /// </summary>
+            /// <param name="nextFrame">The next frame</param>
+            public void Add(BitmapSource nextFrame)
+            {
+                var jbe = new JpegBitmapEncoder();
+                jbe.QualityLevel = 100;
+                jbe.Frames.Add(BitmapFrame.Create(nextFrame));
+                jbe.Save(vs);
+            }
+
+            /// <summary>
+            /// Add another frame
+            /// </summary>
+            /// <param name="nextFrame">The next frame</param>
+            public void Add(MemoryStream nextFrame)
+            {
+                nextFrame.WriteTo(vs);
+            }
+
+            /// <summary>
+            /// Save and close the file
             /// </summary>
             public void Close()
             {
                 Dispose();
+            }
+
+            /// <summary>
+            /// Get the Encoder for the specified ImageFormat
+            /// </summary>
+            /// <param name="format">ImageFormat that defines the Encoder</param>
+            /// <returns>Encoder of the specified format</returns>
+            public static ImageCodecInfo GetEncoder(ImageFormat format)
+            {
+                ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+                foreach (ImageCodecInfo codec in codecs)
+                {
+                    if (codec.FormatID == format.Guid)
+                    {
+                        return codec;
+                    }
+                }
+                return null;
             }
         }
     }

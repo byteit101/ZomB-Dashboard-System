@@ -15,10 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics;
 using System.IO;
 
@@ -28,18 +24,18 @@ namespace System451.Communication.Dashboard.Net.Video
     {
         //Note: to update ffmpeg, find a build at http://ffmpeg.arrozcru.org/
 
-        public static Stream GetEncoderStream(string fileName, int fps)
+        public static Stream GetEncoderStream(string fileName, float fps)
         {
-            return exec("-f image2pipe -vcodec mjpeg -r " + fps + " -i - \"" + fileName + "\"").StandardInput.BaseStream;
+            return exec("-f image2pipe -vcodec mjpeg -r " + fps.ToString() + " -i - \"" + fileName + "\"").StandardInput.BaseStream;
         }
 
         public static Process exec(string args)
         {
             //hopefully we have ffmpeg in the current directory
             ProcessStartInfo psi = new ProcessStartInfo("ffmpeg.exe", args);
+            psi.CreateNoWindow = true;
             psi.UseShellExecute = false;
             psi.RedirectStandardInput = true;
-            //psi.RedirectStandardError = true;
             try
             {
                 Process p = Process.Start(psi);

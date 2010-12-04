@@ -21,17 +21,19 @@ using System.ComponentModel;
 namespace System451.Communication.Dashboard
 {
     //TODO: Savable has no benifits from inheritence YET
-    public interface ISavableZomBData// : IDashboardControl
+    public interface ISavableZomBData
     {
         /// <summary>
         /// Gets the TypeConverter for this data type
         /// </summary>
         /// <returns>Appropriate TypeConverter</returns>
         TypeConverter GetTypeConverter();
+
         /// <summary>
         /// Gets the Value of the data as a string
         /// </summary>
         string DataValue { get; }
+
         /// <summary>
         /// Notifies the Saver when new data is present
         /// This should call a fast enqueue function to the string
@@ -41,10 +43,8 @@ namespace System451.Communication.Dashboard
 
     public interface IZomBDataSaver
     {
-        bool PrefixBindings { get; set; }
         void Add(ISavableZomBData DataSource);
         void StartSave(string file);
-        void StartSave();
         void EndSave();
     }
 }
