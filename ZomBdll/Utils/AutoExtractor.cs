@@ -29,7 +29,8 @@ namespace System451.Communication.Dashboard
                 All = 0xffff,
                 InTheHandManaged = 0x1,
                 InTheHandNative = 0x2,
-                SlimDX = 0x4
+                SlimDX = 0x4,
+                VLC = 0x8
             }
             public static void Extract(Files files)
             {
@@ -57,6 +58,17 @@ namespace System451.Communication.Dashboard
                         else
                             File.WriteAllBytes("SlimDX.dll", Resources.SlimDX86);
                     }
+                }
+                if ((files & Files.VLC) == Files.VLC)
+                {
+                    if (!File.Exists("libvlc.dll"))
+                        File.WriteAllBytes("libvlc.dll", Resources.libvlc);
+                    if (!File.Exists("libvlccore.dll"))
+                        File.WriteAllBytes("libvlccore.dll", Resources.libvlccore);
+                    if (!File.Exists("Vlc.DotNet.Core.dll"))
+                        File.WriteAllBytes("Vlc.DotNet.Core.dll", Resources.Vlc_DotNet_Core);
+                    if (!File.Exists("Vlc.DotNet.Forms.dll"))
+                        File.WriteAllBytes("Vlc.DotNet.Forms.dll", Resources.Vlc_DotNet_Forms);
                 }
             }
         }

@@ -79,6 +79,12 @@
     <Reference Include="UIAutomationProvider">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="Vlc.DotNet.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Vlc.DotNet.Forms">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -307,6 +313,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="ext\SlimDX.dll" />
+    <None Include="ext\libvlc.dll" />
+    <None Include="ext\libvlccore.dll" />
+    <None Include="ext\Vlc.DotNet.Core.dll" />
+    <None Include="ext\Vlc.DotNet.Forms.dll" />
     <Content Include="ext\WebCam_Capture\%40PSC_ReadMe_1339_10.txt" />
     <Content Include="ext\WebCam_Capture\CAMERA.ICO" />
     <None Include="ext\x64\SlimDX.dll" />

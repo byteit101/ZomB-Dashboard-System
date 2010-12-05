@@ -95,6 +95,20 @@ namespace System451.Communication.Dashboard.Properties {
             }
         }
         
+        public static byte[] libvlc {
+            get {
+                object obj = ResourceManager.GetObject("libvlc", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        public static byte[] libvlccore {
+            get {
+                object obj = ResourceManager.GetObject("libvlccore", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         public static byte[] SlimDX64 {
             get {
                 object obj = ResourceManager.GetObject("SlimDX64", resourceCulture);
@@ -127,6 +141,20 @@ namespace System451.Communication.Dashboard.Properties {
             get {
                 object obj = ResourceManager.GetObject("TacoShell", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        public static byte[] Vlc_DotNet_Core {
+            get {
+                object obj = ResourceManager.GetObject("Vlc_DotNet_Core", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        public static byte[] Vlc_DotNet_Forms {
+            get {
+                object obj = ResourceManager.GetObject("Vlc_DotNet_Forms", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
