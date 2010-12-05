@@ -20,6 +20,11 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using System451.Communication.Dashboard.Utils;
+using Vlc.DotNet.Forms;
+using System.Linq;
+using Vlc.DotNet.Core.Medias;
+using Vlc.DotNet.Core;
+using System.Windows.Threading;
 
 namespace System451.Communication.Dashboard.Controls
 {
@@ -27,13 +32,18 @@ namespace System451.Communication.Dashboard.Controls
     public partial class ZomBeye : UserControl
     {
         string folder = BTZomBFingerFactory.DefaultLoadLocation;
-        //AviPlayer playa = null;
-#warning Implement a video player
         string[] files;
         int index;
+        static ZomBeye()
+        {
+            AutoExtractor.Extract(AutoExtractor.Files.VLC);
+        }
         public ZomBeye()
         {
             InitializeComponent();
+            vlcBox.Manager = new VlcManager();
+            this.vlcBox.Manager.PluginsPath = @"C:\Program Files\VideoLan\VLC\";
+            this.vlcBox.EndReached += new Vlc.DotNet.Core.VlcEventHandler<EventArgs>(vlcBox_EndReached);
             if (!DesignMode)
                 ReloadAll();
         }
@@ -49,42 +59,34 @@ namespace System451.Communication.Dashboard.Controls
         {
             this.folder = folder;
             ReloadAll();
-            Play();
         }
 
         private void ReloadAll()
         {
             try
             {
-                //playa = null;
                 Playing = false;
-                files = Directory.GetFiles(folder, "*.avi");
+                files = Directory.GetFiles(folder, "*.webm");
                 index = 0;
                 Reload();
             }
-            catch
-            {
-                //MessageBox.Show("Path Not found");
-            }
+            catch { }
         }
 
         private void Reload()
         {
-            ////playa.Stop();
-            //playa = new AviPlayer(new AviManager(files[index], true).GetVideoStream(), pictureBox1, null);
-            //playa.Stopped += new EventHandler(playa_Stopped);
+            var mm = new FileMedia();
+            mm.Path = files[index];
+            vlcBox.Play(mm);
+            Playing = true;
         }
 
-        void playa_Stopped(object sender, EventArgs e)
+        void vlcBox_EndReached(object sender, VlcEventArgs<EventArgs> e)
         {
-            if (Playing)
+            setTimeout(delegate
             {
                 Next();
-                Play();
-                return;
-            }
-            //Playing = playa.IsRunning;
-
+            }, 2);
         }
 
         public void Next()
@@ -105,35 +107,40 @@ namespace System451.Communication.Dashboard.Controls
 
         public void Play()
         {
-            //if (playa != null)
-            //{
-            //    playa.Start();
-            //    Playing = true;
-            //}
+            var mm = new FileMedia();
+            mm.Path = files[index];
+            vlcBox.Play(mm);
+            Playing = true;
         }
 
         public void PlayPause()
         {
-            if (!Playing)
-                Play();
-            else
-                Pause();
+            vlcBox.Pause();
         }
 
         public void Pause()
         {
-            //if (playa != null)
-            //{
-            //    Playing = false;
-            //    playa.Stop();
-            //    Playing = false;
-            //}
+            Playing = false;
+            vlcBox.Pause();
+            Playing = false;
         }
         public bool Playing { get; private set; }
 
         private void button1_Click(object sender, EventArgs e)
         {
             PlayPause();
+        }
+
+        void setTimeout(VoidFunction eh, int ms)
+        {
+            DispatcherTimer dt = new DispatcherTimer();
+            dt.Interval = new TimeSpan(0, 0, 0, 0, ms);
+            dt.Tick += delegate
+            {
+                dt.Stop();
+                eh();
+            };
+            dt.Start();
         }
     }
 }
