@@ -55,11 +55,13 @@ namespace System451.Communication.Dashboard.ViZ
         ListBox listBox1;
         Panel propHolder;
 
-        static Designer dsb;
+        static Designer dsb = null;
 
         public Designer()
         {
-            dsb = this;//TODO: enforce 1 only
+            if (dsb != null)
+                throw new InvalidOperationException("Only one ViZ designer can be active at a time in this App Domain");
+            dsb = this;
             InitializeComponent();
             if (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width > 1080)
             {

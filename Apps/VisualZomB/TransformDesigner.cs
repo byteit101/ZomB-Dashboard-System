@@ -63,7 +63,7 @@ namespace System451.Communication.Dashboard.ViZ
         }
         public override bool IsDefaultValue()
         {
-            return false;//TODO: make return true sometimes
+            return (SurfaceControl.GetSurfaceControlFromControl(Object)).RenderTransform == MatrixTransform.Identity;
         }
     }
 }
