@@ -113,7 +113,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 numrows = ((numrows * recmaxh) > finalSize.Height) ? Math.Floor(finalSize.Height / recmaxh) : numrows;
                 finalHeight = recmaxh;
                 numcols = Math.Ceiling(Math.Ceiling(Children.Count / 2.0) / numrows);
-                //TODO: use these better
                 finalWidthl = recmaxl;
                 finalWidthr = recmaxr;
             }

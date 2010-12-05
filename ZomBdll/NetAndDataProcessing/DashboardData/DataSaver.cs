@@ -201,7 +201,6 @@ namespace System451.Communication.Dashboard
                 bit[2] = (byte)(sb.Length);
                 AddValue(bit);
             }
-            //TODO: Fix this
         }
 
         #endregion

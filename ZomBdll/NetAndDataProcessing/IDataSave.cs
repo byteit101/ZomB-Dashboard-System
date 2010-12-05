@@ -20,7 +20,6 @@ using System.ComponentModel;
 
 namespace System451.Communication.Dashboard
 {
-    //TODO: Savable has no benifits from inheritence YET
     public interface ISavableZomBData
     {
         /// <summary>

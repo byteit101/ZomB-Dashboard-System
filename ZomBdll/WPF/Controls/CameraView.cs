@@ -59,8 +59,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         public override void UpdateControl(string value)
         {
-            //TODO?
-            //base.UpdateControl(value);
+
         }
 
         public override void OnApplyTemplate()

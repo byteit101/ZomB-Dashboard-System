@@ -194,7 +194,7 @@ namespace System451.Communication.Dashboard.Net
                                 {
                                     //Create our e
                                     InvalidPacketRecievedEventArgs e = new InvalidPacketRecievedEventArgs(buffer, ddh.InvalidPacketAction == InvalidPacketActions.AlwaysContinue || ddh.InvalidPacketAction == InvalidPacketActions.Continue);
-                                    InvalidPacketRecieved(this, e);//TODO: Test multi-cast-ness of this
+                                    InvalidPacketRecieved(this, e);
                                     if ((int)ddh.InvalidPacketAction < 3)//1-4
                                     {
                                         if (!e.ContinueAnyway)

@@ -25,6 +25,7 @@ using System.Linq;
 using Vlc.DotNet.Core.Medias;
 using Vlc.DotNet.Core;
 using System.Windows.Threading;
+using Microsoft.Win32;
 
 namespace System451.Communication.Dashboard.Controls
 {
@@ -42,7 +43,7 @@ namespace System451.Communication.Dashboard.Controls
         {
             InitializeComponent();
             vlcBox.Manager = new VlcManager();
-            this.vlcBox.Manager.PluginsPath = @"C:\Program Files\VideoLan\VLC\";
+            this.vlcBox.Manager.PluginsPath = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\VideoLAN\VLC").GetValue("InstallDir", @"C:\Program Files\VideoLan\VLC\").ToString();
             this.vlcBox.EndReached += new Vlc.DotNet.Core.VlcEventHandler<EventArgs>(vlcBox_EndReached);
             if (!DesignMode)
                 ReloadAll();
