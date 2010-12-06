@@ -22,7 +22,7 @@ using System.Windows.Controls;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
-    public class DashboardDataPanel : Panel
+    public class DashboardDataPanel : Panel, IZomBDashboardDataHubConsumer
     {
         public DashboardDataPanel()
         {
@@ -109,6 +109,16 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 DashboardDataHub.InvalidPacketAction = value;
             }
         }
+        
+        //make wpf happy, and me unhappy
+        public static readonly DependencyProperty DefaultSourcesProperty =
+            DependencyProperty.Register("DefaultSources", typeof(StartSources), typeof(DashboardDataPanel), new UIPropertyMetadata(
+                new PropertyChangedCallback((s, e) => (s as DashboardDataPanel).DefaultSources = (StartSources)e.NewValue)));
+
+        public static readonly DependencyProperty InvalidPacketActionProperty =
+                    DependencyProperty.Register("InvalidPacketAction", typeof(InvalidPacketActions), typeof(DashboardDataPanel), new UIPropertyMetadata(
+                        new PropertyChangedCallback((s, e) => (s as DashboardDataPanel).InvalidPacketAction = (InvalidPacketActions)e.NewValue)));
+
 
         private void AddControls(IEnumerable controlCollection)
         {

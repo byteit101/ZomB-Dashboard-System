@@ -22,11 +22,23 @@ using System.Windows.Controls;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
-    public class DashboardDataCanvas : Canvas
+    public class DashboardDataCanvas : Canvas, IZomBDashboardDataHubConsumer
     {
         public DashboardDataCanvas()
         {
             DashboardDataHub = new DashboardDataHub();
+            this.Loaded += delegate
+            {
+                ReloadControls();
+                if (AutoStart)
+                    Start();
+            };
+        }
+
+        protected DashboardDataCanvas(bool init)
+        {
+            if (init)
+                DashboardDataHub = new DashboardDataHub();
             this.Loaded += delegate
             {
                 ReloadControls();
@@ -90,6 +102,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             }
             set
             {
+                if (DashboardDataHub != null)
                 DashboardDataHub.StartSource = value;
             }
         }
@@ -106,9 +119,20 @@ namespace System451.Communication.Dashboard.WPF.Controls
             }
             set
             {
+                if (DashboardDataHub!=null)
                 DashboardDataHub.InvalidPacketAction = value;
             }
         }
+
+        //make wpf happy, and me unhappy
+        public static readonly DependencyProperty DefaultSourcesProperty =
+            DependencyProperty.Register("DefaultSources", typeof(StartSources), typeof(DashboardDataCanvas), new UIPropertyMetadata(
+                new PropertyChangedCallback((s, e) => (s as DashboardDataCanvas).DefaultSources = (StartSources)e.NewValue)));
+
+        public static readonly DependencyProperty InvalidPacketActionProperty =
+                    DependencyProperty.Register("InvalidPacketAction", typeof(InvalidPacketActions), typeof(DashboardDataCanvas), new UIPropertyMetadata(
+                        new PropertyChangedCallback((s, e) => (s as DashboardDataCanvas).InvalidPacketAction = (InvalidPacketActions)e.NewValue)));
+
 
         private void AddControls(IEnumerable controlCollection)
         {

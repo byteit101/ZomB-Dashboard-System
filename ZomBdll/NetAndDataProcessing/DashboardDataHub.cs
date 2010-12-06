@@ -30,7 +30,6 @@ using System451.Communication.Dashboard.Net;
 
 namespace System451.Communication.Dashboard
 {
-
     /// <summary>
     /// This is the main controller of the dashboard packets data
     /// </summary>
@@ -55,7 +54,6 @@ namespace System451.Communication.Dashboard
         /// </summary>
         public DashboardDataHub()
         {
-            ClearSources();
             RegisterDashboardPacketSource();//Default
             main = Dispatcher.CurrentDispatcher;
         }

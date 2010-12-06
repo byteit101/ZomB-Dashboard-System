@@ -21,19 +21,30 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
-    public class DashboardDataHubWindow : Window
+    public class DashboardDataHubWindow : Window, IZomBDashboardDataHubConsumer
     {
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool SetForegroundWindow(IntPtr hWnd);
         static Mutex mutex;
 
-        DashboardDataHub dashboardDataHub1 = new DashboardDataHub();
+        DashboardDataHub dashboardDataHub1;
 
         public DashboardDataHubWindow()
+        {
+            Init(true);
+        }
+
+        protected DashboardDataHubWindow(bool mutexonly)
+        {
+            Init(!mutexonly);
+        }
+
+        protected void Init(bool newddh)
         {
             //Check Singleton
             bool createdNew = true;
@@ -57,17 +68,31 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 }
             }
 
+            if (newddh)
+            {
+                this.dashboardDataHub1 = new DashboardDataHub();
+                dashboardDataHub1.StartSource = StartSources.DashboardPacket;
+                dashboardDataHub1.InvalidPacketAction = InvalidPacketActions.Ignore;
+            }
+
             this.Title = "ZomB Dashboard";
-            //this.WindowStyle = WindowStyle.None;
+            this.Icon = BitmapFrame.Create(new Uri("pack://application:,,,/ZomB;component/Resources/ZomB.ico", UriKind.RelativeOrAbsolute));
             this.SizeToContent = SizeToContent.WidthAndHeight;
-            //this.Width = 1024;
-            //this.Height = 400;
 
             this.Loaded += delegate
             {
-                this.InvalidPacketAction = (InvalidPacketActions)(Content as DependencyObject).GetValue(InvalidPacketActionProperty);
-                if (!DesignerProperties.GetIsInDesignMode(this))
-                    ReloadControls();
+                if ((!newddh) && Content is IZomBDashboardDataHubConsumer)
+                    dashboardDataHub1 = (Content as IZomBDashboardDataHubConsumer).DashboardDataHub;
+                else
+                {
+                    try
+                    {
+                        this.InvalidPacketAction = (InvalidPacketActions)(Content as DependencyObject).GetValue(InvalidPacketActionProperty);
+                        if (!DesignerProperties.GetIsInDesignMode(this))
+                            ReloadControls();
+                    }
+                    catch { }
+                }
             };
 
             if (Environment.UserName == "Driver")
@@ -76,9 +101,9 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 this.WindowStartupLocation = WindowStartupLocation.Manual;
                 this.Left = 0;
                 this.Top = 0;
+                this.Width = 1024;
+                this.Height = 400;
             }
-            dashboardDataHub1.StartSource = StartSources.DashboardPacket;
-            dashboardDataHub1.InvalidPacketAction = InvalidPacketActions.Ignore;
             GC.KeepAlive(mutex);
             this.Closing += delegate
             {
@@ -114,7 +139,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         /// <summary>
         /// Gets the internal DashboardDataHub
         /// </summary>
-        protected DashboardDataHub DashboardDataHub
+        public DashboardDataHub DashboardDataHub
         {
             get
             {
@@ -141,7 +166,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         /// </summary>
         public void Start()
         {
-            if ((!DesignerProperties.GetIsInDesignMode(this)) && (!Running))
+            if ((!DesignerProperties.GetIsInDesignMode(this)) && (!Running) && dashboardDataHub1 != null)
             {
                 dashboardDataHub1.Start();
                 Running = true;
@@ -291,5 +316,10 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 catch { /*No children or not a DepObj*/ }
             }
         }
+    }
+
+    public interface IZomBDashboardDataHubConsumer
+    {
+        DashboardDataHub DashboardDataHub { get; }
     }
 }

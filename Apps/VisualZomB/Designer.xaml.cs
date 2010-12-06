@@ -770,7 +770,11 @@ namespace System451.Communication.Dashboard.ViZ
 
         public void LoadFile(string fileName)
         {
-            Canvas cvs = XamlReader.Load(new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read)) as Canvas;
+            Canvas cvs = XamlReader.Load(new MemoryStream(UTF8Encoding.UTF8.GetBytes(new StreamReader(new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+                .ReadToEnd().Replace("ZomB:DashboardDataCanvas ",
+                "ViZ:StoppedDDHCVS xmlns:ViZ=\"clr-namespace:System451.Communication.Dashboard.ViZ;assembly=ViZ\" ")
+                .Replace("/ZomB:DashboardDataCanvas",
+                "/ViZ:StoppedDDHCVS")))) as Canvas;
             if (cvs == null)
                 return;
             List<Control> lc = new List<Control>(cvs.Children.Count);
@@ -811,7 +815,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         public string Export()
         {
-            StringBuilder sb = new StringBuilder("<Canvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:ZomB=\"clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB\" Height=\"400\" Width=\"1024\" ZomB:DashboardDataHubWindow.InvalidPacketAction=\"");
+            StringBuilder sb = new StringBuilder("<ZomB:DashboardDataCanvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:ZomB=\"clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB\" Height=\"400\" Width=\"1024\" InvalidPacketAction=\"");
             sb.Append((designerProps[3] as ComboBox).SelectedValue); sb.Append("\">");
             List<KeyValuePair<string, PropertyElement>> attached = new List<KeyValuePair<string, PropertyElement>>();
 
@@ -874,7 +878,7 @@ namespace System451.Communication.Dashboard.ViZ
                     sb.Append("\" />");
             }
 
-            sb.Append("</Canvas>");
+            sb.Append("</ZomB:DashboardDataCanvas>");
             return sb.ToString();
         }
 
@@ -911,6 +915,14 @@ namespace System451.Communication.Dashboard.ViZ
         public static bool Flagged(this Designer.CurrentDragMove ths, Designer.CurrentDragMove value)
         {
             return (ths & value) == value;
+        }
+    }
+
+    public class StoppedDDHCVS : WPF.Controls.DashboardDataCanvas
+    {
+        public StoppedDDHCVS() : base(false)
+        {
+            this.AutoStart = false;
         }
     }
 }

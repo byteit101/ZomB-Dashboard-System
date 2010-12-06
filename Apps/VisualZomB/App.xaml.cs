@@ -29,6 +29,7 @@ namespace System451.Communication.Dashboard.ViZ
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            System.Windows.Forms.Application.EnableVisualStyles();
             LoadAssembliesGeneric();
             var args = e.Args;
             if (args.Length >0)
