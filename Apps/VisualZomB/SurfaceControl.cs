@@ -25,6 +25,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System451.Communication.Dashboard.WPF.Design;
 using System.ComponentModel;
+using System.Reflection;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -107,6 +108,7 @@ namespace System451.Communication.Dashboard.ViZ
                     tlsize.Visibility = lsize.Visibility = tsize.Visibility = trsize.Visibility
                         = blsize.Visibility = rsize.Visibility = bsize.Visibility = sizer.Visibility = Visibility.Collapsed;
                 }
+                LoadVerbs();
             }
         }
 
@@ -188,6 +190,68 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 this.Width = e.NewSize.Width;
                 this.Height = e.NewSize.Height;
+            }
+        }
+
+        private Collection<ViZVerb> GetVerbs()
+        {
+            Collection<ViZVerb> verb = new Collection<ViZVerb>();
+            var mthds = Control.GetType().GetMethods();
+            foreach (var func in mthds)
+            {
+                foreach (var item in func.GetCustomAttributes(typeof(ZomBDesignerVerbAttribute), false))
+                {
+                    verb.Add(new ViZVerb(item as ZomBDesignerVerbAttribute, func, Control));
+                    break;
+                }
+            }
+            return verb;
+        }
+
+        class ViZVerb
+        {
+            public ViZVerb(ZomBDesignerVerbAttribute vb, MethodInfo mi, FrameworkElement obj)
+            {
+                Verb = vb;
+                Method = mi;
+                Obj = obj;
+            }
+
+            public ZomBDesignerVerbAttribute Verb { get; set; }
+
+            public MethodInfo Method { get; set; }
+
+            public FrameworkElement Obj { get; set; }
+
+            public MenuItem GetItem()
+            {
+                var mi = new MenuItem();
+                mi.Header = Verb.Name;
+                mi.ToolTip = Verb.Description;
+                mi.Click += delegate
+                {
+                    try
+                    {
+                        Method.Invoke(Obj, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("All designer verbs need to have a parameterless invoke.\r\n" + ex.ToString());
+                    }
+                };
+                return mi;
+            }
+        }
+        
+        private void LoadVerbs()
+        {
+            var v = GetVerbs();
+            if (v.Count > 0)
+            {
+                foreach (var item in v)
+                {
+                    mnu.Items.Add(item.GetItem());
+                }
             }
         }
 

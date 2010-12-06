@@ -34,4 +34,16 @@ namespace System451.Communication.Dashboard.WPF.Design
         public ImageSource Icon { get; internal set; }
         public string IconName { get; set; }
     }
+
+    [global::System.AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
+    public sealed class ZomBDesignerVerbAttribute : Attribute
+    {
+        public ZomBDesignerVerbAttribute(string name)
+        {
+            Name = name;
+        }
+
+        public string Name { get; private set; }
+        public string Description { get; set; }
+    }
 }

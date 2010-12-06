@@ -223,6 +223,32 @@ namespace System451.Communication.Dashboard.WPF.Controls
             }
         }
 
+        [Design.ZomBDesignerVerb("Set to battery defaults")]
+        public void SetRangeToBattery()
+        {
+            Min = 7.0;
+            Max = 14.5;
+            HighThreshold = 13.25;
+            LowThreshold = 9.5;
+            DoubleValue = 12.0;
+            HighThresholdBrush = Brushes.Orange;
+            LowThresholdBrush = Brushes.Red;
+            BarWidth = 0;
+        }
+
+        [Design.ZomBDesignerVerb("Set to normalized")]
+        public void SetRangeToNormalized()
+        {
+            Min = -1.0;
+            Max = 1;
+            HighThreshold = 1;
+            LowThreshold = -1;
+            DoubleValue = 0;
+            HighThresholdBrush = Brushes.Red;
+            LowThresholdBrush = Brushes.Green;
+            BarWidth = 5;
+        }
+
 
         #region IValueConverter Members
 
