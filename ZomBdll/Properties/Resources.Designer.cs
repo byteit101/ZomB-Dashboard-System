@@ -81,13 +81,6 @@ namespace System451.Communication.Dashboard.Properties {
             }
         }
         
-        public static System.Drawing.Bitmap DashboardSpeed {
-            get {
-                object obj = ResourceManager.GetObject("DashboardSpeed", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         public static byte[] InTheHand_Net_Personal {
             get {
                 object obj = ResourceManager.GetObject("InTheHand_Net_Personal", resourceCulture);
@@ -120,13 +113,6 @@ namespace System451.Communication.Dashboard.Properties {
             get {
                 object obj = ResourceManager.GetObject("SlimDX86", resourceCulture);
                 return ((byte[])(obj));
-            }
-        }
-        
-        public static System.Drawing.Bitmap TacoFull_small2 {
-            get {
-                object obj = ResourceManager.GetObject("TacoFull_small2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

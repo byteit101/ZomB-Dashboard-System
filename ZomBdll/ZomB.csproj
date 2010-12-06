@@ -20,7 +20,8 @@
     <AssemblyName>ZomB</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ApplicationIcon>Graph.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -248,7 +249,9 @@
       <DependentUpon>ZomBButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPF\Controls\ZomBGLControl.cs" />
+    <Compile Include="WPF\DashboardDataCanvas.cs" />
     <Compile Include="WPF\DashboardDataHubWindow.cs" />
+    <Compile Include="WPF\DashboardDataPanel.cs" />
     <Compile Include="WPF\Design\IDesigner.cs" />
     <Compile Include="WPF\Design\Reflector.cs" />
     <Compile Include="WPF\Design\ViZBindingParser.cs" />
@@ -305,8 +308,7 @@
       <DependentUpon>VarValue.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="TBB\DashboardSpeed.ico" />
-    <EmbeddedResource Include="DashboardSpeed.bmp" />
+    <None Include="TBB\DashboardSpeed.ico" />
     <None Include="ext\32feetWidcomm.dll">
     </None>
     <Content Include="CREDITS.txt">
@@ -321,7 +323,6 @@
     <Content Include="ext\WebCam_Capture\CAMERA.ICO" />
     <None Include="ext\x64\SlimDX.dll" />
     <Content Include="ext\x64\32feetWidcomm.dll" />
-    <Content Include="Graph.ico" />
     <Content Include="ext\InTheHand.Net.Personal.dll">
     </Content>
     <Content Include="LICENSE.txt">
@@ -337,42 +338,41 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Resources\taco2.svg" />
-    <Content Include="Resources\TacoFull-small2.jpg" />
     <Content Include="Resources\TacoFull-small2.png" />
     <Resource Include="Resources\tacofull.png" />
     <Resource Include="Resources\transform.ico" />
     <None Include="Resources\Transforms icon.svg" />
     <Content Include="Resources\ZomB text.png" />
-    <EmbeddedResource Include="Resources\ZomB text.svg" />
-    <EmbeddedResource Include="Resources\ZomBDS.svg" />
-    <EmbeddedResource Include="Resources\ZomBDSMini.svg" />
+    <None Include="Resources\ZomB text.svg" />
+    <None Include="Resources\ZomBDS.svg" />
+    <None Include="Resources\ZomBDSMini.svg" />
     <Resource Include="Resources\ZomB.ico" />
     <Content Include="Resources\ZomBWFrame.png" />
     <None Include="Resources\ZomBZ.png" />
     <Content Include="TBB\ZomB text t.png" />
     <Content Include="TBB\ZomB text.png" />
     <EmbeddedResource Include="TBB\ZomBeye.png" />
-    <EmbeddedResource Include="TBB\Analog.ico" />
+    <None Include="TBB\Analog.ico" />
     <EmbeddedResource Include="TBB\Analog.png" />
-    <EmbeddedResource Include="TBB\DashboardDirection.ico" />
-    <EmbeddedResource Include="TBB\DashboardDirection.png" />
-    <EmbeddedResource Include="TBB\Distance.ico" />
+    <None Include="TBB\DashboardDirection.ico" />
+    <None Include="TBB\DashboardDirection.png" />
+    <None Include="TBB\Distance.ico" />
     <EmbeddedResource Include="TBB\Distance.png" />
-    <EmbeddedResource Include="TBB\Graph.ico" />
+    <None Include="TBB\Graph.ico" />
     <EmbeddedResource Include="TBB\Graph.png" />
     <None Include="Resources\TacoShell.png" />
-    <EmbeddedResource Include="Resources\ZomB W Frame.svg" />
+    <None Include="Resources\ZomB W Frame.svg" />
     <None Include="TBB\ZomBeye.svg" />
-    <EmbeddedResource Include="TBB\Analog.svg" />
-    <EmbeddedResource Include="TBB\Distance.svg" />
-    <EmbeddedResource Include="TBB\Graph.svg" />
-    <EmbeddedResource Include="TBB\OnOff.ico" />
+    <None Include="TBB\Analog.svg" />
+    <None Include="TBB\Distance.svg" />
+    <None Include="TBB\Graph.svg" />
+    <None Include="TBB\OnOff.ico" />
     <EmbeddedResource Include="TBB\OnOff.png" />
-    <EmbeddedResource Include="TBB\OnOff.svg" />
-    <EmbeddedResource Include="TBB\Spike.ico" />
+    <None Include="TBB\OnOff.svg" />
+    <None Include="TBB\Spike.ico" />
     <EmbeddedResource Include="TBB\Spike.png" />
-    <EmbeddedResource Include="TBB\Spike.svg" />
-    <EmbeddedResource Include="TBB\Taco.ico" />
+    <None Include="TBB\Spike.svg" />
+    <None Include="TBB\Taco.ico" />
     <EmbeddedResource Include="TBB\Taco.png" />
     <EmbeddedResource Include="Controls\ZomBeye.resx">
       <DependentUpon>ZomBeye.cs</DependentUpon>
