@@ -37,8 +37,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         public TacoMeter()
         {
-            this.Width = 150;
-            this.Height = 100;
+            this.Width = 300;
+            this.Height = 150;
         }
 
         [Design.ZomBDesignable(), Description("The maximum value we are going to get."), Category("Behavior")]
