@@ -38,7 +38,8 @@
             </ListBox.ItemsPanel>
         </ListBox>
         <ScrollViewer PreviewMouseWheel="PropScroller_PreviewMouseWheel" Margin="2" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Name="PropScroller">
-            <ZomB:FlowPropertyGrid Orientation="Horizontal" Name="PropertyBox" x:FieldModifier="public" HorizontalAlignment="Left" VerticalAlignment="Top" RightCollumnWidth="110" />
+            <ZomB:FlowPropertyGrid Orientation="Horizontal" Name="PropertyBox" x:FieldModifier="public" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                   RightCollumnWidth="110" LeftCollumnWidth="120" CollumnPadding="3" />
         </ScrollViewer>
     </Grid>
 </Window>

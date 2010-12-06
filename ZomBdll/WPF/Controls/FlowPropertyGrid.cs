@@ -43,7 +43,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         }
 
         public static readonly DependencyProperty LeftCollumnWidthProperty = DependencyProperty.Register("LeftCollumnWidth", typeof(double), typeof(FlowPropertyGrid), new UIPropertyMetadata(double.NaN));
-        
+
         public double RightCollumnWidth
         {
             get { return (double)GetValue(RightCollumnWidthProperty); }
@@ -51,6 +51,14 @@ namespace System451.Communication.Dashboard.WPF.Controls
         }
 
         public static readonly DependencyProperty RightCollumnWidthProperty = DependencyProperty.Register("RightCollumnWidth", typeof(double), typeof(FlowPropertyGrid), new UIPropertyMetadata(double.NaN));
+        
+        public double CollumnPadding
+        {
+            get { return (double)GetValue(CollumnPaddingProperty); }
+            set { SetValue(CollumnPaddingProperty, value); }
+        }
+
+        public static readonly DependencyProperty CollumnPaddingProperty = DependencyProperty.Register("CollumnPadding", typeof(double), typeof(FlowPropertyGrid), new UIPropertyMetadata(0.0));
 
 
 
@@ -91,7 +99,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 double numrows = Math.Ceiling(Children.Count / 2.0);
                 numrows = ((numrows * recmaxh) > availableSize.Height) ? Math.Floor(availableSize.Height / recmaxh) : numrows;
                 double numcols = Math.Ceiling(Math.Ceiling(Children.Count / 2.0) / numrows);
-                return new Size(numcols * (recmaxr + recmaxl), numrows * recmaxh);
+                return new Size((numcols * (recmaxr + recmaxl)) + ((numcols * CollumnPadding) - CollumnPadding), numrows * recmaxh);
             }
             return new Size(maxl + maxr, maxh * Math.Ceiling(Children.Count / 2.0));
         }
@@ -125,7 +133,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 child = Children[i];
                 if (i % (numrows * 2) == 0)//start new row
                 {
-                    x += finalWidthl + finalWidthr;
+                    x += finalWidthl + finalWidthr + CollumnPadding;
                     y = 0;
                 }
                 if (i % 2 == 0)//left side
