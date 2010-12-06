@@ -142,5 +142,48 @@ namespace System451.Communication.Dashboard.WPF.Controls
         }
 
         #endregion
+
+        [Design.ZomBDesignerVerb("Set range to analog")]
+        public void SetRangeToAnalog()
+        {
+            Min = 0;
+            Max = 1024;
+            DoubleValue = 0;
+        }
+
+        [Design.ZomBDesignerVerb("Set range to volts (0-5)")]
+        public void SetRangeToAnalogV()
+        {
+            Min = 0;
+            Max = 5;
+        }
+
+        [Design.ZomBDesignerVerb("Set range to degrees")]
+        public void SetRangeToDegrees()
+        {
+            Min = 0;
+            Max = 360;
+        }
+
+        [Design.ZomBDesignerVerb("Set range to radians")]
+        public void SetRangeToRadians()
+        {
+            Min = 0;
+            Max = 2 * Math.PI;
+        }
+
+        [Design.ZomBDesignerVerb("Set range to battery")]
+        public void SetRangeToBattery()
+        {
+            Min = 7.0;
+            Max = 14.5;
+        }
+
+        [Design.ZomBDesignerVerb("Set range to normalized")]
+        public void SetRangeToNormalized()
+        {
+            Min = -1;
+            Max = 1;
+        }
     }
 }

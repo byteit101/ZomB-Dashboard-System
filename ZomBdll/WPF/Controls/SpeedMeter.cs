@@ -46,6 +46,30 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.Height = 50;
         }
 
+        [Design.ZomBDesignerVerb("Set range to analog")]
+        public void SetRangeToAnalog()
+        {
+            Min = 0;
+            Max = 1024;
+            DoubleValue = 0;
+        }
+
+        [Design.ZomBDesignerVerb("Set range to volts (0-5)")]
+        public void SetRangeToAnalogV()
+        {
+            Min = 0;
+            Max = 5;
+            DoubleValue = 0;
+        }
+
+        [Design.ZomBDesignerVerb("Set range to normalized")]
+        public void SetRangeToNormalized()
+        {
+            Min = -1;
+            Max = 1;
+            DoubleValue = 0;
+        }
+
         [Design.ZomBDesignable(), Description("The maximum value we are going to get."), Category("Behavior")]
         public double Max
         {

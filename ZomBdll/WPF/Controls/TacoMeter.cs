@@ -82,5 +82,29 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             throw new NotImplementedException();
         }
+
+        [Design.ZomBDesignerVerb("Set range to analog")]
+        public void SetRangeToAnalog()
+        {
+            Min = 0;
+            Max = 1024;
+            DoubleValue = 0;
+        }
+
+        [Design.ZomBDesignerVerb("Set range to degrees")]
+        public void SetRangeToDegrees()
+        {
+            Min = -90;
+            Max = 90;
+            DoubleValue = 0;
+        }
+
+        [Design.ZomBDesignerVerb("Set range to normalized")]
+        public void SetRangeToNormalized()
+        {
+            Min = -1;
+            Max = 1;
+            DoubleValue = 0;
+        }
     }
 }

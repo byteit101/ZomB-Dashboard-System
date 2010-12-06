@@ -98,6 +98,30 @@ namespace System451.Communication.Dashboard.WPF.Controls
             throw new NotImplementedException();
         }
 
+        [Design.ZomBDesignerVerb("Set range to degrees")]
+        public void SetRangeToDegrees()
+        {
+            Min = 0;
+            Max = 360;
+            DoubleValue = 0;
+        }
+
+        [Design.ZomBDesignerVerb("Set range to radians")]
+        public void SetRangeToRadians()
+        {
+            Min = Math.PI/-2.0;
+            Max = 3 * Math.PI / 2.0;
+            DoubleValue = 0;
+        }
+
+        [Design.ZomBDesignerVerb("Set range to normalized")]
+        public void SetRangeToNormalized()
+        {
+            Min = 0;
+            Max = 4;
+            DoubleValue = 0;
+        }
+
         #region IZomBDataControl Members
 
         public event ZomBDataControlUpdatedEventHandler DataUpdated;
