@@ -778,6 +778,16 @@ namespace System451.Communication.Dashboard.ViZ
             if (cvs == null)
                 return;
             List<Control> lc = new List<Control>(cvs.Children.Count);
+
+            //canvas size
+            var ofv = new Point(cvs.Width, cvs.Height) - new Point(ZDash.ActualWidth, ZDash.ActualHeight);
+            var newInnerSize = (Size)(new Point(ZDash.ActualWidth, ZDash.ActualHeight) + ofv);
+            var newOuterSize = (Size)(new Point(this.ActualWidth, this.ActualHeight) + ofv);
+            this.Width = newOuterSize.Width;
+            this.Height = newOuterSize.Height;
+            LayoutCvs.Width = (ZDChrome.Width = ZDash.Width = newInnerSize.Width) + 4;
+            LayoutCvs.Height = (ZDChrome.Height = ZDash.Height = newInnerSize.Height) + 4;
+
             foreach (UIElement item in cvs.Children)
             {
                 if (item.GetType().GetCustomAttributes(typeof(ZomBControlAttribute), true).Length > 0)
@@ -815,7 +825,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         public string Export()
         {
-            StringBuilder sb = new StringBuilder("<ZomB:DashboardDataCanvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:ZomB=\"clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB\" Height=\"400\" Width=\"1024\" InvalidPacketAction=\"");
+            StringBuilder sb = new StringBuilder("<ZomB:DashboardDataCanvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:ZomB=\"clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB\" Height=\"" + ZDash.ActualHeight + "\" Width=\"" + ZDash.ActualWidth + "\" InvalidPacketAction=\"");
             sb.Append((designerProps[3] as ComboBox).SelectedValue); sb.Append("\">");
             List<KeyValuePair<string, PropertyElement>> attached = new List<KeyValuePair<string, PropertyElement>>();
 
@@ -908,6 +918,38 @@ namespace System451.Communication.Dashboard.ViZ
         {
             Utils.InstallUtils.Install();
             MessageBox.Show("Success!\r\n\r\nPlease restart this application to load the win32 modules.");
+        }
+
+        bool resizingform = false;
+        Point orfPoing;
+        Size orfSixe, wsize;
+
+        private void ResizeGrip_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            resizingform = true;
+            ResizeGrip.CaptureMouse();
+            orfPoing = e.GetPosition(this);
+            orfSixe = new Size(ZDash.ActualWidth, ZDash.ActualHeight);
+            wsize = new Size(this.ActualWidth, this.ActualHeight);
+        }
+
+        private void ResizeGrip_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (!resizingform)
+                return;
+            var ofv = e.GetPosition(this) - orfPoing;
+            var newInnerSize = (Size)((Point)orfSixe + ofv);
+            var newOuterSize = (Size)((Point)wsize + ofv);
+            this.Width = newOuterSize.Width;
+            this.Height = newOuterSize.Height;
+            LayoutCvs.Width = (ZDChrome.Width = ZDash.Width = newInnerSize.Width) + 4;
+            LayoutCvs.Height = (ZDChrome.Height = ZDash.Height = newInnerSize.Height) + 4;
+        }
+
+        private void ResizeGrip_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            resizingform = false;
+            ResizeGrip.ReleaseMouseCapture();
         }
     }
     public static class ExtensionsBit

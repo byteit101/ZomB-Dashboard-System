@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ZomB="clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB"
         xmlns:loc="clr-namespace:System451.Communication.Dashboard.ViZ"
-    AllowsTransparency="True" Background="Transparent" WindowStyle="None" Title="ZomB Designer" Height="404" Width="1028" SnapsToDevicePixels="True" Loaded="Window_Loaded" WindowStartupLocation="Manual"
+    AllowsTransparency="True" Background="Transparent" WindowStyle="None" Title="ZomB Designer" Height="404" Width="1028" MinHeight="154" MinWidth="204" SnapsToDevicePixels="True" Loaded="Window_Loaded" WindowStartupLocation="Manual"
         Icon="pack://application:,,,/ZomB;component/Resources/ZomB.ico">
     <Window.CommandBindings>
         <CommandBinding Command="Play" Executed="CommandBinding_Play_Executed" />
@@ -23,9 +23,9 @@
         <KeyBinding Modifiers="Ctrl" Key="O" Command="Open" />
     </Window.InputBindings>
     <ScrollViewer Name="Scrlview" Background="Transparent" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-        <Canvas Name="LayoutCvs" Width="1028" Height="404">
-        <loc:DropShadowChrome Canvas.Top="1" Canvas.Left="1" Width="1024" Height="400">
-            <Canvas Width="1024" Height="400" Background="White" Name="ZDash" AllowDrop="True" Drop="ZDash_Drop" 
+        <Canvas Name="LayoutCvs" Width="1028" Height="404" MinHeight="154" MinWidth="204">
+            <loc:DropShadowChrome x:Name="ZDChrome" Canvas.Top="1" Canvas.Left="1" Width="1024" Height="400" MinHeight="150" MinWidth="200">
+            <Canvas Width="1024" Height="400" MinHeight="150" MinWidth="200" Background="White" Name="ZDash" AllowDrop="True" Drop="ZDash_Drop" 
                     DragEnter="ZDash_DragEnter" PreviewMouseLeftButtonDown="ZDash_MouseLeftButtonDown"
                         PreviewMouseRightButtonDown="ZDash_PreviewMouseRightButtonDown"
                         PreviewMouseLeftButtonUp="ScrollViewer_MouseLeftButtonUp" PreviewMouseMove="ScrollViewer_MouseMove"
@@ -112,6 +112,8 @@
                 </DrawingImage>
             </Image.Source>
         </Image>
+            <Path Name="ResizeGrip" MouseLeftButtonDown="ResizeGrip_MouseDown" MouseMove="ResizeGrip_MouseMove" MouseLeftButtonUp="ResizeGrip_MouseUp"
+                  Cursor="SizeNWSE" Canvas.Bottom="0" Canvas.Right="0" Fill="Transparent" Data="M 17,0 H 20 V 20 H 0 V 17 H 12 L 17,12 z"></Path>
     </Canvas>
         </ScrollViewer>
 </Window>
