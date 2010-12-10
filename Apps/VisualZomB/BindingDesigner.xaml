@@ -72,7 +72,7 @@
                             </Grid>
                         </ControlTemplate>
                     </TabControl.Template>
-                    <TabItem Header="Default" >
+                    <TabItem Header="Default">
                         <StackPanel>
                             <RadioButton Content="None" Padding="1" Name="NoConv" IsChecked="True" Checked="DefaultConvert_Changed" />
                             <RadioButton Content="Number Converter" Padding="1" Name="NumCov" Checked="DefaultConvert_Changed" />
@@ -82,7 +82,31 @@
                         </StackPanel>
                     </TabItem>
                     <TabItem Header="Custom">
-                        Coming soon...
+                        <GroupBox>
+                            <GroupBox.Header>
+                                <RadioButton Name="NumRangeConv" Checked="DefaultConvert_Changed">Numeric Range Coverter</RadioButton>
+                            </GroupBox.Header>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="50" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Margin="2" Grid.Column="0" Grid.Row="0">From</TextBlock>
+                                <TextBox Margin="2" Grid.Column="1" Grid.Row="0" Name="bindconvNumCustomFomStart" TextChanged="bindconvNumCustomToEnd_TextChanged"></TextBox>
+                                <TextBlock Margin="2" Grid.Column="2" Grid.Row="0">-</TextBlock>
+                                <TextBox Margin="2" Grid.Column="3" Grid.Row="0" Name="bindconvNumCustomFomEnd" TextChanged="bindconvNumCustomToEnd_TextChanged"></TextBox>
+                                <TextBlock Margin="2" Grid.Column="0" Grid.Row="1">To</TextBlock>
+                                <TextBox Margin="2" Grid.Column="1" Grid.Row="1" Name="bindconvNumCustomToStart" TextChanged="bindconvNumCustomToEnd_TextChanged"></TextBox>
+                                <TextBlock Margin="2" Grid.Column="2" Grid.Row="1">-</TextBlock>
+                                <TextBox Margin="2" Grid.Column="3" Grid.Row="1" Name="bindconvNumCustomToEnd" TextChanged="bindconvNumCustomToEnd_TextChanged"></TextBox>
+                            </Grid>
+                        </GroupBox>
                     </TabItem>
                 </TabControl>
             </Grid>

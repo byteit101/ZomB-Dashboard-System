@@ -39,6 +39,52 @@ namespace System451.Communication.Dashboard.WPF.Controls
                         }
                         return value;
                     }
+                case 'p':
+                    {
+                        switch (parameter.ToString()[1])
+                        {
+                            case 'n':
+                                {
+                                    //Format: {Fromstart:fromend}-{tostart:toend}
+                                    //ex: {-1.0:1.0}-{0:360}
+                                    var rx = new Regex("\\{([\\-\\.0-9]*)\\:([\\-\\.0-9]*)\\}\\-\\{([\\-\\.0-9]*)\\:([\\-\\.0-9]*)\\}");
+                                    var res = rx.Match(parameter.ToString().Substring(2));
+                                    var fs = res.Groups[1].Value;
+                                    var fe = res.Groups[2].Value;
+                                    var ts = res.Groups[3].Value;
+                                    var te = res.Groups[4].Value;
+                                    try
+                                    {
+                                        var fsd = double.Parse(fs);
+                                        var fed = double.Parse(fe);
+                                        var tsd = double.Parse(ts);
+                                        var ted = double.Parse(te);
+
+                                        //massive converter, fun
+                                        double end = (((((double)value) - fsd) / (fed - fsd)) * (ted - tsd)) + tsd;
+                                        //return, using its own parse
+                                        if (targetType == typeof(double))
+                                            return end;
+                                        try
+                                        {
+                                            return targetType.GetMethod("Parse", new Type[] { typeof(string) }).Invoke(null, new object[] { end.ToString() });
+                                        }
+                                        catch { }
+                                        try
+                                        {
+                                            return targetType.GetMethod("Parse", new Type[] { typeof(string) }).Invoke(null, new object[] { Math.Round(end).ToString() });
+                                        }
+                                        catch { }
+                                        return end;//hope for the best
+                                    }
+                                    catch { }
+                                    break;
+                                }
+                            default:
+                                break;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }

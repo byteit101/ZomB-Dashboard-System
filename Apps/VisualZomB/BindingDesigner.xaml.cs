@@ -25,6 +25,7 @@ namespace System451.Communication.Dashboard.ViZ
     {
         object obj;
         PropertyInfo prop;
+        bool inited = false;
         public BindingDesigner(object o, PropertyInfo p, IEnumerable itms)
         {
             InitializeComponent();
@@ -32,7 +33,7 @@ namespace System451.Communication.Dashboard.ViZ
             prop = p;
             elmbox.ItemsSource = from object i in itms where (i as SurfaceControl).Control.Name!="" select i;
             var name = "";
-            if (o is IZomBControl && (o as IZomBControl).ControlName != "")
+            if (o is IZomBControl && !string.IsNullOrEmpty((o as IZomBControl).ControlName))
                 name = (o as IZomBControl).ControlName;
             else if (o is FrameworkElement)
                 name = (o as FrameworkElement).Name;
@@ -60,7 +61,10 @@ namespace System451.Communication.Dashboard.ViZ
                     i++;
                 }
                 propnamebox.SelectedIndex = i;
+
+                //TODO: add converter info and reload
             }
+            inited = true;
         }
 
         private void elmbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -117,7 +121,9 @@ namespace System451.Communication.Dashboard.ViZ
         private string getConverterType()
         {
             char t = 'x';
-            if (NumCov.IsChecked == true)
+            if (NumRangeConv.IsChecked == true) //TODO: generizise
+                return "pn{" + bindconvNumCustomFomStart.Text + ":" + bindconvNumCustomFomEnd.Text + "}-{" + bindconvNumCustomToStart.Text + ":" + bindconvNumCustomToEnd.Text + "}";
+            else if (NumCov.IsChecked == true)
                 t = 'n';
             else if (BrushConv.IsChecked == true)
                 t = 'B';
@@ -135,7 +141,55 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void DefaultConvert_Changed(object sender, RoutedEventArgs e)
         {
+            if (!inited)
+                return;
+            if (sender == NumRangeConv)
+                NoConv.IsChecked = NumCov.IsChecked = BrushConv.IsChecked = StringConv.IsChecked = TypeConv.IsChecked = false;
+            else
+                NumRangeConv.IsChecked = false;
+        }
 
+        private void bindconvNumCustomToEnd_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var txt = (sender as TextBox).Text;
+            var ntxt = numbify(txt);
+            if (txt != ntxt)
+            {
+                Console.Beep();
+                (sender as TextBox).Text = ntxt;
+            }
+        }
+
+        private string numbify(string txt)
+        {
+            StringBuilder sb = new StringBuilder();
+            int count = txt.Length;
+            for (int i = 0; i < count; i++)
+            {
+                switch (txt[i])
+                {
+                    case '0':
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
+                    case '.':
+                        sb.Append(txt[i]);
+                        break;
+                    case '-':
+                        if (sb.Length<1)
+                            sb.Append(txt[i]);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return sb.ToString();
         }
     }
 
