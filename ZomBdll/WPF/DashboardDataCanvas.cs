@@ -27,6 +27,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public DashboardDataCanvas()
         {
             DashboardDataHub = new DashboardDataHub();
+            AutoStart = true;
             this.Loaded += delegate
             {
                 ReloadControls();

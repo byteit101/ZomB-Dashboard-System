@@ -31,7 +31,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     [Design.ZomBDesignableProperty("Background")]
     public class xShake : ZomBGLControl
     {
-        GamepadState pad;
+        GamepadState pad = new GamepadState(0);
         static xShake()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(xShake),
