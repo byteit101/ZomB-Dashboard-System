@@ -48,6 +48,12 @@ namespace System451.Communication.Dashboard.WPF.Controls
             };
         }
 
+        ~DashboardDataCanvas()
+        {
+            if (DashboardDataHub != null)
+                DashboardDataHub.Stop();
+        }
+
         public DashboardDataHub DashboardDataHub { get; set; }
 
         /// <summary>

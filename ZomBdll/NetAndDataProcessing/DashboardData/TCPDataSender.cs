@@ -99,10 +99,15 @@ namespace System451.Communication.Dashboard.Net
                     cRIOConnection.Start();
                     cRIOConnection.BeginAcceptTcpClient(new AsyncCallback(delegate (IAsyncResult ar)
                         {
-                            tcpc = cRIOConnection.EndAcceptTcpClient(ar);
-                            tcpc.GetStream().WriteByte(0x49);
-                            tcpc.GetStream().WriteByte(0x00);
-                            isrunning = true;
+                            try
+                            {
+                                tcpc = cRIOConnection.EndAcceptTcpClient(ar);
+                                tcpc.GetStream().WriteByte(0x49);
+                                tcpc.GetStream().WriteByte(0x00);
+                                isrunning = true;
+                            }
+                            catch { }//must be disposing, bye-bye world!
+                            //*Thunk* The coffin slams shut
                         }), cRIOConnection);
                 }
                 catch (Exception ex)

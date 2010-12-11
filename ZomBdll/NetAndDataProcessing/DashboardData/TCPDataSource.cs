@@ -339,6 +339,7 @@ namespace System451.Communication.Dashboard.Net
                     }
                 }
             }
+            catch { }//Don't let em leak!
             finally
             {
                 if (zb != null)

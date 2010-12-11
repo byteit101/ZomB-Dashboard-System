@@ -925,7 +925,15 @@ namespace System451.Communication.Dashboard.ViZ
         private void RunApp()
         {
             string zaml = Export();
-            new Run(zaml).ShowDialog();
+            {
+                Run r = new Run(zaml);
+                r.ShowDialog();
+
+                //Ok, now lets clean up this mess the best we can
+                r.DashboardDataHub.Stop();
+                r = null;
+            }
+            GC.Collect();
         }
 
         public string Export()

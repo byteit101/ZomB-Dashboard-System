@@ -320,6 +320,18 @@ namespace System451.Communication.Dashboard
                 {
                     Running = true;
                 }
+                try
+                {
+                    for (int i = 0; i < DataSnd.Count; i++)
+                    {
+                        DataSnd[i].Stop();
+                    }
+                    Running = false;
+                }
+                catch
+                {
+                    Running = true;
+                }
             }
 
         }
