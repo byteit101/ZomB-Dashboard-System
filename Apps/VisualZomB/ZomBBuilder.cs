@@ -49,6 +49,7 @@ namespace System451.Communication.Dashboard.ViZ
         [System.STAThread]
         static void Main()
         {
+            System.AppDomain.CurrentDomain.AssemblyResolve += System451.Communication.Dashboard.Utils.AutoExtractor.AssemblyResolve;
             new System.Windows.Application().Run(new ZApp());
         }
     }

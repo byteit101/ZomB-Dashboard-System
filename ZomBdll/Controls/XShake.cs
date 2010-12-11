@@ -41,7 +41,6 @@ namespace System451.Communication.Dashboard.Controls
         /// </summary>
         public XShake()
         {
-            AutoExtractor.Extract(AutoExtractor.Files.SlimDX);
             pad = null;
         }
 

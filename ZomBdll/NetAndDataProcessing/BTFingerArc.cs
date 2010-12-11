@@ -55,7 +55,8 @@ namespace System451.Communication.Dashboard.Utils
         {
             if (s == null)
             {
-                AutoExtractor.Extract(AutoExtractor.Files.InTheHandManaged | AutoExtractor.Files.InTheHandNative);
+                //TODO: make sure the following line is not needed
+                //AutoExtractor.Extract(AutoExtractor.Files.InTheHandManaged | AutoExtractor.Files.InTheHandNative);
                 s = new BTZomBFingerFactory(teamNumber, from, to);
             }
             return s;
@@ -89,7 +90,7 @@ namespace System451.Communication.Dashboard.Utils
         /// </remarks>
         internal BTZomBFingerFactory(int teamNumber, string from, string to)
         {
-            AutoExtractor.Extract(AutoExtractor.Files.InTheHandManaged | AutoExtractor.Files.InTheHandNative);
+            //AutoExtractor.Extract(AutoExtractor.Files.InTheHandManaged | AutoExtractor.Files.InTheHandNative);
             saveTo = to;
             pullFrom = from;
             //team GUID, last part is random, don't want to calculate

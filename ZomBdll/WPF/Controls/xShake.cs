@@ -41,7 +41,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         public xShake()
         {
-            AutoExtractor.Extract(AutoExtractor.Files.SlimDX);
             this.Background = Brushes.Wheat;
             this.Width = 10;
             this.Height = 10;

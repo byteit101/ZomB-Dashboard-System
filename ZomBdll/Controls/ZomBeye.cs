@@ -35,10 +35,6 @@ namespace System451.Communication.Dashboard.Controls
         string folder = BTZomBFingerFactory.DefaultLoadLocation;
         string[] files;
         int index;
-        static ZomBeye()
-        {
-            AutoExtractor.Extract(AutoExtractor.Files.VLC);
-        }
         public ZomBeye()
         {
             InitializeComponent();

@@ -15,7 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+using System;
 using System.IO;
+using System.Reflection;
 using System451.Communication.Dashboard.Properties;
 
 namespace System451.Communication.Dashboard
@@ -70,6 +72,24 @@ namespace System451.Communication.Dashboard
                     if (!File.Exists("Vlc.DotNet.Forms.dll"))
                         File.WriteAllBytes("Vlc.DotNet.Forms.dll", Resources.Vlc_DotNet_Forms);
                 }
+            }
+
+            public static Assembly AssemblyResolve(object sender, ResolveEventArgs e)
+            {
+                var dll = new AssemblyName(e.Name).Name + ".dll";
+
+                if (!File.Exists(dll))
+                {
+                    if (dll.ToLower() == "inthehand.net.personal.dll")
+                        Extract(Files.InTheHandManaged | Files.InTheHandNative);
+                    else if (dll.ToLower() == "slimdx.dll")
+                        Extract(Files.SlimDX);
+                    else if (dll.ToLower().Contains("vlc"))
+                        Extract(Files.VLC);
+                    if (!File.Exists(dll))
+                        return null;
+                }
+                return Assembly.LoadFrom(dll);
             }
         }
     }

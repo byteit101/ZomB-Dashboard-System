@@ -18,6 +18,7 @@
 using System;
 using System.IO;
 using System.Windows;
+using System451.Communication.Dashboard.Utils;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -28,6 +29,7 @@ namespace System451.Communication.Dashboard.ViZ
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AutoExtractor.AssemblyResolve);
             System.Windows.Forms.Application.EnableVisualStyles();
             LoadAssembliesGeneric();
             var args = e.Args;
