@@ -104,7 +104,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             set
             {
                 if (DashboardDataHub != null)
-                DashboardDataHub.StartSource = value;
+                    DashboardDataHub.StartSource = value;
             }
         }
 
@@ -120,8 +120,25 @@ namespace System451.Communication.Dashboard.WPF.Controls
             }
             set
             {
-                if (DashboardDataHub!=null)
-                DashboardDataHub.InvalidPacketAction = value;
+                if (DashboardDataHub != null)
+                    DashboardDataHub.InvalidPacketAction = value;
+            }
+        }
+
+        /// <summary>
+        /// Your team number
+        /// </summary>
+        [Category("ZomB"), Description("Your team number. Used for the camera and TCP connection auto configure.")]
+        public int Team
+        {
+            get
+            {
+                return DashboardDataHub.Team;
+            }
+            set
+            {
+                if (DashboardDataHub != null)
+                    DashboardDataHub.Team = value;
             }
         }
 
@@ -133,6 +150,11 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public static readonly DependencyProperty InvalidPacketActionProperty =
                     DependencyProperty.Register("InvalidPacketAction", typeof(InvalidPacketActions), typeof(DashboardDataCanvas), new UIPropertyMetadata(
                         new PropertyChangedCallback((s, e) => (s as DashboardDataCanvas).InvalidPacketAction = (InvalidPacketActions)e.NewValue)));
+
+        public static readonly DependencyProperty TeamProperty =
+                    DependencyProperty.Register("Team", typeof(InvalidPacketActions), typeof(DashboardDataCanvas), new UIPropertyMetadata(
+                        new PropertyChangedCallback((s, e) => (s as DashboardDataCanvas).Team = (int)e.NewValue)));
+
 
 
         private void AddControls(IEnumerable controlCollection)

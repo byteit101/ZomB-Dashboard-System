@@ -54,7 +54,6 @@ namespace System451.Communication.Dashboard
         /// </summary>
         public DashboardDataHub()
         {
-            RegisterDashboardPacketSource();//Default
             main = Dispatcher.CurrentDispatcher;
         }
 
@@ -208,7 +207,11 @@ namespace System451.Communication.Dashboard
         {
             foreach (var item in DataSnd)
             {
-                item.Send(e.Name, e.Value);
+                try
+                {
+                    item.Send(e.Name, e.Value);
+                }
+                catch { }
             }
         }
 
@@ -438,6 +441,12 @@ namespace System451.Communication.Dashboard
                 {
                     case StartSources.DashboardPacket:
                         return (RegisterDashboardPacketSource() == null ? false : true);
+                    case StartSources.TCPSource:
+                        return RegisterTCPSource(Team) == null ? false : true;
+                    case StartSources.TCPSender:
+                        return RegisterTCPSender(Team) == null ? false : true;
+                    case StartSources.AllTCP:
+                        return (RegisterTCPSource(Team) == null || RegisterTCPSender(Team) == null) ? false : true;
                     case StartSources.Manual:
                         //I can't set it up!
                         break;
@@ -448,6 +457,8 @@ namespace System451.Communication.Dashboard
             }
             return false;
         }
+
+        public int Team { get; set; }
 
         /// <summary>
         /// Registers a DB Packet Data source and returns it if successfull
@@ -476,6 +487,22 @@ namespace System451.Communication.Dashboard
             {
                 TCPDataSource src = new TCPDataSource(team);
                 return (RegisterSource(src) ? src : null);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Registers a TCP Data sender and returns it if successfull
+        /// You must not be running the DDH to add successfully
+        /// </summary>
+        /// <param name="team">The team number</param>
+        /// <returns>If successfull, the registerd TCPDS</returns>
+        public TCPDataSender RegisterTCPSender(int team)
+        {
+            if (!Running)
+            {
+                TCPDataSender src = new TCPDataSender(team);
+                return (RegisterSender(src) ? src : null);
             }
             return null;
         }
@@ -662,12 +689,27 @@ namespace System451.Communication.Dashboard
     /// <summary>
     /// What the DDH will load as sources when it loads
     /// </summary>
-    public enum StartSources //TODO: Add TCP
+    public enum StartSources
     {
         /// <summary>
         /// Use the DB packet
         /// </summary>
-        DashboardPacket,
+        DashboardPacket = 1,
+
+        /// <summary>
+        /// Use a TCP stream from the robot
+        /// </summary>
+        TCPSource,
+
+        /// <summary>
+        /// Send stuff to the robot via a TCP stream
+        /// </summary>
+        TCPSender,
+
+        /// <summary>
+        /// Send and recieve stuff from a TCP to the robot
+        /// </summary>
+        AllTCP,
 
         /// <summary>
         /// Manual configuration

@@ -86,6 +86,7 @@ namespace System451.Communication.Dashboard.ViZ
             ViZLogo.BeginAnimation(Image.OpacityProperty, VizLogoani);
 
             //Create our properties
+            //TODO: this is a mess, improve it
             var lb = new Label();
             lb.Content = "Dashboard Data Hub";
             lb.Style = (Style)lb.FindResource("PropCatStyle");
@@ -95,7 +96,6 @@ namespace System451.Communication.Dashboard.ViZ
             (designerProps[2] as Label).Content = "Invalid Packets:";
             designerProps.Add(new ComboBox());
             var cb = (designerProps[3] as ComboBox);
-            cb.Width = 90;
             foreach (var item in Enum.GetNames(typeof(InvalidPacketActions)))
             {
                 cb.Items.Add(item);
@@ -104,6 +104,25 @@ namespace System451.Communication.Dashboard.ViZ
                     cb.SelectedValue = item;
                 }
             }
+            designerProps.Add(new Label());
+            (designerProps[4] as Label).Content = "Source:";
+            designerProps.Add(new ComboBox());
+            cb = (designerProps[5] as ComboBox);
+            foreach (var item in Enum.GetNames(typeof(StartSources)))
+            {
+                cb.Items.Add(item);
+                if (item == "DashboardPacket")
+                {
+                    cb.SelectedValue = item;
+                }
+            }
+            designerProps.Add(new Label());
+            (designerProps[6] as Label).Content = "Team #:";
+            designerProps.Add(new TextBox());
+            (designerProps[7] as TextBox).Text = "0";
+            //End of massivly wrong code
+            //TODO: clean up the above code
+
             propHolder.Children.Clear();
             foreach (var item in designerProps)
             {
@@ -770,11 +789,11 @@ namespace System451.Communication.Dashboard.ViZ
 
         public void LoadFile(string fileName)
         {
-            Canvas cvs = XamlReader.Load(new MemoryStream(UTF8Encoding.UTF8.GetBytes(new StreamReader(new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+            StoppedDDHCVS cvs = XamlReader.Load(new MemoryStream(UTF8Encoding.UTF8.GetBytes(new StreamReader(new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
                 .ReadToEnd().Replace("ZomB:DashboardDataCanvas ",
                 "ViZ:StoppedDDHCVS xmlns:ViZ=\"clr-namespace:System451.Communication.Dashboard.ViZ;assembly=ViZ\" ")
                 .Replace("/ZomB:DashboardDataCanvas",
-                "/ViZ:StoppedDDHCVS")))) as Canvas;
+                "/ViZ:StoppedDDHCVS")))) as StoppedDDHCVS;
             if (cvs == null)
                 return;
             List<Control> lc = new List<Control>(cvs.Children.Count);
@@ -787,6 +806,10 @@ namespace System451.Communication.Dashboard.ViZ
             this.Height = newOuterSize.Height;
             LayoutCvs.Width = (ZDChrome.Width = ZDash.Width = newInnerSize.Width) + 4;
             LayoutCvs.Height = (ZDChrome.Height = ZDash.Height = newInnerSize.Height) + 4;
+
+            (designerProps[3] as ComboBox).SelectedIndex = ((int)cvs.InvalidPacketAction) - 1;//this hinges on the values
+            (designerProps[5] as ComboBox).SelectedIndex = ((int)cvs.DefaultSources) - 1;//this hinges on the values
+            (designerProps[7] as TextBox).Text = cvs.Team.ToString();
 
             foreach (UIElement item in cvs.Children)
             {
@@ -826,7 +849,12 @@ namespace System451.Communication.Dashboard.ViZ
         public string Export()
         {
             StringBuilder sb = new StringBuilder("<ZomB:DashboardDataCanvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:ZomB=\"clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB\" Height=\"" + ZDash.ActualHeight + "\" Width=\"" + ZDash.ActualWidth + "\" InvalidPacketAction=\"");
-            sb.Append((designerProps[3] as ComboBox).SelectedValue); sb.Append("\">");
+            sb.Append((designerProps[3] as ComboBox).SelectedValue);
+            sb.Append("\" DefaultSources=\"");
+            sb.Append((designerProps[5] as ComboBox).SelectedValue);
+            sb.Append("\" Team=\"");
+            sb.Append((designerProps[7] as TextBox).Text);
+            sb.Append("\">");
             List<KeyValuePair<string, PropertyElement>> attached = new List<KeyValuePair<string, PropertyElement>>();
 
             foreach (var item in LogicalTreeHelper.GetChildren(ZDash))

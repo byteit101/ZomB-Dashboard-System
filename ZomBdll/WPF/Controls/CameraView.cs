@@ -55,6 +55,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             tars = new CameraTargetUI();
             tars.Width = 1;
             tars.Height = 1;
+            this.ControlAdded += delegate { if (VideoSource == DefaultVideoSource.WPILibTcpStream) TeamUpdated(); };
         }
 
         public override void UpdateControl(string value)
@@ -78,19 +79,28 @@ namespace System451.Communication.Dashboard.WPF.Controls
             videoSource.Start();
         }
 
-        [Design.ZomBDesignable(DisplayName = "Team #"), Category("Misc"), Description("Your team number. This is used to create the IP address of the camera")]
+        /// <summary>
+        /// Gets the DDH's Team
+        /// </summary>
         public int TeamNumber
         {
-            get { return (int)GetValue(TeamNumberProperty); }
-            set { SetValue(TeamNumberProperty, value); }
+            get { return LocalDashboardDataHub.Team; }
         }
 
-        static void TeamUpdated(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        static void sTeamUpdated(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            CameraView am = (o as CameraView);
-            am.videoSource = ((am.VideoSource == DefaultVideoSource.WPILibTcpStream) ? (IDashboardVideoDataSource)new WPILibTcpVideoSource((int)e.NewValue) : ((am.VideoSource == DefaultVideoSource.Webcam) ? (IDashboardVideoDataSource)new WebCamVideoSource() : null));
-            am.videoSource.NewImageRecieved += new NewImageDataRecievedEventHandler(am.videoSource_NewImageRecieved);
-            am.videoSource.Start();
+            (o as CameraView).TeamUpdated();
+        }
+
+        void TeamUpdated()
+        {
+            try
+            {
+                videoSource = ((VideoSource == DefaultVideoSource.WPILibTcpStream) ? (IDashboardVideoDataSource)new WPILibTcpVideoSource(TeamNumber) : ((VideoSource == DefaultVideoSource.Webcam) ? (IDashboardVideoDataSource)new WebCamVideoSource() : null));
+                videoSource.NewImageRecieved += new NewImageDataRecievedEventHandler(videoSource_NewImageRecieved);
+                videoSource.Start();
+            }
+            catch { }
         }
 
         static void ResetVischanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -111,11 +121,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 System.Windows.Forms.MessageBox.Show(x.ToString());
             }
         }
-
-        // Using a DependencyProperty as the backing store for TeamNumber.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty TeamNumberProperty =
-            DependencyProperty.Register("TeamNumber", typeof(int), typeof(CameraView), new UIPropertyMetadata(0, TeamUpdated));
-
 
         [Design.ZomBDesignable(DisplayName = "Show Reset"), Category("Appearance"), Description("Should we show the reset button?")]
         public bool ShowReset
@@ -138,7 +143,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         // Using a DependencyProperty as the backing store for VideoSource.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty VideoSourceProperty =
-            DependencyProperty.Register("VideoSource", typeof(DefaultVideoSource), typeof(CameraView), new UIPropertyMetadata(DefaultVideoSource.WPILibTcpStream, TeamUpdated));
+            DependencyProperty.Register("VideoSource", typeof(DefaultVideoSource), typeof(CameraView), new UIPropertyMetadata(DefaultVideoSource.WPILibTcpStream, sTeamUpdated));
 
         #region IZomBControlGroup Members
 

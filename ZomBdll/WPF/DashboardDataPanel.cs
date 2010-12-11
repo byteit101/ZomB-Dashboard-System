@@ -27,6 +27,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public DashboardDataPanel()
         {
             DashboardDataHub = new DashboardDataHub();
+            AutoStart = true;
             this.Loaded += delegate
             {
                 ReloadControls();
@@ -90,7 +91,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
             }
             set
             {
-                DashboardDataHub.StartSource = value;
+                if (DashboardDataHub != null)
+                    DashboardDataHub.StartSource = value;
             }
         }
 
@@ -106,10 +108,28 @@ namespace System451.Communication.Dashboard.WPF.Controls
             }
             set
             {
-                DashboardDataHub.InvalidPacketAction = value;
+                if (DashboardDataHub != null)
+                    DashboardDataHub.InvalidPacketAction = value;
             }
         }
-        
+
+        /// <summary>
+        /// Your team number
+        /// </summary>
+        [Category("ZomB"), Description("Your team number. Used for the camera and TCP connection auto configure.")]
+        public int Team
+        {
+            get
+            {
+                return DashboardDataHub.Team;
+            }
+            set
+            {
+                if (DashboardDataHub != null)
+                    DashboardDataHub.Team = value;
+            }
+        }
+
         //make wpf happy, and me unhappy
         public static readonly DependencyProperty DefaultSourcesProperty =
             DependencyProperty.Register("DefaultSources", typeof(StartSources), typeof(DashboardDataPanel), new UIPropertyMetadata(
@@ -118,6 +138,10 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public static readonly DependencyProperty InvalidPacketActionProperty =
                     DependencyProperty.Register("InvalidPacketAction", typeof(InvalidPacketActions), typeof(DashboardDataPanel), new UIPropertyMetadata(
                         new PropertyChangedCallback((s, e) => (s as DashboardDataPanel).InvalidPacketAction = (InvalidPacketActions)e.NewValue)));
+
+        public static readonly DependencyProperty TeamProperty =
+                    DependencyProperty.Register("Team", typeof(InvalidPacketActions), typeof(DashboardDataPanel), new UIPropertyMetadata(
+                        new PropertyChangedCallback((s, e) => (s as DashboardDataPanel).Team = (int)e.NewValue)));
 
 
         private void AddControls(IEnumerable controlCollection)
