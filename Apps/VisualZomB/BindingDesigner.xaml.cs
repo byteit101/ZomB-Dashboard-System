@@ -59,7 +59,13 @@ namespace System451.Communication.Dashboard.ViZ
                 if (itm != null)
                     itm = SurfaceControl.GetSurfaceControlFromControl(itm);
                 if (itm == null)
-                    itm = (from object elm in elmbox.ItemsSource where (elm as SurfaceControl).Control.Name == be.ParentBinding.ElementName select elm).First();
+                {
+                    try
+                    {
+                        itm = (from object elm in elmbox.ItemsSource where (elm as SurfaceControl).Control.Name == be.ParentBinding.ElementName select elm).First();
+                    }
+                    catch { }
+                }
                 elmbox.SelectedItem = itm;
                 var rs = (from object elm in propnamebox.ItemsSource
                           where (((object[])elm)[0] as PropertyInfo).Name == be.ParentBinding.Path.Path

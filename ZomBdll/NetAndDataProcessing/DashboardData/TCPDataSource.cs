@@ -128,6 +128,12 @@ namespace System451.Communication.Dashboard.Net
                 catch
                 {
                 }
+                try
+                {
+                    cRIOConnection.Close();
+                    cRIOConnection = null;
+                }
+                catch { }
             }
         }
 
@@ -337,6 +343,12 @@ namespace System451.Communication.Dashboard.Net
             {
                 if (zb != null)
                     zb.Dispose();
+                try
+                {
+                    cRIOConnection.Close();
+                }
+                catch { }
+                cRIOConnection = null;
             }
         }
 

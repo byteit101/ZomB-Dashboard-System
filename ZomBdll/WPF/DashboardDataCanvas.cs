@@ -99,14 +99,19 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             get
             {
-                return DashboardDataHub.StartSource;
+                if (DashboardDataHub != null)
+                    return DashboardDataHub.StartSource;
+                return hiddends;
             }
             set
             {
                 if (DashboardDataHub != null)
                     DashboardDataHub.StartSource = value;
+                else
+                    hiddends = value;
             }
         }
+        StartSources hiddends;
 
         /// <summary>
         /// What to do when an invalid packet is recieved
@@ -116,14 +121,19 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             get
             {
-                return DashboardDataHub.InvalidPacketAction;
+                if (DashboardDataHub != null)
+                    return DashboardDataHub.InvalidPacketAction;
+                return hiddenipa;
             }
             set
             {
                 if (DashboardDataHub != null)
                     DashboardDataHub.InvalidPacketAction = value;
+                else
+                    hiddenipa = value;
             }
         }
+        InvalidPacketActions hiddenipa;
 
         /// <summary>
         /// Your team number
@@ -133,14 +143,19 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             get
             {
-                return DashboardDataHub.Team;
+                if (DashboardDataHub != null)
+                    return DashboardDataHub.Team;
+                return hiddent;
             }
             set
             {
                 if (DashboardDataHub != null)
                     DashboardDataHub.Team = value;
+                else
+                    hiddent = value;
             }
         }
+        int hiddent;
 
         //make wpf happy, and me unhappy
         public static readonly DependencyProperty DefaultSourcesProperty =

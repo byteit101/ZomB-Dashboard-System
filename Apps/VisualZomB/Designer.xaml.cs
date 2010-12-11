@@ -905,6 +905,7 @@ namespace System451.Communication.Dashboard.ViZ
                 cvs.Children.Remove(item);
                 AddControl(item);
             }
+            Deselect();
         }
 
         private void SaveApp()

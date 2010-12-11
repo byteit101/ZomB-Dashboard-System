@@ -115,6 +115,15 @@ namespace System451.Communication.Dashboard.Net
         public void Stop()
         {
             isrunning = false;
+            try
+            {
+                if (tcpc != null)
+                    tcpc.Close();
+                cRIOConnection.Stop();
+            }
+            catch { }
+            tcpc = null;
+            cRIOConnection = null;
         }
 
         public void Send(string name, string value)
