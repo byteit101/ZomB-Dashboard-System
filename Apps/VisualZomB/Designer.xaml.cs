@@ -27,21 +27,29 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System451.Communication.Dashboard.WPF.Design;
-using System.Diagnostics;
 
 namespace System451.Communication.Dashboard.ViZ
 {
     public partial class Designer : Window
     {
+        #region init, variables, and basic controls
         enum CurrentDrag
         {
-            None, Move, Resize
+            None,
+            Move,
+            Resize
         }
+
         [Flags]
         public enum CurrentDragMove
         {
-            None = 0x0, X = 0x1, Y = 0x2, Width = 0x4, Height = 0x8
+            None = 0x0,
+            X = 0x1,
+            Y = 0x2,
+            Width = 0x4,
+            Height = 0x8
         }
+
         Point dndopoint, opoint, oxpoint;
         object origSrc;
         bool lbdragging = false;
@@ -54,6 +62,10 @@ namespace System451.Communication.Dashboard.ViZ
         Toolbox tbx;
         ListBox listBox1;
         Panel propHolder;
+
+        bool resizingform = false;
+        Point orfPoing;
+        Size orfSixe, wsize;
 
         static Designer dsb = null;
 
@@ -165,7 +177,16 @@ namespace System451.Communication.Dashboard.ViZ
             tbx.Close();
         }
 
+        private void Rectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
+        #endregion
+
         #region AddControl
+
+        #region DnD
 
         private void listBox1_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -204,6 +225,11 @@ namespace System451.Communication.Dashboard.ViZ
             catch { }//System.Diagnostics.Debug.Print("FAIL!"); }
         }
 
+        private void listBox1_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            lbdragging = false;
+        }
+
         // Helper to search up the VisualTree
         public static T FindAnchestor<T, P>(DependencyObject current) where T : DependencyObject
         {
@@ -218,6 +244,7 @@ namespace System451.Communication.Dashboard.ViZ
             while (current != null);
             return null;
         }
+
         public static T FindAnchestor<T>(DependencyObject current) where T : DependencyObject
         {
             do
@@ -250,6 +277,8 @@ namespace System451.Communication.Dashboard.ViZ
             }
         }
 
+        #endregion
+
         private void AddControl(ZomBControlAttribute info)
         {
             AddControl(info, new Point(5.0, 5.0));
@@ -258,7 +287,7 @@ namespace System451.Communication.Dashboard.ViZ
         private void AddControl(ZomBControlAttribute info, Point point)
         {
             FrameworkElement fe = Reflector.Inflate(info.Type) as FrameworkElement;
-            fe.Name = "Z" + Guid.NewGuid().ToString("N").Substring(0,16);
+            fe.Name = "Z" + Guid.NewGuid().ToString("N").Substring(0, 16);
             AddControl(fe, point);
         }
 
@@ -285,11 +314,6 @@ namespace System451.Communication.Dashboard.ViZ
             Canvas.SetTop(sc, point.Y);
             Canvas.SetLeft(sc, point.X);
             Select(sc);
-        }
-
-        private void listBox1_PreviewMouseUp(object sender, MouseButtonEventArgs e)
-        {
-            lbdragging = false;
         }
 
         #endregion
@@ -328,7 +352,7 @@ namespace System451.Communication.Dashboard.ViZ
                         if (cdm.Flagged(CurrentDragMove.Width))
                             sc.Width = Math.Min(Math.Max(0, opoint.X + mv.X), ZDash.Width - Canvas.GetLeft((UIElement)origSrc));
                         if (cdm.Flagged(CurrentDragMove.Height))
-                            sc.Height = Math.Min(Math.Max(0, opoint.Y + mv.Y), ZDash.Height - Canvas.GetTop((UIElement)origSrc)); ;
+                            sc.Height = Math.Min(Math.Max(0, opoint.Y + mv.Y), ZDash.Height - Canvas.GetTop((UIElement)origSrc));
                         if (cdm.Flagged(CurrentDragMove.X))
                         {
                             Canvas.SetLeft(sc, Math.Min(Math.Max(0, oxpoint.X + mv.X), Canvas.GetLeft(sc) + sc.Width));
@@ -337,7 +361,7 @@ namespace System451.Communication.Dashboard.ViZ
                         if (cdm.Flagged(CurrentDragMove.Y))
                         {
                             Canvas.SetTop(sc, Math.Min(Math.Max(0, oxpoint.Y + mv.Y), Canvas.GetTop(sc) + sc.Height));
-                            sc.Height = Math.Min(Math.Max(0, opoint.Y - mv.Y), ZDash.Height - Canvas.GetTop((UIElement)origSrc)); ;
+                            sc.Height = Math.Min(Math.Max(0, opoint.Y - mv.Y), ZDash.Height - Canvas.GetTop((UIElement)origSrc));
                         }
                         ShowSnaps(((SnapGridDirections)cdm), x => { sc.Width = Canvas.GetLeft(sc) + sc.Width - x; Canvas.SetLeft(sc, x); }, y => { sc.Height = Canvas.GetTop(sc) + sc.Height - y; Canvas.SetTop(sc, y); }, r => curObj.Width = r - SnapGridHelper.Left(curObj), b => curObj.Height = b - SnapGridHelper.Top(curObj));
 
@@ -642,6 +666,38 @@ namespace System451.Communication.Dashboard.ViZ
 
         #endregion
 
+        #region Designer Resizing
+
+        private void ResizeGrip_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            resizingform = true;
+            ResizeGrip.CaptureMouse();
+            orfPoing = e.GetPosition(this);
+            orfSixe = new Size(ZDash.ActualWidth, ZDash.ActualHeight);
+            wsize = new Size(this.ActualWidth, this.ActualHeight);
+        }
+
+        private void ResizeGrip_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (!resizingform)
+                return;
+            var ofv = e.GetPosition(this) - orfPoing;
+            var newInnerSize = (Size)((Point)orfSixe + ofv);
+            var newOuterSize = (Size)((Point)wsize + ofv);
+            this.Width = newOuterSize.Width;
+            this.Height = newOuterSize.Height;
+            LayoutCvs.Width = (ZDChrome.Width = ZDash.Width = newInnerSize.Width) + 4;
+            LayoutCvs.Height = (ZDChrome.Height = ZDash.Height = newInnerSize.Height) + 4;
+        }
+
+        private void ResizeGrip_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            resizingform = false;
+            ResizeGrip.ReleaseMouseCapture();
+        }
+
+        #endregion
+
         #endregion
 
         #region Selection
@@ -729,6 +785,26 @@ namespace System451.Communication.Dashboard.ViZ
 
         #endregion
 
+        #region Menu
+
+        private void CommandBinding_Deploy_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (ZomBBuilder.BuildZomBString(Export(), @"C:\Program Files\FRC Dashboard\Dashboard.exe"))
+            {
+                MessageBox.Show(@"Success! Dashboard.exe written to C:\Program Files\FRC Dashboard\Dashboard.exe");
+            }
+            else
+                MessageBox.Show("Error building exe");
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Utils.InstallUtils.Install();
+            MessageBox.Show("Success!\r\n\r\nPlease restart this application to load the win32 modules.");
+        }
+
+        #endregion
+
         #region Other
 
         private void ZDash_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -757,6 +833,11 @@ namespace System451.Communication.Dashboard.ViZ
                 ZDash.Children.Remove(curObj);
                 curObj = null;
             }
+        }
+
+        public static Designer getDesigner()
+        {
+            return dsb;
         }
 
         #endregion
@@ -921,64 +1002,6 @@ namespace System451.Communication.Dashboard.ViZ
         }
 
         #endregion
-
-        private void Rectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            this.DragMove();
-        }
-
-        private void CommandBinding_Deploy_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            if (ZomBBuilder.BuildZomBString(Export(), @"C:\Program Files\FRC Dashboard\Dashboard.exe"))
-            {
-                MessageBox.Show(@"Success! Dashboard.exe written to C:\Program Files\FRC Dashboard\Dashboard.exe");
-            }
-            else
-                MessageBox.Show("Error building exe");
-        }
-
-        public static Designer getDesigner()
-        {
-            return dsb;
-        }
-
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            Utils.InstallUtils.Install();
-            MessageBox.Show("Success!\r\n\r\nPlease restart this application to load the win32 modules.");
-        }
-
-        bool resizingform = false;
-        Point orfPoing;
-        Size orfSixe, wsize;
-
-        private void ResizeGrip_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            resizingform = true;
-            ResizeGrip.CaptureMouse();
-            orfPoing = e.GetPosition(this);
-            orfSixe = new Size(ZDash.ActualWidth, ZDash.ActualHeight);
-            wsize = new Size(this.ActualWidth, this.ActualHeight);
-        }
-
-        private void ResizeGrip_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (!resizingform)
-                return;
-            var ofv = e.GetPosition(this) - orfPoing;
-            var newInnerSize = (Size)((Point)orfSixe + ofv);
-            var newOuterSize = (Size)((Point)wsize + ofv);
-            this.Width = newOuterSize.Width;
-            this.Height = newOuterSize.Height;
-            LayoutCvs.Width = (ZDChrome.Width = ZDash.Width = newInnerSize.Width) + 4;
-            LayoutCvs.Height = (ZDChrome.Height = ZDash.Height = newInnerSize.Height) + 4;
-        }
-
-        private void ResizeGrip_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            resizingform = false;
-            ResizeGrip.ReleaseMouseCapture();
-        }
     }
     public static class ExtensionsBit
     {
@@ -990,7 +1013,8 @@ namespace System451.Communication.Dashboard.ViZ
 
     public class StoppedDDHCVS : WPF.Controls.DashboardDataCanvas
     {
-        public StoppedDDHCVS() : base(false)
+        public StoppedDDHCVS()
+            : base(false)
         {
             this.AutoStart = false;
         }

@@ -1,20 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*
+ * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
+ * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
+using System.Collections;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System451.Communication.Dashboard.WPF.Design;
-using System.Reflection;
-using System.Collections;
-using System.ComponentModel;
 using System451.Communication.Dashboard.WPF.Controls;
+using System451.Communication.Dashboard.WPF.Design;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -31,23 +43,23 @@ namespace System451.Communication.Dashboard.ViZ
             InitializeComponent();
             obj = o;
             prop = p;
-            elmbox.ItemsSource = from object i in itms where (i as SurfaceControl).Control.Name!="" select i;
+            elmbox.ItemsSource = from object i in itms where (i as SurfaceControl).Control.Name != "" select i;
             var name = "";
             if (o is IZomBControl && !string.IsNullOrEmpty((o as IZomBControl).ControlName))
                 name = (o as IZomBControl).ControlName;
             else if (o is FrameworkElement)
                 name = (o as FrameworkElement).Name;
-            InfoBlock.Text = "Element: " + name + " - {" + o.GetType().Name + "}\r\nProperty: "+p.Name+"\r\nType: "+p.PropertyType.Name;
+            InfoBlock.Text = "Element: " + name + " - {" + o.GetType().Name + "}\r\nProperty: " + p.Name + "\r\nType: " + p.PropertyType.Name;
             var dp = DependencyPropertyDescriptor.FromName(p.Name, p.DeclaringType, o.GetType()).DependencyProperty;
             var dop = o as DependencyObject;
             var be = BindingOperations.GetBindingExpression(dop, dp);
             if (be != null)
             {
                 var itm = be.ParentBinding.Source;
-                if (itm!=null)
+                if (itm != null)
                     itm = SurfaceControl.GetSurfaceControlFromControl(itm);
-                if (itm==null)
-                    itm = (from object elm in elmbox.ItemsSource where (elm as SurfaceControl).Control.Name==be.ParentBinding.ElementName select elm).First();
+                if (itm == null)
+                    itm = (from object elm in elmbox.ItemsSource where (elm as SurfaceControl).Control.Name == be.ParentBinding.ElementName select elm).First();
                 elmbox.SelectedItem = itm;
                 var rs = (from object elm in propnamebox.ItemsSource
                           where (((object[])elm)[0] as PropertyInfo).Name == be.ParentBinding.Path.Path
@@ -72,7 +84,7 @@ namespace System451.Communication.Dashboard.ViZ
             propnamebox.ItemsSource = from p in (elmbox.SelectedItem as SurfaceControl).Control.GetType().GetProperties()
                                       orderby p.Name
                                       where IsBindable(p)
-                                      select new object[] {p, GetIsPropertyMain(p)};
+                                      select new object[] { p, GetIsPropertyMain(p) };
         }
 
         private bool IsBindable(PropertyInfo p)
@@ -109,7 +121,7 @@ namespace System451.Communication.Dashboard.ViZ
             var dpd = DependencyPropertyDescriptor.FromName(prop.Name, prop.DeclaringType, obj.GetType());
             var b = new Binding((((object[])propnamebox.SelectedItem)[0] as PropertyInfo).Name);
             b.Source = elmbox.SelectedItem;
-            if (NoConv.IsChecked==false)
+            if (NoConv.IsChecked == false)
             {
                 b.Converter = new ViZBindingParser();
                 b.ConverterParameter = getConverterType();
@@ -182,7 +194,7 @@ namespace System451.Communication.Dashboard.ViZ
                         sb.Append(txt[i]);
                         break;
                     case '-':
-                        if (sb.Length<1)
+                        if (sb.Length < 1)
                             sb.Append(txt[i]);
                         break;
                     default:

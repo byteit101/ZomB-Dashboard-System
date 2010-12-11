@@ -15,10 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+using System;
 using System.IO;
 using System.Windows;
-using System;
-using System.Diagnostics;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -32,7 +31,7 @@ namespace System451.Communication.Dashboard.ViZ
             System.Windows.Forms.Application.EnableVisualStyles();
             LoadAssembliesGeneric();
             var args = e.Args;
-            if (args.Length >0)
+            if (args.Length > 0)
             {
                 if (File.Exists(args[0]))
                     new Run(File.ReadAllText(args[0])).Show();
@@ -78,8 +77,8 @@ namespace System451.Communication.Dashboard.ViZ
                 try
                 {
                     ResourceDictionary MyResourceDictionary = new ResourceDictionary();
-     MyResourceDictionary.Source = new Uri("pack://application:,,,/"+item.FullName+";component/Themes/Generic.xaml");
-     App.Current.Resources.MergedDictionaries.Add(MyResourceDictionary);
+                    MyResourceDictionary.Source = new Uri("pack://application:,,,/" + item.FullName + ";component/Themes/Generic.xaml");
+                    App.Current.Resources.MergedDictionaries.Add(MyResourceDictionary);
                 }
                 catch
                 {

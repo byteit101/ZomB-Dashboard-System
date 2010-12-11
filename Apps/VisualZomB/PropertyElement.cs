@@ -16,15 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 using System451.Communication.Dashboard.WPF.Design;
 using System451.Communication.Dashboard.WPF.Design.DesignUtils;
-using System.Collections;
-using System.Windows.Media;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -249,13 +249,13 @@ namespace System451.Communication.Dashboard.ViZ
             if (Object != null && Property != null)
             {
                 var itm = new FrameworkElement[2];
-                itm[0]=(new TextBlock());
+                itm[0] = (new TextBlock());
                 (itm[0] as TextBlock).Text = Name + ": ";
                 (itm[0] as TextBlock).HorizontalAlignment = HorizontalAlignment.Right;
                 (itm[0] as TextBlock).VerticalAlignment = VerticalAlignment.Center;
                 if (Type == typeof(bool))
                 {
-                    itm[1]=(new CheckBox());
+                    itm[1] = (new CheckBox());
                     (itm[1] as CheckBox).IsChecked = (bool)Value;
                     (itm[1] as CheckBox).Checked += delegate { Value = true; };
                     (itm[1] as CheckBox).Unchecked += delegate { Value = false; };
@@ -263,7 +263,7 @@ namespace System451.Communication.Dashboard.ViZ
                 }
                 else if (Type == typeof(int) || Type == typeof(double))
                 {
-                    itm[1]=(new TextBox());
+                    itm[1] = (new TextBox());
                     if (Dynamic)
                     {
                         Binding bind = new Binding();

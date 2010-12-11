@@ -24,7 +24,8 @@ namespace System451.Communication.Dashboard.ViZ
 {
     public class Run : DashboardDataHubWindow
     {
-        public Run(string xaml) : base(true)
+        public Run(string xaml)
+            : base(true)
         {
             this.Content = XamlReader.Load(new MemoryStream(Encoding.UTF8.GetBytes(xaml)));
         }

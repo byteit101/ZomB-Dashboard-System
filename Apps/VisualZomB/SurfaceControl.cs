@@ -18,14 +18,14 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System451.Communication.Dashboard.WPF.Design;
-using System.ComponentModel;
-using System.Reflection;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -61,7 +61,7 @@ namespace System451.Communication.Dashboard.ViZ
         static void i_Click(object sender, RoutedEventArgs e)
         {
             var ea = ((e.Source as FrameworkElement).Parent as ContextMenu).Tag;
-            Point p= ((sender as FrameworkElement).Parent as ContextMenu).TranslatePoint(new Point(0,0), ea as UIElement);
+            Point p = ((sender as FrameworkElement).Parent as ContextMenu).TranslatePoint(new Point(0, 0), ea as UIElement);
             DependencyObject d = (ea as UIElement).InputHitTest(p) as DependencyObject;
             while (!(VisualTreeHelper.GetParent(d as UIElement) is WPF.Controls.FlowPropertyGrid))
             {
@@ -242,7 +242,7 @@ namespace System451.Communication.Dashboard.ViZ
                 return mi;
             }
         }
-        
+
         private void LoadVerbs()
         {
             var v = GetVerbs();
@@ -308,10 +308,10 @@ namespace System451.Communication.Dashboard.ViZ
                 rprop = Canvas.TopProperty;
             }
             var itm = new FrameworkElement[2];
-            itm[0]=(new TextBlock());
+            itm[0] = (new TextBlock());
             (itm[0] as TextBlock).Text = Name;
             (itm[0] as TextBlock).HorizontalAlignment = HorizontalAlignment.Right;
-            itm[1]=(new TextBox());
+            itm[1] = (new TextBox());
             Binding bind = new Binding();
             bind.Mode = BindingMode.TwoWay;
             bind.Source = this;

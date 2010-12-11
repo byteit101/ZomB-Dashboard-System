@@ -12,7 +12,7 @@
                 <TabControl SelectionChanged="TabControl_SelectionChanged">
                     <TabItem Header="Fixed Rotation" Name="FixedRotateTab">
                         <Grid>
-                        <ZomB:DirectionMeter x:Name="FixedRotationDial" />
+                            <ZomB:DirectionMeter x:Name="FixedRotationDial" />
                             <Label HorizontalAlignment="Center" VerticalAlignment="Bottom" Content="{Binding ElementName=FixedRotationDial, Path=DoubleValue}" Width="50"></Label>
                         </Grid>
                     </TabItem>
