@@ -791,16 +791,16 @@ namespace System451.Communication.Dashboard.ViZ
         {
             if (ZomBBuilder.BuildZomBString(Export(), @"C:\Program Files\FRC Dashboard\Dashboard.exe"))
             {
-                MessageBox.Show(@"Success! Dashboard.exe written to C:\Program Files\FRC Dashboard\Dashboard.exe");
+                System.Windows.Forms.MessageBox.Show(@"Success! Dashboard.exe written to C:\Program Files\FRC Dashboard\Dashboard.exe");
             }
             else
-                MessageBox.Show("Error building exe");
+                System.Windows.Forms.MessageBox.Show("Error building exe");
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             Utils.InstallUtils.Install();
-            MessageBox.Show("Success!\r\n\r\nPlease restart this application to load the win32 modules.");
+            System.Windows.Forms.MessageBox.Show("Success!\r\n\r\nPlease restart this application to load the win32 modules.");
         }
 
         #endregion

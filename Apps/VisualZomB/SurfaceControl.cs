@@ -236,7 +236,7 @@ namespace System451.Communication.Dashboard.ViZ
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("All designer verbs need to have a parameterless invoke.\r\n" + ex.ToString());
+                        System.Windows.Forms.MessageBox.Show("All designer verbs need to have a parameterless invoke.\r\n" + ex.ToString());
                     }
                 };
                 return mi;

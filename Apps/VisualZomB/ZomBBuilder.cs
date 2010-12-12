@@ -26,7 +26,7 @@ namespace System451.Communication.Dashboard.ViZ
         public static bool BuildZomBString(string zaml, string path)
         {
             File.Copy(Assembly.Load("ZomB").Location, Path.GetDirectoryName(path) + "\\ZomB.dll", true);
-            if (!File.Exists(path))
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
             var cs = CodeDomProvider.CreateProvider("CSharp");
             CompilerParameters pam = new CompilerParameters();
