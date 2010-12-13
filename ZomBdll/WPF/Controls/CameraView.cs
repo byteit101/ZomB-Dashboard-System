@@ -25,6 +25,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System451.Communication.Dashboard.Net.Video;
+using System.IO;
+using System451.Communication.Dashboard.Utils;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -35,12 +37,18 @@ namespace System451.Communication.Dashboard.WPF.Controls
     [TemplatePart(Name = "PART_img", Type = typeof(Image))]
     [TemplatePart(Name = "PART_refresh", Type = typeof(UIElement))]
     [TemplatePart(Name = "PART_targets", Type = typeof(Panel))]
-    public class CameraView : ZomBGLControl, IZomBControlGroup
+    public class CameraView : ZomBGLControl, IZomBControlGroup, ISavableZomBData
     {
         Image PART_img;
         IDashboardVideoDataSource videoSource;
         UIElement PART_refresh;
         CameraTargetUI tars;
+        Stream laststream;
+        VideoStreamSaver vss;
+        MenuItem mi;
+        MenuItem smi;
+        ContextMenu enu;
+
         static CameraView()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(CameraView),
@@ -56,6 +64,36 @@ namespace System451.Communication.Dashboard.WPF.Controls
             tars.Width = 1;
             tars.Height = 1;
             this.ControlAdded += delegate { if (VideoSource == DefaultVideoSource.WPILibTcpStream) TeamUpdated(); };
+            enu = new ContextMenu();
+            mi = new MenuItem();
+            mi.Header = "Start Saving";
+            mi.FontSize = 20;
+            mi.Click += new RoutedEventHandler(mi_Click);
+            enu.Items.Add(mi);
+            smi = new MenuItem();
+            smi.Header = "Stop Saving";
+            smi.FontSize = 20;
+            smi.Visibility = Visibility.Collapsed;
+            smi.Click += new RoutedEventHandler(smi_Click);
+            enu.Items.Add(smi);
+            this.ContextMenu = enu;
+        }
+
+        void smi_Click(object sender, RoutedEventArgs e)
+        {
+            vss.EndSave();
+            smi.Visibility = Visibility.Collapsed;
+            mi.Visibility = Visibility.Visible;
+        }
+
+        void mi_Click(object sender, RoutedEventArgs e)
+        {
+            Directory.CreateDirectory(BTZomBFingerFactory.DefaultSaveLocation);
+            vss = new VideoStreamSaver(this);
+            vss.FPS = 15;
+            vss.StartSave(BTZomBFingerFactory.DefaultSaveLocation + "\\Capture" + (DateTime.Now.Ticks.ToString("x")) + ".webm");
+            mi.Visibility = Visibility.Collapsed;
+            smi.Visibility = Visibility.Visible;
         }
 
         public override void UpdateControl(string value)
@@ -115,6 +153,11 @@ namespace System451.Communication.Dashboard.WPF.Controls
             try
             {
                 PART_img.Source = JpegBitmapDecoder.Create(e.NewDataStream, BitmapCreateOptions.None, BitmapCacheOption.None).Frames[0];
+                if (this.dataUpdatedEvent != null)
+                {
+                    laststream = e.NewDataStream;
+                    dataUpdatedEvent(this, new EventArgs());
+                }
             }
             catch (System.Exception x)
             {
@@ -161,6 +204,29 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         #endregion
 
+        #region ISavableZomBData Members
+
+        TypeConverter ISavableZomBData.GetTypeConverter()
+        {
+            return new Net.Video.BitmapConverter();
+        }
+
+        string ISavableZomBData.DataValue
+        {
+            get
+            {
+                //TODO: figure out a better way to do this
+                return Convert.ToBase64String((laststream as MemoryStream).ToArray());//I know this is a memory stream :-)
+            }
+        }
+        private EventHandler dataUpdatedEvent;
+
+        event EventHandler ISavableZomBData.DataUpdated
+        {
+            add { dataUpdatedEvent += value; }
+            remove { dataUpdatedEvent -= value; }
+        }
+        #endregion
 
         [Design.ZomBDesignable(), Category("ZomB"), Description("What targets will we be looking for?")]
         public CameraTargetCollection Targets
