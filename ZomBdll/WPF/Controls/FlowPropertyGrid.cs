@@ -60,8 +60,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         public static readonly DependencyProperty CollumnPaddingProperty = DependencyProperty.Register("CollumnPadding", typeof(double), typeof(FlowPropertyGrid), new UIPropertyMetadata(0.0));
 
-
-
         protected override Size MeasureOverride(Size availableSize)
         {
             if (Children.Count < 1)

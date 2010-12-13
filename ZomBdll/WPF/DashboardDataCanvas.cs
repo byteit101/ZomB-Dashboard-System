@@ -196,12 +196,16 @@ namespace System451.Communication.Dashboard.WPF.Controls
                     DashboardDataHub.Add((IZomBMonitor)item);
                 }
 
-                //If panel or has other controls, find those
-                foreach (var e in LogicalTreeHelper.GetChildren(item))
+                try
                 {
-                    AddControls(LogicalTreeHelper.GetChildren(item));
-                    break;
+                    //If panel or has other controls, find those
+                    foreach (UIElement e in LogicalTreeHelper.GetChildren(item))
+                    {
+                        AddControls(LogicalTreeHelper.GetChildren(item));
+                        break;
+                    }
                 }
+                catch { }
             }
         }
     }
