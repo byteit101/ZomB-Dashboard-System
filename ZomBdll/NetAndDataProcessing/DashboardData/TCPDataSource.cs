@@ -314,7 +314,11 @@ namespace System451.Communication.Dashboard.Net
                         zb.Read(vbuf, 0, valuel);
 
                         //Add the value
-                        kys.Add(Encoding.UTF8.GetString(buf), Encoding.UTF8.GetString(vbuf));
+                        string nom = Encoding.UTF8.GetString(buf), val = Encoding.UTF8.GetString(vbuf);
+                        if (kys.ContainsKey(nom))
+                            kys[nom] = val;
+                        else
+                            kys.Add(nom, val);
 
                         //Decrease error
                         if (nume > 0)
