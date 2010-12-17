@@ -56,6 +56,7 @@ namespace System451.Communication.Dashboard.ViZ
         CurrentDrag cd = CurrentDrag.None;
         CurrentDragMove cdm = CurrentDragMove.None;
         List<FrameworkElement> designerProps = new List<FrameworkElement>(4);
+        static Dictionary<string, string> xmlNSmappings = new Dictionary<string, string>();
 
         SurfaceControl curObj;
 
@@ -75,6 +76,10 @@ namespace System451.Communication.Dashboard.ViZ
                 throw new InvalidOperationException("Only one ViZ designer can be active at a time in this App Domain");
             dsb = this;
             InitializeComponent();
+
+            //initialize ns's
+            LoadNSs();
+
             if (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width > 1080)
             {
                 //chromify, we have space
@@ -139,6 +144,18 @@ namespace System451.Communication.Dashboard.ViZ
             foreach (var item in designerProps)
             {
                 propHolder.Children.Add(item);
+            }
+        }
+
+        private void LoadNSs()
+        {
+            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (var ns in asm.GetCustomAttributes(typeof(WPF.Design.ZomBZamlNamespaceAttribute), false))
+                {
+                    var zn = ns as WPF.Design.ZomBZamlNamespaceAttribute;
+                    xmlNSmappings.Add(zn.ClrNamespace, zn.XmlNamespace);
+                }
             }
         }
 
@@ -929,8 +946,12 @@ namespace System451.Communication.Dashboard.ViZ
                 Run r = new Run(zaml);
                 r.ShowDialog();
 
-                //Ok, now lets clean up this mess the best we can
-                r.DashboardDataHub.Stop();
+                try
+                {
+                    //Ok, now lets clean up this mess the best we can
+                    r.DashboardDataHub.Stop();
+                }
+                catch { }
                 r = null;
             }
             GC.Collect();
@@ -938,7 +959,9 @@ namespace System451.Communication.Dashboard.ViZ
 
         public string Export()
         {
-            StringBuilder sb = new StringBuilder("<ZomB:DashboardDataCanvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:ZomB=\"clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB\" Height=\"" + ZDash.ActualHeight + "\" Width=\"" + ZDash.ActualWidth + "\" InvalidPacketAction=\"");
+            StringBuilder sb = new StringBuilder("<ZomB:DashboardDataCanvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" ");
+            sb.Append(GetZamlAllNSs());
+            sb.Append("Height=\"" + ZDash.ActualHeight + "\" Width=\"" + ZDash.ActualWidth + "\" InvalidPacketAction=\"");
             sb.Append((designerProps[3] as ComboBox).SelectedValue);
             sb.Append("\" DefaultSources=\"");
             sb.Append((designerProps[5] as ComboBox).SelectedValue);
@@ -949,7 +972,10 @@ namespace System451.Communication.Dashboard.ViZ
 
             foreach (var item in LogicalTreeHelper.GetChildren(ZDash))
             {
-                sb.Append("<ZomB:");
+                string xns = GetXmlNS(((SurfaceControl)item).Control);
+                sb.Append("<");
+                sb.Append(xns);
+                sb.Append(":");
                 sb.Append(((SurfaceControl)item).Control.GetType().Name);
                 if (((SurfaceControl)item).Control.Name != "")
                 {
@@ -985,20 +1011,26 @@ namespace System451.Communication.Dashboard.ViZ
                     sb.Append("\">");
                     foreach (var aprop in attached)
                     {
-                        sb.Append("<ZomB:");
+                        sb.Append("<");
+                        sb.Append(xns);
+                        sb.Append(":");
                         sb.Append(ctrlNom);
                         sb.Append(".");
                         sb.Append(aprop.Key);
                         sb.Append(">");
                         sb.Append(aprop.Value.Designer.GetValue());
-                        sb.Append("</ZomB:");
+                        sb.Append("</");
+                        sb.Append(xns);
+                        sb.Append(":");
                         sb.Append(ctrlNom);
                         sb.Append(".");
                         sb.Append(aprop.Key);
                         sb.Append(">");
                     }
                     attached.Clear();
-                    sb.Append("</ZomB:");
+                    sb.Append("</");
+                    sb.Append(xns);
+                    sb.Append(":");
                     sb.Append(ctrlNom);
                     sb.Append(">");
                 }
@@ -1007,6 +1039,34 @@ namespace System451.Communication.Dashboard.ViZ
             }
 
             sb.Append("</ZomB:DashboardDataCanvas>");
+            return sb.ToString();
+        }
+
+        private string GetXmlNS(object item)
+        {
+            return xmlNSmappings[item.GetType().Namespace];
+        }
+
+        private string GetZamlAllNSs()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (var ns in asm.GetCustomAttributes(typeof(WPF.Design.ZomBZamlNamespaceAttribute), false))
+                {
+                    var zn = ns as WPF.Design.ZomBZamlNamespaceAttribute;
+                    sb.Append("xmlns:");
+                    sb.Append(zn.XmlNamespace);
+                    sb.Append("=\"clr-namespace:");
+                    sb.Append(zn.ClrNamespace);
+                    sb.Append(";assembly=");
+                    string an = asm.FullName;
+                    if (an.Contains(","))
+                        an = an.Substring(0, an.IndexOf(','));
+                    sb.Append(an);
+                    sb.Append("\" ");
+                }
+            }
             return sb.ToString();
         }
 

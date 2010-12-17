@@ -18,6 +18,8 @@
 using System;
 using System.Windows.Media;
 
+[assembly: System451.Communication.Dashboard.WPF.Design.ZomBZamlNamespace("System451.Communication.Dashboard.WPF.Controls", "ZomB")]
+
 namespace System451.Communication.Dashboard.WPF.Design
 {
     [global::System.AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
@@ -45,5 +47,18 @@ namespace System451.Communication.Dashboard.WPF.Design
 
         public string Name { get; private set; }
         public string Description { get; set; }
+    }
+
+    [global::System.AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = true)]
+    public sealed class ZomBZamlNamespaceAttribute : Attribute
+    {
+        public ZomBZamlNamespaceAttribute(string clrNamespace, string xmlNamespace)
+        {
+            this.ClrNamespace = clrNamespace;
+            this.XmlNamespace = xmlNamespace;
+        }
+
+        public string ClrNamespace { get; private set; }
+        public string XmlNamespace { get; private set; }
     }
 }
