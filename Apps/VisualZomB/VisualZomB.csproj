@@ -157,6 +157,10 @@
     <None Include="ViZ.snk" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ZomB.DriverStation\ZomB.DriverStation.csproj">
+      <Project>{49B23038-A658-43B3-8620-EBC62E873201}</Project>
+      <Name>ZomB.DriverStation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ZomBdll\ZomB.csproj">
       <Project>{B40501FE-DF11-452B-BAD6-30DE836902C6}</Project>
       <Name>ZomB</Name>

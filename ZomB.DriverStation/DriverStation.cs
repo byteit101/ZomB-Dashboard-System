@@ -18,6 +18,9 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Net.Sockets;
+using System.Timers;
+using System451.Communication.Dashboard.Utils;
 
 namespace System451.Communication.Dashboard.Net.DriverStation
 {
@@ -29,12 +32,17 @@ namespace System451.Communication.Dashboard.Net.DriverStation
     {
         Button PART_endis;
         DashboardDataHub ddh;
+        UdpClient uc;
+        bool running;
+        Timer tmr;
+        short loops;
 
         public DriverStation()
         {
             this.Width = 100;
             this.Height = 50;
             this.Background = Brushes.LightGray;
+            Enabled = false;
         }
 
         public override void OnApplyTemplate()
@@ -48,6 +56,7 @@ namespace System451.Communication.Dashboard.Net.DriverStation
                 else
                     Enable();
             };
+            Disable();
         }
 
         public bool Enabled { get; private set; }
@@ -60,18 +69,89 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             }
         }
 
-        private void Enable()
+        public void Enable()
         {
             PART_endis.Background = Brushes.Red;
             PART_endis.Content = "Disable";
             Enabled = true;
+            if (!running)
+                Start();
         }
 
-        private void Disable()
+        public void Disable()
         {
             PART_endis.Background = Brushes.Green;
             PART_endis.Content = "Enable";
             Enabled = false;
+        }
+
+        private void Start()
+        {
+            running = true;
+            uc = new UdpClient(1150, AddressFamily.InterNetwork);
+            tmr = new Timer(20);
+            tmr.AutoReset = true;
+            tmr.Elapsed += new ElapsedEventHandler(hz);
+            tmr.Start();
+        }
+
+        void hz(object sender, ElapsedEventArgs e)
+        {
+            int start = ((int)(Team/100.0))*100;
+
+            uc.Send(GetStatus(), 1024, "10." + (start / 100) + "." + (Team - start) + ".2", 1110);
+        }
+
+        private byte[] GetStatus()
+        {
+            byte[] r = new byte[1024];
+            r[0] = (byte)(loops >> 8);
+            r[1] = (byte)(loops);
+            loops++;
+            var status = new BitField();
+            /*
+             * 0-FPGA Checksum
+             * 1-cRio Checksum
+             * 2-Resynch
+             * 3-FMS Attached
+             * 4-Auton
+             * 5-Enabled
+             * 6-Not E-Stopped
+             * 7-Reset
+             */
+            status[5] = Enabled;
+            status[6] = true;
+            r[2] = status.Byte;
+            r[3] = 0xff;//digitalInput
+            r[4] = (byte)(Team >> 8);
+            r[5] = (byte)(Team);
+            //alliance, R/B, ascii 1,2,3
+            r[6] = 0x52;
+            r[7] = 0x31;
+
+            //version
+            r[72] = 0x31;
+            r[73] = 0x30;
+            r[74] = 0x30;
+            r[75] = 0x32;
+            r[76] = 0x30;
+            r[77] = 0x38;
+            r[78] = 0x30;
+            r[79] = 0x30;
+            uint cr = Libs.Crc32.Compute(r);
+            r[1020] = (byte)(cr >> 24);
+            r[1021] = (byte)(cr >> 16);
+            r[1022] = (byte)(cr >> 8);
+            r[1023] = (byte)(cr);
+            return r;
+        }
+
+        private void Stop()
+        {
+            tmr.Stop();
+            Disable();
+            hz(this, null);
+            running = false;
         }
 
         #region IZomBControl Members
@@ -91,4 +171,18 @@ namespace System451.Communication.Dashboard.Net.DriverStation
 
         #endregion
     }
+    /**************************************
+     **** Driver Station Protocol 2010 ****
+     **************************************
+     * The UDP server needs to be set up on
+     * port 1150 and set to recieve from 
+     * only the robot's IP. The UDP client
+     * should send to 1110 on the robot at
+     * 50 hertz.
+     * 
+     * 
+     * 
+     * 
+     * 
+     **************************************/
 }
