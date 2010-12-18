@@ -76,7 +76,7 @@ namespace System451.Communication.Dashboard
 
             public static Assembly AssemblyResolve(object sender, ResolveEventArgs e)
             {
-                var dll = new AssemblyName(e.Name).Name + ".dll";
+                var dll = e.Name.Replace("\\\\", "\\");
 
                 if (!File.Exists(dll))
                 {

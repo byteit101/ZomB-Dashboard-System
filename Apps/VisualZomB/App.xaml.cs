@@ -17,6 +17,7 @@
  */
 using System;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 using System451.Communication.Dashboard.Utils;
 
@@ -31,6 +32,7 @@ namespace System451.Communication.Dashboard.ViZ
         {
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AutoExtractor.AssemblyResolve);
             System.Windows.Forms.Application.EnableVisualStyles();
+            LoadPlugins();
             LoadAssembliesGeneric();
             var args = e.Args;
             if (args.Length > 0)
@@ -70,6 +72,22 @@ namespace System451.Communication.Dashboard.ViZ
             }
             else
                 new Designer().Show();
+        }
+
+        private void LoadPlugins()
+        {
+            if (Directory.Exists("plugins"))
+            {
+                var plugins = Directory.GetFiles("plugins", "*.dll");
+                foreach (var item in plugins)
+                {
+                    try
+                    {
+                        Assembly.LoadFrom(item);
+                    }
+                    catch { }
+                }
+            }
         }
 
         private void LoadAssembliesGeneric()
