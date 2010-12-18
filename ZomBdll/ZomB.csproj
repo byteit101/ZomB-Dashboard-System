@@ -94,9 +94,11 @@
     <Compile Include="Controls\XShake.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="NetAndDataProcessing\UDPProxy.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\IDataSender.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\TCPDataSender.cs" />
     <Compile Include="NetAndDataProcessing\IZomBDataControl.cs" />
+    <Compile Include="NetAndDataProcessing\TCPProxy.cs" />
     <Compile Include="NetAndDataProcessing\Video\FFmpeg.cs" />
     <Compile Include="Utils\AeroGlass.cs" />
     <Compile Include="Utils\CPU.cs" />
@@ -217,6 +219,7 @@
     </Compile>
     <Compile Include="WPF\Controls\AlertControl.cs" />
     <Compile Include="WPF\Controls\CameraView.cs" />
+    <Compile Include="WPF\Controls\NetForward.cs" />
     <Compile Include="WPF\Controls\Designer\BrushDesignerWindow.xaml.cs">
       <DependentUpon>BrushDesignerWindow.xaml</DependentUpon>
     </Compile>
@@ -401,6 +404,10 @@
     <Page Include="WPF\Controls\CameraView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controls\NetForward.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
