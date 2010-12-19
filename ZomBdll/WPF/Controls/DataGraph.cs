@@ -40,7 +40,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DataGraph),
             new FrameworkPropertyMetadata(typeof(DataGraph)));
-            DoubleValueProperty.OverrideMetadata(typeof(DataGraph), new FrameworkPropertyMetadata(new PropertyChangedCallback(newDdb)));
         }
 
         public DataGraph()
@@ -61,11 +60,20 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.Regenerate();//Zombie planaria!
         }
 
-        static void newDdb(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        public override void UpdateControl(string value)
         {
-            DataGraph am = (o as DataGraph);
+            try
+            {
+                newDdb(double.Parse(value));
+            }
+            catch { }
+        }
+
+        void newDdb(double nv)
+        {
+            DataGraph am = this;
             am.vals.Dequeue();
-            am.vals.Enqueue((double)e.NewValue);
+            am.vals.Enqueue(nv);
             am.Regenerate();
         }
 
