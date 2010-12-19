@@ -21,26 +21,35 @@ using System.Windows.Media;
 using System.Net.Sockets;
 using System.Timers;
 using System451.Communication.Dashboard.Utils;
+using System;
+using System.Net;
 
 namespace System451.Communication.Dashboard.Net.DriverStation
 {
-    [WPF.Design.ZomBControl("Driver Station", Description = "A small driver station for driving the robot without runnning the ds software")]
+    [WPF.Design.ZomBControl("Driver Station", Description = "A small driver station for driving the robot without runnning the ds software", IconName="DSIcon")]
     [TemplatePart(Name = "PART_endis", Type = typeof(Button))]
+    [TemplatePart(Name = "PART_Status", Type = typeof(Label))]
     [WPF.Design.ZomBDesignableProperty("Width", Dynamic = true, Category = "Layout")]
     [WPF.Design.ZomBDesignableProperty("Height", Dynamic = true, Category = "Layout")]
+    [WPF.Design.ZomBDesignableProperty("Background")]
+    [WPF.Design.ZomBDesignableProperty("BorderBrush")]
+    [WPF.Design.ZomBDesignableProperty("BorderThickness")]
     public class DriverStation : Control, IZomBControl
     {
         Button PART_endis;
+        Label statuslbl;
         DashboardDataHub ddh;
         UdpClient uc;
         bool running;
         Timer tmr;
         short loops;
+        public const int MaxConnectionTimeout = 10;
+        int connected = MaxConnectionTimeout + 1;
 
         public DriverStation()
         {
             this.Width = 100;
-            this.Height = 50;
+            this.Height = 65;
             this.Background = Brushes.LightGray;
             Enabled = false;
         }
@@ -57,6 +66,8 @@ namespace System451.Communication.Dashboard.Net.DriverStation
                     Enable();
             };
             Disable();
+            statuslbl = base.GetTemplateChild("PART_Status") as Label;
+            statuslbl.Content = "Not Connected";
         }
 
         public bool Enabled { get; private set; }
@@ -93,6 +104,28 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             tmr.AutoReset = true;
             tmr.Elapsed += new ElapsedEventHandler(hz);
             tmr.Start();
+            dolisten();
+        }
+
+        private void dolisten()
+        {
+            uc.BeginReceive(delegate(IAsyncResult ar)
+            {
+                try
+                {
+                    IPEndPoint iep = null;
+                    byte[] dgram = uc.EndReceive(ar, ref iep);
+                    connected = 0;
+                    stat(dgram[1].ToString("x")+"."+dgram[2].ToString("x"));
+                    dolisten();
+                }
+                catch { }
+            }, this);
+        }
+
+        private void stat(string stat)
+        {
+            statuslbl.Dispatcher.Invoke(new VoidFunction(() => statuslbl.Content = stat), null);
         }
 
         void hz(object sender, ElapsedEventArgs e)
@@ -100,6 +133,13 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             int start = ((int)(Team/100.0))*100;
 
             uc.Send(GetStatus(), 1024, "10." + (start / 100) + "." + (Team - start) + ".2", 1110);
+
+            if (connected > MaxConnectionTimeout)
+            {
+                stat("Not Connected");
+            }
+            else
+                connected++;
         }
 
         private byte[] GetStatus()
