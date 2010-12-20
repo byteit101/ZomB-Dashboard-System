@@ -27,15 +27,19 @@ namespace System451.Communication.Dashboard.ViZ
     public class TransformDesigner : DesignerBase
     {
         Button b;
+        Label stat;
         public override FrameworkElement GetProperyField()
         {
             b = new Button();
             b.Content = " ... ";
             b.Click += new RoutedEventHandler(b_Click);
+            stat = new Label();
+            stat.Content = (SurfaceControl.GetSurfaceControlFromControl(Object)).RenderTransform.GetType().Name;
             var s = new StackPanel();
             s.FlowDirection = FlowDirection.RightToLeft;
             s.Orientation = Orientation.Horizontal;
             s.Children.Add(b);
+            s.Children.Add(stat);
             return s;
         }
 
@@ -43,6 +47,7 @@ namespace System451.Communication.Dashboard.ViZ
         {
             var win = new TransformDesignerWindow(Object as UIElement);
             win.ShowDialog();
+            stat.Content = (SurfaceControl.GetSurfaceControlFromControl(Object)).RenderTransform.GetType().Name;
         }
 
         public override bool IsExpanded()
@@ -72,6 +77,30 @@ namespace System451.Communication.Dashboard.ViZ
                 else
                     sb.Append((ict as RotateTransform).Angle);
                 sb.Append("</RotateTransform.Angle></RotateTransform>");
+            }
+            else if (ict is TranslateTransform)
+            {
+                sb.Append("<TranslateTransform><TranslateTransform.X>");
+                var be = BindingOperations.GetBindingExpression(ict, TranslateTransform.XProperty);//TODO: hope Y is the same
+                if (be != null)
+                {
+                    var bpd = new BoundPropertyDesigner();
+                    bpd.Initialize(ict, ict.GetType().GetProperty("X"));
+                    sb.Append(bpd.GetValue());
+                    sb.Append("</TranslateTransform.X><TranslateTransform.Y>");
+                }
+                else
+                    sb.Append("0</TranslateTransform.X><TranslateTransform.Y>");
+                be = BindingOperations.GetBindingExpression(ict, TranslateTransform.YProperty);//TODO: hope Y is the same
+                if (be != null)
+                {
+                    var bpd = new BoundPropertyDesigner();
+                    bpd.Initialize(ict, ict.GetType().GetProperty("Y"));
+                    sb.Append(bpd.GetValue());
+                }
+                else
+                    sb.Append("0");
+                sb.Append("</TranslateTransform.Y></TranslateTransform>");
             }
         }
         public override bool IsDefaultValue()

@@ -35,8 +35,16 @@ namespace System451.Communication.Dashboard.ViZ
             this.Object = SurfaceControl.GetSurfaceControlFromControl(ubject);
             if (Object.RenderTransform != MatrixTransform.Identity)
             {
-                FixedRotationDial.DoubleValue = (Object.RenderTransform as RotateTransform).Angle;
-                MainTabs.IsEnabled = true;
+                if (Object.RenderTransform is RotateTransform)
+                {
+                    FixedRotationDial.DoubleValue = (Object.RenderTransform as RotateTransform).Angle;
+                    MainTabs.IsEnabled = true;
+                }
+                else if (Object.RenderTransform is TranslateTransform)
+                {
+                    MainTabs.IsEnabled = true;
+                    TranslateTab.IsSelected = true;
+                }
             }
         }
 
@@ -69,6 +77,34 @@ namespace System451.Communication.Dashboard.ViZ
                 return;
             if (e.AddedItems.Contains(FixedRotateTab) && Object.RenderTransform is RotateTransform)
                 (Object.RenderTransform as RotateTransform).Angle = (Object.RenderTransform as RotateTransform).Angle;
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Object.RenderTransform = MatrixTransform.Identity;
+        }
+
+        private void Transform_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!init)
+                return;
+            if (e.AddedItems.Contains(RotateTab) && !(Object.RenderTransform is RotateTransform))
+                Object.RenderTransform = new RotateTransform(0);
+            else if (e.AddedItems.Contains(TranslateTab) && !(Object.RenderTransform is TranslateTransform))
+                Object.RenderTransform = new TranslateTransform(0, 0);
+        }
+
+        //set x
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            new BindingDesigner(Object.RenderTransform, Object.RenderTransform.GetType().GetProperty("X")
+                , Designer.getDesigner().ZDash.Children).ShowDialog();
+        }
+
+        private void SetYTransform_click(object sender, RoutedEventArgs e)
+        {
+            new BindingDesigner(Object.RenderTransform, Object.RenderTransform.GetType().GetProperty("X")
+                , Designer.getDesigner().ZDash.Children).ShowDialog();
         }
     }
 }

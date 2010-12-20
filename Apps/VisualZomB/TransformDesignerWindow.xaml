@@ -5,9 +5,9 @@
         Title="Transform Designer" SizeToContent="WidthAndHeight" Loaded="Window_Loaded" Icon="/ZomB;component/Resources/transform.ico">
     <GroupBox Margin="4">
         <GroupBox.Header>
-            <CheckBox IsChecked="{Binding Mode=TwoWay, ElementName=MainTabs, Path=IsEnabled}" Checked="endisable_transformers">Enable Transforms</CheckBox>
+            <CheckBox IsChecked="{Binding Mode=TwoWay, ElementName=MainTabs, Path=IsEnabled}" Checked="endisable_transformers" Unchecked="CheckBox_Unchecked">Enable Transforms</CheckBox>
         </GroupBox.Header>
-        <TabControl Name="MainTabs" Height="216" Width="309" Margin="0,4,0,0" IsEnabled="False">
+        <TabControl Name="MainTabs" Height="216" Width="309" Margin="0,4,0,0" IsEnabled="False" SelectionChanged="Transform_SelectionChanged">
             <TabItem Header="Rotate" Name="RotateTab">
                 <TabControl SelectionChanged="TabControl_SelectionChanged">
                     <TabItem Header="Fixed Rotation" Name="FixedRotateTab">
@@ -20,6 +20,12 @@
                         <Button HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click">Edit Binding</Button>
                     </TabItem>
                 </TabControl>
+            </TabItem>
+            <TabItem Header="Translate" Name="TranslateTab">
+                <StackPanel VerticalAlignment="Center">
+                    <Button HorizontalAlignment="Center" Margin="10" Click="Button_Click_1">Set X binding</Button>
+                    <Button HorizontalAlignment="Center" Margin="10" Click="SetYTransform_click">Set Y binding</Button>
+                </StackPanel>
             </TabItem>
         </TabControl>
     </GroupBox>
