@@ -103,7 +103,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void SetYTransform_click(object sender, RoutedEventArgs e)
         {
-            new BindingDesigner(Object.RenderTransform, Object.RenderTransform.GetType().GetProperty("X")
+            new BindingDesigner(Object.RenderTransform, Object.RenderTransform.GetType().GetProperty("Y")
                 , Designer.getDesigner().ZDash.Children).ShowDialog();
         }
     }

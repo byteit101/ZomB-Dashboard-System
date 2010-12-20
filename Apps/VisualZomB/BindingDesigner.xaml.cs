@@ -56,7 +56,7 @@ namespace System451.Communication.Dashboard.ViZ
             if (be != null)
             {
                 var itm = be.ParentBinding.Source;
-                if (itm != null)
+                if (itm != null && !(itm is SurfaceControl))
                     itm = SurfaceControl.GetSurfaceControlFromControl(itm);
                 if (itm == null)
                 {
