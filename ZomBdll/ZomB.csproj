@@ -219,6 +219,7 @@
     </Compile>
     <Compile Include="WPF\Controls\AlertControl.cs" />
     <Compile Include="WPF\Controls\CameraView.cs" />
+    <Compile Include="WPF\Controls\Image.cs" />
     <Compile Include="WPF\Controls\NetForward.cs" />
     <Compile Include="WPF\Controls\Designer\BrushDesignerWindow.xaml.cs">
       <DependentUpon>BrushDesignerWindow.xaml</DependentUpon>
@@ -404,6 +405,10 @@
     <Page Include="WPF\Controls\CameraView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controls\Image.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

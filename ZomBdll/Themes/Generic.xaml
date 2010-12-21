@@ -17,5 +17,7 @@
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/StatusLabel.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/ValueMeter.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/DebugGrid.xaml" />
+        <ResourceDictionary Source="/ZomB;component/WPF/Controls/NetForward.xaml" />
+        <ResourceDictionary Source="/ZomB;component/WPF/Controls/Image.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
