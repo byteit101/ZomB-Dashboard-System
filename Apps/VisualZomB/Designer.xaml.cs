@@ -31,7 +31,7 @@ using System451.Communication.Dashboard.WPF.Design;
 
 namespace System451.Communication.Dashboard.ViZ
 {
-    public partial class Designer : Window
+    public partial class Designer : Window, ISurfaceDesigner
     {
         #region init, variables, and basic controls
         enum CurrentDrag
@@ -76,6 +76,7 @@ namespace System451.Communication.Dashboard.ViZ
             if (dsb != null)
                 throw new InvalidOperationException("Only one ViZ designer can be active at a time in this App Domain");
             dsb = this;
+            ZDesigner.SetDesigner(this);
             InitializeComponent();
 
             //initialize ns's
@@ -858,26 +859,6 @@ namespace System451.Communication.Dashboard.ViZ
             return dsb;
         }
 
-        public static string[] GetNames()
-        {
-            var th = getDesigner().ZDash.Children;
-            return (from SurfaceControl child in th select child.Control.Name).ToArray();
-        }
-
-        public static string[] GetProperties(string controlname)
-        {
-            var th = getDesigner().ZDash.Children;
-            return (from prop in
-                        (from SurfaceControl child in th where child.Control.Name == controlname select child.Control).First().GetType().GetProperties()
-                    select prop.Name).ToArray();
-        }
-
-        public static  object GetByName(string controlname)
-        {
-            var th = getDesigner().ZDash.Children;
-            return (from SurfaceControl child in th where child.Control.Name == controlname select child.Control).First();
-        }
-
         #endregion
 
         #endregion
@@ -1089,6 +1070,59 @@ namespace System451.Communication.Dashboard.ViZ
                 }
             }
             return sb.ToString();
+        }
+
+        #endregion
+
+
+
+        public static string[] GetNames()
+        {
+            var th = getDesigner().ZDash.Children;
+            return (from SurfaceControl child in th select child.Control.Name).ToArray();
+        }
+
+        public static string[] GetProperties(string controlname)
+        {
+            var th = getDesigner().ZDash.Children;
+            return (from prop in
+                        (from SurfaceControl child in th where child.Control.Name == controlname select child.Control).First().GetType().GetProperties()
+                    select prop.Name).ToArray();
+        }
+
+        public static object GetByName(string controlname)
+        {
+            var th = getDesigner().ZDash.Children;
+            return (from SurfaceControl child in th where child.Control.Name == controlname select child.Control).First();
+        }
+
+        #region ISurfaceDesigner Members
+
+        public UIElement[] GetChildren()
+        {
+            var th = getDesigner().ZDash.Children;
+            return (from SurfaceControl child in th select child.Control).ToArray();
+        }
+
+        public bool ChildrenContain(string name)
+        {
+            var th = getDesigner().ZDash.Children;
+            return (from SurfaceControl child in th where child.Control.Name == name select child.Control).Count() > 0;
+        }
+
+        public bool ChildrenContain(UIElement element)
+        {
+            var th = getDesigner().ZDash.Children;
+            return (from SurfaceControl child in th where child.Control == element select child.Control).Count() > 0;
+        }
+
+        public UIElement GetChildByName(string name)
+        {
+            var th = getDesigner().ZDash.Children;
+            var rs= (from SurfaceControl child in th where child.Control.Name == name select child.Control);
+            if (rs.Count() < 1)
+                return null;
+            return rs.First();
         }
 
         #endregion

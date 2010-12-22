@@ -113,8 +113,11 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         void PART_refresh_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            videoSource.Stop();
-            videoSource.Start();
+            if (ZDesigner.IsRunMode)
+            {
+                videoSource.Stop();
+                videoSource.Start();
+            }
         }
 
         /// <summary>
@@ -132,6 +135,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         void TeamUpdated()
         {
+            if (ZDesigner.IsDesignMode)
+                return;
             try
             {
                 videoSource = ((VideoSource == DefaultVideoSource.WPILibTcpStream) ? (IDashboardVideoDataSource)new WPILibTcpVideoSource(TeamNumber) : ((VideoSource == DefaultVideoSource.Webcam) ? (IDashboardVideoDataSource)new WebCamVideoSource() : null));

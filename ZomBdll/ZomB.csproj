@@ -260,6 +260,7 @@
     <Compile Include="WPF\Design\Reflector.cs" />
     <Compile Include="WPF\Design\ViZBindingParser.cs" />
     <Compile Include="WPF\Design\ZControl.cs" />
+    <Compile Include="WPF\Design\ZDesigner.cs" />
     <Compile Include="WPF\Design\ZomBDesignableAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
