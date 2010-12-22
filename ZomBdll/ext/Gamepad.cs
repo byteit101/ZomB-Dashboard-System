@@ -1,8 +1,7 @@
 ﻿/*
- * This code was found on http://visualcsharp.webs.com/projectdownloads.htm
+ * This code is based on code that was found on http://visualcsharp.webs.com/projectdownloads.htm
  * Since this code was not found with a license, it is subject
  * to the ZomB Dashboard System's license
- * This source code is unmodified aside from line 29 & 35-39 from the original source (aside from this header, and the notice below)
  * Original source can be found at http://www.mediafire.com/file/ihhjztqmudy/Xbox360Controller.zip
  **/
 /*
@@ -42,8 +41,6 @@ namespace System451.Communication.Dashboard.Libs.Xbox360Controller
         public readonly Controller Controller;
 
         public DPadState DPad { get; private set; }
-        public ThumbstickState LeftStick { get; private set; }
-        public ThumbstickState RightStick { get; private set; }
 
         public bool A { get; private set; }
         public bool B { get; private set; }
@@ -56,8 +53,13 @@ namespace System451.Communication.Dashboard.Libs.Xbox360Controller
         public bool Start { get; private set; }
         public bool Back { get; private set; }
 
-        public float RightTrigger { get; private set; }
-        public float LeftTrigger { get; private set; }
+        public double RightTrigger { get; private set; }
+        public double LeftTrigger { get; private set; }
+
+        public double RightX { get; private set; }
+        public double LeftX { get; private set; }
+        public double RightY { get; private set; }
+        public double LeftY { get; private set; }
 
         public bool Connected
         {
@@ -92,8 +94,8 @@ namespace System451.Communication.Dashboard.Libs.Xbox360Controller
             RightShoulder = (gamepadState.Buttons & GamepadButtonFlags.RightShoulder) != 0;
 
             // Triggers
-            LeftTrigger = gamepadState.LeftTrigger / (float)byte.MaxValue;
-            RightTrigger = gamepadState.RightTrigger / (float)byte.MaxValue;
+            LeftTrigger = gamepadState.LeftTrigger / (double)byte.MaxValue;
+            RightTrigger = gamepadState.RightTrigger / (double)byte.MaxValue;
 
             // Buttons
             Start = (gamepadState.Buttons & GamepadButtonFlags.Start) != 0;
@@ -110,13 +112,10 @@ namespace System451.Communication.Dashboard.Libs.Xbox360Controller
                                  (gamepadState.Buttons & GamepadButtonFlags.DPadLeft) != 0,
                                  (gamepadState.Buttons & GamepadButtonFlags.DPadRight) != 0);
 
-            // Thumbsticks
-            LeftStick = new ThumbstickState(
-                Normalize(gamepadState.LeftThumbX, gamepadState.LeftThumbY, Gamepad.GamepadLeftThumbDeadZone),
-                (gamepadState.Buttons & GamepadButtonFlags.LeftThumb) != 0);
-            RightStick = new ThumbstickState(
-                Normalize(gamepadState.RightThumbX, gamepadState.RightThumbY, Gamepad.GamepadRightThumbDeadZone),
-                (gamepadState.Buttons & GamepadButtonFlags.RightThumb) != 0);
+            LeftX = gamepadState.LeftThumbX/ (double)short.MaxValue;
+            LeftY = gamepadState.LeftThumbY / (double)short.MaxValue;
+            RightX = gamepadState.RightThumbX / (double)short.MaxValue;
+            RightX = gamepadState.RightThumbY / (double)short.MaxValue;
         }
 
         static Vector2 Normalize(short rawX, short rawY, short threshold)

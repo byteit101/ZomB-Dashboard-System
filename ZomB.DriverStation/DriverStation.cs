@@ -45,6 +45,7 @@ namespace System451.Communication.Dashboard.Net.DriverStation
         short loops;
         public const int MaxConnectionTimeout = 10;
         int connected = MaxConnectionTimeout + 1;
+        
 
         public DriverStation()
         {
@@ -52,6 +53,8 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             this.Height = 65;
             this.Background = Brushes.LightGray;
             Enabled = false;
+            Joystick1 = new Joystick();
+            Joystick1.SetFindName(new Func<string, object>((name) => FindName(name)));
         }
 
         public override void OnApplyTemplate()
@@ -168,6 +171,13 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             //alliance, R/B, ascii 1,2,3
             r[6] = 0x52;
             r[7] = 0x31;
+            //Joystick data
+            try
+            {
+                Dispatcher.Invoke(new VoidFunction(() => Joystick1.SaveDataTo(r, 8)), null);
+            }
+            catch { }
+            
 
             //version
             r[72] = 0x31;
@@ -178,6 +188,8 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             r[77] = 0x38;
             r[78] = 0x30;
             r[79] = 0x30;
+
+            //CRC
             uint cr = Libs.Crc32.Compute(r);
             r[1020] = (byte)(cr >> 24);
             r[1021] = (byte)(cr >> 16);
@@ -193,6 +205,17 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             hz(this, null);
             running = false;
         }
+
+        [WPF.Design.ZomBDesignable()]
+        public Joystick Joystick1
+        {
+            get { return (Joystick)GetValue(Joystick1Property); }
+            set { SetValue(Joystick1Property, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Joystick1.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty Joystick1Property =
+            DependencyProperty.Register("Joystick1", typeof(Joystick), typeof(DriverStation), new UIPropertyMetadata(null));
 
         #region IZomBControl Members
 
@@ -221,7 +244,81 @@ namespace System451.Communication.Dashboard.Net.DriverStation
      * 50 hertz.
      * 
      * 
-     * 
+     * Values in bytes
+Offset - Size - Description - extra info
+
+First, is the Driver Station -> cRio packet
+
+0-2-Packet Index
+2-1-Control Byte (more about this one later)
+3-1-Driver Station Digital Input
+4-2-Team ID
+6-1-Driver Station Alliance
+7-1-Driver Station Position
+8-(1x6)-Joystick 0, 6 bytes, each is one axis (signed byte, -128 to 127)
+14-2-Joystick 0 Buttons
+16-(1x6)-Joystick 1, 6 bytes, same as Joystick 0
+22-2-Joystick 1 Buttons
+24-(1x6)-Joystick 2, 6 bytes, same as Joystick 1
+30-2-Joystick 2 Buttons
+32-(1x6)-Joystick 3, 6 bytes, same as Joystick 2
+38-2-Joystick 3 Buttons
+
+40-2-Analog 0-Only uses 10 of the 16 bits, so max value of 1024
+42-2-Analog 1-Same as 0
+44-2-Analog 2-Same as 0
+46-2-Analog 3-Same as 0
+
+48-8-cRio checksum
+56-4-FPGA Checksum 1
+60-4-FPGA Checksum 2
+64-4-FPGA Checksum 3
+68-4-FPGA Checksum 4
+
+72-8-Version Data
+
+80-938-High end data, this is where current dashboard sends/recieves data
+
+1020-4-Packet CRC (More on this one later)
+
+
+Now for cRio -> Driver Station (more simple)
+
+0-1-Control Byte
+1-2-Battery Voltage, slightly weird, explained later
+3-1-Robot Digital Output
+4-4-Unknown/Not Needed
+8-2-Team Number
+10-6-Robot Mac
+16-8-Robot Version
+24-6-Unknown
+30-2-Counter
+32-988-High End Data
+1020-4-CRC checksum
+
+
+Now, for further explanation
+
+Control Byte
+the bits of the control byte specify robot state, such as enabled/disabled, auton/teleop, etc
+0-FPGA Checksum
+1-cRio Checksum
+2-Resynch
+3-FMS Attached
+4-Auton
+5-Enabled
+6-Not E-Stopped
+7-Reset
+If you would like help on how to set bits of a number, i can help you with that as well
+
+Packet CRC
+make sure that you are generating all 1024 bytes, and that 1020-1024 are empty when you generate this.
+
+Battery voltage
+this value was weird, but the value is sent over in the following fashion
+if the first byte has a hex value of 12 and the second has a hex value of 45, then the battery is 12.45 volts, so if you were gonna set a label, you would do label.Text = Convert.toString(firstByte,16) + "." + Convert.toString(secondByte,16) + " volts"
+
+
      * 
      * 
      **************************************/

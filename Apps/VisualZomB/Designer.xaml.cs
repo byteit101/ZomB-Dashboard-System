@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -857,6 +858,26 @@ namespace System451.Communication.Dashboard.ViZ
             return dsb;
         }
 
+        public static string[] GetNames()
+        {
+            var th = getDesigner().ZDash.Children;
+            return (from SurfaceControl child in th select child.Control.Name).ToArray();
+        }
+
+        public static string[] GetProperties(string controlname)
+        {
+            var th = getDesigner().ZDash.Children;
+            return (from prop in
+                        (from SurfaceControl child in th where child.Control.Name == controlname select child.Control).First().GetType().GetProperties()
+                    select prop.Name).ToArray();
+        }
+
+        public static  object GetByName(string controlname)
+        {
+            var th = getDesigner().ZDash.Children;
+            return (from SurfaceControl child in th where child.Control.Name == controlname select child.Control).First();
+        }
+
         #endregion
 
         #endregion
@@ -894,7 +915,7 @@ namespace System451.Communication.Dashboard.ViZ
                 "/ViZ:StoppedDDHCVS")))) as StoppedDDHCVS;
             if (cvs == null)
                 return;
-            List<Control> lc = new List<Control>(cvs.Children.Count);
+            List<UIElement> lc = new List<UIElement>(cvs.Children.Count);
 
             //canvas size
             var ofv = new Point(cvs.Width, cvs.Height) - new Point(ZDash.ActualWidth, ZDash.ActualHeight);
@@ -913,14 +934,14 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 if (item.GetType().GetCustomAttributes(typeof(ZomBControlAttribute), true).Length > 0)
                 {
-                    lc.Add((Control)item);
+                    lc.Add(item);
                 }
             }
             ZDash.Children.Clear();
             foreach (var item in lc)
             {
                 cvs.Children.Remove(item);
-                AddControl(item);
+                AddControl((FrameworkElement)item);
             }
             Deselect();
         }

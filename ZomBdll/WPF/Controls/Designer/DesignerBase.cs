@@ -30,7 +30,7 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designers
 
         #region IDesigner Members
 
-        public void Initialize(object obj, PropertyInfo property)
+        public virtual void Initialize(object obj, PropertyInfo property)
         {
             Object = obj;
             Property = property;
