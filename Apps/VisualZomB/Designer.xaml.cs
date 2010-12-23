@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,6 +28,8 @@ using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System451.Communication.Dashboard.Utils;
+using System451.Communication.Dashboard.ViZ.Properties;
 using System451.Communication.Dashboard.WPF.Design;
 
 namespace System451.Communication.Dashboard.ViZ
@@ -130,7 +133,7 @@ namespace System451.Communication.Dashboard.ViZ
             foreach (var item in Enum.GetNames(typeof(StartSources)))
             {
                 cb.Items.Add(item);
-                if (item == "DashboardPacket")
+                if (item == "AllTCP")
                 {
                     cb.SelectedValue = item;
                 }
@@ -138,7 +141,7 @@ namespace System451.Communication.Dashboard.ViZ
             designerProps.Add(new Label());
             (designerProps[6] as Label).Content = "Team #:";
             designerProps.Add(new TextBox());
-            (designerProps[7] as TextBox).Text = "0";
+            (designerProps[7] as TextBox).Text = Settings.Default.LastTeamNumber;
             //End of massivly wrong code
             //TODO: clean up the above code
 
@@ -147,6 +150,12 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 propHolder.Children.Add(item);
             }
+
+            this.Closing += delegate
+            {
+                Settings.Default.LastTeamNumber = (designerProps[7] as TextBox).Text;
+                Settings.Default.Save();
+            };
         }
 
         private void LoadNSs()
@@ -944,17 +953,22 @@ namespace System451.Communication.Dashboard.ViZ
         private void RunApp()
         {
             string zaml = Export();
-            {
-                Run r = new Run(zaml);
-                r.ShowDialog();
+            var ad = AppDomain.CreateDomain("ZomB Running Domain");
+            ad.AssemblyResolve += AutoExtractor.AssemblyResolve;
 
+            {
                 try
                 {
-                    //Ok, now lets clean up this mess the best we can
-                    r.DashboardDataHub.Stop();
+                    var r = ad.CreateInstanceOf<AppRunner>();
+                    r.Run(zaml);
+                    r = null;
                 }
                 catch { }
-                r = null;
+                try
+                {
+                    AppDomain.Unload(ad);
+                }
+                catch { }
             }
             GC.Collect();
         }
@@ -992,7 +1006,7 @@ namespace System451.Communication.Dashboard.ViZ
                 sb.Append(Canvas.GetLeft(item as UIElement));
                 foreach (KeyValuePair<string, PropertyElement> cprops in ((SurfaceControl)item).GetProps())
                 {
-                    if ((cprops.Value.Designer != null && cprops.Value.Designer.IsDefaultValue()) || cprops.Value.Value.ToString() == "" || (cprops.Value.Designer != null && cprops.Value.Designer.GetValue() == ""))
+                    if ((cprops.Value.Designer != null && cprops.Value.Designer.IsDefaultValue()) || cprops.Value.Value.ToString() == "")
                         continue;
                     if (cprops.Value.Designer != null && cprops.Value.Designer.IsExpanded())
                     {

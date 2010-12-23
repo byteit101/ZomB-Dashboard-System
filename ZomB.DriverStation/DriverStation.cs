@@ -49,8 +49,8 @@ namespace System451.Communication.Dashboard.Net.DriverStation
 
         public DriverStation()
         {
-            this.Width = 100;
-            this.Height = 65;
+            this.Width = 150;
+            this.Height = 100;
             this.Background = Brushes.LightGray;
             Enabled = false;
             Joystick1 = new Joystick();

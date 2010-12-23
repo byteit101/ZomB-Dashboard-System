@@ -22,5 +22,17 @@ namespace System451.Communication.Dashboard.ViZ.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public string LastTeamNumber {
+            get {
+                return ((string)(this["LastTeamNumber"]));
+            }
+            set {
+                this["LastTeamNumber"] = value;
+            }
+        }
     }
 }

@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Media;
+using System.Reflection;
 
 namespace System451.Communication.Dashboard
 {
@@ -89,6 +90,16 @@ namespace System451.Communication.Dashboard
             public static object Inflate(Type t)
             {
                 return t.GetConstructor(Type.EmptyTypes).Invoke(null);
+            }
+
+            public static T CreateInstanceOf<T>(this AppDomain appDomain) where T : class
+            {
+                return Activator.CreateInstance(appDomain, Assembly.GetAssembly(typeof(T)).FullName, typeof(T).FullName).Unwrap() as T;
+            }
+
+            public static T CreateInstanceOf<T>(this AppDomain appDomain, params object[] args) where T : class
+            {
+                return Activator.CreateInstance(appDomain, Assembly.GetAssembly(typeof(T)).FullName, typeof(T).FullName, false, BindingFlags.Default, null, args, null, null, new System.Security.Policy.Evidence()).Unwrap() as T;
             }
         }
     }

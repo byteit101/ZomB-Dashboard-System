@@ -19,6 +19,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Markup;
 using System451.Communication.Dashboard.WPF.Controls;
+using System;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -29,5 +30,33 @@ namespace System451.Communication.Dashboard.ViZ
         {
             this.Content = XamlReader.Load(new MemoryStream(Encoding.UTF8.GetBytes(xaml)));
         }
+    }
+
+    public class AppRunner : MarshalByRefObject
+    {
+        public AppRunner()
+        {
+
+        }
+
+        public void Run(string xaml)
+        {
+            {
+                Run r = new Run(xaml);
+                try
+                {
+                    r.ShowDialog();
+                }
+                catch { }
+                try
+                {
+                    r.DashboardDataHub.Stop();
+                }
+                catch { }
+                r = null;
+            }
+            GC.Collect();
+        }
+
     }
 }

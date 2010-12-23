@@ -36,7 +36,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.Orientation = Orientation.Vertical;
             this.Background = Brushes.PeachPuff;
             this.Height = 100;
-            this.Width = 50;
+            this.Width = 125;
         }
 
         public void UpdateStatus(FRCDSStatus status) { }
