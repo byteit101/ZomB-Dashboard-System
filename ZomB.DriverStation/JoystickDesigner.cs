@@ -61,6 +61,8 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             sb.Append(j.XSource);
             sb.Append("\" YSource=\"");
             sb.Append(j.YSource);
+            sb.Append("\" ZSource=\"");
+            sb.Append(j.ZSource);
             sb.Append("\" />");
             return sb.ToString();
         }

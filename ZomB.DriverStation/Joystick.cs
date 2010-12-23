@@ -166,6 +166,23 @@ namespace System451.Communication.Dashboard.Net.DriverStation
 
         private static readonly DependencyPropertyKey YProperty = DependencyProperty.RegisterReadOnly("Y", typeof(double), typeof(Joystick), new UIPropertyMetadata(0.0));
 
+        public string ZSource
+        {
+            get { return (string)GetValue(ZSourceProperty); }
+            set { SetValue(ZSourceProperty, value); }
+        }
+
+        public static readonly DependencyProperty ZSourceProperty =
+            DependencyProperty.Register("ZSource", typeof(string), typeof(Joystick), new FrameworkPropertyMetadata(sourceChanged));
+
+        public double Z
+        {
+            get { return (double)GetValue(ZProperty.DependencyProperty); }
+            private set { SetValue(ZProperty, value); }
+        }
+
+        private static readonly DependencyPropertyKey ZProperty = DependencyProperty.RegisterReadOnly("Z", typeof(double), typeof(Joystick), new UIPropertyMetadata(0.0));
+
         private static void sourceChanged(object o, DependencyPropertyChangedEventArgs e)
         {
             //TODO: change
@@ -177,12 +194,18 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             {
                 (o as Joystick).setup(YProperty, e.NewValue.ToString(), "LeftY");
             }
+            else if (e.Property == ZSourceProperty)
+            {
+                (o as Joystick).setup(ZProperty, e.NewValue.ToString(), "RightX");
+            }
         }
 
         private void setup(DependencyPropertyKey propkey, string srcString, string Axis)
         {
             try
             {
+                if (srcString == "")
+                    srcString = "Hardware1" + Axis;
                 switch (srcString.ToLower()[0])
                 {
                     case 'h'://ardware
@@ -233,6 +256,7 @@ namespace System451.Communication.Dashboard.Net.DriverStation
                 {
                     stream[offset] = (byte)((X * 127.5));
                     stream[offset + 1] = (byte)((Y * 127.5));
+                    stream[offset + 2] = (byte)((Z * 127.5));
                 }
             }
             catch { }

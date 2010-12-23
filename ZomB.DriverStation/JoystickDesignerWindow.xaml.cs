@@ -30,6 +30,7 @@ namespace System451.Communication.Dashboard.Net.DriverStation
         {
             joy.XSource = XBox.GetConfigString();
             joy.YSource = YBox.GetConfigString();
+            joy.ZSource = ZBox.GetConfigString();
             //if (xsourcebox.SelectedItem.ToString().Contains("Virtual"))
             //    joy.XSource = xsourcebox.SelectedItem.ToString().Replace(" ", "") + "@" + xdetailbox.SelectedItem.ToString();
             //else
