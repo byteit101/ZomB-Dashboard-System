@@ -54,7 +54,9 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             this.Background = Brushes.LightGray;
             Enabled = false;
             Joystick1 = new Joystick();
-            Joystick1.SetFindName(new Func<string, object>((name) => FindName(name)));
+            Joystick2 = new Joystick();
+            Joystick3 = new Joystick();
+            Joystick4 = new Joystick();
         }
 
         public override void OnApplyTemplate()
@@ -174,7 +176,12 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             //Joystick data
             try
             {
-                Dispatcher.Invoke(new VoidFunction(() => Joystick1.SaveDataTo(r, 8)), null);
+                Dispatcher.Invoke(new VoidFunction(() => {
+                    Joystick1.SaveDataTo(r, 8);
+                    Joystick2.SaveDataTo(r, 16);
+                    Joystick3.SaveDataTo(r, 24);
+                    Joystick4.SaveDataTo(r, 32);
+                }), null);
             }
             catch { }
             
@@ -206,6 +213,11 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             running = false;
         }
 
+        static void joychanged(object o, DependencyPropertyChangedEventArgs e)
+        {
+            ((Joystick)(o as DriverStation).GetValue(e.Property)).SetFindName((n) => (o as DriverStation).FindName(n));
+        }
+
         [WPF.Design.ZomBDesignable()]
         public Joystick Joystick1
         {
@@ -215,7 +227,40 @@ namespace System451.Communication.Dashboard.Net.DriverStation
 
         // Using a DependencyProperty as the backing store for Joystick1.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty Joystick1Property =
-            DependencyProperty.Register("Joystick1", typeof(Joystick), typeof(DriverStation), new UIPropertyMetadata(null));
+            DependencyProperty.Register("Joystick1", typeof(Joystick), typeof(DriverStation), new UIPropertyMetadata(null, joychanged));
+
+        [WPF.Design.ZomBDesignable()]
+        public Joystick Joystick2
+        {
+            get { return (Joystick)GetValue(Joystick2Property); }
+            set { SetValue(Joystick2Property, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Joystick1.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty Joystick2Property =
+            DependencyProperty.Register("Joystick2", typeof(Joystick), typeof(DriverStation), new UIPropertyMetadata(null, joychanged));
+
+        [WPF.Design.ZomBDesignable()]
+        public Joystick Joystick3
+        {
+            get { return (Joystick)GetValue(Joystick3Property); }
+            set { SetValue(Joystick3Property, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Joystick1.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty Joystick3Property =
+            DependencyProperty.Register("Joystick3", typeof(Joystick), typeof(DriverStation), new UIPropertyMetadata(null, joychanged));
+
+        [WPF.Design.ZomBDesignable()]
+        public Joystick Joystick4
+        {
+            get { return (Joystick)GetValue(Joystick4Property); }
+            set { SetValue(Joystick4Property, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Joystick1.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty Joystick4Property =
+            DependencyProperty.Register("Joystick4", typeof(Joystick), typeof(DriverStation), new UIPropertyMetadata(null, joychanged));
 
         #region IZomBControl Members
 

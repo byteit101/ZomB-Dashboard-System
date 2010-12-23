@@ -34,7 +34,7 @@ namespace System451.Communication.Dashboard.Net.DriverStation
     {
         static GamepadState[] Pads = new[] { new GamepadState(0), new GamepadState(1), new GamepadState(2), new GamepadState(3) };
         Collection<HWconfig> hw = new Collection<HWconfig>();
-       // Collection<SWconfig> sw = new Collection<SWconfig>();
+        Collection<SWconfig> sw = new Collection<SWconfig>();
         static Timer stmr = new Timer(20);
         Timer tmr = new Timer(20);
         Func<string, object> findfunc;
@@ -51,39 +51,44 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             }
         }
 
-        //public class SWconfig
-        //{
-        //    public string SourceProperty { get; set; }
-        //    public DependencyPropertyKey dpKey { get; set; }
-        //    public string src { get; set; }
-        //    public Joystick me { get; set; }
-        //    public Func<string, object> seter { get; set; }
-        //    public void Update()
-        //    {
-        //        try
-        //        {
-        //            var o = seter(src);
-
-        //            me.SetValue(dpKey, o.GetType().GetProperty(SourceProperty).GetValue(o, null));
-        //        }
-        //        catch { }
-        //    }
-        //}
+        public class SWconfig
+        {
+            public string SourceProperty { get; set; }
+            private PropertyInfo SoProperty { get; set; }
+            public DependencyPropertyKey dpKey { get; set; }
+            public string src { get; set; }
+            public Joystick me { get; set; }
+            public Func<string, object> seter { get; set; }
+            private object obj { get; set; }
+            public void Update()
+            {
+                if (seter != null)
+                {
+                    obj = seter(src);
+                    SoProperty = obj.GetType().GetProperty(SourceProperty);
+                    seter = null;
+                }
+                if (seter == null && obj != null && SoProperty != null)
+                    me.SetValue(dpKey, SoProperty.GetValue(obj, null));
+            }
+        }
 
         static Joystick()
         {
             var cdisp = System.Windows.Threading.Dispatcher.CurrentDispatcher;
-            stmr.AutoReset = true;
-            stmr.Elapsed += delegate { cdisp.Invoke(new VoidFunction(updateJoys), null); };
-            stmr.Start();
+            //stmr.AutoReset = true;
+            //stmr.Elapsed += delegate { cdisp.Invoke(new VoidFunction(updateJoys), null); };
+            //if (ZDesigner.IsRunMode)
+            //stmr.Start();
         }
 
         public Joystick()
         {
             var cdisp = System.Windows.Threading.Dispatcher.CurrentDispatcher;
-            tmr.AutoReset = true;
-            tmr.Elapsed += delegate { cdisp.Invoke(new VoidFunction(updateJoy), null); };
-            tmr.Start();
+            //tmr.AutoReset = false;
+            //tmr.Elapsed += delegate { cdisp.Invoke(new VoidFunction(updateJoy), null); };
+            //if (ZDesigner.IsRunMode)
+            //tmr.Start();
         }
 
         internal void SetFindName(Func<string, object> find)
@@ -91,10 +96,10 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             try
             {
                 findfunc = find;
-                //foreach (var config in sw)
-                //{
-                //    config.seter = find;
-                //}
+                foreach (var config in sw)
+                {
+                    config.seter = find;
+                }
             }
             catch { }
         }
@@ -119,10 +124,10 @@ namespace System451.Communication.Dashboard.Net.DriverStation
                 {
                     item.Update();
                 }
-                //foreach (var config in sw)
-                //{
-                //    config.Update();
-                //}
+                foreach (var config in sw)
+                {
+                    config.Update();
+                }
             }
             catch { }
         }
@@ -207,7 +212,10 @@ namespace System451.Communication.Dashboard.Net.DriverStation
 
         private void SoftwareConfig(DependencyPropertyKey propkey, string name, string property)
         {
-           // sw.Add(new SWconfig { me = this, dpKey = propkey, src=name, SourceProperty=property });//o.GetType().GetProperty(property) });
+            if (ZDesigner.IsRunMode)
+            {
+                sw.Add(new SWconfig { me = this, dpKey = propkey, src = name, SourceProperty = property, seter=findfunc });
+            }
         }
 
         private void HardwareConfig(DependencyPropertyKey propkey, int port, string axis)
@@ -219,6 +227,8 @@ namespace System451.Communication.Dashboard.Net.DriverStation
         {
             try
             {
+                updateJoys();
+                updateJoy();
                 unchecked
                 {
                     stream[offset] = (byte)((X * 127.5));

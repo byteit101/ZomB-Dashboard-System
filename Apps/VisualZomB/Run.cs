@@ -41,6 +41,9 @@ namespace System451.Communication.Dashboard.ViZ
 
         public void Run(string xaml)
         {
+            System451.Communication.Dashboard.ViZ.App app = new System451.Communication.Dashboard.ViZ.App();
+            App.LoadPlugins();
+            App.LoadAssembliesGeneric();
             {
                 Run r = new Run(xaml);
                 try

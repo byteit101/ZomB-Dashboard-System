@@ -74,7 +74,7 @@ namespace System451.Communication.Dashboard.ViZ
                 new Designer().Show();
         }
 
-        private void LoadPlugins()
+        internal static void LoadPlugins()
         {
             if (Directory.Exists("plugins"))
             {
@@ -90,8 +90,12 @@ namespace System451.Communication.Dashboard.ViZ
             }
         }
 
-        private void LoadAssembliesGeneric()
+        internal static void LoadAssembliesGeneric()
         {
+            if (App.Current == null)
+            {
+                //loading pack:// uri syntax, he he he!
+            }
             foreach (var item in AppDomain.CurrentDomain.GetAssemblies())
             {
                 try

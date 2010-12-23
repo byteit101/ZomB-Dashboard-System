@@ -26,19 +26,34 @@ namespace System451.Communication.Dashboard.ViZ
         public static bool BuildZomBString(string zaml, string path)
         {
             File.Copy(Assembly.Load("ZomB").Location, Path.GetDirectoryName(path) + "\\ZomB.dll", true);
+            if (Directory.Exists("plugins"))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(path)+"\\plugins");
+                foreach (var item in Directory.GetFiles("plugins"))
+                {
+                    File.Copy(item, Path.GetDirectoryName(path) + "\\plugins\\"+Path.GetFileName(item), true);
+                }
+            }
             if (!Directory.Exists(Path.GetDirectoryName(path)))
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
             var cs = CodeDomProvider.CreateProvider("CSharp");
             CompilerParameters pam = new CompilerParameters();
             pam.ReferencedAssemblies.Add("System.dll");
             pam.ReferencedAssemblies.Add(Assembly.Load("PresentationCore, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35").Location);
+            pam.ReferencedAssemblies.Add(Assembly.Load("System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089").Location);
             pam.ReferencedAssemblies.Add(Assembly.Load("PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35").Location);
             pam.ReferencedAssemblies.Add(Assembly.Load("WindowsBase, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35").Location);
             pam.ReferencedAssemblies.Add(Path.GetDirectoryName(path) + "\\ZomB.dll");
             pam.OutputAssembly = path;
             pam.GenerateExecutable = true;
             pam.CompilerOptions = "/t:winexe";//hide console
-            string src = @"namespace System451.g
+            string src = @"using System;
+using System.IO;
+using System.Reflection;
+using System.Windows;
+using System451.Communication.Dashboard.Utils;
+
+namespace System451.g
 {
     class ZApp : System451.Communication.Dashboard.WPF.Controls.DashboardDataHubWindow
     {
@@ -49,8 +64,47 @@ namespace System451.Communication.Dashboard.ViZ
         [System.STAThread]
         static void Main()
         {
-            System.AppDomain.CurrentDomain.AssemblyResolve += System451.Communication.Dashboard.Utils.AutoExtractor.AssemblyResolve;
-            new System.Windows.Application().Run(new ZApp());
+            System451.g.App app = new System451.g.App();
+            app.Run(new ZApp());
+        }
+    }
+    public class App : Application
+    {
+        public App()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AutoExtractor.AssemblyResolve);
+            LoadPlugins();
+            LoadAssembliesGeneric();
+        }
+
+        internal static void LoadPlugins()
+        {
+            if (Directory.Exists(""plugins""))
+            {
+                string[] plugins = Directory.GetFiles(""plugins"", ""*.dll"");
+                foreach (string item in plugins)
+                {
+                    try
+                    {
+                        Assembly.LoadFrom(item);
+                    }
+                    catch { }
+                }
+            }
+        }
+
+        internal static void LoadAssembliesGeneric()
+        {
+            foreach (Assembly item in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                try
+                {
+                    ResourceDictionary MyResourceDictionary = new ResourceDictionary();
+                    MyResourceDictionary.Source = new Uri(""pack://application:,,,/"" + item.FullName + "";component/Themes/Generic.xaml"");
+                    App.Current.Resources.MergedDictionaries.Add(MyResourceDictionary);
+                }
+                catch {}
+            }
         }
     }
 }";

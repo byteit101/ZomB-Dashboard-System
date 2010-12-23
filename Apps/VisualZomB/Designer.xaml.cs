@@ -966,7 +966,7 @@ namespace System451.Communication.Dashboard.ViZ
                 catch { }
                 try
                 {
-                    AppDomain.Unload(ad);
+                    //AppDomain.Unload(ad);
                 }
                 catch { }
             }

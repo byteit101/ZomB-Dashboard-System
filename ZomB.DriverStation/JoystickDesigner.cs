@@ -30,10 +30,6 @@ namespace System451.Communication.Dashboard.Net.DriverStation
         public override void Initialize(object obj, System.Reflection.PropertyInfo property)
         {
             base.Initialize(obj, property);
-            //TODO: EVIL HACK!
-            var a = (from asm in AppDomain.CurrentDomain.GetAssemblies() where asm.FullName.Contains("ViZ") select asm).First().GetType("System451.Communication.Dashboard.ViZ.Designer").GetMethod("GetByName");
-            
-            GetVaueAsType<Joystick>().SetFindName((name)=>a.Invoke(null, new[] {name}));
         }
         public override FrameworkElement GetProperyField()
         {
