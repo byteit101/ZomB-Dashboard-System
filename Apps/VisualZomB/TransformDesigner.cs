@@ -34,7 +34,9 @@ namespace System451.Communication.Dashboard.ViZ
             b.Content = " ... ";
             b.Click += new RoutedEventHandler(b_Click);
             stat = new Label();
-            stat.Content = (SurfaceControl.GetSurfaceControlFromControl(Object)).RenderTransform.GetType().Name;
+            var name = (SurfaceControl.GetSurfaceControlFromControl(Object)).RenderTransform.GetType().Name;
+            var it = (SurfaceControl.GetSurfaceControlFromControl(Object)).RenderTransform.ToString();
+            stat.Content = (it != "Identity") ? name.Substring(0, name.IndexOf("Transform")) : it;
             var s = new StackPanel();
             s.FlowDirection = FlowDirection.RightToLeft;
             s.Orientation = Orientation.Horizontal;
@@ -47,7 +49,9 @@ namespace System451.Communication.Dashboard.ViZ
         {
             var win = new TransformDesignerWindow(Object as UIElement);
             win.ShowDialog();
-            stat.Content = (SurfaceControl.GetSurfaceControlFromControl(Object)).RenderTransform.GetType().Name;
+            var name = (SurfaceControl.GetSurfaceControlFromControl(Object)).RenderTransform.GetType().Name;
+            var it = (SurfaceControl.GetSurfaceControlFromControl(Object)).RenderTransform.ToString();
+            stat.Content = (it != "Identity") ? name.Substring(0, name.IndexOf("Transform")) : it;
         }
 
         public override bool IsExpanded()

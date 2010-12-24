@@ -311,6 +311,7 @@ namespace System451.Communication.Dashboard.ViZ
                         (itm[1] as TextBox).TextChanged += delegate(object sender, TextChangedEventArgs e) { Value = (sender as TextBox).Text; };
                     }
                 }
+                itm[1].MaxWidth = 110;
                 itm[0].Tag = itm[1].Tag = this;
                 itm[0].ToolTip = itm[1].ToolTip = Description;
                 return itm;
