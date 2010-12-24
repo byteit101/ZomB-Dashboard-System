@@ -262,6 +262,9 @@
     <Compile Include="WPF\Design\ZControl.cs" />
     <Compile Include="WPF\Design\ZDesigner.cs" />
     <Compile Include="WPF\Design\ZomBDesignableAttribute.cs" />
+    <Compile Include="WPF\ProgressDialog.xaml.cs">
+      <DependentUpon>ProgressDialog.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\DirectionMeter.resx">
@@ -508,6 +511,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\ProgressDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

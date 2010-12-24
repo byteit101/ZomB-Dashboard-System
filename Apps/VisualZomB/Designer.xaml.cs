@@ -31,6 +31,7 @@ using System.Windows.Media.Animation;
 using System451.Communication.Dashboard.Utils;
 using System451.Communication.Dashboard.ViZ.Properties;
 using System451.Communication.Dashboard.WPF.Design;
+using System.Threading;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -952,25 +953,56 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void RunApp()
         {
+            var pw = new WPF.ProgressDialog();
+
+            pw.Status = "Initializing...";
+            pw.Show();
+
+            Dispatcher.Invoke(new VoidFunction(() => pw.Status = "Generating Zaml..."));
             string zaml = Export();
+
+            System.Threading.ThreadPool.QueueUserWorkItem(delegate(object o){
+
+            Dispatcher.Invoke(new VoidFunction(() => pw.Status = "Initializing process..."));
             var ad = AppDomain.CreateDomain("ZomB Running Domain");
             ad.AssemblyResolve += AutoExtractor.AssemblyResolve;
 
             {
                 try
                 {
+                    Dispatcher.Invoke(new VoidFunction(() => pw.Status = "Loading assemblies..."));
                     var r = ad.CreateInstanceOf<AppRunner>();
-                    r.Run(zaml);
-                    r = null;
+                    Dispatcher.Invoke(new VoidFunction(() => pw.Status = "Building controls and running..."));
+                    this.StaRun(zaml, r, pw);
                 }
                 catch { }
                 try
                 {
-                    //AppDomain.Unload(ad);
+                    AppDomain.Unload(ad);
                 }
                 catch { }
             }
             GC.Collect();
+            try
+            {
+                pw.Close();
+            }
+            catch { }
+                });
+        }
+
+        private void StaRun(string zaml, AppRunner r, WPF.ProgressDialog pw)
+        {
+            Thread thr = new Thread(delegate()
+            {
+                r.Run(zaml);
+                Dispatcher.Invoke(new VoidFunction(() => pw.Close()));
+                r.Start();
+                r = null;
+            });
+            thr.SetApartmentState(ApartmentState.STA);
+            thr.Start();
+            thr.Join();
         }
 
         public string Export()

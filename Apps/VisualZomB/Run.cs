@@ -20,6 +20,7 @@ using System.Text;
 using System.Windows.Markup;
 using System451.Communication.Dashboard.WPF.Controls;
 using System;
+using System.Threading;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -34,6 +35,7 @@ namespace System451.Communication.Dashboard.ViZ
 
     public class AppRunner : MarshalByRefObject
     {
+        Run r;
         public AppRunner()
         {
 
@@ -44,8 +46,11 @@ namespace System451.Communication.Dashboard.ViZ
             System451.Communication.Dashboard.ViZ.App app = new System451.Communication.Dashboard.ViZ.App();
             App.LoadPlugins();
             App.LoadAssembliesGeneric();
+                r = new Run(xaml);
+        }
+        public void Start()
+        {
             {
-                Run r = new Run(xaml);
                 try
                 {
                     r.ShowDialog();
@@ -54,12 +59,12 @@ namespace System451.Communication.Dashboard.ViZ
                 try
                 {
                     r.DashboardDataHub.Stop();
+                    r.StopAll();
                 }
                 catch { }
                 r = null;
             }
             GC.Collect();
         }
-
     }
 }

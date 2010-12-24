@@ -316,6 +316,43 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 catch { /*No children or not a DepObj*/ }
             }
         }
+
+        public void StopAll()
+        {
+            try
+            {
+                StopControls(this);
+            }
+            catch { }
+        }
+
+        private void StopControls(DependencyObject controlCollection)
+        {
+            foreach (var item in LogicalTreeHelper.GetChildren(controlCollection))
+            {
+                //If panel or has other controls, find those
+                try
+                {
+                    foreach (var sub in LogicalTreeHelper.GetChildren((DependencyObject)item))
+                    {
+                        StopControls((DependencyObject)item);
+                        break;
+                    }
+                }
+                catch { /*No children or not a DepObj*/ }
+
+                try
+                {
+                    (item as IDisposable).Dispose();
+                }
+                catch { }
+                try
+                {
+                    (item).GetType().GetMethod("Close").Invoke(item, null);
+                }
+                catch { }
+            }
+        }
     }
 
     public interface IZomBDashboardDataHubConsumer

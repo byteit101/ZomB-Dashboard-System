@@ -23,6 +23,7 @@ using System.Timers;
 using System451.Communication.Dashboard.Utils;
 using System;
 using System.Net;
+using System.Threading;
 
 namespace System451.Communication.Dashboard.Net.DriverStation
 {
@@ -41,7 +42,7 @@ namespace System451.Communication.Dashboard.Net.DriverStation
         DashboardDataHub ddh;
         UdpClient uc;
         bool running;
-        Timer tmr;
+        System.Timers.Timer tmr;
         short loops;
         public const int MaxConnectionTimeout = 10;
         int connected = MaxConnectionTimeout + 1;
@@ -57,6 +58,22 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             Joystick2 = new Joystick();
             Joystick3 = new Joystick();
             Joystick4 = new Joystick();
+        }
+
+        ~DriverStation()
+        {
+            try
+            {
+                Disable();
+                Stop();
+            }
+            catch { }
+            try
+            {
+                uc.Close();
+                uc = null;
+            }
+            catch { }
         }
 
         public override void OnApplyTemplate()
@@ -96,16 +113,20 @@ namespace System451.Communication.Dashboard.Net.DriverStation
 
         public void Disable()
         {
-            PART_endis.Background = Brushes.Green;
-            PART_endis.Content = "Enable";
             Enabled = false;
+            try
+            {
+                PART_endis.Background = Brushes.Green;
+                PART_endis.Content = "Enable";
+            }
+            catch { }
         }
 
         private void Start()
         {
             running = true;
             uc = new UdpClient(1150, AddressFamily.InterNetwork);
-            tmr = new Timer(20);
+            tmr = new System.Timers.Timer(20);
             tmr.AutoReset = true;
             tmr.Elapsed += new ElapsedEventHandler(hz);
             tmr.Start();
@@ -135,16 +156,30 @@ namespace System451.Communication.Dashboard.Net.DriverStation
 
         void hz(object sender, ElapsedEventArgs e)
         {
-            int start = ((int)(Team/100.0))*100;
-
-            uc.Send(GetStatus(), 1024, "10." + (start / 100) + "." + (Team - start) + ".2", 1110);
-
-            if (connected > MaxConnectionTimeout)
+            try
             {
-                stat("Not Connected");
+                int start = ((int)(Team / 100.0)) * 100;
+
+                uc.Send(GetStatus(), 1024, "10." + (start / 100) + "." + (Team - start) + ".2", 1110);
+
+                if (connected > MaxConnectionTimeout)
+                {
+                    stat("Not Connected");
+                }
+                else
+                    connected++;
             }
-            else
-                connected++;
+            catch
+            {
+                if (tmr!=null)
+                tmr.Stop();
+                try
+                {
+                    uc.Close();
+                }
+                catch { }
+                //throw;
+            }
         }
 
         private byte[] GetStatus()
@@ -183,7 +218,8 @@ namespace System451.Communication.Dashboard.Net.DriverStation
                     Joystick4.SaveDataTo(r, 32);
                 }), null);
             }
-            catch { }
+            catch (ThreadAbortException e) { throw; }
+                catch{ }
             
 
             //version
@@ -207,6 +243,7 @@ namespace System451.Communication.Dashboard.Net.DriverStation
 
         private void Stop()
         {
+            if (tmr!=null)
             tmr.Stop();
             Disable();
             hz(this, null);
