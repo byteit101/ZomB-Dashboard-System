@@ -106,6 +106,34 @@ namespace System451.Communication.Dashboard.ViZ
                     sb.Append("0");
                 sb.Append("</TranslateTransform.Y></TranslateTransform>");
             }
+            else if (ict is SkewTransform)
+            {
+                sb.Append("<SkewTransform><SkewTransform.AngleX>");
+                var be = BindingOperations.GetBindingExpression(ict, SkewTransform.AngleXProperty);//TODO: hope Y is the same
+                if (be != null)
+                {
+                    var bpd = new BoundPropertyDesigner();
+                    bpd.Initialize(ict, ict.GetType().GetProperty("AngleX"));
+                    sb.Append(bpd.GetValue());
+                    sb.Append("</SkewTransform.AngleX><SkewTransform.AngleY>");
+                }
+                else
+                    sb.Append("0</SkewTransform.AngleX><SkewTransform.AngleY>");
+                be = BindingOperations.GetBindingExpression(ict, SkewTransform.AngleYProperty);//TODO: hope Y is the same
+                if (be != null)
+                {
+                    var bpd = new BoundPropertyDesigner();
+                    bpd.Initialize(ict, ict.GetType().GetProperty("AngleY"));
+                    sb.Append(bpd.GetValue());
+                }
+                else
+                    sb.Append("0");
+                sb.Append("</SkewTransform.AngleY><SkewTransform.CenterX>");
+                sb.Append((ict as SkewTransform).CenterX);
+                sb.Append("</SkewTransform.CenterX><SkewTransform.CenterY>");
+                sb.Append((ict as SkewTransform).CenterY);
+                sb.Append("</SkewTransform.CenterY></SkewTransform>");
+            }
         }
         public override bool IsDefaultValue()
         {

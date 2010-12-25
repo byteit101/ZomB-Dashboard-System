@@ -45,6 +45,13 @@ namespace System451.Communication.Dashboard.ViZ
                     MainTabs.IsEnabled = true;
                     TranslateTab.IsSelected = true;
                 }
+                else if (Object.RenderTransform is SkewTransform)
+                {
+                    MainTabs.IsEnabled = true;
+                    SkewTab.IsSelected = true;
+                    Xorigin.Text = (Object.RenderTransform as SkewTransform).CenterX.ToString();
+                    Yorigin.Text = (Object.RenderTransform as SkewTransform).CenterY.ToString();
+                }
             }
         }
 
@@ -92,6 +99,8 @@ namespace System451.Communication.Dashboard.ViZ
                 Object.RenderTransform = new RotateTransform(0);
             else if (e.AddedItems.Contains(TranslateTab) && !(Object.RenderTransform is TranslateTransform))
                 Object.RenderTransform = new TranslateTransform(0, 0);
+            else if (e.AddedItems.Contains(SkewTab) && !(Object.RenderTransform is SkewTransform))
+                Object.RenderTransform = new SkewTransform(0, 0);
         }
 
         //set x
@@ -105,6 +114,44 @@ namespace System451.Communication.Dashboard.ViZ
         {
             new BindingDesigner(Object.RenderTransform, Object.RenderTransform.GetType().GetProperty("Y")
                 , Designer.getDesigner().ZDash.Children).ShowDialog();
+        }
+
+        private void SetSkewX_Click(object sender, RoutedEventArgs e)
+        {
+            new BindingDesigner(Object.RenderTransform, Object.RenderTransform.GetType().GetProperty("AngleX")
+                , Designer.getDesigner().ZDash.Children).ShowDialog();
+        }
+
+        private void SetSkewY_Click(object sender, RoutedEventArgs e)
+        {
+            new BindingDesigner(Object.RenderTransform, Object.RenderTransform.GetType().GetProperty("AngleY")
+                , Designer.getDesigner().ZDash.Children).ShowDialog();
+        }
+
+        private void Xorigin_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                double i = double.Parse(Xorigin.Text);
+                (Object.RenderTransform as SkewTransform).CenterX = i;
+            }
+            catch
+            {
+                Console.Beep();
+            }
+        }
+
+        private void Yorigin_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                double i = double.Parse(Yorigin.Text);
+                (Object.RenderTransform as SkewTransform).CenterY = i;
+            }
+            catch
+            {
+                Console.Beep();
+            }
         }
     }
 }
