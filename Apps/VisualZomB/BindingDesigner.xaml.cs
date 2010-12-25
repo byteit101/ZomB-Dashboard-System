@@ -218,7 +218,7 @@ namespace System451.Communication.Dashboard.ViZ
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             var c = (value as SurfaceControl).Control;
-            return ((c is IZomBControl) ? (c as IZomBControl).ControlName : (c as FrameworkElement).Name) + " - {" + (value as SurfaceControl).Control.GetType().Name + "}";
+            return ((c is IZomBControl && !string.IsNullOrEmpty((c as IZomBControl).ControlName)) ? (c as IZomBControl).ControlName : (c as FrameworkElement).Name) + " - {" + (value as SurfaceControl).Control.GetType().Name + "}";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
