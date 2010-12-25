@@ -115,6 +115,7 @@ namespace System451.Communication.Dashboard.ViZ
             lb.Style = (Style)lb.FindResource("PropCatStyle");
             designerProps.Add(lb);
             designerProps.Add(new Label());
+            (designerProps[1] as Label).Style=(Style)lb.FindResource("PropCatStyle");
             designerProps.Add(new Label());
             (designerProps[2] as Label).Content = "Invalid Packets:";
             designerProps.Add(new ComboBox());

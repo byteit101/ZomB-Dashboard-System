@@ -271,7 +271,9 @@ namespace System451.Communication.Dashboard.ViZ
                 lb.Content = category.Key;
                 lb.Style = (Style)lb.FindResource("PropCatStyle");
                 prophld.Children.Add(lb);
-                prophld.Children.Add(new Label());//balance it
+                lb = new Label();
+                lb.Style = (Style)lb.FindResource("PropCatStyle");
+                prophld.Children.Add(lb);//balance it
                 category.Value.Sort();
                 foreach (var itm in category.Value)
                 {
@@ -311,6 +313,7 @@ namespace System451.Communication.Dashboard.ViZ
             itm[0] = (new TextBlock());
             (itm[0] as TextBlock).Text = Name;
             (itm[0] as TextBlock).HorizontalAlignment = HorizontalAlignment.Right;
+            (itm[0] as TextBlock).VerticalAlignment = VerticalAlignment.Center;
             itm[1] = (new TextBox());
             Binding bind = new Binding();
             bind.Mode = BindingMode.TwoWay;

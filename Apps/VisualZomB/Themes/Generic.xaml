@@ -4,6 +4,7 @@
     xmlns:local="clr-namespace:System451.Communication.Dashboard.ViZ">
     <Style x:Key="PropCatStyle" TargetType="{x:Type Label}">
         <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Background" Value="LightGray" />
     </Style>
     <Style TargetType="{x:Type local:SurfaceControl}">
         <Setter Property="Template">

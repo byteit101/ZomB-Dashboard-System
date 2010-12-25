@@ -21,12 +21,14 @@ using System.Linq;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Media;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
     public class FlowPropertyGrid : Panel
     {
         double recmaxr, recmaxl, recmaxh;
+        FPGGrid grid = new FPGGrid();
         
         public Orientation Orientation
         {
@@ -144,7 +146,50 @@ namespace System451.Communication.Dashboard.WPF.Controls
                     y += finalHeight;
                 }
             }
+            grid.SetStats(finalWidthl, finalWidthr,  CollumnPadding, finalHeight, numcols, numrows);
             return new Size(numcols * (finalWidthr + finalWidthl), numrows * finalHeight);
+        }
+
+        protected override System.Windows.Media.Visual GetVisualChild(int index)
+        {
+            if (index == 0)
+                return grid;
+            return base.GetVisualChild(index-1);
+        }
+        protected override int VisualChildrenCount
+        {
+            get
+            {
+                return base.VisualChildrenCount+1;
+            }
+        }
+
+        class FPGGrid : DrawingVisual
+        {
+            internal void SetStats(double finalWidthl, double finalWidthr, double CollumnPadding, double finalHeight, double numcols, double numrows)
+            {
+                using (DrawingContext dc = this.RenderOpen())
+                {
+                    double colwidth=finalWidthl + finalWidthr;
+                    double width = (colwidth + CollumnPadding) * numcols + 1;
+                    double height = finalHeight * numrows + 1;
+                    Pen pn = new Pen(Brushes.LightGray,1);
+                    //horizontal
+                    for (int i = 0; i <= numrows; i++)
+                    {
+                        double o = i * finalHeight;
+                        dc.DrawLine(pn, new Point(0, o), new Point(width, o));
+                    }
+                    //verticle
+                    for (int i = 0; i <= numcols; i++)
+                    {
+                        double o = i * colwidth + (i * CollumnPadding);
+                        dc.DrawLine(pn, new Point(o+.5, 0), new Point(o+.5, height));
+                        o -= finalWidthr;
+                        dc.DrawLine(pn, new Point(o+.5, 0), new Point(o+.5, height));
+                    }
+                }
+            }
         }
     }
 }
