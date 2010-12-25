@@ -19,6 +19,7 @@ using System;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
+using System451.Communication.Dashboard.WPF.Controls.Designer;
 
 namespace System451.Communication.Dashboard.WPF.Design
 {
@@ -99,6 +100,8 @@ namespace System451.Communication.Dashboard.WPF.Design
                     return typeof(BrushDesigner);
                 if (type == typeof(Color))
                     return typeof(ColorDesigner);
+                if (type == typeof(ImageSource))
+                    return typeof(ImageSourceDesigner);
                 foreach (var at in type.GetCustomAttributes(typeof(WPF.Design.DesignerAttribute), true))
                     return (at as WPF.Design.DesignerAttribute).DesignerType;
                 return null;
