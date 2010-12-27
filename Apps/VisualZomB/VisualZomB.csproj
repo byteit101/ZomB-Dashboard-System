@@ -175,6 +175,14 @@
   <ItemGroup>
     <Resource Include="ZomBBinding.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Dashboardexe.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Zaml.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir plugins

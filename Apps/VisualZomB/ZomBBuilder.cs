@@ -46,7 +46,7 @@ namespace System451.Communication.Dashboard.ViZ
             pam.ReferencedAssemblies.Add(Path.GetDirectoryName(path) + "\\ZomB.dll");
             pam.OutputAssembly = path;
             pam.GenerateExecutable = true;
-            pam.CompilerOptions = "/t:winexe";//hide console
+            pam.CompilerOptions = "/t:winexe /win32icon:Dashboardexe.ico";//hide console, set icon
             string src = @"using System;
 using System.IO;
 using System.Reflection;
