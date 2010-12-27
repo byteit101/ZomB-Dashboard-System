@@ -18,6 +18,7 @@
 using System.CodeDom.Compiler;
 using System.IO;
 using System.Reflection;
+using System;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -46,7 +47,8 @@ namespace System451.Communication.Dashboard.ViZ
             pam.ReferencedAssemblies.Add(Path.GetDirectoryName(path) + "\\ZomB.dll");
             pam.OutputAssembly = path;
             pam.GenerateExecutable = true;
-            pam.CompilerOptions = "/t:winexe /win32icon:Dashboardexe.ico";//hide console, set icon
+            pam.CompilerOptions = "/t:winexe \"/win32icon:"+
+                Path.GetDirectoryName(Assembly.GetEntryAssembly().CodeBase).Replace("file:\\", "")+"\\Dashboardexe.ico\"";//hide console, set icon
             string src = @"using System;
 using System.IO;
 using System.Reflection;
@@ -110,7 +112,24 @@ namespace System451.g
 }";
             var res = cs.CompileAssemblyFromSource(pam, src);
             if (res.Errors.HasErrors)
-                System.Windows.Forms.MessageBox.Show("Generation failed: " + res.Errors.ToString());
+                try
+                {
+                    var str = "ERROR BUILDING!";
+                    foreach (CompilerError item in res.Errors)
+                    {
+                        str+=item.ToString();
+                    }
+                    System.Windows.Forms.MessageBox.Show("Generation failed: " + str);
+                }
+                catch
+                {
+                    //console?
+                    Console.WriteLine("ERROR BUILDING!");
+                    foreach (CompilerError item in res.Errors)
+                    {
+                        Console.WriteLine(item.ToString());
+                    }
+                }
             else
                 return true;
             return false;
