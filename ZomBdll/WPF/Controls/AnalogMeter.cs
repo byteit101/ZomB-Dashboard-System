@@ -32,7 +32,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     [Design.ZomBDesignableProperty("BorderBrush")]
     [Design.ZomBDesignableProperty("BorderThickness")]
     [Design.ZomBDesignableProperty("DoubleValue", DisplayName = "Value")]
-    public class AnalogMeter : ZomBGLControl, IMultiValueConverter
+    public class AnalogMeter : ZomBGLControl, IMultiValueConverter, IZomBDataControl
     {
         static AnalogMeter()
         {
@@ -144,5 +144,76 @@ namespace System451.Communication.Dashboard.WPF.Controls
             Max = 1;
             DoubleValue = 0;
         }
+
+        #region IZomBDataControl Members
+
+        public event ZomBDataControlUpdatedEventHandler DataUpdated;
+
+        bool dce = false;
+        public bool DataControlEnabled
+        {
+            get
+            {
+                return dce;
+            }
+            set
+            {
+                if (dce != value)
+                {
+                    dce = value;
+                    if (dce)
+                    {
+                        this.MouseLeftButtonUp += AlertControl_MouseLeftButtonUp;
+                        this.MouseMove += ValueMeter_MouseMove;
+                        this.MouseLeftButtonDown += ValueMeter_MouseLeftButtonDown;
+                    }
+                    else
+                    {
+                        this.MouseLeftButtonUp -= AlertControl_MouseLeftButtonUp;
+                        this.MouseMove -= ValueMeter_MouseMove;
+                        this.MouseLeftButtonDown -= ValueMeter_MouseLeftButtonDown;
+                    }
+                }
+            }
+        }
+
+        bool draggin = false;
+
+        void ValueMeter_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            draggin = true;
+            this.CaptureMouse();
+        }
+
+        void ValueMeter_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (draggin)
+            {
+                DoubleValue = Math.Max(this.Min, Math.Min(this.Max, PointToAngle(e.GetPosition(this)) / 180 * (this.Max - this.Min) + this.Min));
+                if (DataUpdated != null)
+                    DataUpdated(this, new ZomBDataControlUpdatedEventArgs(ControlName, DoubleValue.ToString()));
+            }
+        }
+        double PointToAngle(Point p)
+        {
+            double r = Math.Atan((p.X - (this.ActualWidth / 2)) / ((this.ActualHeight * .87) - p.Y)) / Math.PI * 180;
+            if (double.IsNaN(r))
+                return 0;
+            if (p.Y > (this.ActualHeight * .87))
+            {
+                if (p.X > (this.ActualWidth / 2))
+                    return 180;
+                return 0;
+            }
+            return r+90;
+        }
+
+        void AlertControl_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            draggin = false;
+            ReleaseMouseCapture();
+        }
+
+        #endregion
     }
 }
