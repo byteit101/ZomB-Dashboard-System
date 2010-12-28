@@ -19,19 +19,26 @@ using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
-using System451.Communication.Dashboard.Libs.Xbox360Controller;
 using System451.Communication.Dashboard.Utils;
+using System.Net;
+using System.Windows.Controls;
+using System451.Communication.Dashboard.Net;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
     /// <summary>
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
-    //[Design.ZomBControl("Network Forwarder", Description = "This will forward stuff to a different computer", IconName = "NetForwardIcon")]
+    [Design.ZomBControl("Network Forwarder", Description = "This will forward stuff to a different computer", IconName = "NetForwardIcon")]
     [Design.ZomBDesignableProperty("Background")]
-    public class NetForward : ZomBGLControl
+    [Design.ZomBDesignableProperty("Width", Dynamic = true, Category = "Layout")]
+    [Design.ZomBDesignableProperty("Height", Dynamic = true, Category = "Layout")]
+    [Design.ZomBDesignableProperty("RenderTransform", DisplayName = "Transform")]
+    [Design.ZomBDesignableProperty("RenderTransformOrigin", DisplayName = "Transform Origin", Description = "The location the transform modifies about. In the range 0-1.")]
+    public class NetForward : Control
     {
-        GamepadState pad = new GamepadState(0);
+        TCPProxy tcp = null;
+        UDPProxy udp = null;
         static NetForward()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(NetForward),
@@ -45,5 +52,87 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.Height = 20;
         }
 
+        [Design.ZomBDesignable(), Category("Network")]
+        public NetForwardType Protocol
+        {
+            get { return (NetForwardType)GetValue(ProtocolProperty); }
+            set { SetValue(ProtocolProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Protocol.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ProtocolProperty =
+            DependencyProperty.Register("Protocol", typeof(NetForwardType), typeof(NetForward), new UIPropertyMetadata(NetForwardType.TCP, update));
+
+
+        [Design.ZomBDesignable(), Category("Network")]
+        public int Port
+        {
+            get { return (int)GetValue(PortProperty); }
+            set { SetValue(PortProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Port.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PortProperty =
+            DependencyProperty.Register("Port", typeof(int), typeof(NetForward), new UIPropertyMetadata(update));
+
+
+        [Design.ZomBDesignable(), Category("Network")]
+        public string To
+        {
+            get { return (string)GetValue(ToProperty); }
+            set { SetValue(ToProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for To.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ToProperty =
+            DependencyProperty.Register("To", typeof(string), typeof(NetForward), new UIPropertyMetadata(update), ipvalidate);
+
+        private static bool ipvalidate(object o)
+        {
+            if (o == null)
+                return true;
+            IPAddress iad;
+            return IPAddress.TryParse(o.ToString(), out iad);
+        }
+
+        private static void update(object o, DependencyPropertyChangedEventArgs e)
+        {
+            if (ZDesigner.IsRunMode)
+            {
+                (o as NetForward).Hookup();
+            }
+        }
+
+        private void Hookup()
+        {
+            if (To != null && Port != 0)
+            {
+                if (tcp != null)
+                {
+                    tcp.Stop();
+                    tcp = null;
+                }
+                if (udp != null)
+                {
+                    udp.Stop();
+                    udp = null;
+                }
+                if (Protocol == NetForwardType.TCP)
+                {
+                    tcp = new TCPProxy(new IPEndPoint(IPAddress.Any, Port), new IPEndPoint(IPAddress.Parse(To), Port));
+                    tcp.Start();
+                }
+                else
+                {
+                    udp = new UDPProxy(new IPEndPoint(IPAddress.Any, Port), new IPEndPoint(IPAddress.Parse(To), Port));
+                    udp.Start();
+                }
+            }
+        }
+
+    }
+    public enum NetForwardType
+    {
+        TCP, UDP
     }
 }
