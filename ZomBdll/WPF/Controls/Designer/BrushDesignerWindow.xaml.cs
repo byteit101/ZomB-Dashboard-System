@@ -35,19 +35,23 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
         Brush b;
         enum Mode
         {
-            Solid, LinearGradient
+            Solid, LinearGradient, Image
         };
         Mode cmode = Mode.Solid;
         int gradIndex = 0;
         Action<Brush> setv;
         List<StopMarker> contrls = new List<StopMarker>();
         RotateTransform GGridTrans;
+        ImageSourceDesigner isd;
+        bool imginited = false;
         public BrushDesignerWindow(object obj, PropertyInfo prop)
         {
             InitializeComponent();
             (GradientGrid.Background as DrawingBrush).RelativeTransform = GGridTrans = new RotateTransform();
             GGridTrans.CenterX = 0.5;
             GGridTrans.CenterY = 0.5;
+            isd = new ImageSourceDesigner();
+
             b = prop.GetValue(obj, null) as Brush;
             setv = (x) => prop.SetValue(obj, x, null);
             if (b.IsFrozen)
@@ -62,6 +66,10 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             else if (b is LinearGradientBrush)
             {
                 cmode = Mode.LinearGradient;
+            }
+            else if (b is ImageBrush)
+            {
+                cmode = Mode.Image;
             }
         }
 
@@ -83,6 +91,22 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
                 }
                 Stop_Click(contrls[0], null);
                 tc.SelectedItem = LinGradTab;
+            }
+            else if (cmode == Mode.Image)
+            {
+                tc.SelectedItem = ImageTab;
+                InitImg();
+            }
+        }
+
+        private void InitImg()
+        {
+            if (!imginited)
+            {
+                isd.Initialize(b, b.GetType().GetProperty("ImageSource"));
+                browsePanel.Children.Add(isd.GetProperyField());
+                ImageGrid.Background = b;
+                imginited = true;
             }
         }
 
@@ -118,14 +142,28 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
                 setv(b);
                 cmode = Mode.Solid;
             }
+            else if (b is ImageBrush)
+            {
+                b = new SolidColorBrush(Colors.Black);
+                setv(b);
+                cmode = Mode.Solid;
+            }
         }
 
         private void TabItemlg_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
         {
-            if (b is SolidColorBrush)
+            if (!(b is LinearGradientBrush))
             {
-                b = new LinearGradientBrush((b as SolidColorBrush).Color, (b as SolidColorBrush).Color, 0);
-                setv(b);
+                if (b is SolidColorBrush)
+                {
+                    b = new LinearGradientBrush((b as SolidColorBrush).Color, (b as SolidColorBrush).Color, 0);
+                    setv(b);
+                }
+                else if (b is ImageBrush)
+                {
+                    b = new LinearGradientBrush(Colors.Black, Colors.White, 0);
+                    setv(b);
+                }
                 ((GradientGrid.Background as DrawingBrush).Drawing as GeometryDrawing).Brush = b;
                 GradientGrid.Children.Clear();
                 contrls.Clear();
@@ -137,6 +175,17 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
                     GradientGrid.Children.Add(sm);
                 }
                 cmode = Mode.LinearGradient;
+            }
+        }
+
+        private void TabItemli_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
+        {
+            if (!(b is ImageBrush))
+            {
+                b = new ImageBrush();
+                setv(b);
+                InitImg();
+                cmode = Mode.Image;
             }
         }
 

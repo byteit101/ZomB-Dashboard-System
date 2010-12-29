@@ -86,20 +86,31 @@ namespace System451.Communication.Dashboard.WPF.Design
             {
                 //TODO: add others
                 //must be linear gradient
-                LinearGradientBrush lb = (Property.GetValue(Object, null) as LinearGradientBrush);
-                StringBuilder s = new StringBuilder("<LinearGradientBrush StartPoint=\"0,0\" EndPoint=\"");
-                s.Append(lb.EndPoint.ToString());
-                s.Append("\">");
-                foreach (var item in lb.GradientStops)
+                if (Property.GetValue(Object, null) is ImageBrush)
                 {
-                    s.Append("<GradientStop Offset=\"");
-                    s.Append(item.Offset);
-                    s.Append("\" Color=\"");
-                    s.Append(item.Color.ToString());
+                    ImageBrush lb = (Property.GetValue(Object, null) as ImageBrush);
+                    StringBuilder s = new StringBuilder("<ImageBrush ImageSource=\"");
+                    s.Append(lb.ImageSource.ToString());
                     s.Append("\" />");
+                    return s.ToString();
                 }
-                s.Append("</LinearGradientBrush>");
-                return s.ToString();
+                else
+                {
+                    LinearGradientBrush lb = (Property.GetValue(Object, null) as LinearGradientBrush);
+                    StringBuilder s = new StringBuilder("<LinearGradientBrush StartPoint=\"0,0\" EndPoint=\"");
+                    s.Append(lb.EndPoint.ToString());
+                    s.Append("\">");
+                    foreach (var item in lb.GradientStops)
+                    {
+                        s.Append("<GradientStop Offset=\"");
+                        s.Append(item.Offset);
+                        s.Append("\" Color=\"");
+                        s.Append(item.Color.ToString());
+                        s.Append("\" />");
+                    }
+                    s.Append("</LinearGradientBrush>");
+                    return s.ToString();
+                }
             }
         }
     }

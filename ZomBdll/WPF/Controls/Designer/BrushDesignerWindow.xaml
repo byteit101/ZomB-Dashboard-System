@@ -39,6 +39,14 @@
                     </Canvas>
                 </DockPanel>
             </TabItem>
+            <TabItem Header="Image" Name="ImageTab" RequestBringIntoView="TabItemli_RequestBringIntoView">
+                <DockPanel Margin="10 10 10 0">
+                    <DockPanel DockPanel.Dock="Bottom" Margin="0 3 0 0" Name="browsePanel">
+                        <Label DockPanel.Dock="Left">Location: </Label>
+                    </DockPanel>
+                    <Canvas Name="ImageGrid" />
+                </DockPanel>
+            </TabItem>
         </TabControl>
     </DockPanel>
 </Window>
