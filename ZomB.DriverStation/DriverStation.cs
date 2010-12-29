@@ -24,6 +24,7 @@ using System451.Communication.Dashboard.Utils;
 using System;
 using System.Net;
 using System.Threading;
+using System.ComponentModel;
 
 namespace System451.Communication.Dashboard.Net.DriverStation
 {
@@ -255,7 +256,7 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             ((Joystick)(o as DriverStation).GetValue(e.Property)).SetFindName((n) => (o as DriverStation).FindName(n));
         }
 
-        [WPF.Design.ZomBDesignable()]
+        [WPF.Design.ZomBDesignable(), Category("IO")]
         public Joystick Joystick1
         {
             get { return (Joystick)GetValue(Joystick1Property); }
@@ -266,7 +267,7 @@ namespace System451.Communication.Dashboard.Net.DriverStation
         public static readonly DependencyProperty Joystick1Property =
             DependencyProperty.Register("Joystick1", typeof(Joystick), typeof(DriverStation), new UIPropertyMetadata(null, joychanged));
 
-        [WPF.Design.ZomBDesignable()]
+        [WPF.Design.ZomBDesignable(), Category("IO")]
         public Joystick Joystick2
         {
             get { return (Joystick)GetValue(Joystick2Property); }
@@ -277,7 +278,7 @@ namespace System451.Communication.Dashboard.Net.DriverStation
         public static readonly DependencyProperty Joystick2Property =
             DependencyProperty.Register("Joystick2", typeof(Joystick), typeof(DriverStation), new UIPropertyMetadata(null, joychanged));
 
-        [WPF.Design.ZomBDesignable()]
+        [WPF.Design.ZomBDesignable(), Category("IO")]
         public Joystick Joystick3
         {
             get { return (Joystick)GetValue(Joystick3Property); }
@@ -288,7 +289,7 @@ namespace System451.Communication.Dashboard.Net.DriverStation
         public static readonly DependencyProperty Joystick3Property =
             DependencyProperty.Register("Joystick3", typeof(Joystick), typeof(DriverStation), new UIPropertyMetadata(null, joychanged));
 
-        [WPF.Design.ZomBDesignable()]
+        [WPF.Design.ZomBDesignable(), Category("IO")]
         public Joystick Joystick4
         {
             get { return (Joystick)GetValue(Joystick4Property); }

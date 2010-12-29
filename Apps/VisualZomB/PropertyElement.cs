@@ -256,6 +256,7 @@ namespace System451.Communication.Dashboard.ViZ
                 if (Type == typeof(bool))
                 {
                     itm[1] = (new CheckBox());
+                    (itm[1] as CheckBox).VerticalAlignment = VerticalAlignment.Center;
                     (itm[1] as CheckBox).IsChecked = (bool)Value;
                     (itm[1] as CheckBox).Checked += delegate { Value = true; };
                     (itm[1] as CheckBox).Unchecked += delegate { Value = false; };

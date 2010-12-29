@@ -2,7 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ZomB="clr-namespace:System451.Communication.Dashboard.WPF.Controls;assembly=ZomB"
-    Title="Toolbox" Height="230" Width="1000" ShowInTaskbar="False" WindowStyle="ToolWindow" SnapsToDevicePixels="True" MinWidth="150" MinHeight="150" Icon="pack://application:,,,/ZomB;component/Resources/ZomB.ico">
+    Title="Toolbox" Height="262" Width="1000" ShowInTaskbar="False" WindowStyle="ToolWindow" SnapsToDevicePixels="True" MinWidth="150" MinHeight="150" Icon="pack://application:,,,/ZomB;component/Resources/ZomB.ico">
     <Window.Resources>
         <Style TargetType="{x:Type ListBoxItem}">
             <Style.Triggers>

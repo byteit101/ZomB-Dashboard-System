@@ -48,7 +48,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 pad = new GamepadState(0);
         }
 
-        [Design.ZomBDesignable(DisplayName = "Controller #"), Description("The Gamepad Number")]
+        [Design.ZomBDesignable(DisplayName = "Controller #"), Description("The Gamepad Number"), Category("ZomB")]
         public int GamepadNumber
         {
             get { return (int)GetValue(GamepadNumberProperty); }

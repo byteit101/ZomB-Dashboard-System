@@ -35,6 +35,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     {
         DashboardDataHub localDDH;
 
+        [Category("ZomB")]
         public string StringValue
         {
             get
@@ -65,7 +66,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public static readonly DependencyProperty StringValueProperty =
             DependencyProperty.Register("StringValue", typeof(string), typeof(ZomBGLControl), new UIPropertyMetadata(""));
 
-
+        [Category("ZomB")]
         public int IntValue
         {
             get
@@ -97,7 +98,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             DependencyProperty.Register("IntValue", typeof(int), typeof(ZomBGLControl), new UIPropertyMetadata(0));
 
 
-
+        [Category("ZomB")]
         public double DoubleValue
         {
             get
@@ -128,7 +129,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public static readonly DependencyProperty DoubleValueProperty =
             DependencyProperty.Register("DoubleValue", typeof(double), typeof(ZomBGLControl), new UIPropertyMetadata(0.0));
 
-
+        [Category("ZomB")]
         public bool BoolValue
         {
             get
