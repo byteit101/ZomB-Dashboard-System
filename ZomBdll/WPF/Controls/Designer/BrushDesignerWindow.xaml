@@ -28,7 +28,15 @@
                             <ToggleButton Name="Vertical" Content="Vertical" Margin="6,0,0,0" Checked="Vertical_Checked" />
                             </StackPanel>
                     </StackPanel>
-                    <Canvas Name="GradientGrid" />
+                    <Canvas Name="GradientGrid">
+                        <Canvas.Background>
+                            <DrawingBrush>
+                                <DrawingBrush.Drawing>
+                                    <GeometryDrawing Geometry="M 0,0 0,1 1,1 1,0 z" />
+                                </DrawingBrush.Drawing>
+                            </DrawingBrush>
+                        </Canvas.Background>
+                    </Canvas>
                 </DockPanel>
             </TabItem>
         </TabControl>

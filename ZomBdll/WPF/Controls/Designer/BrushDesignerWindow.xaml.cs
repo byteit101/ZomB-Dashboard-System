@@ -41,9 +41,13 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
         int gradIndex = 0;
         Action<Brush> setv;
         List<StopMarker> contrls = new List<StopMarker>();
+        RotateTransform GGridTrans;
         public BrushDesignerWindow(object obj, PropertyInfo prop)
         {
             InitializeComponent();
+            (GradientGrid.Background as DrawingBrush).RelativeTransform = GGridTrans = new RotateTransform();
+            GGridTrans.CenterX = 0.5;
+            GGridTrans.CenterY = 0.5;
             b = prop.GetValue(obj, null) as Brush;
             setv = (x) => prop.SetValue(obj, x, null);
             if (b.IsFrozen)
@@ -70,7 +74,7 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             }
             else if (cmode == Mode.LinearGradient)
             {
-                GradientGrid.Background = b;
+                ((GradientGrid.Background as DrawingBrush).Drawing as GeometryDrawing).Brush = b;
                 foreach (var item in (b as LinearGradientBrush).GradientStops)
                 {
                     var sm = GetNewStopMarker(item.Color,item.Offset);
@@ -122,7 +126,7 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             {
                 b = new LinearGradientBrush((b as SolidColorBrush).Color, (b as SolidColorBrush).Color, 0);
                 setv(b);
-                GradientGrid.Background = b;
+                ((GradientGrid.Background as DrawingBrush).Drawing as GeometryDrawing).Brush = b;
                 GradientGrid.Children.Clear();
                 contrls.Clear();
                 (b as LinearGradientBrush).GradientStops.Changed += new EventHandler(GradientStops_Changed);
@@ -213,12 +217,14 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
         {
             (b as LinearGradientBrush).EndPoint = new Point(0, 1);
             Horizontal.IsChecked = false;
+            GGridTrans.Angle = -90;
         }
 
         private void Horizontal_Checked(object sender, RoutedEventArgs e)
         {
             (b as LinearGradientBrush).EndPoint = new Point(1, 0);
             Vertical.IsChecked = false;
+            GGridTrans.Angle = 0;
         }
     }
 
