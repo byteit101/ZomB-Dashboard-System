@@ -86,8 +86,13 @@ namespace System451.Communication.Dashboard
                         Extract(Files.SlimDX);
                     else if (dll.ToLower().Contains("vlc"))
                         Extract(Files.VLC);
-                    if (!File.Exists(dll))
-                        return null;
+                    try
+                    {
+                        var asm = Assembly.Load(dll);
+                        return asm;
+                    }
+                    catch { }
+                    return null;
                 }
                 return Assembly.LoadFrom(dll);
             }

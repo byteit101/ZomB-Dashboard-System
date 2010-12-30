@@ -17,6 +17,7 @@
  */
 using System;
 using System.Windows.Forms;
+using System451.Communication.Dashboard.Utils;
 
 namespace DefaultDash
 {
@@ -30,6 +31,7 @@ namespace DefaultDash
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AutoExtractor.AssemblyResolve);
             Application.Run(new Form1());
         }
     }

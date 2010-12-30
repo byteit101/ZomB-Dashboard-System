@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System451.Communication.Dashboard.Utils;
 
 namespace ZomBeye
 {
@@ -31,6 +32,7 @@ namespace ZomBeye
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AutoExtractor.AssemblyResolve);
             Application.Run(new Form1());
         }
     }
