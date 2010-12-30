@@ -41,7 +41,7 @@ namespace System451.Communication.Dashboard.Net.DriverStation
 
         void btn_Click(object sender, RoutedEventArgs e)
         {
-            new JoystickDesignerWindow { joy = GetVaueAsType<Joystick>() }.ShowDialog();
+            new JoystickDesignerWindow { joy = GetVaueAsType<Joystick>() }.InitConfig().ShowDialog();
         }
 
         public override bool IsDefaultValue()

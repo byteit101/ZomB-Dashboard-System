@@ -25,6 +25,14 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             InitializeComponent();
         }
 
+        public JoystickDesignerWindow InitConfig()
+        {
+            XBox.SetConfig(joy.XSource);
+            YBox.SetConfig(joy.YSource);
+            ZBox.SetConfig(joy.ZSource);
+            return this;
+        }
+
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
