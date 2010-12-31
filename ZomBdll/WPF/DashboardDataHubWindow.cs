@@ -88,7 +88,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
                     try
                     {
                         this.InvalidPacketAction = (InvalidPacketActions)(Content as DependencyObject).GetValue(InvalidPacketActionProperty);
-                        if (!DesignerProperties.GetIsInDesignMode(this))
+                        if (!DesignerProperties.GetIsInDesignMode(this) && ZDesigner.IsRunMode)
                             ReloadControls();
                     }
                     catch { }
@@ -150,7 +150,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         /// <summary>
         /// Start the DashboardDataHub when we load the form?
         /// </summary>
-        //public bool AutoStart { get; set; }
+        public bool AutoStart { get; set; }
 
         /// <summary>
         /// Re-iterate and find all controls
@@ -158,7 +158,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public void ReloadControls()
         {
             AddControls(this);
-            Start();
+            if (AutoStart)
+                Start();
         }
 
         /// <summary>
