@@ -1,6 +1,6 @@
 ﻿/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
- * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * Copyright (C) 2011, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,8 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -31,7 +31,6 @@ using System.Windows.Media.Animation;
 using System451.Communication.Dashboard.Utils;
 using System451.Communication.Dashboard.ViZ.Properties;
 using System451.Communication.Dashboard.WPF.Design;
-using System.Threading;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -115,7 +114,7 @@ namespace System451.Communication.Dashboard.ViZ
             lb.Style = (Style)lb.FindResource("PropCatStyle");
             designerProps.Add(lb);
             designerProps.Add(new Label());
-            (designerProps[1] as Label).Style=(Style)lb.FindResource("PropCatStyle");
+            (designerProps[1] as Label).Style = (Style)lb.FindResource("PropCatStyle");
             designerProps.Add(new Label());
             (designerProps[2] as Label).Content = "Invalid Packets:";
             designerProps.Add(new ComboBox());
@@ -517,6 +516,51 @@ namespace System451.Communication.Dashboard.ViZ
                 }
             }
 
+            if ((dir & SnapGridDirections.X) == SnapGridDirections.X)
+            {
+                if ((lastDistance = Math.Abs(0 - SnapGridHelper.Left(curObj))) < SnapGridHelper.SnapableForceDistance)
+                {
+                    dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.X, Type = SnapType.Equal1, other = ZDash });
+                }
+                else if ((lastDistance = Math.Abs(SnapGridHelper.SnapDistance - SnapGridHelper.Left(curObj))) < SnapGridHelper.SnapableForceDistance)
+                {
+                    dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.X, Type = SnapType.Distance, other = ZDash });
+                }
+            }
+            if ((dir & SnapGridDirections.Right) == SnapGridDirections.Right)
+            {
+                if ((lastDistance = Math.Abs(ZDash.ActualWidth - SnapGridHelper.Right(curObj))) < SnapGridHelper.SnapableForceDistance)
+                {
+                    dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Right, Type = SnapType.Equal1, other = ZDash });
+                }
+                else if ((lastDistance = Math.Abs(ZDash.ActualWidth - SnapGridHelper.Right(curObj) - SnapGridHelper.SnapDistance)) < SnapGridHelper.SnapableForceDistance)
+                {
+                    dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Right, Type = SnapType.Distance, other = ZDash });
+                }
+            }
+            if ((dir & SnapGridDirections.Y) == SnapGridDirections.Y)
+            {
+                if ((lastDistance = Math.Abs(0 - SnapGridHelper.Top(curObj))) < SnapGridHelper.SnapableForceDistance)
+                {
+                    dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Y, Type = SnapType.Equal1, other = ZDash });
+                }
+                else if ((lastDistance = Math.Abs(SnapGridHelper.SnapDistance - SnapGridHelper.Top(curObj))) < SnapGridHelper.SnapableForceDistance)
+                {
+                    dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Y, Type = SnapType.Distance, other = ZDash });
+                }
+            }
+            if ((dir & SnapGridDirections.Bottom) == SnapGridDirections.Bottom)
+            {
+                if ((lastDistance = Math.Abs(ZDash.ActualHeight - SnapGridHelper.Bottom(curObj))) < SnapGridHelper.SnapableForceDistance)
+                {
+                    dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Bottom, Type = SnapType.Equal1, other = ZDash });
+                }
+                else if ((lastDistance = Math.Abs(ZDash.ActualHeight - SnapGridHelper.SnapDistance - SnapGridHelper.Bottom(curObj))) < SnapGridHelper.SnapableForceDistance)
+                {
+                    dist.Add(new SnapGridDistance { Distance = lastDistance, Location = SnapGridDirections.Bottom, Type = SnapType.Distance, other = ZDash });
+                }
+            }
+
             //Snap to code
             bool top = false, left = false, bottom = false, right = false;
             double topdi = Double.NaN, leftdi = Double.NaN, bottomdi = Double.NaN, rightdi = Double.NaN;
@@ -524,6 +568,16 @@ namespace System451.Communication.Dashboard.ViZ
             dist.Sort();
             foreach (SnapGridDistance item in dist)
             {
+                double otherleft = SnapGridHelper.Left(item.other);
+                double otherright = SnapGridHelper.Right(item.other);
+                double othertop = SnapGridHelper.Top(item.other);
+                double otherbottom = SnapGridHelper.Bottom(item.other);
+                if (item.other == ZDash)
+                {
+                    otherright = otherbottom = 0;
+                    otherleft = ZDash.ActualWidth;
+                    othertop = ZDash.ActualHeight;
+                }
                 switch (item.Location)
                 {
                     case SnapGridDirections.X:
@@ -535,15 +589,15 @@ namespace System451.Communication.Dashboard.ViZ
                             {
                                 if (item.Type == SnapType.Distance)
                                 {
-                                    leftModifier(SnapGridHelper.Right(item.other) + SnapGridHelper.SnapDistance);
+                                    leftModifier(otherright + SnapGridHelper.SnapDistance);
                                 }
                                 else if (item.Type == SnapType.Equal1)
                                 {
-                                    leftModifier(SnapGridHelper.Right(item.other));
+                                    leftModifier(otherright);
                                 }
                                 else
                                 {
-                                    leftModifier(SnapGridHelper.Left(item.other));
+                                    leftModifier(otherleft);
                                 }
                             }
                         }
@@ -557,8 +611,8 @@ namespace System451.Communication.Dashboard.ViZ
                             else
                             {
                                 leftside.x1 = leftside.x2;
-                                leftside.y1 = Math.Min(leftside.y1, Canvas.GetTop(item.other) - Canvas.GetTop(curObj));
-                                leftside.y2 = Math.Max(leftside.y2, Canvas.GetTop(item.other) + item.other.Height - (Canvas.GetTop(curObj)));
+                                leftside.y1 = Math.Min(leftside.y1, othertop - Canvas.GetTop(curObj));
+                                leftside.y2 = Math.Max(leftside.y2, othertop + item.other.Height - (Canvas.GetTop(curObj)));
                             }
                         }
                         break;
@@ -571,15 +625,15 @@ namespace System451.Communication.Dashboard.ViZ
                             {
                                 if (item.Type == SnapType.Distance)
                                 {
-                                    topModifier(SnapGridHelper.Bottom(item.other) + SnapGridHelper.SnapDistance);
+                                    topModifier(otherbottom + SnapGridHelper.SnapDistance);
                                 }
                                 else if (item.Type == SnapType.Equal1)
                                 {
-                                    topModifier(SnapGridHelper.Bottom(item.other));
+                                    topModifier(otherbottom);
                                 }
                                 else
                                 {
-                                    topModifier(SnapGridHelper.Top(item.other));
+                                    topModifier(othertop);
                                 }
                             }
                         }
@@ -593,8 +647,8 @@ namespace System451.Communication.Dashboard.ViZ
                             else
                             {
                                 topside.y1 = topside.y2;
-                                topside.x1 = Math.Min(topside.x1, Canvas.GetLeft(item.other) - Canvas.GetLeft(curObj));
-                                topside.x2 = Math.Max(topside.x2, Canvas.GetLeft(item.other) + item.other.Width - (Canvas.GetLeft(curObj)));
+                                topside.x1 = Math.Min(topside.x1, otherleft - Canvas.GetLeft(curObj));
+                                topside.x2 = Math.Max(topside.x2, otherleft + item.other.Width - (Canvas.GetLeft(curObj)));
                             }
                         }
                         break;
@@ -607,15 +661,15 @@ namespace System451.Communication.Dashboard.ViZ
                             {
                                 if (item.Type == SnapType.Distance)
                                 {
-                                    rightModifier(SnapGridHelper.Left(item.other) - SnapGridHelper.SnapDistance);
+                                    rightModifier(otherleft - SnapGridHelper.SnapDistance);
                                 }
                                 else if (item.Type == SnapType.Equal1)
                                 {
-                                    rightModifier(SnapGridHelper.Left(item.other));
+                                    rightModifier(otherleft);
                                 }
                                 else
                                 {
-                                    rightModifier(SnapGridHelper.Right(item.other));
+                                    rightModifier(otherright);
                                 }
                             }
                         }
@@ -629,8 +683,8 @@ namespace System451.Communication.Dashboard.ViZ
                             else
                             {
                                 rightside.x1 = rightside.x2 = curObj.Width + 0.5;
-                                rightside.y1 = Math.Min(rightside.y1, Canvas.GetTop(item.other) - Canvas.GetTop(curObj));
-                                rightside.y2 = Math.Max(rightside.y2, Canvas.GetTop(item.other) + item.other.Height - (Canvas.GetTop(curObj)));
+                                rightside.y1 = Math.Min(rightside.y1, othertop - Canvas.GetTop(curObj));
+                                rightside.y2 = Math.Max(rightside.y2, othertop + item.other.Height - (Canvas.GetTop(curObj)));
                             }
                         }
                         break;
@@ -643,15 +697,15 @@ namespace System451.Communication.Dashboard.ViZ
                             {
                                 if (item.Type == SnapType.Distance)
                                 {
-                                    bottomModifier(SnapGridHelper.Top(item.other) - SnapGridHelper.SnapDistance);
+                                    bottomModifier(othertop - SnapGridHelper.SnapDistance);
                                 }
                                 else if (item.Type == SnapType.Equal1)
                                 {
-                                    bottomModifier(SnapGridHelper.Top(item.other));
+                                    bottomModifier(othertop);
                                 }
                                 else
                                 {
-                                    bottomModifier(SnapGridHelper.Bottom(item.other));
+                                    bottomModifier(otherbottom);
                                 }
                             }
                         }
@@ -666,8 +720,8 @@ namespace System451.Communication.Dashboard.ViZ
                             else
                             {
                                 bottomside.y1 = bottomside.y2 = curObj.Height + 0.5;
-                                bottomside.x1 = Math.Min(bottomside.x1, Canvas.GetLeft(item.other) - Canvas.GetLeft(curObj));
-                                bottomside.x2 = Math.Max(bottomside.x2, Canvas.GetLeft(item.other) + item.other.Width - (Canvas.GetLeft(curObj)));
+                                bottomside.x1 = Math.Min(bottomside.x1, otherleft - Canvas.GetLeft(curObj));
+                                bottomside.x2 = Math.Max(bottomside.x2, otherleft + item.other.Width - (Canvas.GetLeft(curObj)));
                             }
                         }
                         break;
@@ -962,34 +1016,35 @@ namespace System451.Communication.Dashboard.ViZ
             Dispatcher.Invoke(new VoidFunction(() => pw.Status = "Generating Zaml..."));
             string zaml = Export();
 
-            System.Threading.ThreadPool.QueueUserWorkItem(delegate(object o){
-
-            Dispatcher.Invoke(new VoidFunction(() => pw.Status = "Initializing process..."));
-            var ad = AppDomain.CreateDomain("ZomB Running Domain");
-            ad.AssemblyResolve += AutoExtractor.AssemblyResolve;
-
+            System.Threading.ThreadPool.QueueUserWorkItem(delegate(object o)
             {
+
+                Dispatcher.Invoke(new VoidFunction(() => pw.Status = "Initializing process..."));
+                var ad = AppDomain.CreateDomain("ZomB Running Domain");
+                ad.AssemblyResolve += AutoExtractor.AssemblyResolve;
+
+                {
+                    try
+                    {
+                        Dispatcher.Invoke(new VoidFunction(() => pw.Status = "Loading assemblies..."));
+                        var r = ad.CreateInstanceOf<AppRunner>();
+                        Dispatcher.Invoke(new VoidFunction(() => pw.Status = "Building controls and running..."));
+                        this.StaRun(zaml, r, pw);
+                    }
+                    catch { }
+                    try
+                    {
+                        AppDomain.Unload(ad);
+                    }
+                    catch { }
+                }
+                GC.Collect();
                 try
                 {
-                    Dispatcher.Invoke(new VoidFunction(() => pw.Status = "Loading assemblies..."));
-                    var r = ad.CreateInstanceOf<AppRunner>();
-                    Dispatcher.Invoke(new VoidFunction(() => pw.Status = "Building controls and running..."));
-                    this.StaRun(zaml, r, pw);
+                    pw.Close();
                 }
                 catch { }
-                try
-                {
-                    AppDomain.Unload(ad);
-                }
-                catch { }
-            }
-            GC.Collect();
-            try
-            {
-                pw.Close();
-            }
-            catch { }
-                });
+            });
         }
 
         private void StaRun(string zaml, AppRunner r, WPF.ProgressDialog pw)
@@ -1166,7 +1221,7 @@ namespace System451.Communication.Dashboard.ViZ
         public UIElement GetChildByName(string name)
         {
             var th = getDesigner().ZDash.Children;
-            var rs= (from SurfaceControl child in th where child.Control.Name == name select child.Control);
+            var rs = (from SurfaceControl child in th where child.Control.Name == name select child.Control);
             if (rs.Count() < 1)
                 return null;
             return rs.First();

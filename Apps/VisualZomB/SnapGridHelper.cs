@@ -1,6 +1,6 @@
 ﻿/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
- * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * Copyright (C) 2011, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,76 +28,76 @@ namespace System451.Communication.Dashboard.ViZ
         public const double SnapDistance = 10;
         public const double SnapableForceDistance = 5.1;
 
-        public static Func<Control, Control, double> SnapDistanceLeftLeft = (current, other) => (Left(other) - Left(current));
-        public static Func<Control, Control, double> SnapDistanceLeftRight = (current, other) => (Right(other) - Left(current));
-        public static Func<Control, Control, bool> SnapableLeft =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapDistanceLeftLeft = (current, other) => (Left(other) - Left(current));
+        public static Func<FrameworkElement, FrameworkElement, double> SnapDistanceLeftRight = (current, other) => (Right(other) - Left(current));
+        public static Func<FrameworkElement, FrameworkElement, bool> SnapableLeft =
             (current, other) => (Math.Abs(SnapDistanceLeftLeft(current, other)) < SnapableWithinDistance || Math.Abs(SnapDistanceLeftRight(current, other)) < SnapableWithinDistance);
 
-        public static Func<Control, Control, double> SnapDistanceRightRight = (current, other) => (Right(other) - Right(current));
-        public static Func<Control, Control, double> SnapDistanceRightLeft = (current, other) => (Left(other) - Right(current));
-        public static Func<Control, Control, bool> SnapableRight =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapDistanceRightRight = (current, other) => (Right(other) - Right(current));
+        public static Func<FrameworkElement, FrameworkElement, double> SnapDistanceRightLeft = (current, other) => (Left(other) - Right(current));
+        public static Func<FrameworkElement, FrameworkElement, bool> SnapableRight =
             (current, other) => (Math.Abs(SnapDistanceRightRight(current, other)) < SnapableWithinDistance || Math.Abs(SnapDistanceRightLeft(current, other)) < SnapableWithinDistance);
 
-        public static Func<Control, Control, double> SnapDistanceTopTop = (current, other) => (Top(other) - Top(current));
-        public static Func<Control, Control, double> SnapDistanceTopBottom = (current, other) => (Bottom(other) - Top(current));
-        public static Func<Control, Control, bool> SnapableTop =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapDistanceTopTop = (current, other) => (Top(other) - Top(current));
+        public static Func<FrameworkElement, FrameworkElement, double> SnapDistanceTopBottom = (current, other) => (Bottom(other) - Top(current));
+        public static Func<FrameworkElement, FrameworkElement, bool> SnapableTop =
             (current, other) => (Math.Abs(SnapDistanceTopTop(current, other)) < SnapableWithinDistance || Math.Abs(SnapDistanceTopBottom(current, other)) < SnapableWithinDistance);
 
-        public static Func<Control, Control, double> SnapDistanceBottomBottom = (current, other) => (Bottom(other) - Bottom(current));
-        public static Func<Control, Control, double> SnapDistanceBottomTop = (current, other) => (Top(other) - Bottom(current));
-        public static Func<Control, Control, bool> SnapableBottom =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapDistanceBottomBottom = (current, other) => (Bottom(other) - Bottom(current));
+        public static Func<FrameworkElement, FrameworkElement, double> SnapDistanceBottomTop = (current, other) => (Top(other) - Bottom(current));
+        public static Func<FrameworkElement, FrameworkElement, bool> SnapableBottom =
             (current, other) => (Math.Abs(SnapDistanceBottomBottom(current, other)) < SnapableWithinDistance || Math.Abs(SnapDistanceBottomTop(current, other)) < SnapableWithinDistance);
 
 
-        public static Func<Control, Control, bool> SnapableDistanceLeft =
+        public static Func<FrameworkElement, FrameworkElement, bool> SnapableDistanceLeft =
             (current, other) => (Math.Abs(SnapDistanceLeftRight(current, other) + SnapDistance) < SnapableWithinDistance);
-        public static Func<Control, Control, bool> SnapableDistanceRight =
+        public static Func<FrameworkElement, FrameworkElement, bool> SnapableDistanceRight =
             (current, other) => (Math.Abs(SnapDistanceRightLeft(current, other) - SnapDistance) < SnapableWithinDistance);
-        public static Func<Control, Control, double> SnapableDistanceLeftRightY =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapableDistanceLeftRightY =
             (current, other) => (-SnapableDistanceEqu(new Point(Left(current), Top(current)), new Point(Right(other), Top(other)), new Point(Left(current), Bottom(current)), new Point(Right(other), Bottom(other)))) - Top(current);
 
-        public static Func<Control, Control, bool> SnapableDistanceTop =
+        public static Func<FrameworkElement, FrameworkElement, bool> SnapableDistanceTop =
             (current, other) => (Math.Abs(SnapDistanceTopBottom(current, other) + SnapDistance) < SnapableWithinDistance);
-        public static Func<Control, Control, bool> SnapableDistanceBottom =
+        public static Func<FrameworkElement, FrameworkElement, bool> SnapableDistanceBottom =
             (current, other) => (Math.Abs(SnapDistanceBottomTop(current, other) - SnapDistance) < SnapableWithinDistance);
-        public static Func<Control, Control, double> SnapableDistanceTopBottomX =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapableDistanceTopBottomX =
             (current, other) => (-SnapableDistanceEquX(new Point(Left(current), Top(current)), new Point(Left(other), Bottom(other)), new Point(Right(current), Top(current)), new Point(Right(other), Bottom(other)))) - Left(current);
 
 
-        public static Func<Control, Control, double> SnapableForceLeft1 =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapableForceLeft1 =
             (current, other) => Math.Abs(SnapDistanceLeftRight(current, other));
-        public static Func<Control, Control, double> SnapableForceRight1 =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapableForceRight1 =
             (current, other) => Math.Abs(SnapDistanceRightLeft(current, other));
-        public static Func<Control, Control, double> SnapableForceTop1 =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapableForceTop1 =
             (current, other) => Math.Abs(SnapDistanceTopBottom(current, other));
-        public static Func<Control, Control, double> SnapableForceBottom1 =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapableForceBottom1 =
             (current, other) => Math.Abs(SnapDistanceBottomTop(current, other));
 
-        public static Func<Control, Control, double> SnapableForceLeft2 =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapableForceLeft2 =
             (current, other) => Math.Abs(SnapDistanceLeftLeft(current, other));
-        public static Func<Control, Control, double> SnapableForceRight2 =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapableForceRight2 =
             (current, other) => Math.Abs(SnapDistanceRightRight(current, other));
-        public static Func<Control, Control, double> SnapableForceTop2 =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapableForceTop2 =
             (current, other) => Math.Abs(SnapDistanceTopTop(current, other));
-        public static Func<Control, Control, double> SnapableForceBottom2 =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapableForceBottom2 =
             (current, other) => Math.Abs(SnapDistanceBottomBottom(current, other));
 
 
-        public static Func<Control, Control, double> SnapableForceDistanceLeft =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapableForceDistanceLeft =
             (current, other) => (Math.Abs(SnapDistanceLeftRight(current, other) + SnapDistance));
-        public static Func<Control, Control, double> SnapableForceDistanceRight =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapableForceDistanceRight =
             (current, other) => (Math.Abs(SnapDistanceRightLeft(current, other) - SnapDistance));
-        public static Func<Control, Control, double> SnapableForceDistanceTop =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapableForceDistanceTop =
             (current, other) => (Math.Abs(SnapDistanceTopBottom(current, other) + SnapDistance));
-        public static Func<Control, Control, double> SnapableForceDistanceBottom =
+        public static Func<FrameworkElement, FrameworkElement, double> SnapableForceDistanceBottom =
             (current, other) => (Math.Abs(SnapDistanceBottomTop(current, other) - SnapDistance));
 
 
 
-        public static Func<Control, double> Right = (ctrl) => (Canvas.GetLeft(ctrl) + ctrl.Width);
-        public static Func<Control, double> Left = (ctrl) => Canvas.GetLeft(ctrl);
-        public static Func<Control, double> Top = (ctrl) => Canvas.GetTop(ctrl);
-        public static Func<Control, double> Bottom = (ctrl) => (Canvas.GetTop(ctrl) + ctrl.Height);
+        public static Func<FrameworkElement, double> Right = (ctrl) => (Canvas.GetLeft(ctrl) + ctrl.Width);
+        public static Func<FrameworkElement, double> Left = (ctrl) => Canvas.GetLeft(ctrl);
+        public static Func<FrameworkElement, double> Top = (ctrl) => Canvas.GetTop(ctrl);
+        public static Func<FrameworkElement, double> Bottom = (ctrl) => (Canvas.GetTop(ctrl) + ctrl.Height);
 
         public static Func<Point, Point, double> SnapableDistanceEquM =
             (current, other) => ((current.Y - other.Y) / (current.X - other.X));
@@ -130,7 +130,7 @@ namespace System451.Communication.Dashboard.ViZ
         public SnapType Type { get; set; }
         public SnapGridDirections Location { get; set; }
         public double Distance { get; set; }
-        public Control other { get; set; }
+        public FrameworkElement other { get; set; }
 
         #region IComparable<SnapGridDistance> Members
 
