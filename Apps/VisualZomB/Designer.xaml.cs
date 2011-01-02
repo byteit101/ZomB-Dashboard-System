@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -28,12 +29,11 @@ using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System451.Communication.Dashboard.Net;
 using System451.Communication.Dashboard.Utils;
 using System451.Communication.Dashboard.ViZ.Properties;
-using System451.Communication.Dashboard.WPF.Design;
-using System451.Communication.Dashboard.Net;
 using System451.Communication.Dashboard.WPF.Controls.Designer;
-using System.Reflection;
+using System451.Communication.Dashboard.WPF.Design;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -870,7 +870,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         #region Menu
 
-        private void CommandBinding_Deploy_Executed(object sender, ExecutedRoutedEventArgs e)
+        internal void CommandBinding_Deploy_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             if (ZomBBuilder.BuildZomBString(Export(), @"C:\Program Files\FRC Dashboard\Dashboard.exe"))
             {
@@ -929,17 +929,17 @@ namespace System451.Communication.Dashboard.ViZ
 
         #region Save and Run
 
-        private void CommandBinding_Play_Executed(object sender, ExecutedRoutedEventArgs e)
+        internal void CommandBinding_Play_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             RunApp();
         }
 
-        private void CommandBinding_Save_Executed(object sender, ExecutedRoutedEventArgs e)
+        internal void CommandBinding_Save_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             SaveApp();
         }
 
-        private void CommandBinding_Open_Executed(object sender, ExecutedRoutedEventArgs e)
+        internal void CommandBinding_Open_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             var dlg = new System.Windows.Forms.OpenFileDialog();
             dlg.DefaultExt = ".zaml";
@@ -1174,8 +1174,6 @@ namespace System451.Communication.Dashboard.ViZ
         }
 
         #endregion
-
-
 
         public static string[] GetNames()
         {

@@ -1,6 +1,6 @@
 ﻿/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
- * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * Copyright (C) 2011, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,12 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+using System;
 using System.IO;
 using System.Text;
 using System.Windows.Markup;
 using System451.Communication.Dashboard.WPF.Controls;
-using System;
-using System.Threading;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -46,7 +45,7 @@ namespace System451.Communication.Dashboard.ViZ
             System451.Communication.Dashboard.ViZ.App app = new System451.Communication.Dashboard.ViZ.App();
             App.LoadPlugins();
             App.LoadAssembliesGeneric();
-                r = new Run(xaml);
+            r = new Run(xaml);
         }
         public void Start()
         {

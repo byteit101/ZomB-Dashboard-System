@@ -35,5 +35,25 @@ namespace System451.Communication.Dashboard.ViZ
             PropScroller.ScrollToHorizontalOffset(PropScroller.HorizontalOffset - e.Delta);
             e.Handled = true;
         }
+
+        private void CommandBinding_Deploy_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Designer.getDesigner().CommandBinding_Deploy_Executed(sender, e);
+        }
+
+        private void CommandBinding_Open_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Designer.getDesigner().CommandBinding_Open_Executed(sender, e);
+        }
+
+        private void CommandBinding_Save_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Designer.getDesigner().CommandBinding_Save_Executed(sender, e);
+        }
+
+        private void CommandBinding_Play_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Designer.getDesigner().CommandBinding_Play_Executed(sender, e);
+        }
     }
 }

@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+using System;
 using System.CodeDom.Compiler;
 using System.IO;
 using System.Reflection;
-using System;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -29,10 +29,10 @@ namespace System451.Communication.Dashboard.ViZ
             File.Copy(Assembly.Load("ZomB").Location, Path.GetDirectoryName(path) + "\\ZomB.dll", true);
             if (Directory.Exists("plugins"))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(path)+"\\plugins");
+                Directory.CreateDirectory(Path.GetDirectoryName(path) + "\\plugins");
                 foreach (var item in Directory.GetFiles("plugins"))
                 {
-                    File.Copy(item, Path.GetDirectoryName(path) + "\\plugins\\"+Path.GetFileName(item), true);
+                    File.Copy(item, Path.GetDirectoryName(path) + "\\plugins\\" + Path.GetFileName(item), true);
                 }
             }
             if (!Directory.Exists(Path.GetDirectoryName(path)))
@@ -47,8 +47,8 @@ namespace System451.Communication.Dashboard.ViZ
             pam.ReferencedAssemblies.Add(Path.GetDirectoryName(path) + "\\ZomB.dll");
             pam.OutputAssembly = path;
             pam.GenerateExecutable = true;
-            pam.CompilerOptions = "/t:winexe \"/win32icon:"+
-                Path.GetDirectoryName(Assembly.GetEntryAssembly().CodeBase).Replace("file:\\", "")+"\\Dashboardexe.ico\"";//hide console, set icon
+            pam.CompilerOptions = "/t:winexe \"/win32icon:" +
+                Path.GetDirectoryName(Assembly.GetEntryAssembly().CodeBase).Replace("file:\\", "") + "\\Dashboardexe.ico\"";//hide console, set icon
             string src = @"using System;
 using System.IO;
 using System.Reflection;
@@ -117,7 +117,7 @@ namespace System451.g
                     var str = "ERROR BUILDING!";
                     foreach (CompilerError item in res.Errors)
                     {
-                        str+=item.ToString();
+                        str += item.ToString();
                     }
                     System.Windows.Forms.MessageBox.Show("Generation failed: " + str);
                 }

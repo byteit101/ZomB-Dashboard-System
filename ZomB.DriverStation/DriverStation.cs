@@ -1,6 +1,6 @@
 ﻿/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
- * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * Copyright (C) 2011, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,20 +15,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+using System;
+using System.ComponentModel;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Net.Sockets;
-using System.Timers;
 using System451.Communication.Dashboard.Utils;
-using System;
-using System.Net;
-using System.Threading;
-using System.ComponentModel;
 
 namespace System451.Communication.Dashboard.Net.DriverStation
 {
-    [WPF.Design.ZomBControl("Driver Station", Description = "A small driver station for driving the robot without runnning the ds software", IconName="DSIcon")]
+    [WPF.Design.ZomBControl("Driver Station", Description = "A small driver station for driving the robot without runnning the ds software", IconName = "DSIcon")]
     [TemplatePart(Name = "PART_endis", Type = typeof(Button))]
     [TemplatePart(Name = "PART_Status", Type = typeof(Label))]
     [WPF.Design.ZomBDesignableProperty("Width", Dynamic = true, Category = "Layout")]
@@ -47,7 +47,7 @@ namespace System451.Communication.Dashboard.Net.DriverStation
         short loops;
         public const int MaxConnectionTimeout = 10;
         int connected = MaxConnectionTimeout + 1;
-        
+
 
         public DriverStation()
         {
@@ -143,7 +143,7 @@ namespace System451.Communication.Dashboard.Net.DriverStation
                     IPEndPoint iep = null;
                     byte[] dgram = uc.EndReceive(ar, ref iep);
                     connected = 0;
-                    stat(dgram[1].ToString("x")+"."+dgram[2].ToString("x"));
+                    stat(dgram[1].ToString("x") + "." + dgram[2].ToString("x"));
                     dolisten();
                 }
                 catch { }
@@ -172,8 +172,8 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             }
             catch
             {
-                if (tmr!=null)
-                tmr.Stop();
+                if (tmr != null)
+                    tmr.Stop();
                 try
                 {
                     uc.Close();
@@ -212,16 +212,11 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             //Joystick data
             try
             {
-                Dispatcher.Invoke(new VoidFunction(() => {
-                    Joystick1.SaveDataTo(r, 8);
-                    Joystick2.SaveDataTo(r, 16);
-                    Joystick3.SaveDataTo(r, 24);
-                    Joystick4.SaveDataTo(r, 32);
-                }), null);
+                Dispatcher.Invoke(new BytesFunction(sendJoystics), r);
             }
-            catch (ThreadAbortException e) { throw; }
-                catch{ }
-            
+            catch (ThreadAbortException) { throw; }
+            catch { }
+
 
             //version
             r[72] = 0x31;
@@ -242,10 +237,19 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             return r;
         }
 
+
+        private void sendJoystics(byte[] r)
+        {
+            Joystick1.SaveDataTo(r, 8);
+            Joystick2.SaveDataTo(r, 16);
+            Joystick3.SaveDataTo(r, 24);
+            Joystick4.SaveDataTo(r, 32);
+        }
+
         private void Stop()
         {
-            if (tmr!=null)
-            tmr.Stop();
+            if (tmr != null)
+                tmr.Stop();
             Disable();
             hz(this, null);
             running = false;

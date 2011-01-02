@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:System451.Communication.Dashboard.Net.DriverStation"
-        Title="JoystickDesignerWindow" Height="343" Width="527">
+        Title="Configure Joysticks" Height="343" Width="527">
     <Grid IsSharedSizeScope="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

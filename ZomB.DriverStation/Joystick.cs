@@ -16,16 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System451.Communication.Dashboard.Libs.Xbox360Controller;
-using System.Windows;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Timers;
-using System451.Communication.Dashboard.Utils;
-using System.Windows.Data;
+using System.Windows;
+using System451.Communication.Dashboard.Libs.Xbox360Controller;
 
 namespace System451.Communication.Dashboard.Net.DriverStation
 {
@@ -71,24 +66,6 @@ namespace System451.Communication.Dashboard.Net.DriverStation
                 if (seter == null && obj != null && SoProperty != null)
                     me.SetValue(dpKey, SoProperty.GetValue(obj, null));
             }
-        }
-
-        static Joystick()
-        {
-            var cdisp = System.Windows.Threading.Dispatcher.CurrentDispatcher;
-            //stmr.AutoReset = true;
-            //stmr.Elapsed += delegate { cdisp.Invoke(new VoidFunction(updateJoys), null); };
-            //if (ZDesigner.IsRunMode)
-            //stmr.Start();
-        }
-
-        public Joystick()
-        {
-            var cdisp = System.Windows.Threading.Dispatcher.CurrentDispatcher;
-            //tmr.AutoReset = false;
-            //tmr.Elapsed += delegate { cdisp.Invoke(new VoidFunction(updateJoy), null); };
-            //if (ZDesigner.IsRunMode)
-            //tmr.Start();
         }
 
         internal void SetFindName(Func<string, object> find)
@@ -237,7 +214,7 @@ namespace System451.Communication.Dashboard.Net.DriverStation
         {
             if (ZDesigner.IsRunMode)
             {
-                sw.Add(new SWconfig { me = this, dpKey = propkey, src = name, SourceProperty = property, seter=findfunc });
+                sw.Add(new SWconfig { me = this, dpKey = propkey, src = name, SourceProperty = property, seter = findfunc });
             }
         }
 

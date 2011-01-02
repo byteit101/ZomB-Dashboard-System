@@ -1,6 +1,6 @@
 ﻿/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
- * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * Copyright (C) 2011, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,13 +17,12 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Reflection;
-using System.ComponentModel;
-using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using System451.Communication.Dashboard.WPF.Controls.Designer;
 
 namespace System451.Communication.Dashboard.Net
@@ -127,7 +126,7 @@ namespace System451.Communication.Dashboard.Net
             string port = res.Groups[3].Value;
             SourceName = res.Groups[4].Value;
             SourceType = FindSourceType();
-            var getInfo = SourceType.GetMethod("GetZomBUrlInfo", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Public, null, new Type[]{},  null);
+            var getInfo = SourceType.GetMethod("GetZomBUrlInfo", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Public, null, new Type[] { }, null);
             if (getInfo == null)
                 throw new InvalidProgramException("Type '" + SourceType.ToString() + "' does not contain required static method GetZomBUrlInfo");
             DefaultZomBUrlInfo = getInfo.Invoke(null, null) as ZomBUrlInfo;
@@ -223,7 +222,7 @@ namespace System451.Communication.Dashboard.Net
             string port = DefaultZomBUrlInfo.DefaultPort == Port ? "" : ":" + Port;
             string iadr = IPAddress.ToString();
             if (useTeamDot && iadr.StartsWith("10.") && iadr.EndsWith(".2"))
-                iadr = "."+(int.Parse(iadr.Substring(3).Replace(".", ""))/10);
+                iadr = "." + (int.Parse(iadr.Substring(3).Replace(".", "")) / 10);
             return "zomb://" + iadr + port + "/" + SourceName;
         }
     }
@@ -263,13 +262,13 @@ namespace System451.Communication.Dashboard.Net
             string res = "";
             foreach (var item in this)
             {
-                if (useTeamDot==null)
+                if (useTeamDot == null)
                 {
                     var str = item.ToString();
                     res += str.Substring(str.LastIndexOf('/')) + ";";
                 }
                 else
-                res += item.ToString((bool)useTeamDot) + ";";
+                    res += item.ToString((bool)useTeamDot) + ";";
             }
             return res;
         }
