@@ -162,7 +162,6 @@ namespace System451.Communication.Dashboard.Net.DriverStation
 
         private static void sourceChanged(object o, DependencyPropertyChangedEventArgs e)
         {
-            //TODO: change
             if (e.Property == XSourceProperty)
             {
                 (o as Joystick).setup(XProperty, e.NewValue.ToString(), "LeftX");

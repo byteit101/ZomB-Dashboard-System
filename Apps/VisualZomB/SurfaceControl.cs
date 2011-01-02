@@ -321,7 +321,6 @@ namespace System451.Communication.Dashboard.ViZ
             bind.Path = new PropertyPath(rprop);
             bind.Converter = new StringValueConverter();
             (itm[1] as TextBox).SetBinding(TextBox.TextProperty, bind);
-            itm[0].Tag = itm[1].Tag = null;//TODO: do this
             itm[0].ToolTip = itm[1].ToolTip = "Edits the location of the control";
             return itm;
         }

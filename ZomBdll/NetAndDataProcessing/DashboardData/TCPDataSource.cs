@@ -295,7 +295,7 @@ namespace System451.Communication.Dashboard.Net
                         //Read the value
                         if (longNames)
                         {
-                            valuel = (zb.ReadByte() << 8) + zb.ReadByte();//TODO: test
+                            valuel = (zb.ReadByte() << 8) + zb.ReadByte();
                         }
                         else
                         {

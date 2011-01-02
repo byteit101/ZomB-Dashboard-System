@@ -84,8 +84,6 @@ namespace System451.Communication.Dashboard.WPF.Design
                 return comb.Text;
             else
             {
-                //TODO: add others
-                //must be linear gradient
                 if (Property.GetValue(Object, null) is ImageBrush)
                 {
                     ImageBrush lb = (Property.GetValue(Object, null) as ImageBrush);

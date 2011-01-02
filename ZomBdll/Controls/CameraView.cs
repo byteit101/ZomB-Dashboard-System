@@ -56,7 +56,6 @@ namespace System451.Communication.Dashboard
                         {
                             videoSource.Stop();
                         }
-                        //TODO: support other sources
                         videoSource = GetDefaultSrc();
                         videoSource.NewImageRecieved += new NewImageDataRecievedEventHandler(videoSource_NewImageRecieved);
                         if (EnableAutoReset)

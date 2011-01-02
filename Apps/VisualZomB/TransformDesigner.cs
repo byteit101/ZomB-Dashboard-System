@@ -85,7 +85,7 @@ namespace System451.Communication.Dashboard.ViZ
             else if (ict is TranslateTransform)
             {
                 sb.Append("<TranslateTransform><TranslateTransform.X>");
-                var be = BindingOperations.GetBindingExpression(ict, TranslateTransform.XProperty);//TODO: hope Y is the same
+                var be = BindingOperations.GetBindingExpression(ict, TranslateTransform.XProperty);
                 if (be != null)
                 {
                     var bpd = new BoundPropertyDesigner();
@@ -95,7 +95,7 @@ namespace System451.Communication.Dashboard.ViZ
                 }
                 else
                     sb.Append("0</TranslateTransform.X><TranslateTransform.Y>");
-                be = BindingOperations.GetBindingExpression(ict, TranslateTransform.YProperty);//TODO: hope Y is the same
+                be = BindingOperations.GetBindingExpression(ict, TranslateTransform.YProperty);
                 if (be != null)
                 {
                     var bpd = new BoundPropertyDesigner();
@@ -109,7 +109,7 @@ namespace System451.Communication.Dashboard.ViZ
             else if (ict is SkewTransform)
             {
                 sb.Append("<SkewTransform><SkewTransform.AngleX>");
-                var be = BindingOperations.GetBindingExpression(ict, SkewTransform.AngleXProperty);//TODO: hope Y is the same
+                var be = BindingOperations.GetBindingExpression(ict, SkewTransform.AngleXProperty);
                 if (be != null)
                 {
                     var bpd = new BoundPropertyDesigner();
@@ -119,7 +119,7 @@ namespace System451.Communication.Dashboard.ViZ
                 }
                 else
                     sb.Append("0</SkewTransform.AngleX><SkewTransform.AngleY>");
-                be = BindingOperations.GetBindingExpression(ict, SkewTransform.AngleYProperty);//TODO: hope Y is the same
+                be = BindingOperations.GetBindingExpression(ict, SkewTransform.AngleYProperty);
                 if (be != null)
                 {
                     var bpd = new BoundPropertyDesigner();

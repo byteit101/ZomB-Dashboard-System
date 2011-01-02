@@ -277,7 +277,7 @@ namespace System451.Communication.Dashboard.Net
             ret.Team = (int)(buffer[8] * 100) + (int)(buffer[9]);
 
             //there's got to be a better way to do this
-#warning This does not work DS Bytes
+//TODO: This does not work DS Bytes
             //int Month = int.Parse(new string(new char[] { (char)buffer[10], (char)buffer[11] }));
             //int Day = int.Parse(new string(new char[] { (char)buffer[12], (char)buffer[13] }));
             //int year = 2000 + int.Parse(new string(new char[] { (char)buffer[14], (char)buffer[15] }));

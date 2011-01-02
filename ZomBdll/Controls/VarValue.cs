@@ -1,6 +1,6 @@
 ﻿/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
- * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * Copyright (C) 2011, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ namespace System451.Communication.Dashboard.Controls
 {
     public partial class VarValue : UserControl, IZomBControl
     {
-        System.Collections.Generic.Dictionary<string, string> vrs = new Dictionary<string, string>();
+        Dictionary<string, string> vrs = new Dictionary<string, string>();
 
         public VarValue()
         {
@@ -34,11 +34,7 @@ namespace System451.Communication.Dashboard.Controls
         {
             get
             {
-                return "dbg";
-            }
-            set
-            {
-
+                return "*";
             }
         }
 
@@ -52,8 +48,8 @@ namespace System451.Communication.Dashboard.Controls
             {
                 if (value != "")
                 {
-                    if (value.Contains(": "))
-                        vrs[value.Substring(0, value.IndexOf(": "))] = value.Substring(value.IndexOf(": ") + 2);
+                    if (value.Contains("="))
+                        vrs[value.Substring(0, value.IndexOf("="))] = value.Substring(value.IndexOf("=") + 1);
                 }
                 label1.Text = label2.Text = "";
                 foreach (KeyValuePair<string, string> kv in vrs)
@@ -75,29 +71,18 @@ namespace System451.Communication.Dashboard.Controls
 
         public bool IsMultiWatch
         {
-            get { return false; }
+            get { return true; }
         }
 
         void IZomBControl.UpdateControl(string value)
         {
-#warning this no longer works
-            ///FROM DDH///
             //this needs to be tested, but should work
-            string Output = "";// UTF7Encoding.UTF7.GetString(packetData);
-
-            //Find segment of data
-            if (Output.Contains("@@ZomB:|") && Output.Contains("|:ZomB@@"))
+            string Output = value;
+            string[] vars = Output.Split('|');
+            foreach (string item in vars)
             {
-                Output = Output.Substring(Output.IndexOf("@@ZomB:|") + 8, (Output.IndexOf("|:ZomB@@") - (Output.IndexOf("@@ZomB:|") + 8)));
-                if (Output != "")
-                {
-                    string[] vars = Output.Split('|');
-                    foreach (string item in vars)
-                    {
-                        if (item.StartsWith("dbg="))
-                            UpdateControl(item.Substring(4));
-                    }
-                }
+                if (item.StartsWith("dbg-"))
+                    UpdateControl(item.Substring(4));
             }
         }
 
@@ -108,6 +93,4 @@ namespace System451.Communication.Dashboard.Controls
 
         #endregion
     }
-
-
 }

@@ -277,12 +277,11 @@ namespace System451.Communication.Dashboard
         protected void StopSrc(IDashboardDataSource item)
         {
             item.Stop();
-            //TODO: Test, this shouldnt be nescesecary
-            if (item.HasData && item != (item.GetDataSource() as IDashboardDataSource))
+            if (item.HasData)
             {
                 item.GetDataSource().Stop();
             }
-            if (item.HasStatus && item != (item.GetStatusSource() as IDashboardDataSource))
+            if (item.HasStatus)
             {
                 item.GetStatusSource().Stop();
             }
@@ -295,7 +294,6 @@ namespace System451.Communication.Dashboard
         protected void StartSrc(IDashboardDataSource item)
         {
             item.Start();
-            //TODO: Test
             if (item.HasData && item != (item.GetDataSource() as IDashboardDataSource))
             {
                 item.GetDataSource().Start();
@@ -547,7 +545,6 @@ namespace System451.Communication.Dashboard
         {
             try
             {
-                //TODO: Support dbg style multiple values
                 string val = "";
                 //if we are watching multiple values
                 if (control.IsMultiWatch)

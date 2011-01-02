@@ -55,8 +55,6 @@ namespace System451.Communication.Dashboard.Utils
         {
             if (s == null)
             {
-                //TODO: make sure the following line is not needed
-                //AutoExtractor.Extract(AutoExtractor.Files.InTheHandManaged | AutoExtractor.Files.InTheHandNative);
                 s = new BTZomBFingerFactory(teamNumber, from, to);
             }
             return s;

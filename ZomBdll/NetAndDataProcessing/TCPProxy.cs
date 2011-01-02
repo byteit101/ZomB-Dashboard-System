@@ -28,7 +28,6 @@ namespace System451.Communication.Dashboard.Net
     public class TCPProxy
     {
         Socket localsoc, remotesoc, remotefrom;
-        Thread thrds;
         byte[] frombuf = new byte[10000];
         byte[] tobuf = new byte[10000];
         int frombytes, tobyes;
