@@ -85,6 +85,11 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
                     TCPBtn.IsChecked = true;
                     nameBox.IsReadOnly = true;
                 }
+                else if (nameBox.Text.EndsWith("/TCP2"))
+                {
+                    TCP2Btn.IsChecked = true;
+                    nameBox.IsReadOnly = true;
+                }
                 else if (nameBox.Text.EndsWith("/DBPkt"))
                 {
                     DBPacketBtn.IsChecked = true;
@@ -135,6 +140,11 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             {
                 nameBox.IsReadOnly = true;
                 nameBox.Text = "zomb://." + Team + "/TCP";
+            }
+            else if (sender == TCP2Btn)
+            {
+                nameBox.IsReadOnly = true;
+                nameBox.Text = "zomb://." + Team + "/TCP2";
             }
             else if (sender == DBPacketBtn)
             {

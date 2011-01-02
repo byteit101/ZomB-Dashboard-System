@@ -57,7 +57,10 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
                     {
                         zurls.Add(ZomBUrl.Parse(item));
                     }
-                    catch { }
+                    catch (Exception ex)
+                    {
+                        System.Windows.Forms.MessageBox.Show(ex.ToString());
+                    }
                 }
                 try
                 {

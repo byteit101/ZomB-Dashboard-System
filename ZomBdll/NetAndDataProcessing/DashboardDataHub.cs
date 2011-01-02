@@ -229,9 +229,11 @@ namespace System451.Communication.Dashboard
                     {
                         foreach (var item in StartSources)
                         {
-                            //if (item.SourceType.IsSubclassOf(typeof(IDataSender))
-                            //    RegisterTCPSender(item.T//TODO
-                            RegisterSource(item.Exec(this));
+                            var ob = item.Exec(this);
+                            if (ob is IDashboardDataSource)
+                                RegisterSource(ob as IDashboardDataSource);
+                            if (ob is IDataSender)
+                                RegisterSender(ob as IDataSender);
                         }
                     }
                     for (; i < DataSrcs.Count; i++)

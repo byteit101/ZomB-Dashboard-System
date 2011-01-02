@@ -133,7 +133,7 @@ namespace System451.Communication.Dashboard.ViZ
             }
             designerProps.Add(new Label());
             (designerProps[4] as Label).Content = "Source:";
-            ZomBUrlSources = "zomb://." + Settings.Default.LastTeamNumber+"/TCP";
+            ZomBUrlSources = "zomb://." + Settings.Default.LastTeamNumber + "/TCP;zomb://." + Settings.Default.LastTeamNumber + "/TCP2";
             var dsnr = new ZomBUrlCollectionDesigner();
             dsnr.Initialize(this, this.GetType().GetProperty("ZomBUrlSources", BindingFlags.NonPublic | BindingFlags.Instance));
             designerProps.Add(dsnr.GetProperyField());

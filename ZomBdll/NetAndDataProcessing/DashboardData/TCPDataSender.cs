@@ -26,6 +26,7 @@ using System.Threading;
 
 namespace System451.Communication.Dashboard.Net
 {
+    [DataSource("TCP2")]
     public class TCPDataSender: IDataSender
     {
         TcpListener cRIOConnection;
@@ -54,6 +55,12 @@ namespace System451.Communication.Dashboard.Net
         {
             IPAddress = addr;
             Port = port;
+        }
+
+        public TCPDataSender(ZomBUrl zurl)
+        {
+            IPAddress = zurl.IPAddress;
+            Port = zurl.Port;
         }
 
         ~TCPDataSender()
@@ -181,6 +188,15 @@ namespace System451.Communication.Dashboard.Net
             {
                 return isrunning;
             }
+        }
+
+        /// <summary>
+        /// Magic method for zomb:// urls
+        /// </summary>
+        /// <returns></returns>
+        private static ZomBUrlInfo GetZomBUrlInfo()
+        {
+            return new ZomBUrlInfo { DefaultPort = 9067 };
         }
     }
 }

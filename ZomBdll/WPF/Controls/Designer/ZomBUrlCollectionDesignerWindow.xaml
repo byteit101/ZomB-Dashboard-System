@@ -35,6 +35,7 @@
             <StackPanel Grid.ColumnSpan="2" Orientation="Horizontal" Margin="3" HorizontalAlignment="Center" Name="toglepanel">
                 <ToggleButton Name="DBPacketBtn" Margin="0,0,3,0" Checked="GeneralCustardBtn_Checked">DBPacket</ToggleButton>
                 <ToggleButton Name="TCPBtn" Margin="0,0,3,0" Checked="GeneralCustardBtn_Checked">TCP</ToggleButton>
+                <ToggleButton Name="TCP2Btn" Margin="0,0,3,0" Checked="GeneralCustardBtn_Checked">RemoteData</ToggleButton>
                 <ToggleButton Name="GeneralCustardBtn" Checked="GeneralCustardBtn_Checked">Custom</ToggleButton>
             </StackPanel>
             <Label Content="URL:" Grid.Row="1" />

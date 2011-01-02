@@ -198,7 +198,7 @@ namespace System451.Communication.Dashboard.Net
         /// </summary>
         /// <param name="ctrlr">A ZomB controller, or null. Some controls may require this, others may not.</param>
         /// <returns>instance of the proper (pinkies up) class</returns>
-        public IDashboardDataSource Exec(IZomBController ctrlr)
+        public object Exec(IZomBController ctrlr)
         {
             if (SourceType == null || Port == 0 || IPAddress == null)
                 throw new InvalidOperationException("ZomB URL is not valid, cannot continue");
@@ -208,9 +208,9 @@ namespace System451.Communication.Dashboard.Net
                 ctor = SourceType.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public, null, new Type[] { typeof(ZomBUrl), typeof(IZomBController) }, null);
                 if (ctor == null)
                     throw new InvalidProgramException("Type '" + SourceType.ToString() + "' does not contain required constructor with arguments (ZomBUrl[, IZomBController])");
-                return ctor.Invoke(new object[] { this, ctrlr }) as IDashboardDataSource;
+                return ctor.Invoke(new object[] { this, ctrlr });
             }
-            return ctor.Invoke(new object[] { this }) as IDashboardDataSource;
+            return ctor.Invoke(new object[] { this });
         }
 
         public override string ToString()
