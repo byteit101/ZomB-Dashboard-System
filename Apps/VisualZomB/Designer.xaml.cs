@@ -31,6 +31,9 @@ using System.Windows.Media.Animation;
 using System451.Communication.Dashboard.Utils;
 using System451.Communication.Dashboard.ViZ.Properties;
 using System451.Communication.Dashboard.WPF.Design;
+using System451.Communication.Dashboard.Net;
+using System451.Communication.Dashboard.WPF.Controls.Designer;
+using System.Reflection;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -61,6 +64,7 @@ namespace System451.Communication.Dashboard.ViZ
         CurrentDragMove cdm = CurrentDragMove.None;
         List<FrameworkElement> designerProps = new List<FrameworkElement>(4);
         static Dictionary<string, string> xmlNSmappings = new Dictionary<string, string>();
+        ZomBUrlCollection ZomBUrlSources { get; set; }
 
         SurfaceControl curObj;
 
@@ -129,16 +133,11 @@ namespace System451.Communication.Dashboard.ViZ
             }
             designerProps.Add(new Label());
             (designerProps[4] as Label).Content = "Source:";
-            designerProps.Add(new ComboBox());
-            cb = (designerProps[5] as ComboBox);
-            foreach (var item in Enum.GetNames(typeof(StartSources)))
-            {
-                cb.Items.Add(item);
-                if (item == "AllTCP")
-                {
-                    cb.SelectedValue = item;
-                }
-            }
+            ZomBUrlSources = "zomb://." + Settings.Default.LastTeamNumber+"/TCP";
+            var dsnr = new ZomBUrlCollectionDesigner();
+            dsnr.Initialize(this, this.GetType().GetProperty("ZomBUrlSources", BindingFlags.NonPublic | BindingFlags.Instance));
+            designerProps.Add(dsnr.GetProperyField());
+            (designerProps[5] as FrameworkElement).Tag = dsnr;
             designerProps.Add(new Label());
             (designerProps[6] as Label).Content = "Team #:";
             designerProps.Add(new TextBox());
@@ -973,7 +972,7 @@ namespace System451.Communication.Dashboard.ViZ
             LayoutCvs.Height = (ZDChrome.Height = ZDash.Height = newInnerSize.Height) + 4;
 
             (designerProps[3] as ComboBox).SelectedIndex = ((int)cvs.InvalidPacketAction) - 1;//this hinges on the values
-            (designerProps[5] as ComboBox).SelectedIndex = ((int)cvs.DefaultSources) - 1;//this hinges on the values
+            ((designerProps[5] as FrameworkElement).Tag as ZomBUrlCollectionDesigner).Set((cvs.DefaultSources));
             (designerProps[7] as TextBox).Text = cvs.Team.ToString();
 
             foreach (UIElement item in cvs.Children)
@@ -1068,7 +1067,7 @@ namespace System451.Communication.Dashboard.ViZ
             sb.Append("Height=\"" + ZDash.ActualHeight + "\" Width=\"" + ZDash.ActualWidth + "\" InvalidPacketAction=\"");
             sb.Append((designerProps[3] as ComboBox).SelectedValue);
             sb.Append("\" DefaultSources=\"");
-            sb.Append((designerProps[5] as ComboBox).SelectedValue);
+            sb.Append(((designerProps[5] as FrameworkElement).Tag as ZomBUrlCollectionDesigner).GetValue());
             sb.Append("\" Team=\"");
             sb.Append((designerProps[7] as TextBox).Text);
             sb.Append("\">");
@@ -1225,6 +1224,15 @@ namespace System451.Communication.Dashboard.ViZ
             if (rs.Count() < 1)
                 return null;
             return rs.First();
+        }
+
+        public int GetTeamNumber()
+        {
+            try
+            {
+                return int.Parse((designerProps[7] as TextBox).Text);
+            }
+            catch { return 0; }
         }
 
         #endregion

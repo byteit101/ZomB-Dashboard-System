@@ -1,6 +1,6 @@
 ﻿/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
- * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * Copyright (C) 2011, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,10 +19,11 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System451.Communication.Dashboard.Net;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
-    public class DashboardDataCanvas : Canvas, IZomBDashboardDataHubConsumer
+    public class DashboardDataCanvas : Canvas, IZomBDashboardDataHubConsumer, IZomBController
     {
         public DashboardDataCanvas()
         {
@@ -101,23 +102,23 @@ namespace System451.Communication.Dashboard.WPF.Controls
         /// What the DDH will load as sources when it start()'s
         /// </summary>
         [Category("ZomB"), Description("What the DDH will load as sources when it start()'s")]
-        public StartSources DefaultSources
+        public ZomBUrlCollection DefaultSources
         {
             get
             {
                 if (DashboardDataHub != null)
-                    return DashboardDataHub.StartSource;
+                    return DashboardDataHub.StartSources;
                 return hiddends;
             }
             set
             {
                 if (DashboardDataHub != null)
-                    DashboardDataHub.StartSource = value;
+                    DashboardDataHub.StartSources = value;
                 else
                     hiddends = value;
             }
         }
-        StartSources hiddends;
+        ZomBUrlCollection hiddends;
 
         /// <summary>
         /// What to do when an invalid packet is recieved
@@ -165,8 +166,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         //make wpf happy, and me unhappy
         public static readonly DependencyProperty DefaultSourcesProperty =
-            DependencyProperty.Register("DefaultSources", typeof(StartSources), typeof(DashboardDataCanvas), new UIPropertyMetadata(
-                new PropertyChangedCallback((s, e) => (s as DashboardDataCanvas).DefaultSources = (StartSources)e.NewValue)));
+            DependencyProperty.Register("DefaultSources", typeof(ZomBUrlCollection), typeof(DashboardDataCanvas), new UIPropertyMetadata(
+                new PropertyChangedCallback((s, e) => (s as DashboardDataCanvas).DefaultSources = (ZomBUrlCollection)e.NewValue)));
 
         public static readonly DependencyProperty InvalidPacketActionProperty =
                     DependencyProperty.Register("InvalidPacketAction", typeof(InvalidPacketActions), typeof(DashboardDataCanvas), new UIPropertyMetadata(
@@ -208,5 +209,14 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 catch { }
             }
         }
+
+        #region IZomBController Members
+
+        public DashboardDataHub GetDashboardDataHub()
+        {
+            return DashboardDataHub;
+        }
+
+        #endregion
     }
 }

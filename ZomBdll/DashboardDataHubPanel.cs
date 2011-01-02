@@ -30,7 +30,7 @@ namespace System451.Communication.Dashboard
         public DashboardDataHubPanel()
         {
             ddh = new DashboardDataHub();
-            ddh.StartSource = StartSources.DashboardPacket;
+            ddh.StartSources = "zomb://0.0.0.0/DBPkt";
             ddh.InvalidPacketAction = InvalidPacketActions.Ignore;
             this.DoubleBuffered = true;
         }
@@ -106,16 +106,16 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// What the DDH will load as sources when it start()'s
         /// </summary>
-        [DefaultValue(typeof(StartSources), "DashboardPacket"), Category("ZomB"), Description("What the DDH will load as sources when it start()'s")]
-        public StartSources DefaultSources
+        [DefaultValue("zomb://0.0.0.0/DBPkt"), Category("ZomB"), Description("What the DDH will load as sources when it start()'s")]
+        public Net.ZomBUrlCollection DefaultSources
         {
             get
             {
-                return ddh.StartSource;
+                return ddh.StartSources;
             }
             set
             {
-                ddh.StartSource = value;
+                ddh.StartSources = value;
             }
         }
 

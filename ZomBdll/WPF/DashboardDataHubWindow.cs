@@ -1,6 +1,6 @@
 ﻿/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
- * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * Copyright (C) 2011, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,7 +71,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             if (newddh)
             {
                 this.dashboardDataHub1 = new DashboardDataHub();
-                dashboardDataHub1.StartSource = StartSources.DashboardPacket;
+                dashboardDataHub1.StartSources = "zomb://0.0.0.0/DBPkt";//default, will always work
                 dashboardDataHub1.InvalidPacketAction = InvalidPacketActions.Ignore;
             }
 
@@ -208,15 +208,15 @@ namespace System451.Communication.Dashboard.WPF.Controls
         /// <summary>
         /// What the DDH will load as sources when it start()'s
         /// </summary>
-        public StartSources DefaultSources
+        public Net.ZomBUrlCollection DefaultSources
         {
             get
             {
-                return dashboardDataHub1.StartSource;
+                return dashboardDataHub1.StartSources;
             }
             set
             {
-                dashboardDataHub1.StartSource = value;
+                dashboardDataHub1.StartSources = value;
             }
         }
 

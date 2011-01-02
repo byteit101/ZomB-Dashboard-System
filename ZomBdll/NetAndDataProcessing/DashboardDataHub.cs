@@ -225,11 +225,14 @@ namespace System451.Communication.Dashboard
                 int i = 0;
                 try
                 {
-                    if (StartSource != StartSources.Manual && DataSrcs.Count==0) //TODO: re-evaluate the best way to do this
+                    if (StartSources != null && StartSources.Count > 0 && DataSrcs.Count == 0)
                     {
-                        //Auto setup the sources
-                        ClearSources();
-                        RegisterSource(StartSource);
+                        foreach (var item in StartSources)
+                        {
+                            //if (item.SourceType.IsSubclassOf(typeof(IDataSender))
+                            //    RegisterTCPSender(item.T//TODO
+                            RegisterSource(item.Exec(this));
+                        }
                     }
                     for (; i < DataSrcs.Count; i++)
                     {
@@ -344,7 +347,7 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// What the DDH will load as sources when it start()'s
         /// </summary>
-        public StartSources StartSource { get; set; }
+        public ZomBUrlCollection StartSources { get; set; }
 
         /// <summary>
         /// Register a new IDashboardDataSource. This adds it to the collection and uses it
@@ -434,38 +437,6 @@ namespace System451.Communication.Dashboard
             {
                 DataSnd.Clear();
                 return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Register the predefined sources
-        /// Will not clear the previous sources
-        /// You must not be running the DDH to add successfully
-        /// </summary>
-        /// <param name="sources">the sources</param>
-        /// <returns>true or false</returns>
-        protected bool RegisterSource(StartSources sources)
-        {
-            if (!Running)
-            {
-                switch (sources)
-                {
-                    case StartSources.DashboardPacket:
-                        return (RegisterDashboardPacketSource() == null ? false : true);
-                    case StartSources.TCPSource:
-                        return RegisterTCPSource(Team) == null ? false : true;
-                    case StartSources.TCPSender:
-                        return RegisterTCPSender(Team) == null ? false : true;
-                    case StartSources.AllTCP:
-                        return (RegisterTCPSource(Team) == null || RegisterTCPSender(Team) == null) ? false : true;
-                    case StartSources.Manual:
-                        //I can't set it up!
-                        break;
-                    default:
-                        //TODO: make sure this never happens
-                        throw new NotImplementedException();
-                }
             }
             return false;
         }
@@ -696,37 +667,6 @@ namespace System451.Communication.Dashboard
         }
 
         #endregion
-    }
-
-    /// <summary>
-    /// What the DDH will load as sources when it loads
-    /// </summary>
-    public enum StartSources
-    {
-        /// <summary>
-        /// Use the DB packet
-        /// </summary>
-        DashboardPacket = 1,
-
-        /// <summary>
-        /// Use a TCP stream from the robot
-        /// </summary>
-        TCPSource,
-
-        /// <summary>
-        /// Send stuff to the robot via a TCP stream
-        /// </summary>
-        TCPSender,
-
-        /// <summary>
-        /// Send and recieve stuff from a TCP to the robot
-        /// </summary>
-        AllTCP,
-
-        /// <summary>
-        /// Manual configuration
-        /// </summary>
-        Manual
     }
 
     /// <summary>

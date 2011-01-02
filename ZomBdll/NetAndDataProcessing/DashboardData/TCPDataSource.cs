@@ -26,7 +26,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System451.Communication.Dashboard.Net
 {
-    [DataSource("TCP", "_team,[_port")]
+    [DataSource("TCP")]
     public class TCPDataSource : IDashboardDataSource, IDashboardDataDataSource
     {
         public const int DefaultPort = 9066;//"ZB"
@@ -56,6 +56,11 @@ namespace System451.Communication.Dashboard.Net
         {
             IPAddress = addr;
             Port = port;
+        }
+        public TCPDataSource(ZomBUrl url)
+        {
+            IPAddress = url.IPAddress;
+            Port = url.Port;
         }
         ~TCPDataSource()
         {
@@ -377,6 +382,15 @@ namespace System451.Communication.Dashboard.Net
         public bool IsRunning
         {
             get { return isrunning; }
+        }
+
+        /// <summary>
+        /// Magic method for zomb:// urls
+        /// </summary>
+        /// <returns></returns>
+        private static ZomBUrlInfo GetZomBUrlInfo()
+        {
+            return new ZomBUrlInfo { DefaultPort = 9066 };
         }
     }
 }

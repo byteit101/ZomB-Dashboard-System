@@ -50,7 +50,7 @@ namespace System451.Communication.Dashboard
             // 
             // dashboardDataHub1
             // 
-            this.dashboardDataHub1.StartSource = System451.Communication.Dashboard.StartSources.DashboardPacket;
+            this.dashboardDataHub1.StartSources = "zomb://0.0.0.0/DBPkt";
             // 
             // DashboardDataHubForm
             // 

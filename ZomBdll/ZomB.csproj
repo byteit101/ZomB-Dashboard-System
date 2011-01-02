@@ -1,13 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'VSDebug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\VSDebug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;REALCOMP</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -219,7 +211,11 @@
     </Compile>
     <Compile Include="WPF\Controls\AlertControl.cs" />
     <Compile Include="WPF\Controls\CameraView.cs" />
+    <Compile Include="WPF\Controls\Designer\ZomBUrlCollectionDesignerWindow.xaml.cs">
+      <DependentUpon>ZomBUrlCollectionDesignerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\Controls\Designer\ImageSourceDesigner.cs" />
+    <Compile Include="WPF\Controls\Designer\ZomBUrlDesigner.cs" />
     <Compile Include="WPF\Controls\Image.cs" />
     <Compile Include="WPF\Controls\NetForward.cs" />
     <Compile Include="WPF\Controls\Designer\BrushDesignerWindow.xaml.cs">
@@ -410,6 +406,10 @@
     <Page Include="WPF\Controls\CameraView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controls\Designer\ZomBUrlCollectionDesignerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

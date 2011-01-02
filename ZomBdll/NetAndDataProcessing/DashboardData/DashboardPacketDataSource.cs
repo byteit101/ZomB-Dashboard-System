@@ -25,7 +25,8 @@ using System.Threading;
 
 namespace System451.Communication.Dashboard.Net
 {
-    [DataSource("DBPacket", "&")]
+    [DataSource("DBPacket")]
+    [DataSource("DBPkt")]
     public class DashboardPacketDataSource : IDashboardDataSource, IDashboardStatusDataSource, IDashboardDataDataSource
     {
         public const int DBPacketPort = 1165;
@@ -41,6 +42,12 @@ namespace System451.Communication.Dashboard.Net
         {
             this.ddh = ddh.GetDashboardDataHub();
         }
+
+        public DashboardPacketDataSource(ZomBUrl info, IZomBController ddh)
+        {
+            this.ddh = ddh.GetDashboardDataHub();
+        }
+
         ~DashboardPacketDataSource()
         {
             Stop();
@@ -348,6 +355,15 @@ namespace System451.Communication.Dashboard.Net
         public bool IsRunning
         {
             get { return isrunning; }
+        }
+
+        /// <summary>
+        /// Magic method for zomb:// urls
+        /// </summary>
+        /// <returns></returns>
+        private static ZomBUrlInfo GetZomBUrlInfo()
+        {
+            return new ZomBUrlInfo { DefaultPort = 1165 };
         }
     }
 }

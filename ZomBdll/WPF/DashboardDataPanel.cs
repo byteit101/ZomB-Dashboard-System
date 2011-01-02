@@ -83,16 +83,16 @@ namespace System451.Communication.Dashboard.WPF.Controls
         /// What the DDH will load as sources when it start()'s
         /// </summary>
         [Category("ZomB"), Description("What the DDH will load as sources when it start()'s")]
-        public StartSources DefaultSources
+        public Net.ZomBUrlCollection DefaultSources
         {
             get
             {
-                return DashboardDataHub.StartSource;
+                return DashboardDataHub.StartSources;
             }
             set
             {
                 if (DashboardDataHub != null)
-                    DashboardDataHub.StartSource = value;
+                    DashboardDataHub.StartSources = value;
             }
         }
 
@@ -132,8 +132,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         //make wpf happy, and me unhappy
         public static readonly DependencyProperty DefaultSourcesProperty =
-            DependencyProperty.Register("DefaultSources", typeof(StartSources), typeof(DashboardDataPanel), new UIPropertyMetadata(
-                new PropertyChangedCallback((s, e) => (s as DashboardDataPanel).DefaultSources = (StartSources)e.NewValue)));
+            DependencyProperty.Register("DefaultSources", typeof(Net.ZomBUrlCollection), typeof(DashboardDataPanel), new UIPropertyMetadata(
+                new PropertyChangedCallback((s, e) => (s as DashboardDataPanel).DefaultSources = (Net.ZomBUrlCollection)e.NewValue)));
 
         public static readonly DependencyProperty InvalidPacketActionProperty =
                     DependencyProperty.Register("InvalidPacketAction", typeof(InvalidPacketActions), typeof(DashboardDataPanel), new UIPropertyMetadata(

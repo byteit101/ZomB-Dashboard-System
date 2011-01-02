@@ -19,6 +19,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Reflection;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
+using System451.Communication.Dashboard.WPF.Controls.Designer;
 
 namespace System451.Communication.Dashboard.Net
 {
@@ -61,7 +67,7 @@ namespace System451.Communication.Dashboard.Net
     /// <summary>
     /// Allows the ZomB URL parser to automaticaly find and instance a DataSource
     /// </summary>
-    [global::System.AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    [global::System.AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     public sealed class DataSourceAttribute : Attribute
     {
         /// <summary>
@@ -103,6 +109,214 @@ namespace System451.Communication.Dashboard.Net
         /// $ denotes the service must be passed in (path on server as string)
         /// </remarks>
         public string ConstructorFormat { get; private set; }
+    }
+
+    [TypeConverter(typeof(ZomBUrlConverter))]
+    public class ZomBUrl
+    {
+        protected ZomBUrl(string zombUrl)
+        {
+            if (zombUrl == null)
+                throw new ArgumentNullException("zombUrl is null");
+            if (!zombUrl.StartsWith("zomb://", StringComparison.CurrentCultureIgnoreCase))
+                throw new ArgumentException("Url is not a ZomB url");
+            var r = new Regex("^zomb://([\\.0-9a-zA-Z]+)(\\:([0-9]{3,5}))?/([a-zA-Z]+[0-9a-zA-Z]*)(/.*)?$", RegexOptions.IgnoreCase);
+            var res = r.Match(zombUrl);
+            //no matches? let it throw!
+            string to = res.Groups[1].Value;
+            string port = res.Groups[3].Value;
+            SourceName = res.Groups[4].Value;
+            SourceType = FindSourceType();
+            var getInfo = SourceType.GetMethod("GetZomBUrlInfo", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Public, null, new Type[]{},  null);
+            if (getInfo == null)
+                throw new InvalidProgramException("Type '" + SourceType.ToString() + "' does not contain required static method GetZomBUrlInfo");
+            DefaultZomBUrlInfo = getInfo.Invoke(null, null) as ZomBUrlInfo;
+            if (port == "")
+                Port = DefaultZomBUrlInfo.DefaultPort;
+            else
+                Port = int.Parse(port);
+            if (to.Length < 2)
+                throw new InvalidDataException("ZomB Url is to an invalid host");
+            if (to[0] == '.')//team syntax
+            {
+                int team = int.Parse(to.Substring(1));
+                IPAddress = IPAddress.Parse("10." + team / 100 + "." + team % 100 + ".2");
+            }
+            else if (to.Equals("localhost", StringComparison.CurrentCultureIgnoreCase))
+                IPAddress = IPAddress.Loopback;
+            else
+                IPAddress = IPAddress.Parse(to);
+        }
+
+        private Type FindSourceType()
+        {
+            //this function takes a while, so lets have some predefined ones
+            switch (SourceName)
+            {
+                case "DBPkt":
+                case "DBPacket":
+                    return typeof(DashboardPacketDataSource);
+                case "TCP":
+                    return typeof(TCPDataSource);
+                case "TCP2":
+                    return typeof(TCPDataSender);
+            }
+            foreach (var item in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (var itype in item.GetTypes())
+                {
+                    foreach (var cat in itype.GetCustomAttributes(typeof(DataSourceAttribute), false))
+                    {
+                        if ((cat as DataSourceAttribute).SourceName.Equals(SourceName, StringComparison.CurrentCultureIgnoreCase))
+                            return itype;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static ZomBUrl Parse(string zombUrl)
+        {
+            return new ZomBUrl(zombUrl);
+        }
+
+        public static ZomBUrl Parse(string zombUrl, int TeamNumber)
+        {
+            if (zombUrl.Contains("zomb://./"))
+                zombUrl = zombUrl.Replace("zomb://./", "zomb://." + TeamNumber + "/");
+            return new ZomBUrl(zombUrl);
+        }
+
+        public int Port { get; private set; }
+        public IPAddress IPAddress { get; private set; }
+        public string SourceName { get; private set; }
+        public Type SourceType { get; private set; }
+        protected ZomBUrlInfo DefaultZomBUrlInfo { get; private set; }
+
+        /// <summary>
+        /// Initializes this url and returns an instance of the proper class
+        /// </summary>
+        /// <param name="ctrlr">A ZomB controller, or null. Some controls may require this, others may not.</param>
+        /// <returns>instance of the proper (pinkies up) class</returns>
+        public IDashboardDataSource Exec(IZomBController ctrlr)
+        {
+            if (SourceType == null || Port == 0 || IPAddress == null)
+                throw new InvalidOperationException("ZomB URL is not valid, cannot continue");
+            var ctor = SourceType.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public, null, new Type[] { typeof(ZomBUrl) }, null);
+            if (ctor == null)
+            {
+                ctor = SourceType.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public, null, new Type[] { typeof(ZomBUrl), typeof(IZomBController) }, null);
+                if (ctor == null)
+                    throw new InvalidProgramException("Type '" + SourceType.ToString() + "' does not contain required constructor with arguments (ZomBUrl[, IZomBController])");
+                return ctor.Invoke(new object[] { this, ctrlr }) as IDashboardDataSource;
+            }
+            return ctor.Invoke(new object[] { this }) as IDashboardDataSource;
+        }
+
+        public override string ToString()
+        {
+            return ToString(false);
+        }
+
+        public string ToString(bool useTeamDot)
+        {
+            string port = DefaultZomBUrlInfo.DefaultPort == Port ? "" : ":" + Port;
+            string iadr = IPAddress.ToString();
+            if (useTeamDot && iadr.StartsWith("10.") && iadr.EndsWith(".2"))
+                iadr = "."+(int.Parse(iadr.Substring(3).Replace(".", ""))/10);
+            return "zomb://" + iadr + port + "/" + SourceName;
+        }
+    }
+
+    public class ZomBUrlConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            if (sourceType == typeof(string))
+                return true;
+            return base.CanConvertFrom(context, sourceType);
+        }
+        public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        {
+            if (value is string)
+                return ZomBUrl.Parse(value.ToString());
+            return base.ConvertFrom(context, culture, value);
+        }
+        public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+        {
+            if (destinationType == typeof(string))
+                return (value as ZomBUrl).ToString();
+            return base.ConvertTo(context, culture, value, destinationType);
+        }
+    }
+
+    [TypeConverter(typeof(ZomBUrlCollectionConverter)), WPF.Design.Designer(typeof(ZomBUrlCollectionDesigner))]
+    public class ZomBUrlCollection : Collection<ZomBUrl>
+    {
+        public override string ToString()
+        {
+            return ToString(false);
+        }
+
+        public string ToString(bool? useTeamDot)
+        {
+            string res = "";
+            foreach (var item in this)
+            {
+                if (useTeamDot==null)
+                {
+                    var str = item.ToString();
+                    res += str.Substring(str.LastIndexOf('/')) + ";";
+                }
+                else
+                res += item.ToString((bool)useTeamDot) + ";";
+            }
+            return res;
+        }
+
+        public static explicit operator string(ZomBUrlCollection col)
+        {
+            return col.ToString();
+        }
+        public static implicit operator ZomBUrlCollection(string col)
+        {
+            return new ZomBUrlCollectionConverter().ConvertFrom(null, null, col) as ZomBUrlCollection;
+        }
+    }
+
+    public class ZomBUrlCollectionConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            if (sourceType == typeof(string))
+                return true;
+            return base.CanConvertFrom(context, sourceType);
+        }
+        public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        {
+            if (value is string)
+            {
+                var urls = value.ToString().Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                ZomBUrlCollection Zuc = new ZomBUrlCollection();
+                foreach (var item in urls)
+                {
+                    Zuc.Add(ZomBUrl.Parse(item.ToString()));
+                }
+                return Zuc;
+            }
+            return base.ConvertFrom(context, culture, value);
+        }
+        public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+        {
+            if (destinationType == typeof(string))
+                return (value as ZomBUrlCollection).ToString();
+            return base.ConvertTo(context, culture, value, destinationType);
+        }
+    }
+
+    public class ZomBUrlInfo
+    {
+        public int DefaultPort { get; set; }
     }
 
     public delegate void InvalidPacketRecievedEventHandler(object sender, InvalidPacketRecievedEventArgs e);

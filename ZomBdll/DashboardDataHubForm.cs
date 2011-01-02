@@ -191,16 +191,16 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// What the DDH will load as sources when it start()'s
         /// </summary>
-        [DefaultValue(typeof(StartSources), "DashboardPacket"), Category("ZomB"), Description("What the DDH will load as sources when it start()'s")]
-        public StartSources DefaultSources
+        [DefaultValue("zomb://0.0.0.0/DBPkt"), Category("ZomB"), Description("What the DDH will load as sources when it start()'s")]
+        public Net.ZomBUrlCollection DefaultSources
         {
             get
             {
-                return dashboardDataHub1.StartSource;
+                return dashboardDataHub1.StartSources;
             }
             set
             {
-                dashboardDataHub1.StartSource = value;
+                dashboardDataHub1.StartSources = value;
             }
         }
 
