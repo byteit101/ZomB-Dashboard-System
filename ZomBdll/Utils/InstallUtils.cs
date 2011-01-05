@@ -17,6 +17,7 @@
  */
 using System.Diagnostics;
 using Microsoft.Win32;
+using System.EnterpriseServices.Internal;
 
 namespace System451.Communication.Dashboard.Utils
 {
@@ -29,9 +30,12 @@ namespace System451.Communication.Dashboard.Utils
 
         public static Process NGen(string AssemblyPath)
         {
-            return Process.Start(Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\.NETFramework")
+            var pi = new ProcessStartInfo(Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\.NETFramework")
                                 .GetValue("InstallRoot", @"C:\WINDOWS\Microsoft.NET\Framework\").ToString() + "v2.0.50727\\ngen.exe",
                                 "install \"" + AssemblyPath + "\"");
+            pi.UseShellExecute = false;
+            pi.CreateNoWindow = true;
+            return Process.Start(pi);
         }
 
         public static void ExtractAll()
@@ -47,9 +51,21 @@ namespace System451.Communication.Dashboard.Utils
         public static void Install(bool async)
         {
             ExtractAll();
-            var p = NGen();
+            //HACK CONF: update when assemblies change
+            var p = NGen("ZomB, Version=0.6.1.0, Culture=neutral, PublicKeyToken=5880636763ded5de");
+            p.WaitForExit();
+            var pub = new Publish();
+            pub.GacInstall("InTheHand.Net.Personal.dll");
+            pub.GacInstall("SlimDX.dll");
+            pub.GacInstall("Vlc.DotNet.Core.dll");
+            pub.GacInstall("Vlc.DotNet.Forms.dll");
+            pub.GacInstall("ZomB.dll");
+            p = NGen("ZomB, Version=0.6.1.0, Culture=neutral, PublicKeyToken=5880636763ded5de");
             if (!async)
                 p.WaitForExit();
+            var q = NGen();
+            if (!async)
+                q.WaitForExit();
         }
     }
 }

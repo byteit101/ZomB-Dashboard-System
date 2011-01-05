@@ -52,8 +52,7 @@ namespace System451.Communication.Dashboard.ViZ
                             this.Shutdown();
                             break;
                         case "-extract-install":
-                            Utils.InstallUtils.ExtractAll();
-                            Utils.InstallUtils.NGen().WaitForExit();
+                            Utils.InstallUtils.Install(false);
                             this.Shutdown();
                             break;
                         case "-build":
