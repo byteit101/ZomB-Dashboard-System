@@ -24,17 +24,32 @@ namespace System451.Communication.Dashboard.ViZ
 {
     public static class ZomBBuilder
     {
-        public static bool BuildZomBString(string zaml, string path)
+        public static void CopyDLLs(string path)
         {
-            File.Copy(Assembly.Load("ZomB").Location, Path.GetDirectoryName(path) + "\\ZomB.dll", true);
-            if (Directory.Exists("plugins"))
+            var dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().CodeBase);//dir! doh!
+            File.Copy(dir + "\\ZomB.dll", path + "\\ZomB.dll", true);
+            if (Directory.Exists(dir+"\\plugins"))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(path) + "\\plugins");
-                foreach (var item in Directory.GetFiles("plugins"))
+                Directory.CreateDirectory(path + "\\plugins");
+                foreach (var item in Directory.GetFiles(dir + "plugins"))
                 {
-                    File.Copy(item, Path.GetDirectoryName(path) + "\\plugins\\" + Path.GetFileName(item), true);
+                    File.Copy(item, path + "\\plugins\\" + Path.GetFileName(item), true);
                 }
             }
+        }
+
+        public static bool BuildZomBString(string zaml, string path)
+        {
+            return BuildZomBString(zaml, path, false);
+        }
+
+        public static bool BuildZomBString(string zaml, string path, bool loadLocal)
+        {
+            return BuildZomBString(zaml, path, loadLocal, Path.GetDirectoryName(Assembly.GetEntryAssembly().CodeBase).Replace("file:\\", "") + "\\Dashboardexe.ico");
+        }
+
+        public static bool BuildZomBString(string zaml, string path, bool loadLocal, string iconPath)
+        {
             if (!Directory.Exists(Path.GetDirectoryName(path)))
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
             var cs = CodeDomProvider.CreateProvider("CSharp");
@@ -44,11 +59,13 @@ namespace System451.Communication.Dashboard.ViZ
             pam.ReferencedAssemblies.Add(Assembly.Load("System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089").Location);
             pam.ReferencedAssemblies.Add(Assembly.Load("PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35").Location);
             pam.ReferencedAssemblies.Add(Assembly.Load("WindowsBase, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35").Location);
-            pam.ReferencedAssemblies.Add(Path.GetDirectoryName(path) + "\\ZomB.dll");
+            if (loadLocal)
+                pam.ReferencedAssemblies.Add(Path.GetDirectoryName(path) + "\\ZomB.dll");
+            else
+                pam.ReferencedAssemblies.Add(Path.GetDirectoryName(Assembly.GetEntryAssembly().CodeBase).Replace("file:\\", "") + "\\ZomB.dll");
             pam.OutputAssembly = path;
             pam.GenerateExecutable = true;
-            pam.CompilerOptions = "/t:winexe \"/win32icon:" +
-                Path.GetDirectoryName(Assembly.GetEntryAssembly().CodeBase).Replace("file:\\", "") + "\\Dashboardexe.ico\"";//hide console, set icon
+            pam.CompilerOptions = "/t:winexe \"/win32icon:" + iconPath+"\"";//hide console, set icon
             string src = @"using System;
 using System.IO;
 using System.Reflection;
@@ -75,15 +92,17 @@ namespace System451.g
         public App()
         {
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AutoExtractor.AssemblyResolve);
-            LoadPlugins();
+            LoadPlugins("+loadLocal.ToString().ToLower()+@");
             LoadAssembliesGeneric();
         }
 
-        internal static void LoadPlugins()
+        internal static void LoadPlugins(bool local)
         {
-            if (Directory.Exists(""plugins""))
+            string zombpath = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@""SOFTWARE\ZomB"").GetValue(""Path"", @""C:\Program Files\ZomB"").ToString();
+            string path = local ? ""plugins"" : zombpath + ""\\plugins"";
+            if (Directory.Exists(path))
             {
-                string[] plugins = Directory.GetFiles(""plugins"", ""*.dll"");
+                string[] plugins = Directory.GetFiles(path, ""*.dll"");
                 foreach (string item in plugins)
                 {
                     try

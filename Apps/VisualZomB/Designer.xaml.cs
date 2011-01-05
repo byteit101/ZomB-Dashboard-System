@@ -872,12 +872,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         internal void CommandBinding_Deploy_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (ZomBBuilder.BuildZomBString(Export(), @"C:\Program Files\FRC Dashboard\Dashboard.exe"))
-            {
-                System.Windows.Forms.MessageBox.Show(@"Success! Dashboard.exe written to C:\Program Files\FRC Dashboard\Dashboard.exe");
-            }
-            else
-                System.Windows.Forms.MessageBox.Show("Error building exe");
+            new BuildSettings(Export()).ShowDialog();
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)

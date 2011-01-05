@@ -34,5 +34,41 @@ namespace System451.Communication.Dashboard.ViZ.Properties {
                 this["LastTeamNumber"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\FRC Dashboard\\Dashboard.exe")]
+        public string LastBuildLocation {
+            get {
+                return ((string)(this["LastBuildLocation"]));
+            }
+            set {
+                this["LastBuildLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastIconLocation {
+            get {
+                return ((string)(this["LastIconLocation"]));
+            }
+            set {
+                this["LastIconLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CopyDLLs {
+            get {
+                return ((bool)(this["CopyDLLs"]));
+            }
+            set {
+                this["CopyDLLs"] = value;
+            }
+        }
     }
 }

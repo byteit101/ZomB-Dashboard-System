@@ -51,10 +51,28 @@ namespace System451.Communication.Dashboard.ViZ
                             Utils.InstallUtils.NGen().WaitForExit();
                             this.Shutdown();
                             break;
+                        case "-extract-install":
+                            Utils.InstallUtils.ExtractAll();
+                            Utils.InstallUtils.NGen().WaitForExit();
+                            this.Shutdown();
+                            break;
                         case "-build":
                             if (args.Length == 3 && File.Exists(args[1]))
                             {
                                 ZomBBuilder.BuildZomBString(File.ReadAllText(args[1]), Path.GetFullPath(args[2]));
+                                this.Shutdown();
+                                break;
+                            }
+                            else
+                            {
+                                System.Windows.Forms.MessageBox.Show("Invalid CLI arguments. Valid arguments:\r\n -extract  Extract all embedded dll's\r\n -build infile outfile   Build the infile into an exe at outfile\r\n [fileName]  Run this Zaml file");
+                                break;
+                            }
+                        case "-buildfull":
+                            if (args.Length == 3 && File.Exists(args[1]))
+                            {
+                                ZomBBuilder.CopyDLLs(Path.GetDirectoryName(Path.GetFullPath(args[2])));
+                                ZomBBuilder.BuildZomBString(File.ReadAllText(args[1]), Path.GetFullPath(args[2]), true);
                                 this.Shutdown();
                                 break;
                             }

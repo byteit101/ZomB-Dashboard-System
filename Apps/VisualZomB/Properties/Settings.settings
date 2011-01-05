@@ -5,5 +5,14 @@
     <Setting Name="LastTeamNumber" Type="System.String" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="LastBuildLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Program Files\FRC Dashboard\Dashboard.exe</Value>
+    </Setting>
+    <Setting Name="LastIconLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="CopyDLLs" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
