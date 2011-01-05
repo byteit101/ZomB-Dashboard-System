@@ -1,6 +1,6 @@
 ﻿/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
- * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * Copyright (C) 2011, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Win32;
+using System.EnterpriseServices.Internal;
 
 namespace NullGEN
 {
@@ -25,6 +26,11 @@ namespace NullGEN
     {
         static void Main(string[] args)
         {
+            if (args.Length == 1 && args[0] == "-uninstall")
+            {
+                Uninstall();
+                return;
+            }
             if (args.Length < 1)
                 Console.WriteLine("Press Y to ngen this exe");
             if (args.Length > 0 || Console.ReadKey().Key == ConsoleKey.Y)
@@ -49,6 +55,36 @@ namespace NullGEN
                 nd = System.Windows.Automation.Provider.NavigateDirection.LastChild;
             Type t = typeof(System.Configuration.Install.AssemblyInstaller);
 
+        }
+
+        public static Process NGenu()
+        {
+            return NGenu(Process.GetCurrentProcess().MainModule.FileName);
+        }
+
+        public static Process NGenu(string AssemblyPath)
+        {
+            var pi = new ProcessStartInfo(Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\.NETFramework")
+                                .GetValue("InstallRoot", @"C:\WINDOWS\Microsoft.NET\Framework\").ToString() + "v2.0.50727\\ngen.exe",
+                                "uninstall \"" + AssemblyPath + "\"");
+            pi.UseShellExecute = false;
+            pi.CreateNoWindow = true;
+            return Process.Start(pi);
+        }
+
+
+        public static void Uninstall()
+        {
+            var pub = new Publish();
+            pub.GacRemove("InTheHand.Net.Personal");
+            pub.GacRemove("SlimDX");
+            pub.GacRemove("Vlc.DotNet.Core");
+            pub.GacRemove("Vlc.DotNet.Forms");
+            pub.GacRemove("ZomB");
+            var p = NGenu("ViZ, Version=0.6.1.0, Culture=neutral, PublicKeyToken=c7d9dbcb0b13713a");
+            p.WaitForExit();
+            var q = NGenu("ZomB, Version=0.6.1.0, Culture=neutral, PublicKeyToken=5880636763ded5de");
+            q.WaitForExit();
         }
     }
 }
