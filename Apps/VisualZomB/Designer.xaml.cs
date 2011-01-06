@@ -877,8 +877,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            Utils.InstallUtils.Install();
-            System.Windows.Forms.MessageBox.Show("Success!\r\n\r\nPlease restart this application to load the win32 modules.");
+            new About().ShowDialog();
         }
 
         #endregion

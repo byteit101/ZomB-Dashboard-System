@@ -78,14 +78,14 @@ namespace System451.Communication.Dashboard
             {
                 var dll = e.Name.Replace("\\\\", "\\");
 
-                if (!File.Exists(dll))
-                {
-                    if (dll.ToLower() == "inthehand.net.personal.dll")
+                if (dll.ToLower().Contains("inthehand.net.personal"))
                         Extract(Files.InTheHandManaged | Files.InTheHandNative);
                     else if (dll.ToLower() == "slimdx.dll")
                         Extract(Files.SlimDX);
                     else if (dll.ToLower().Contains("vlc"))
                         Extract(Files.VLC);
+                else
+                    return null;
                     try
                     {
                         var asm = Assembly.Load(dll);
@@ -93,8 +93,6 @@ namespace System451.Communication.Dashboard
                     }
                     catch { }
                     return null;
-                }
-                return Assembly.LoadFrom(dll);
             }
         }
     }

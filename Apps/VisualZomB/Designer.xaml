@@ -73,11 +73,11 @@
                                     </Grid>
                                 </ControlTemplate>
                             </MenuItem.Template>
-                            <MenuItem Header="Open" Command="Open"/>
-                            <MenuItem Header="Save" Command="Save"/>
-                            <MenuItem Header="Deploy" Command="SaveAs"/>
+                            <MenuItem Header="Open..." Command="Open"/>
+                            <MenuItem Header="Save..." Command="Save"/>
+                            <MenuItem Header="Deploy..." Command="SaveAs"/>
                             <MenuItem Header="Run" Command="Play"/>
-                            <MenuItem Header="Install..." Click="MenuItem_Click"/>
+                            <MenuItem Header="About" Click="MenuItem_Click"/>
                         </MenuItem>
                     </Menu>
                     <Rectangle Width="20" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown" SnapsToDevicePixels="True">
