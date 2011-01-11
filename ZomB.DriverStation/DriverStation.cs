@@ -59,6 +59,7 @@ namespace System451.Communication.Dashboard.Net.DriverStation
             Joystick2 = new Joystick();
             Joystick3 = new Joystick();
             Joystick4 = new Joystick();
+            KeySafety.Start(Enable, Disable, Disable);
         }
 
         ~DriverStation()
