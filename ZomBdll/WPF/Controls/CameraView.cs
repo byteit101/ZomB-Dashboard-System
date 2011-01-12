@@ -334,9 +334,9 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         public void SetTargets(CameraTargetCollection p)
         {
-            foreach (var item in targets)
+            while (targets.Count != 0)
             {
-                RemoveTarget(item as CameraTarget);
+                RemoveTarget(targets[0] as CameraTarget);
             }
             foreach (var item in p)
             {
@@ -346,9 +346,9 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         public void SetTargets(IEnumerable<IZomBControl> p)
         {
-            foreach (var item in targets)
+            while (targets.Count!=0)
             {
-                RemoveTarget(item as CameraTarget);
+                RemoveTarget(targets[0] as CameraTarget);
             }
             foreach (var item in p)
             {
