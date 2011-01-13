@@ -48,8 +48,8 @@
             </Rectangle.Fill>
         </Rectangle>
         <DockPanel Grid.ColumnSpan="2" Grid.Row="1">
-            <TextBlock DockPanel.Dock="Top" FontSize="28" TextAlignment="Center" Name="VersionBlock" FontFamily="Verdana">Version 0.7beta1 - New Year, New ZomB</TextBlock>
-            <TextBlock DockPanel.Dock="Top" FontSize="18" TextAlignment="Center" FontFamily="Verdana">Released 1/6/2011</TextBlock>
+            <TextBlock DockPanel.Dock="Top" FontSize="28" TextAlignment="Center" Name="VersionBlock" FontFamily="Verdana">Version 0.7 - New Year, New ZomB</TextBlock>
+            <TextBlock DockPanel.Dock="Top" FontSize="18" TextAlignment="Center" FontFamily="Verdana">Released 1/13/2011</TextBlock>
         </DockPanel>
         <Image Grid.Row="2" Margin="10">
             <Image.Source>
