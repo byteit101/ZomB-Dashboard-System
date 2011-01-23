@@ -83,6 +83,8 @@ namespace System451.Communication.Dashboard.ViZ
             if (dsb != null)
                 throw new InvalidOperationException("Only one ViZ designer can be active at a time in this App Domain");
             dsb = this;
+            if (Settings.Default.LastTeamNumber == "0" || Settings.Default.LastTeamNumber == "" || Settings.Default.LastTeamNumber == null)
+                new FirstRun().ShowDialog();
             ZDesigner.SetDesigner(this);
             InitializeComponent();
 
