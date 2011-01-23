@@ -93,6 +93,7 @@
     <Compile Include="NetAndDataProcessing\IZomBDataControl.cs" />
     <Compile Include="NetAndDataProcessing\TCPProxy.cs" />
     <Compile Include="NetAndDataProcessing\Video\FFmpeg.cs" />
+    <Compile Include="NetAndDataProcessing\Video\MJpegStream.cs" />
     <Compile Include="Utils\AeroGlass.cs" />
     <Compile Include="Utils\CPU.cs" />
     <Compile Include="ext\Gamepad.cs" />
