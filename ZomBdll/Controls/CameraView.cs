@@ -303,6 +303,10 @@ namespace System451.Communication.Dashboard
         /// </summary>
         WPILibTcpStream,
         /// <summary>
+        /// The Axis Camera via HTTP
+        /// </summary>
+        MJPEGStream,
+        /// <summary>
         /// The Webcam on this computer
         /// </summary>
         Webcam,

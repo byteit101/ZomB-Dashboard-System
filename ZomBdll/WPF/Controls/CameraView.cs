@@ -27,6 +27,7 @@ using System.Windows.Media.Imaging;
 using System451.Communication.Dashboard.Net.Video;
 using System.IO;
 using System451.Communication.Dashboard.Utils;
+using System.Net;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -139,7 +140,12 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 return;
             try
             {
-                videoSource = ((VideoSource == DefaultVideoSource.WPILibTcpStream) ? (IDashboardVideoDataSource)new WPILibTcpVideoSource(TeamNumber) : ((VideoSource == DefaultVideoSource.Webcam) ? (IDashboardVideoDataSource)new WebCamVideoSource() : null));
+                videoSource = ((VideoSource == DefaultVideoSource.WPILibTcpStream) ?
+                    (IDashboardVideoDataSource)new WPILibTcpVideoSource(TeamNumber)
+                    : ((VideoSource == DefaultVideoSource.Webcam) ?
+                        (IDashboardVideoDataSource)new WebCamVideoSource() : 
+                        ((VideoSource == DefaultVideoSource.MJPEGStream) ?
+                        (IDashboardVideoDataSource)new MJPEGVideoSource(IPAddress.Parse(VideoSourceArgs)) : null)));
                 videoSource.NewImageRecieved += new NewImageDataRecievedEventHandler(videoSource_NewImageRecieved);
                 videoSource.Start();
             }
@@ -192,6 +198,17 @@ namespace System451.Communication.Dashboard.WPF.Controls
         // Using a DependencyProperty as the backing store for VideoSource.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty VideoSourceProperty =
             DependencyProperty.Register("VideoSource", typeof(DefaultVideoSource), typeof(CameraView), new UIPropertyMetadata(DefaultVideoSource.WPILibTcpStream, sTeamUpdated));
+        
+        [Design.ZomBDesignable(DisplayName = "Source args"), Category("Behavior"), Description("IP Address of the camera in MJPEG mode")]
+        public string VideoSourceArgs
+        {
+            get { return (string)GetValue(VideoSourceArgsProperty); }
+            set { SetValue(VideoSourceArgsProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for VideoSource.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty VideoSourceArgsProperty =
+            DependencyProperty.Register("VideoSourceArgs", typeof(string), typeof(CameraView), new UIPropertyMetadata("", sTeamUpdated));
 
         #region IZomBControlGroup Members
 
