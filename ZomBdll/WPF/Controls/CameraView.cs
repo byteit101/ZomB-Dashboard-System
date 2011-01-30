@@ -159,16 +159,21 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 am.PART_refresh.Visibility = (((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed);
         }
 
+        private delegate void JFunction(BitmapFrame frame);
+
         private void videoSource_NewImageRecieved(object sender, NewImageDataRecievedEventArgs e)
         {
             try
             {
-                PART_img.Source = JpegBitmapDecoder.Create(e.NewDataStream, BitmapCreateOptions.None, BitmapCacheOption.None).Frames[0];
-                if (this.dataUpdatedEvent != null)
+                Dispatcher.Invoke(new JFunction((incoming)=>
                 {
-                    laststream = e.NewDataStream;
-                    dataUpdatedEvent(this, new EventArgs());
-                }
+                    PART_img.Source = incoming;
+                    if (this.dataUpdatedEvent != null)
+                    {
+                        laststream = e.NewDataStream;
+                        dataUpdatedEvent(this, new EventArgs());
+                    }
+                }), JpegBitmapDecoder.Create(e.NewDataStream, BitmapCreateOptions.None, BitmapCacheOption.None).Frames[0]);
             }
             catch (System.Exception x)
             {
