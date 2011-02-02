@@ -75,9 +75,11 @@
                             </MenuItem.Template>
                             <MenuItem Header="Open..." Command="Open"/>
                             <MenuItem Header="Save..." Command="Save"/>
+                            <MenuItem Header="AutoListen" Click="AutoListen_Click" Name="AAListen"/>
+                            <MenuItem Header="Stop Listening" Click="StopListening_Click" Name="AAdeListen" Visibility="Collapsed" />
                             <MenuItem Header="Deploy..." Command="SaveAs"/>
                             <MenuItem Header="Run" Command="Play"/>
-                            <MenuItem Header="About" Click="MenuItem_Click"/>
+                            <MenuItem Header="About..." Click="MenuItem_Click"/>
                         </MenuItem>
                     </Menu>
                     <Rectangle Width="20" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown" SnapsToDevicePixels="True">
@@ -115,7 +117,7 @@
             <Path Name="ResizeGrip" MouseLeftButtonDown="ResizeGrip_MouseDown" MouseMove="ResizeGrip_MouseMove" MouseLeftButtonUp="ResizeGrip_MouseUp"
                   Cursor="SizeNWSE" Canvas.Bottom="0" Canvas.Right="0" Fill="Transparent" Data="M 17,0 H 20 V 20 H 0 V 17 H 12 L 17,12 z"></Path>
             <DockPanel Name="AutoAddPanel" Canvas.Top="0" Canvas.Left="0" LastChildFill="False" />
-            <Button Canvas.Bottom="0" Click="bc">Add</Button>
+            <!--<Button Canvas.Bottom="0" Click="bc">Add</Button>-->
         </Canvas>
     </ScrollViewer>
 </Window>

@@ -22,12 +22,13 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Windows.Threading;
 
 namespace System451.Communication.Dashboard.Net
 {
     [DataSource("DBPacket")]
     [DataSource("DBPkt")]
-    public class DashboardPacketDataSource : IDashboardDataSource, IDashboardStatusDataSource, IDashboardDataDataSource
+    public class DashboardPacketDataSource : IDashboardDataSource, IDashboardStatusDataSource, IDashboardDataDataSource, IDashboardPeekableDataSource
     {
         public const int DBPacketPort = 1165;
         UdpClient cRIOConnection;
@@ -197,7 +198,7 @@ namespace System451.Communication.Dashboard.Net
                             //Check first
                             if (!VerifyPacket(buffer))
                             {
-                                if (InvalidPacketRecieved != null)
+                                if (InvalidPacketRecieved != null && !peeking)
                                 {
                                     //Create our e
                                     InvalidPacketRecievedEventArgs e = new InvalidPacketRecievedEventArgs(buffer, ddh.InvalidPacketAction == InvalidPacketActions.AlwaysContinue || ddh.InvalidPacketAction == InvalidPacketActions.Continue);
@@ -214,17 +215,27 @@ namespace System451.Communication.Dashboard.Net
 
                             //Get the items in a dictionary
                             Dictionary<string, string> vals = SplitParams(Output);
-                            FRCDSStatus status = ParseDSBytes(buffer);
-                            cStat = status;
-                            kys = vals;
+                            if (peeking)
+                            {
+                                foreach (var keys in vals)
+                                {
+                                    dp.Invoke(cb, keys.Key);
+                                }
+                            }
+                            else
+                            {
+                                FRCDSStatus status = ParseDSBytes(buffer);
+                                cStat = status;
+                                kys = vals;
 
-                            //Fire events
-                            if (DataRecieved != null)
-                                DataRecieved(this, new EventArgs());
-                            if (NewStatusRecieved != null)
-                                NewStatusRecieved(this, new NewStatusRecievedEventArgs(status));
-                            if (NewDataRecieved != null)
-                                NewDataRecieved(this, new NewDataRecievedEventArgs(vals));
+                                //Fire events
+                                if (DataRecieved != null)
+                                    DataRecieved(this, new EventArgs());
+                                if (NewStatusRecieved != null)
+                                    NewStatusRecieved(this, new NewStatusRecievedEventArgs(status));
+                                if (NewDataRecieved != null)
+                                    NewDataRecieved(this, new NewDataRecievedEventArgs(vals));
+                            }
                         }
                     }
                     if (nume > 0)
@@ -365,5 +376,28 @@ namespace System451.Communication.Dashboard.Net
         {
             return new ZomBUrlInfo { DefaultPort = 1165 };
         }
+
+        #region IDashboardPeekableDataSource Members
+
+        bool peeking = false;
+        Utils.StringFunction cb;
+        Dispatcher dp;
+
+        public bool BeginNamePeek(Utils.StringFunction callback)
+        {
+            peeking = true;
+            cb = callback;
+            dp = Dispatcher.CurrentDispatcher;
+            Start();
+            return true;
+        }
+
+        public void EndNamePeek()
+        {
+            Stop();
+            peeking = false;
+        }
+
+        #endregion
     }
 }

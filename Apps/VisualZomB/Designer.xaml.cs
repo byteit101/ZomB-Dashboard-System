@@ -35,6 +35,7 @@ using System451.Communication.Dashboard.ViZ.Properties;
 using System451.Communication.Dashboard.WPF.Controls.Designer;
 using System451.Communication.Dashboard.WPF.Design;
 using System451.Communication.Dashboard.WPF.Controls;
+using System.Collections.ObjectModel;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -907,14 +908,77 @@ namespace System451.Communication.Dashboard.ViZ
 
         #endregion
 
+        bool aaing;//A-A-R-D-V-A-R-K!
+        Collection<IDashboardPeekableDataSource> peeps = new Collection<IDashboardPeekableDataSource>();
+
+        private void AutoListen_Click(object sender, RoutedEventArgs e)
+        {
+            if (!aaing)
+            {
+                aadict.Clear();
+                peeps.Clear();
+                AutoAddPanel.Children.Clear();
+                try
+                {
+                    foreach (var item in ZomBUrlSources)
+                    {
+                        if (typeof(IDashboardPeekableDataSource).IsAssignableFrom(item.SourceType))
+                        {
+                            try
+                            {
+                                peeps.Add((IDashboardPeekableDataSource)item.Exec(null));
+                            }
+                            catch { }
+                        }
+                    }
+                    if (peeps.Count < 1)
+                        throw new Exception();//wee!
+                    foreach (var item in peeps)
+                    {
+                        item.BeginNamePeek(AddAutoStub);
+                    }
+                    aaing = true;
+                    AAListen.Visibility = System.Windows.Visibility.Collapsed;
+                    AAdeListen.Visibility = System.Windows.Visibility.Visible;
+                }
+                catch
+                {
+                    System.Windows.Forms.MessageBox.Show("Error Initializing AutoListener for specified sources, are they Peekable?");
+                }
+            }
+        }
+
+        private void StopListening_Click(object sender, RoutedEventArgs e)
+        {
+            if (aaing && peeps != null)
+            {
+                foreach (var item in peeps)
+                {
+                    item.EndNamePeek();
+                }
+                aaing = false;
+                AAListen.Visibility = System.Windows.Visibility.Visible;
+                AAdeListen.Visibility = System.Windows.Visibility.Collapsed;
+                aadict.Clear();
+                peeps.Clear();
+                AutoAddPanel.Children.Clear();
+            }
+        }
+
         private void bc(object sender, RoutedEventArgs e)
         {
             AddAutoStub("Go");
         }
 
+        Dictionary<string, AutoPoint> aadict = new Dictionary<string, AutoPoint>();
+
         private void AddAutoStub(string name)
         {
-            AutoAddPanel.Children.Add(new AutoPoint { Name = name, Toolbox = GetAAToolBoxClone() });
+            if (!aadict.ContainsKey(name))
+            {
+                aadict.Add(name, new AutoPoint { Name = name, Toolbox = GetAAToolBoxClone() });
+                AutoAddPanel.Children.Add(aadict[name]);
+            }
         }
 
         private ListBox GetAAToolBoxClone()

@@ -22,11 +22,12 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Windows.Threading;
 
 namespace System451.Communication.Dashboard.Net
 {
     [DataSource("TCP")]
-    public class TCPDataSource : IDashboardDataSource, IDashboardDataDataSource
+    public class TCPDataSource : IDashboardDataSource, IDashboardDataDataSource, IDashboardPeekableDataSource
     {
         public const int DefaultPort = 1180;//legal
 
@@ -316,13 +317,22 @@ namespace System451.Communication.Dashboard.Net
                         while (cRIOConnection.Available < valuel)
                             Thread.Sleep(1);
                         zb.Read(vbuf, 0, valuel);
-
-                        //Add the value
+                                                
                         string nom = Encoding.UTF8.GetString(buf), val = Encoding.UTF8.GetString(vbuf);
-                        if (kys.ContainsKey(nom))
-                            kys[nom] = val;
+                        //if peeking, send
+                        if (peeking)
+                        {
+                            dp.Invoke(cb, nom);
+                        }
                         else
-                            kys.Add(nom, val);
+                        {
+                            //otherwise
+                            //Add the value
+                            if (kys.ContainsKey(nom))
+                                kys[nom] = val;
+                            else
+                                kys.Add(nom, val);
+                        }
 
                         //Decrease error
                         if (nume > 0)
@@ -391,5 +401,28 @@ namespace System451.Communication.Dashboard.Net
         {
             return new ZomBUrlInfo { DefaultPort = 1180 };
         }
+
+        #region IDashboardPeekableDataSource Members
+
+        bool peeking = false;
+        Utils.StringFunction cb;
+        Dispatcher dp;
+
+        public bool BeginNamePeek(Utils.StringFunction callback)
+        {
+            peeking = true;
+            cb = callback;
+            dp = Dispatcher.CurrentDispatcher;
+            Start();
+            return true;
+        }
+
+        public void EndNamePeek()
+        {
+            Stop();
+            peeking = false;
+        }
+
+        #endregion
     }
 }
