@@ -33,7 +33,7 @@ namespace System451.Communication.Dashboard.Net
         public TCPDataSender(int team)
         {
             IPAddress = IPAddress.Parse("10." + ((int)(team / 100)) + "." + ((int)(team % 100)) + ".2");
-            Port = TCPDataSource.DefaultPort+1;
+            Port = TCPDataSource.DefaultPort;
         }
 
         public TCPDataSender(int team, int port)
@@ -45,7 +45,7 @@ namespace System451.Communication.Dashboard.Net
         public TCPDataSender(IPAddress addr)
         {
             IPAddress = addr;
-            Port = TCPDataSource.DefaultPort+1;
+            Port = TCPDataSource.DefaultPort;
         }
 
         public TCPDataSender(IPAddress addr, int port)

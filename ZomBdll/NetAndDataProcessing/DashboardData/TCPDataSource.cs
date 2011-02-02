@@ -28,7 +28,7 @@ namespace System451.Communication.Dashboard.Net
     [DataSource("TCP")]
     public class TCPDataSource : IDashboardDataSource, IDashboardDataDataSource
     {
-        public const int DefaultPort = 9066;//"ZB"
+        public const int DefaultPort = 1180;//legal
 
         TcpClient cRIOConnection;
         bool isrunning;
