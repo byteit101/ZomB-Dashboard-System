@@ -125,6 +125,11 @@ namespace System451.Communication.Dashboard.Net
             string to = res.Groups[1].Value;
             string port = res.Groups[3].Value;
             SourceName = res.Groups[4].Value;
+            try
+            {
+                Path = res.Groups[5].Value;
+            }
+            catch { }
             SourceType = FindSourceType();
             var getInfo = SourceType.GetMethod("GetZomBUrlInfo", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Public, null, new Type[] { }, null);
             if (getInfo == null)
@@ -159,6 +164,8 @@ namespace System451.Communication.Dashboard.Net
                     return typeof(TCPDataSource);
                 case "TCP2":
                     return typeof(TCPDataSender);
+                case "DataSave":
+                    return typeof(DataSaver);
             }
             foreach (var item in AppDomain.CurrentDomain.GetAssemblies())
             {
@@ -189,6 +196,7 @@ namespace System451.Communication.Dashboard.Net
         public int Port { get; private set; }
         public IPAddress IPAddress { get; private set; }
         public string SourceName { get; private set; }
+        public string Path { get; private set; }
         public Type SourceType { get; private set; }
         protected ZomBUrlInfo DefaultZomBUrlInfo { get; private set; }
 

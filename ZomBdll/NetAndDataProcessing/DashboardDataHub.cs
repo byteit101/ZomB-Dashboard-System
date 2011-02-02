@@ -234,6 +234,8 @@ namespace System451.Communication.Dashboard
                                 RegisterSource(ob as IDashboardDataSource);
                             if (ob is IDataSender)
                                 RegisterSender(ob as IDataSender);
+                            if (ob is IZomBMonitor)
+                                Add(ob as IZomBMonitor);
                         }
                     }
                     for (; i < DataSrcs.Count; i++)

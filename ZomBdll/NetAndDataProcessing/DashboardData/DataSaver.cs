@@ -20,12 +20,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
+using System451.Communication.Dashboard.Net;
+using System451.Communication.Dashboard.Utils;
 
 namespace System451.Communication.Dashboard
 {
     /// <summary>
     /// DataSaver saves data from the DDH to a file that can be read by DataPlayerSource
     /// </summary>
+    [DataSource("DataSave")]
     public class DataSaver : IZomBMonitor
     {
         Queue<byte[]> buffer = new Queue<byte[]>();
@@ -41,6 +44,11 @@ namespace System451.Communication.Dashboard
         public DataSaver(string file)
         {
             fpath = file;
+        }
+
+        internal DataSaver(ZomBUrl url)
+        {
+            fpath = BTZomBFingerFactory.DefaultSaveLocation + "\\ZCapture" + (DateTime.Now.Ticks.ToString("x")) + ".zcap";
         }
 
         ~DataSaver()
@@ -204,6 +212,15 @@ namespace System451.Communication.Dashboard
         }
 
         #endregion
+
+        /// <summary>
+        /// Magic method for zomb:// urls
+        /// </summary>
+        /// <returns></returns>
+        private static ZomBUrlInfo GetZomBUrlInfo()
+        {
+            return new ZomBUrlInfo { DefaultPort = 0 };
+        }
     }
     //Format: T(ushort)[timespan]S[data]D(ushort)[length][data]
 }
