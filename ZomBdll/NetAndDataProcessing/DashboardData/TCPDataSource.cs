@@ -389,7 +389,7 @@ namespace System451.Communication.Dashboard.Net
         /// <returns></returns>
         private static ZomBUrlInfo GetZomBUrlInfo()
         {
-            return new ZomBUrlInfo { DefaultPort = 9066 };
+            return new ZomBUrlInfo { DefaultPort = 1180 };
         }
     }
 }

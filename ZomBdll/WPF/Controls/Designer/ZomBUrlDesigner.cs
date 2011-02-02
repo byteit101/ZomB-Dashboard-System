@@ -33,6 +33,7 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
         public override FrameworkElement GetProperyField()
         {
             var pan = new DockPanel();
+            pan.Width = 110;//TODO: hard coded from Toolbox.xaml
             t = new Label();
             try
             {
@@ -67,8 +68,10 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
                     t.Content = zurls.ToString(null);
                 }
                 catch { }//Null value
+                pan.ToolTip = t.Content;
             };
             DockPanel.SetDock(btn, Dock.Right);
+            pan.ToolTip = t.Content;
             pan.Children.Add(btn);
             pan.Children.Add(t);
             return pan;

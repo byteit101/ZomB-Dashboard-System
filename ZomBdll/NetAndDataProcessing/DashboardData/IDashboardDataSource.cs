@@ -128,6 +128,8 @@ namespace System451.Communication.Dashboard.Net
             try
             {
                 Path = res.Groups[5].Value;
+                if (Path.StartsWith("/"))
+                    Path = Path.Substring(1);
             }
             catch { }
             SourceType = FindSourceType();
@@ -166,6 +168,8 @@ namespace System451.Communication.Dashboard.Net
                     return typeof(TCPDataSender);
                 case "DataSave":
                     return typeof(DataSaver);
+                case "File":
+                    return typeof(DataPlayerSource);
             }
             foreach (var item in AppDomain.CurrentDomain.GetAssemblies())
             {

@@ -26,6 +26,7 @@ namespace System451.Communication.Dashboard.Net
     /// <summary>
     /// DataPlayerSource "plays" the data saved by DataSaver
     /// </summary>
+    [DataSource("File")]
     public class DataPlayerSource : IDashboardDataSource, IDashboardStatusDataSource, IDashboardDataDataSource
     {
         Dictionary<string, string> vls = new Dictionary<string, string>();
@@ -40,6 +41,11 @@ namespace System451.Communication.Dashboard.Net
         public DataPlayerSource(string file)
         {
             FilePath = file;
+        }
+
+        internal DataPlayerSource(ZomBUrl url)
+        {
+            FilePath = url.Path;
         }
 
         /// <summary>
@@ -236,6 +242,15 @@ namespace System451.Communication.Dashboard.Net
         public event NewStatusRecievedEventHandler NewStatusRecieved;
 
         #endregion
+
+        /// <summary>
+        /// Magic method for zomb:// urls
+        /// </summary>
+        /// <returns></returns>
+        private static ZomBUrlInfo GetZomBUrlInfo()
+        {
+            return new ZomBUrlInfo { DefaultPort = 0 };
+        }
     }
     //Format: T(ushort)[timespan]S[data]D(ushort)[length][data]
 }
