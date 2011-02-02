@@ -24,6 +24,7 @@ using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System451.Communication.Dashboard.WPF.Controls.Designer;
+using System451.Communication.Dashboard.Utils;
 
 namespace System451.Communication.Dashboard.Net
 {
@@ -41,6 +42,15 @@ namespace System451.Communication.Dashboard.Net
         event EventHandler DataRecieved;
         event InvalidPacketRecievedEventHandler InvalidPacketRecieved;
         event ErrorEventHandler OnError;
+    }
+
+    /// <summary>
+    /// Represents a source of Peekable Dashboard data
+    /// </summary>
+    public interface IDashboardPeekableDataSource
+    {
+        bool BeginNamePeek(StringFunction callback);
+        void EndNamePeek();
     }
 
     /// <summary>

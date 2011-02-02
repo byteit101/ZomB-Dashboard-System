@@ -1,0 +1,59 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ZomB="clr-namespace:System451.Communication.Dashboard.WPF.Controls">
+    <Style TargetType="{x:Type ZomB:AutoPoint}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ZomB:AutoPoint}">
+                    <Border Padding="{TemplateBinding Padding}">
+                        <Canvas Name="svg2" Width="16" Height="16">
+                            <Canvas.Resources>
+                                <LinearGradientBrush x:Key="linearGradient3757" MappingMode="RelativeToBoundingBox" StartPoint="0,0" EndPoint="1,1">
+                                    <LinearGradientBrush.GradientStops>
+                                        <GradientStopCollection>
+                                            <GradientStop Color="#FFCBCBCB" Offset="0"/>
+                                            <GradientStop Color="#FF999999" Offset="1"/>
+                                        </GradientStopCollection>
+                                    </LinearGradientBrush.GradientStops>
+                                </LinearGradientBrush>
+                                <LinearGradientBrush x:Key="linearGradient3791" MappingMode="Absolute" SpreadMethod="Reflect" StartPoint="8,1050.3622" EndPoint="9,1050.3622">
+                                    <LinearGradientBrush.GradientStops>
+                                        <GradientStopCollection>
+                                            <GradientStop Color="#FFCBCBCB" Offset="0"/>
+                                            <GradientStop Color="#FF999999" Offset="1"/>
+                                        </GradientStopCollection>
+                                    </LinearGradientBrush.GradientStops>
+                                    <LinearGradientBrush.Transform>
+                                        <!--linearGradient-->
+                                        <TranslateTransform X="0" Y="-1039.3622"/>
+                                    </LinearGradientBrush.Transform>
+                                </LinearGradientBrush>
+                                <RadialGradientBrush x:Key="radialGradient3798" MappingMode="Absolute" Center="8.5555553,5.2222228" GradientOrigin="6.5585995,7.2191787" RadiusX="7" RadiusY="7">
+                                    <RadialGradientBrush.GradientStops>
+                                        <GradientStopCollection>
+                                            <GradientStop Color="#FFCBCBCB" Offset="0"/>
+                                            <GradientStop Color="#FF999999" Offset="1"/>
+                                        </GradientStopCollection>
+                                    </RadialGradientBrush.GradientStops>
+                                    <RadialGradientBrush.Transform>
+                                        <!--radialGradient-->
+                                        <MatrixTransform Matrix="-5.1090281e-8,0.78571541,-0.78571541,-5.1090286e-8,12.103181,-1.2222085"/>
+                                    </RadialGradientBrush.Transform>
+                                </RadialGradientBrush>
+                            </Canvas.Resources>
+                            <Path Name="path2987" Fill="{StaticResource radialGradient3798}" Data="M 8 0 C 4.9624295 0 2.5 2.4624295 2.5 5.5 C 2.5 8.5375705 4.9624295 11 8 11 C 11.03757 11 13.5 8.5375705 13.5 5.5 C 13.5 2.4624295 11.03757 0 8 0 z "/>
+                            <Path Name="rect3765" Fill="{StaticResource linearGradient3791}" Data="m 8 10 c -0.5522847 0 -1 0.4477 -1 1 l 0 1 2 0 0 -1 C 9 10.4477 8.5522847 10 8 10 z m -1 3 0 1 2 0 0 -1 -2 0 z m 0 2 0 1 2 0 0 -1 -2 0 z"/>
+                            <Popup Name="PART_Pop" AllowsTransparency="True" MaxWidth="200" Placement="Bottom"
+                                   PopupAnimation="Slide" StaysOpen="False">
+                                <Border BorderBrush="Black" BorderThickness="1" Background="White" Padding="5">
+                                    <ContentPresenter Content="{TemplateBinding Toolbox}" />
+                                </Border>
+                            </Popup>
+                        </Canvas>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

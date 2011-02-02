@@ -254,6 +254,7 @@
     <Compile Include="WPF\DashboardDataCanvas.cs" />
     <Compile Include="WPF\DashboardDataHubWindow.cs" />
     <Compile Include="WPF\DashboardDataPanel.cs" />
+    <Compile Include="WPF\Design\AutoPoint.cs" />
     <Compile Include="WPF\Design\IDesigner.cs" />
     <Compile Include="WPF\Design\Reflector.cs" />
     <Compile Include="WPF\Design\ViZBindingParser.cs" />
@@ -511,6 +512,10 @@
     <Page Include="WPF\Controls\ZomBGLControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Design\AutoPoint.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
