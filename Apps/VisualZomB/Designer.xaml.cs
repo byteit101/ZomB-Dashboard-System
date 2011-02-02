@@ -34,6 +34,7 @@ using System451.Communication.Dashboard.Utils;
 using System451.Communication.Dashboard.ViZ.Properties;
 using System451.Communication.Dashboard.WPF.Controls.Designer;
 using System451.Communication.Dashboard.WPF.Design;
+using System451.Communication.Dashboard.WPF.Controls;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -289,19 +290,41 @@ namespace System451.Communication.Dashboard.ViZ
             return null;
         }
 
+        public static DependencyObject FindTopAnchestor(DependencyObject current)
+        {
+            do
+            {
+                if (VisualTreeHelper.GetParent(current) == null)
+                {
+                    return current;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            }
+            while (current != null);
+            return null;
+        }
+
         private void ZDash_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent("ZomBControl"))
             {
                 ZomBControlAttribute info = (e.Data.GetData("ZomBControl") as ZomBControlAttribute);
                 if (info != null)
-                    AddControl((ZomBControlAttribute)info, e.GetPosition(ZDash));
+                    AddControl(info, e.GetPosition(ZDash));
+            }
+            else if (e.Data.GetDataPresent("ZomBControl2"))
+            {
+                ZomBControlAttribute info = (e.Data.GetData("ZomBControl2") as ZomBControlAttribute);
+                if (info != null)
+                {
+                    AddControl(info, e.GetPosition(ZDash), ap);
+                }
             }
         }
 
         private void ZDash_DragEnter(object sender, DragEventArgs e)
         {
-            if (!e.Data.GetDataPresent("ZomBControl"))
+            if (!e.Data.GetDataPresent("ZomBControl") && !e.Data.GetDataPresent("ZomBControl2"))
             {
                 e.Effects = DragDropEffects.None;
             }
@@ -312,6 +335,15 @@ namespace System451.Communication.Dashboard.ViZ
         private void AddControl(ZomBControlAttribute info)
         {
             AddControl(info, new Point(5.0, 5.0));
+        }
+
+        private void AddControl(ZomBControlAttribute info, Point point, AutoPoint aup)
+        {
+            FrameworkElement fe = Reflector.Inflate(info.Type) as FrameworkElement;
+            fe.Name = aup.Name;
+            if (fe is ZomBGLControl)
+                (fe as ZomBGLControl).ControlName = aup.Name;
+            AddControl(fe, point);
         }
 
         private void AddControl(ZomBControlAttribute info, Point point)
@@ -820,6 +852,85 @@ namespace System451.Communication.Dashboard.ViZ
             }
             curObj = null;
             UpdateSelected();
+        }
+
+        #endregion
+
+        #region AutoAdd
+
+        #region AADnD
+
+        AutoPoint ap;
+
+        private void listBox2_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            dndopoint = e.GetPosition(null);
+            origSrc = e.OriginalSource;
+            lbdragging = true;
+            ap=FindAnchestor<AutoPoint>(LogicalTreeHelper.GetParent(FindTopAnchestor((DependencyObject)origSrc)));
+        }
+
+        private void listBox2_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                // Get the current mouse position
+                Point mousePos = e.GetPosition(null);
+                Vector diff = dndopoint - mousePos;
+
+                if (lbdragging && (e.LeftButton == MouseButtonState.Pressed &&
+                    Math.Abs(diff.X) + Math.Abs(diff.Y) > 3))
+                {
+                    // Get the dragged ListViewItem
+                    ListBoxItem listViewItem =
+                        FindAnchestor<ListBoxItem, WrapPanel>((DependencyObject)origSrc);
+
+                    //System.Diagnostics.Debug.Print("Moving...");
+                    // Find the data behind the ListViewItem
+                    ZomBControlAttribute contact = (ZomBControlAttribute)FindAnchestor<ListBox>(listViewItem).ItemContainerGenerator.
+                        ItemFromContainer(listViewItem);
+                    //System.Diagnostics.Debug.Print("Found...");
+                    // Initialize the drag & drop operation
+                    DataObject dragData = new DataObject("ZomBControl2", contact);
+                    DragDrop.DoDragDrop(listViewItem, dragData, DragDropEffects.Copy);
+                    lbdragging = false;
+
+                }
+            }
+            catch { }//System.Diagnostics.Debug.Print("FAIL!"); }
+        }
+
+        private void listBox2_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            lbdragging = false;
+        }
+
+        #endregion
+
+        private void bc(object sender, RoutedEventArgs e)
+        {
+            AddAutoStub("Go");
+        }
+
+        private void AddAutoStub(string name)
+        {
+            AutoAddPanel.Children.Add(new AutoPoint { Name = name, Toolbox = GetAAToolBoxClone() });
+        }
+
+        private ListBox GetAAToolBoxClone()
+        {
+            var lb = DeepClonetb();
+            lb.ItemsSource = listBox1.ItemsSource;
+            lb.PreviewMouseLeftButtonDown += listBox2_PreviewMouseLeftButtonDown;
+            lb.PreviewMouseUp += listBox2_PreviewMouseUp;
+            lb.PreviewMouseMove += listBox2_PreviewMouseMove;
+            return lb;
+        }
+
+        private ListBox DeepClonetb()
+        {
+            var s = "<ListBox xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" Grid.Column=\"0\" VerticalAlignment=\"Stretch\" ScrollViewer.HorizontalScrollBarVisibility=\"Disabled\"><ListBox.ItemTemplate><DataTemplate><ListBoxItem Padding=\"3\" HorizontalAlignment=\"Stretch\" ToolTipService.InitialShowDelay=\"1000\" ToolTipService.ShowDuration=\"10000\"><ListBoxItem.ToolTip><StackPanel Width=\"200\"><Label FontWeight=\"Bold\" Background=\"Blue\" Foreground=\"White\" HorizontalAlignment=\"Stretch\" HorizontalContentAlignment=\"Center\" Content=\"{Binding Path=Name}\"></Label><TextBlock Padding=\"10\" TextWrapping=\"Wrap\" Text=\"{Binding Path=Description}\"></TextBlock></StackPanel></ListBoxItem.ToolTip><Image Source=\"{Binding Path=Icon}\" Width=\"32\" Height=\"32\" Margin=\"2\" VerticalAlignment=\"Center\" HorizontalAlignment=\"Center\" SnapsToDevicePixels=\"True\" /></ListBoxItem></DataTemplate></ListBox.ItemTemplate><ListBox.ItemsPanel><ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate></ListBox.ItemsPanel></ListBox>";
+            return (ListBox)XamlReader.Parse(s);
         }
 
         #endregion
