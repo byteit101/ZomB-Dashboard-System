@@ -46,7 +46,8 @@ namespace System451.Communication.Dashboard.Net
 
         public DashboardPacketDataSource(ZomBUrl info, IZomBController ddh)
         {
-            this.ddh = ddh.GetDashboardDataHub();
+            if (ddh != null)
+                this.ddh = ddh.GetDashboardDataHub();
         }
 
         ~DashboardPacketDataSource()
