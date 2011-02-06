@@ -7,7 +7,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ZomB:AutoPoint}">
                     <Border Padding="{TemplateBinding Padding}">
-                        <Canvas Name="svg2" Width="16" Height="16">
+                        <Canvas Name="svg2" Width="16" Height="16" ToolTip="{TemplateBinding Name}">
                             <Canvas.Resources>
                                 <LinearGradientBrush x:Key="linearGradient3757" MappingMode="RelativeToBoundingBox" StartPoint="0,0" EndPoint="1,1">
                                     <LinearGradientBrush.GradientStops>

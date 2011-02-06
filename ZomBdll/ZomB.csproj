@@ -211,6 +211,7 @@
     <Compile Include="WPF\Controls\AnalogMeter.cs">
     </Compile>
     <Compile Include="WPF\Controls\AlertControl.cs" />
+    <Compile Include="WPF\Controls\BluFinger.cs" />
     <Compile Include="WPF\Controls\CameraView.cs" />
     <Compile Include="WPF\Controls\Designer\ZomBUrlCollectionDesignerWindow.xaml.cs">
       <DependentUpon>ZomBUrlCollectionDesignerWindow.xaml</DependentUpon>
@@ -402,6 +403,10 @@
     <Page Include="WPF\Controls\AlertControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controls\BluFinger.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

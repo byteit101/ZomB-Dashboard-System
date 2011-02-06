@@ -1,0 +1,33 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ZomB="clr-namespace:System451.Communication.Dashboard.WPF.Controls">
+    <Style TargetType="{x:Type ZomB:BluFinger}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ZomB:BluFinger}">
+                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                        <TextBox Background="{TemplateBinding Background}" Name="PART_Status">Loading...</TextBox>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <DrawingImage x:Key="BluFingerIcon">
+        <DrawingImage.Drawing>
+            <GeometryDrawing Geometry="M 0 0 48 0 48 48 0 48 z">
+                <GeometryDrawing.Brush>
+                    <VisualBrush Viewbox="0 0 48 48" ViewboxUnits="Absolute">
+                        <VisualBrush.Visual>
+                            <Viewbox>
+                                <Canvas Width="48" Height="48">
+                                    <Path Fill="#0060AE" Data="m 23.21875 2.4375 c -8.201172 0.16406 -13.88477 4.58691 -14.625 12.40625 -0.24659 2.60107 -0.42627 5.24609 -0.5 7.84375 l 0 4.28125 c 0.12793 3.88475 0.62548 7.44921 1.78125 10.1875 2.193843 5.20312 6.038085 8.291 12.875 8.4375 l 1.0625 0 c 7.521973 -0.16994 12.396484 -2.30469 14.875 -10.9375 2.479004 -8.63282 0.682129 -21.01661 -1.625 -25.375 C 34.754395 4.92089 31.166504 2.57519 24.15625 2.4375 l -0.9375 0 z m -0.6875 3.0625 11.125 10.96875 -7.53125 7.5 7.5625 7.5625 -11.15625 11.15625 0 -14.9375 -6.3125 6.3125 -2.28125 -2.25 7.75 -7.75 L 14 16.375 l 2.25 -2.28125 6.28125 6.28125 0 -14.875 z m 2.90625 7.125 0 7.75 3.84375 -3.84375 L 25.4375 12.625 z m 0 14.84375 0 7.78125 3.84375 -3.84375 -3.84375 -3.9375 z"/>
+                                </Canvas>
+                            </Viewbox>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </GeometryDrawing.Brush>
+            </GeometryDrawing>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+</ResourceDictionary>

@@ -19,6 +19,7 @@
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/DebugGrid.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/NetForward.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/Image.xaml" />
+        <ResourceDictionary Source="/ZomB;component/WPF/Controls/BluFinger.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Design/AutoPoint.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
