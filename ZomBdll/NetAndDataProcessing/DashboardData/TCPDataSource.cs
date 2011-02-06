@@ -29,7 +29,7 @@ namespace System451.Communication.Dashboard.Net
     [DataSource("TCP")]
     public class TCPDataSource : IDashboardDataSource, IDashboardDataDataSource, IDashboardPeekableDataSource
     {
-        public const int DefaultPort = 1180;//legal
+        public const int DefaultPort = 9066;
 
         TcpClient cRIOConnection;
         bool isrunning;
@@ -399,7 +399,7 @@ namespace System451.Communication.Dashboard.Net
         /// <returns></returns>
         private static ZomBUrlInfo GetZomBUrlInfo()
         {
-            return new ZomBUrlInfo { DefaultPort = 1180 };
+            return new ZomBUrlInfo { DefaultPort = 9066 };
         }
 
         #region IDashboardPeekableDataSource Members
