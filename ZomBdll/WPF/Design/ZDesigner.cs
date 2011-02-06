@@ -31,7 +31,7 @@ namespace System451.Communication.Dashboard
         {
             get
             {
-                return designr != null;
+                return designr != null || (System.ComponentModel.LicenseManager.UsageMode != System.ComponentModel.LicenseUsageMode.Runtime);
             }
         }
 
@@ -39,7 +39,7 @@ namespace System451.Communication.Dashboard
         {
             get
             {
-                return designr == null;
+                return designr == null || (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Runtime);
             }
         }
 
