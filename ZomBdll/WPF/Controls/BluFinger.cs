@@ -48,6 +48,11 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public BluFinger()
         {
             this.Background = Brushes.LightBlue;
+            this.MouseDoubleClick += delegate
+            {
+                if (bf != null)
+                    bf.Start();
+            };
         }
 
         ~BluFinger()
@@ -80,7 +85,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 if (status != null)
                     status.Text = "Ready";
             };
-            bf.Start();
             if (status != null)
                 status.Text = "Ready";
         }
