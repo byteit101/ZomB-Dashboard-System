@@ -322,14 +322,12 @@
     <Content Include="CREDITS.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="ext\SlimDX.dll" />
     <None Include="ext\libvlc.dll" />
     <None Include="ext\libvlccore.dll" />
     <None Include="ext\Vlc.DotNet.Core.dll" />
     <None Include="ext\Vlc.DotNet.Forms.dll" />
     <Content Include="ext\WebCam_Capture\%40PSC_ReadMe_1339_10.txt" />
     <Content Include="ext\WebCam_Capture\CAMERA.ICO" />
-    <None Include="ext\x64\SlimDX.dll" />
     <Content Include="ext\x64\32feetWidcomm.dll" />
     <Content Include="ext\InTheHand.Net.Personal.dll">
     </Content>

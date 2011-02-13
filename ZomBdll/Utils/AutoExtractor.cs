@@ -31,6 +31,7 @@ namespace System451.Communication.Dashboard
                 All = 0xffff,
                 InTheHandManaged = 0x1,
                 InTheHandNative = 0x2,
+                [Obsolete("slimDX is not in this dll, download it fom the interwebs")]
                 SlimDX = 0x4,
                 VLC = 0x8
             }
@@ -49,16 +50,6 @@ namespace System451.Communication.Dashboard
                             File.WriteAllBytes("32feetWidcomm.dll", Resources._32feetWidcommx64);
                         else
                             File.WriteAllBytes("32feetWidcomm.dll", Resources._32feetWidcommx86);
-                    }
-                }
-                if ((files & Files.SlimDX) == Files.SlimDX)
-                {
-                    if (!File.Exists("SlimDX.dll"))
-                    {
-                        if (CPU.Is64BitOperatingSystem())
-                            File.WriteAllBytes("SlimDX.dll", Resources.SlimDX64);
-                        else
-                            File.WriteAllBytes("SlimDX.dll", Resources.SlimDX86);
                     }
                 }
                 if ((files & Files.VLC) == Files.VLC)
@@ -80,8 +71,6 @@ namespace System451.Communication.Dashboard
 
                 if (dll.ToLower().Contains("inthehand.net.personal"))
                         Extract(Files.InTheHandManaged | Files.InTheHandNative);
-                    else if (dll.ToLower() == "slimdx.dll")
-                        Extract(Files.SlimDX);
                     else if (dll.ToLower().Contains("vlc"))
                         Extract(Files.VLC);
                 else

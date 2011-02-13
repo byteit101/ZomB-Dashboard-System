@@ -51,14 +51,14 @@ namespace System451.Communication.Dashboard.WPF.Controls
             pup = base.GetTemplateChild("PART_Pop") as Popup;
         }
 
-        public string Name
+        new public string Name
         {
             get { return (string)GetValue(NameProperty); }
             set { SetValue(NameProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Name.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty NameProperty =
+        new public static readonly DependencyProperty NameProperty =
             DependencyProperty.Register("Name", typeof(string), typeof(AutoPoint), new UIPropertyMetadata(""));
 
         public object Toolbox
