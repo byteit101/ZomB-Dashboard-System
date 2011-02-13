@@ -136,10 +136,6 @@ namespace System451.Communication.Dashboard
                         {
                             Thread.Sleep(50);
                         }
-                        if (!saving)
-                        {
-                            return;
-                        }
                         while (pubicQueue.Count > 0)
                         {
                             lock (pubicQueue)
@@ -161,6 +157,27 @@ namespace System451.Communication.Dashboard
                             srm.Add(imageQueue.Dequeue());
                         }
                         Thread.Sleep(500);
+                    }
+
+                    //close out
+                    while (pubicQueue.Count > 0)
+                    {
+                        lock (pubicQueue)
+                        {
+                            privateQueue.Enqueue(pubicQueue.Dequeue());
+                        }
+                    }
+                    while (privateQueue.Count > 0)
+                    {
+                        //We should honor them, but lets not, as we should have a imageconverter
+                        imageQueue.Enqueue(new MemoryStream(Convert.FromBase64String(privateQueue.Dequeue())));
+                    }
+                    if (srm != null)
+                    {
+                        while (imageQueue.Count > 0)
+                        {
+                            srm.Add(imageQueue.Dequeue());
+                        }
                     }
                 }
                 finally
