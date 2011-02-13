@@ -17,6 +17,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -32,10 +33,9 @@ using System.Windows.Media.Animation;
 using System451.Communication.Dashboard.Net;
 using System451.Communication.Dashboard.Utils;
 using System451.Communication.Dashboard.ViZ.Properties;
+using System451.Communication.Dashboard.WPF.Controls;
 using System451.Communication.Dashboard.WPF.Controls.Designer;
 using System451.Communication.Dashboard.WPF.Design;
-using System451.Communication.Dashboard.WPF.Controls;
-using System.Collections.ObjectModel;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -403,8 +403,8 @@ namespace System451.Communication.Dashboard.ViZ
                 case CurrentDrag.Move:
                     {
                         Vector mv = e.GetPosition(ZDash) - dndopoint;
-                        Canvas.SetLeft((UIElement)origSrc, Math.Min(Math.Max(0, opoint.X + mv.X), ZDash.Width - (origSrc as SurfaceControl).Width));
-                        Canvas.SetTop((UIElement)origSrc, Math.Min(Math.Max(0, opoint.Y + mv.Y), ZDash.Height - (origSrc as SurfaceControl).Height));
+                        Canvas.SetLeft((UIElement)origSrc, opoint.X + mv.X);
+                        Canvas.SetTop((UIElement)origSrc, opoint.Y + mv.Y);
                         ShowSnaps(SnapGridDirections.All, (x) => Canvas.SetLeft(curObj, x), (y) => Canvas.SetTop(curObj, y), (r) => Canvas.SetLeft(curObj, r - SnapGridHelper.Right(curObj) + SnapGridHelper.Left(curObj)), (b) => Canvas.SetTop(curObj, b - SnapGridHelper.Bottom(curObj) + SnapGridHelper.Top(curObj)));
                     }
                     break;
@@ -413,18 +413,18 @@ namespace System451.Communication.Dashboard.ViZ
                         Vector mv = e.GetPosition(ZDash) - dndopoint;
                         var sc = (origSrc as SurfaceControl);
                         if (cdm.Flagged(CurrentDragMove.Width))
-                            sc.Width = Math.Min(Math.Max(0, opoint.X + mv.X), ZDash.Width - Canvas.GetLeft((UIElement)origSrc));
+                            sc.Width = opoint.X + mv.X;
                         if (cdm.Flagged(CurrentDragMove.Height))
-                            sc.Height = Math.Min(Math.Max(0, opoint.Y + mv.Y), ZDash.Height - Canvas.GetTop((UIElement)origSrc));
+                            sc.Height = opoint.Y + mv.Y;
                         if (cdm.Flagged(CurrentDragMove.X))
                         {
-                            Canvas.SetLeft(sc, Math.Min(Math.Max(0, oxpoint.X + mv.X), Canvas.GetLeft(sc) + sc.Width));
-                            sc.Width = Math.Min(Math.Max(0, opoint.X - mv.X), ZDash.Width - Canvas.GetLeft((UIElement)origSrc));
+                            Canvas.SetLeft(sc, oxpoint.X + mv.X);
+                            sc.Width = opoint.X - mv.X;
                         }
                         if (cdm.Flagged(CurrentDragMove.Y))
                         {
-                            Canvas.SetTop(sc, Math.Min(Math.Max(0, oxpoint.Y + mv.Y), Canvas.GetTop(sc) + sc.Height));
-                            sc.Height = Math.Min(Math.Max(0, opoint.Y - mv.Y), ZDash.Height - Canvas.GetTop((UIElement)origSrc));
+                            Canvas.SetTop(sc, oxpoint.Y + mv.Y);
+                            sc.Height = opoint.Y - mv.Y;
                         }
                         ShowSnaps(((SnapGridDirections)cdm), x => { sc.Width = Canvas.GetLeft(sc) + sc.Width - x; Canvas.SetLeft(sc, x); }, y => { sc.Height = Canvas.GetTop(sc) + sc.Height - y; Canvas.SetTop(sc, y); }, r => curObj.Width = r - SnapGridHelper.Left(curObj), b => curObj.Height = b - SnapGridHelper.Top(curObj));
 
@@ -868,7 +868,7 @@ namespace System451.Communication.Dashboard.ViZ
             dndopoint = e.GetPosition(null);
             origSrc = e.OriginalSource;
             lbdragging = true;
-            ap=FindAnchestor<AutoPoint>(LogicalTreeHelper.GetParent(FindTopAnchestor((DependencyObject)origSrc)));
+            ap = FindAnchestor<AutoPoint>(LogicalTreeHelper.GetParent(FindTopAnchestor((DependencyObject)origSrc)));
         }
 
         private void listBox2_PreviewMouseMove(object sender, MouseEventArgs e)

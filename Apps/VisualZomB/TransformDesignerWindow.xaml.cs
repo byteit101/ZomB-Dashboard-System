@@ -58,9 +58,16 @@ namespace System451.Communication.Dashboard.ViZ
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             FixedRotationDial.DataControlEnabled = true;
+            bool cont = true;
             FixedRotationDial.DataUpdated += delegate
             {
-                (Object.RenderTransform as RotateTransform).Angle = FixedRotationDial.DoubleValue;
+                if (cont)
+                {
+                    (Object.RenderTransform as RotateTransform).Angle = Math.Round(FixedRotationDial.DoubleValue, 0);
+                    cont = false;
+                    FixedRotationDial.DoubleValue = Math.Round(FixedRotationDial.DoubleValue, 0);
+                    cont = true;
+                }
             };
             init = true;
         }
