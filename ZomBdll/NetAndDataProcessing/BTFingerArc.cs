@@ -97,7 +97,7 @@ namespace System451.Communication.Dashboard.Utils
             radio = InTheHand.Net.Bluetooth.BluetoothRadio.PrimaryRadio;
             listen = new BluetoothListener(teamgid);
             bserve = new BTZomBServer(listen, pullFrom, teamNumber, this);
-            //radio.Mode = RadioMode.Connectable;
+            radio.Mode = RadioMode.Connectable;
             client = new BluetoothClient();
             bfinger = new BTFinger(client, saveTo, teamNumber, this);
             TeamNumber = teamNumber;
@@ -151,11 +151,11 @@ namespace System451.Communication.Dashboard.Utils
         }
         public void DisableBT()
         {
-            //radio.Mode = RadioMode.PowerOff;
+            radio.Mode = RadioMode.PowerOff;
         }
         public void EnableBT()
         {
-            //radio.Mode = RadioMode.Connectable;
+            radio.Mode = RadioMode.Connectable;
         }
         public static string DefaultSaveLocation { get { return @"C:\Program Files\ZomB\Data"; } }
         public static string DefaultLoadLocation { get { return @"C:\Program Files\ZomB\Data\BluArc"; } }
