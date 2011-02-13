@@ -45,7 +45,7 @@ namespace System451.Communication.Dashboard
 
         public static void SetDesigner(ISurfaceDesigner designer)
         {
-            if (designr == null)
+            if (designr == null || designer==null)
                 designr = designer;
             else if (designer != designr)
                 throw new InvalidOperationException("Only one designer can be active at one time");

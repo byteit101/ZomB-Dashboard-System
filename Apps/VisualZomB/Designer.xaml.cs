@@ -1182,39 +1182,37 @@ namespace System451.Communication.Dashboard.ViZ
 
             pw.Status = "Initializing...";
             pw.Show();
+            ZDesigner.SetDesigner(null);
 
-            Dispatcher.Invoke(new VoidFunction(() => pw.Status = "Generating Zaml..."));
+            pw.Status = "Generating Zaml...";
             string zaml = Export();
 
-            System.Threading.ThreadPool.QueueUserWorkItem(delegate(object o)
             {
 
-                Dispatcher.Invoke(new VoidFunction(() => pw.Status = "Initializing process..."));
-                var ad = AppDomain.CreateDomain("ZomB Running Domain");
-                ad.AssemblyResolve += AutoExtractor.AssemblyResolve;
-
+                pw.Status = "Initializing process...";
                 {
+                    Run r = new Run(zaml);
                     try
                     {
-                        Dispatcher.Invoke(new VoidFunction(() => pw.Status = "Loading assemblies..."));
-                        var r = ad.CreateInstanceOf<AppRunner>();
-                        Dispatcher.Invoke(new VoidFunction(() => pw.Status = "Building controls and running..."));
-                        this.StaRun(zaml, r, pw);
+                        pw.Close();
+                        r.ShowDialog();
                     }
                     catch { }
                     try
                     {
-                        AppDomain.Unload(ad);
+                        r.DashboardDataHub.Stop();
+                        r.StopAll();
                     }
                     catch { }
+                    r = null;
                 }
                 GC.Collect();
                 try
                 {
-                    pw.Close();
+                    ZDesigner.SetDesigner(this);
                 }
                 catch { }
-            });
+            }
         }
 
         private void StaRun(string zaml, AppRunner r, WPF.ProgressDialog pw)
