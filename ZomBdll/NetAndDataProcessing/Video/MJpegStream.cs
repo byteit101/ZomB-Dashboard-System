@@ -155,7 +155,7 @@ namespace System451.Communication.Dashboard.Net.Video
 //Authorization: Basic RlJDOkZSQw==\n\n";
                 HttpWebRequest hrq = (HttpWebRequest)HttpWebRequest.Create("http://" + IP.ToString() + "/axis-cgi/mjpg/video.cgi");
                 hrq.UserAgent = "ZomB/0.7.1.0 (Streaming Client)";
-                hrq.Credentials = new NetworkCredential("FRC", "FRC");
+                hrq.Credentials = new NetworkCredential("frc", "FRC");
                 Stream ns;
                 StreamReader sr;
                 try
@@ -177,13 +177,16 @@ namespace System451.Communication.Dashboard.Net.Video
                         char[] buf;
                         while (shouldBeRunning)
                         {
-                            sr = new StreamReader(ns);
+                            sr = new StreamReader(ns, new binencode());
                             Thread.Sleep(1);//let it pile up!
 
-                            string sbuf = sr.ReadLine();
-                            if (!sbuf.StartsWith("Content-Type", StringComparison.CurrentCultureIgnoreCase))
+                            string sbuf = null;
+                            while (sr.ReadLine() != "--" + boundrywaters)
+                                ;
+                            sbuf = sr.ReadLine();
+                            while (!sbuf.StartsWith("Content-Type", StringComparison.CurrentCultureIgnoreCase))
                             {
-                                er("yaah! ctype not first!");
+                                sbuf = sr.ReadLine();
                             }
                             sbuf = sr.ReadLine();
                             image_size = int.Parse(sbuf.Substring(sbuf.IndexOf(": ") + 2));//Content-Length
@@ -194,18 +197,29 @@ namespace System451.Communication.Dashboard.Net.Video
                             {
                                 buf = new char[image_size];
                                 Thread.Sleep(1);
-
-                                sr.Read(buf, 0, image_size);
-                                image_size = 0;
+                                //image_size = 0;
                                 byte[] bbuf = new byte[image_size];
-                                Buffer.BlockCopy(bbuf, 0, bbuf, 0, image_size);
+                                //sr.
+                                int red = 0;
+                                while (red < image_size)
+                                {
+                                    int tred = sr.Read(buf, red, image_size-red);
+                                    if (tred < 1)
+                                        break;
+                                    red += tred;
+                                }
+
+                                for (int i = 0; i < image_size; i++)
+                                {
+                                    bbuf[i] = (byte)buf[i];
+                                }
+                                File.WriteAllBytes("C:\\out.jpg", bbuf);
 
                                 //Save Image
                                 CurImg = Bitmap.FromStream(new MemoryStream(bbuf));
                                 if (NewImageRecieved != null)
                                     NewImageRecieved(this, new NewImageDataRecievedEventArgs(CurImg, new MemoryStream(bbuf)));
-                                while (sr.ReadLine() != ("--" + boundrywaters))
-                                    ;
+                    
                             }
                             else
                                 er("Unknown size");
@@ -230,6 +244,47 @@ namespace System451.Communication.Dashboard.Net.Video
             {
                 OnError(msg);
             }
+        }
+    }
+
+    public class binencode : Encoding
+    {
+        public override int GetByteCount(char[] chars, int index, int count)
+        {
+            return count;
+        }
+
+        public override int GetBytes(char[] chars, int charIndex, int charCount, byte[] bytes, int byteIndex)
+        {
+            for (int i = 0; i < charCount; i++)
+            {
+                bytes[byteIndex + i] = (byte)chars[charIndex + i];
+            }
+            return charCount;
+        }
+
+        public override int GetCharCount(byte[] bytes, int index, int count)
+        {
+            return count;
+        }
+
+        public override int GetChars(byte[] bytes, int byteIndex, int byteCount, char[] chars, int charIndex)
+        {
+            for (int i = 0; i < byteCount; i++)
+            {
+                chars[charIndex + i] = (char)bytes[byteIndex + i];
+            }
+            return byteCount;
+        }
+
+        public override int GetMaxByteCount(int charCount)
+        {
+            return charCount;
+        }
+
+        public override int GetMaxCharCount(int byteCount)
+        {
+            return byteCount;
         }
     }
 }
