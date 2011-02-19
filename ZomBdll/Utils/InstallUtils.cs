@@ -52,7 +52,7 @@ namespace System451.Communication.Dashboard.Utils
         {
             ExtractAll();
             //HACK CONF: update when assemblies change
-            var p = NGen("ZomB, Version=0.7.1.0, Culture=neutral, PublicKeyToken=5880636763ded5de");
+            var p = NGen("ZomB, Version=0.8.0.0, Culture=neutral, PublicKeyToken=5880636763ded5de");
             p.WaitForExit();
             var pub = new Publish();
             pub.GacInstall("InTheHand.Net.Personal.dll");
@@ -60,7 +60,7 @@ namespace System451.Communication.Dashboard.Utils
             pub.GacInstall("Vlc.DotNet.Core.dll");
             pub.GacInstall("Vlc.DotNet.Forms.dll");
             pub.GacInstall("ZomB.dll");
-            p = NGen("ZomB, Version=0.7.1.0, Culture=neutral, PublicKeyToken=5880636763ded5de");
+            p = NGen("ZomB, Version=0.8.0.0, Culture=neutral, PublicKeyToken=5880636763ded5de");
             if (!async)
                 p.WaitForExit();
             var q = NGen();

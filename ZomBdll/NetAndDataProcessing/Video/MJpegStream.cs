@@ -154,7 +154,7 @@ namespace System451.Communication.Dashboard.Net.Video
 //Cache-Control: no-cache\n\
 //Authorization: Basic RlJDOkZSQw==\n\n";
                 HttpWebRequest hrq = (HttpWebRequest)HttpWebRequest.Create("http://" + IP.ToString() + "/axis-cgi/mjpg/video.cgi");
-                hrq.UserAgent = "ZomB/0.7.1.0 (Streaming Client)";
+                hrq.UserAgent = "ZomB/0.8.0.0 (Streaming Client)";
                 hrq.Credentials = new NetworkCredential("frc", "FRC");
                 Stream ns;
                 StreamReader sr;
