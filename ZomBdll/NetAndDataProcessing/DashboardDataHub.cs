@@ -619,7 +619,8 @@ namespace System451.Communication.Dashboard
         /// </summary>
         public static void RestartZomB()
         {
-            Application.Restart();
+            System.Windows.Forms.Application.Restart();
+            System.Windows.Application.Current.Shutdown();
         }
 
         /// <summary>
