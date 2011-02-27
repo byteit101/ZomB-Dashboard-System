@@ -133,6 +133,7 @@ namespace System451.Communication.Dashboard.Net.Video
             //}
             while (shouldBeRunning)
             {
+            tryagain:
                 //http://myserver/axis-cgi/mjpg/video.cgi
                 //produces:
                 //Content-Type: multipart/x-mixed-replace; boundary=myboundary
@@ -154,7 +155,7 @@ namespace System451.Communication.Dashboard.Net.Video
 //Cache-Control: no-cache\n\
 //Authorization: Basic RlJDOkZSQw==\n\n";
                 HttpWebRequest hrq = (HttpWebRequest)HttpWebRequest.Create("http://" + IP.ToString() + "/axis-cgi/mjpg/video.cgi");
-                hrq.UserAgent = "ZomB/0.8.0.0 (Streaming Client)";
+                hrq.UserAgent = "ZomB/0.8.1.0 (Streaming Client)";
                 hrq.Credentials = new NetworkCredential("frc", "FRC");
                 Stream ns;
                 StreamReader sr;
@@ -175,14 +176,20 @@ namespace System451.Communication.Dashboard.Net.Video
                         Running = true;
                         int image_size = 0;
                         char[] buf;
+                        sr = new StreamReader(ns, new binencode());
                         while (shouldBeRunning)
                         {
-                            sr = new StreamReader(ns, new binencode());
                             Thread.Sleep(1);//let it pile up!
 
                             string sbuf = null;
-                            while (sr.ReadLine() != "--" + boundrywaters)
-                                ;
+                            int iiii = 0;
+                            while (sbuf != "--" + boundrywaters)
+                            {
+                                sbuf = sr.ReadLine();
+                                iiii += sbuf.Length;
+                                if (sbuf == null || iiii > 4000000)//4MB? we fail!
+                                    goto tryagain;
+                            }
                             sbuf = sr.ReadLine();
                             while (!sbuf.StartsWith("Content-Type", StringComparison.CurrentCultureIgnoreCase))
                             {
@@ -197,9 +204,7 @@ namespace System451.Communication.Dashboard.Net.Video
                             {
                                 buf = new char[image_size];
                                 Thread.Sleep(1);
-                                //image_size = 0;
                                 byte[] bbuf = new byte[image_size];
-                                //sr.
                                 int red = 0;
                                 while (red < image_size)
                                 {
@@ -213,7 +218,6 @@ namespace System451.Communication.Dashboard.Net.Video
                                 {
                                     bbuf[i] = (byte)buf[i];
                                 }
-                                File.WriteAllBytes("C:\\out.jpg", bbuf);
 
                                 //Save Image
                                 CurImg = Bitmap.FromStream(new MemoryStream(bbuf));
