@@ -91,5 +91,10 @@ namespace System451.Communication.Dashboard.ViZ
                 ZomBBuilder.CopyDLLs(System.IO.Path.GetDirectoryName(outputLocation.Text));
             return ZomBBuilder.BuildZomBString(xaml, outputLocation.Text, depsCopy.IsChecked == true, iconLocation.Text);
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            buildbtn.Focus();
+        }
     }
 }

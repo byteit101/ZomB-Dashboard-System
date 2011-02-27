@@ -1,7 +1,7 @@
 ﻿<Window x:Class="System451.Communication.Dashboard.ViZ.BuildSettings"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Build Settings" Height="230" Width="395">
+        Title="Build Settings" Height="230" Width="395" Loaded="Window_Loaded">
     <DockPanel Name="stackPanel1">
         <GroupBox Header="Dependencies" Name="groupBox1" Padding="5" DockPanel.Dock="Top">
             <StackPanel>
@@ -22,7 +22,7 @@
             </StackPanel>
         </GroupBox>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <Button Height="36" Width="141" Margin="10" Click="Button_Click">Build</Button>
+            <Button Height="36" Width="141" Margin="10" Click="Button_Click" TabIndex="0" Name="buildbtn">Build</Button>
         </StackPanel>
     </DockPanel>
 </Window>
