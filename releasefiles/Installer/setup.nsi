@@ -1,0 +1,452 @@
+SetCompressor /SOLID lzma
+
+Name "ZomB Dashboard System"
+
+RequestExecutionLevel highest
+
+# General Symbol Definitions
+!define REGKEY "SOFTWARE\ZomB"
+!define VERSION "VERSION_NUMBER" ;CONST VERSION
+!define COMPANY "Team 451 and Patrick Plenefisch"
+!define URL http://thecatattack.org/ZomB
+!define VLCVERSION "1.1.7"
+
+# MUI Symbol Definitions
+!define MUI_ICON "Installer.ico"
+!define MUI_UNICON "Uninstaller.ico"
+!define MUI_STARTMENUPAGE_REGISTRY_ROOT HKLM
+!define MUI_STARTMENUPAGE_REGISTRY_KEY ${REGKEY}
+!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME StartMenuGroup
+!define MUI_STARTMENUPAGE_DEFAULTFOLDER ZomB
+
+!define MUI_FINISHPAGE_NOAUTOCLOSE
+!define MUI_UNFINISHPAGE_NOAUTOCLOSE
+!define MUI_COMPONENTSPAGE_SMALLDESC
+
+# Included files
+!include Sections.nsh
+!include MUI2.nsh
+!include Library.nsh
+!include FileAssociation.nsh
+
+# Variables
+Var StartMenuGroup
+Var ZomBLibInstall
+Var vlcVers
+
+# Installer pages
+!insertmacro MUI_PAGE_COMPONENTS
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_STARTMENU Application $StartMenuGroup
+!insertmacro MUI_PAGE_INSTFILES
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+
+# Installer languages
+!insertmacro MUI_LANGUAGE English
+
+# Installer attributes
+OutFile "Install ZomB VERSION_NUMBER.exe" ;CONST VERSION
+InstallDir $PROGRAMFILES\ZomB
+CRCCheck on
+XPStyle on
+ShowInstDetails show
+VIProductVersion 1.3.0.0 ;CONST VERSION
+VIAddVersionKey ProductName "ZomB Dashboard System"
+VIAddVersionKey ProductVersion "${VERSION}"
+VIAddVersionKey CompanyName "${COMPANY}"
+VIAddVersionKey CompanyWebsite "${URL}"
+VIAddVersionKey FileVersion "${VERSION}"
+VIAddVersionKey FileDescription ""
+VIAddVersionKey LegalCopyright ""
+ShowUninstDetails show
+BrandingText "ZomB Dashboard System ${VERSION}"
+
+# Macros
+!macro _DIREMPTY DIR D1 D2 D3
+    Push "${DIR}"
+    Call un.isEmptyDir
+!macroend
+!define IsDirEmpty '"" DIREMPTY'
+
+!macro CREATE_SMGROUP_SHORTCUT NAME PATH
+    Push "${NAME}"
+    Push "${PATH}"
+    Call CreateSMGroupShortcut
+!macroend
+
+!macro DELETE_SMGROUP_SHORTCUT NAME
+    Push "${NAME}"
+    Call un.DeleteSMGroupShortcut
+!macroend
+
+!macro NGEN NAME
+    Push "v2.0"
+	Call GetDotNetDir
+	Pop $R0
+	ExecWait '"$R0\ngen.exe" install "${NAME}" /silent'
+!macroend
+
+!macro UNGEN NAME
+    Push "v2.0"
+	Call un.GetDotNetDir
+	Pop $R0
+	ExecWait '"$R0\ngen.exe" uninstall "${NAME}" /silent'
+!macroend
+
+# Functions
+Function CreateSMGroupShortcut
+    Exch $R0 ;PATH
+    Exch 
+    Exch $R1 ;NAME
+    Push $R2
+    StrCpy $R2 $StartMenuGroup 1
+    StrCmp $R2 `>` no_smgroup
+    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\$R1.lnk" "$R0"
+no_smgroup:
+    Pop $R2
+    Pop $R1
+    Pop $R0
+FunctionEnd
+
+; based on http://nsis.sourceforge.net/Get_directory_of_installed_.NET_runtime
+; Given a .NET version number, this function returns that .NET framework's
+; install directory. Returns "" if the given .NET version is not installed.
+; Params: [version] (eg. "v2.0")
+; Return: [dir] (eg. "C:\WINNT\Microsoft.NET\Framework\v2.0.50727")
+Function GetDotNetDir
+	Exch $R0 ; Set R0 to .net version major
+	Push $R1
+	Push $R2
+ 
+	; set R2 to .NET install dir root
+	ReadRegStr $R2 HKLM "Software\Microsoft\.NETFramework" "InstallRoot"
+ 
+	; set R0 to the .NET install dir full
+	StrCpy $R0 "$R2v2.0.50727"
+	
+	Pop $R2
+	Pop $R1
+	Exch $R0 ; return .net install dir full
+	Return
+ FunctionEnd
+ Function un.GetDotNetDir
+	Exch $R0 ; Set R0 to .net version major
+	Push $R1
+	Push $R2
+ 
+	; set R2 to .NET install dir root
+	ReadRegStr $R2 HKLM "Software\Microsoft\.NETFramework" "InstallRoot"
+ 
+	; set R0 to the .NET install dir full
+	StrCpy $R0 "$R2v2.0.50727"
+	
+	Pop $R2
+	Pop $R1
+	Exch $R0 ; return .net install dir full
+	Return
+ FunctionEnd
+
+Function un.DeleteSMGroupShortcut
+    Exch $R1 ;NAME
+    Push $R2
+    StrCpy $R2 $StartMenuGroup 1
+    StrCmp $R2 `>` no_smgroup
+    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\$R1.lnk"
+no_smgroup:
+    Pop $R2
+    Pop $R1
+FunctionEnd
+
+Function un.isEmptyDir
+  # Stack ->                    # Stack: <directory>
+  Exch $0                       # Stack: $0
+  Push $1                       # Stack: $1, $0
+  FindFirst $0 $1 "$0\*.*"
+  strcmp $1 "." 0 _notempty
+    FindNext $0 $1
+    strcmp $1 ".." 0 _notempty
+      ClearErrors
+      FindNext $0 $1
+      IfErrors 0 _notempty
+        FindClose $0
+        Pop $1                  # Stack: $0
+        StrCpy $0 1
+        Exch $0                 # Stack: 1 (true)
+        goto _end
+     _notempty:
+       FindClose $0
+       ClearErrors
+       Pop $1                   # Stack: $0
+       StrCpy $0 0
+       Exch $0                  # Stack: 0 (false)
+  _end:
+FunctionEnd
+
+InstType "Default"
+InstType "Default and VLC"
+InstType "Full"
+InstType "Minimal"
+
+# Installer sections
+Section "-ZomB Core" SEC0000
+    SectionIn 1 2 3 4
+    
+    !insertmacro MUI_STARTMENU_WRITE_BEGIN Application    
+    CreateDirectory "$SMPROGRAMS\$StartMenuGroup\"    
+    !insertmacro MUI_STARTMENU_WRITE_END
+
+    SetOutPath $INSTDIR
+    SetOverwrite ifnewer
+    File ZomB.dll
+    File /nonfatal LICENSE.txt
+    File /nonfatal CREDITS.txt
+    File NullGEN.exe
+    ExecWait "$INSTDIR\NullGen.exe compile framework" $0
+SectionEnd
+
+Section -post SEC0001
+    WriteRegStr HKLM "${REGKEY}" Path $INSTDIR
+    WriteUninstaller "$INSTDIR\Uninstall ZomB VERSION_NUMBER.exe" ;CONST VERSION
+    !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\Uninstall.lnk" "$INSTDIR\Uninstall ZomB VERSION_NUMBER.exe" ;CONST VERSION
+    !insertmacro MUI_STARTMENU_WRITE_END
+    WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\ZomB" DisplayName "ZomB VERSION_NUMBER" ;CONST VERSION
+    WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\ZomB" DisplayIcon "$INSTDIR\Uninstall ZomB VERSION_NUMBER.exe" ;CONST VERSION
+    WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\ZomB" UninstallString "$INSTDIR\Uninstall ZomB VERSION_NUMBER.exe" ;CONST VERSION
+    WriteRegDWORD HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\ZomB" EstimatedSize 25000
+    WriteRegDWORD HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\ZomB" NoModify 1
+    WriteRegDWORD HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\ZomB" NoRepair 1
+SectionEnd
+
+SectionGroup "Dependencies" SECGRP0001
+    Section "FFmpeg" SEC0002
+        SectionIn 1 2 3
+        SetOverwrite ifnewer
+        File ffmpeg.exe
+    SectionEnd
+    Section "VLC" SEC0003
+        SectionIn 2 3
+        SetOverwrite ifnewer
+        StrCmp $vlcVers "${VLCVERSION}" 0 +2
+            Return
+        NSISdl::download "http://downloads.sourceforge.net/project/vlc/${VLCVERSION}/win32/vlc-${VLCVERSION}-win32.exe" "vlc-${VLCVERSION}-win32.exe"
+        Pop $R0
+        ${If} $R0 == "success"
+            ExecWait '"vlc-${VLCVERSION}-win32.exe" /S' $0
+        ${Else}
+            MessageBox MB_OK "VLC Download failed: $R0"
+        ${EndIf}
+    SectionEnd
+SectionGroupEnd
+
+Section "Visual ZomB" SEC0004
+    SectionIn 1 2 3 4 RO
+    SetOverwrite ifnewer
+    File ViZ.exe
+	File Zaml.ico
+	File Dashboardexe.ico
+    ExecWait "$INSTDIR\ViZ.exe -extract-install" $0
+    ${registerExtension} "$INSTDIR\ViZ.exe" ".zaml" "Run Zaml File"
+	Call RefreshShellIcons
+    !insertmacro CREATE_SMGROUP_SHORTCUT "Visual ZomB" "$INSTDIR\ViZ.exe"
+SectionEnd
+
+SectionGroup "Bindings" SECGRP0002
+	Section "Robot Binding (required)" SEC0013
+        SectionIn 1 2 3 4 RO
+        SetOverwrite ifnewer
+        ${IfNot} ${FileExists} `$INSTDIR\Bindings`
+        CreateDirectory "$INSTDIR\Bindings"
+        ${EndIf}
+        File "/oname=Bindings\ZomB.out" ZomB.out
+		File "/oname=Bindings\ZomB.a" ZomB.a
+		File "/oname=Bindings\OutStaller.exe" OutStaller.exe
+		!insertmacro CREATE_SMGROUP_SHORTCUT "Install bindings to robot" "$INSTDIR\Bindings\OutStaller.exe"
+		Exec "$INSTDIR\Bindings\OutStaller.exe"
+		File "/oname=Bindings\Bindings Help.pdf" "Bindings Help.pdf"
+        !insertmacro CREATE_SMGROUP_SHORTCUT "Binding Help" "$INSTDIR\Bindings\Bindings Help.pdf"
+    SectionEnd
+	
+    Section "C++ Bindings" SEC0005
+        SectionIn 1 2 3 4
+        SetOverwrite ifnewer
+        ${IfNot} ${FileExists} `$INSTDIR\Bindings`
+        CreateDirectory "$INSTDIR\Bindings"
+        ${EndIf}
+        File "/oname=Bindings\ZomBDashboard.h" ZomBDashboard.h
+    SectionEnd
+	
+    Section "Java Bindings" SEC0006
+        SectionIn 1 2 3 4
+        SetOverwrite ifnewer
+        ${IfNot} ${FileExists} `$INSTDIR\Bindings`
+        CreateDirectory "$INSTDIR\Bindings"
+        ${EndIf}
+        File "/oname=Bindings\ZomBDashboard.java" ZomBDashboard.java
+        File "/oname=Bindings\ZomBModes.java" ZomBModes.java
+    SectionEnd
+	
+    Section "LabVIEW Bindings" SEC0007
+        SectionIn 1 2 3 4
+        SetOverwrite ifnewer
+        ${IfNot} ${FileExists} `$INSTDIR\Bindings`
+        CreateDirectory "$INSTDIR\Bindings"
+        ${EndIf}
+        File "/oname=Bindings\ZomB.llb" ZomB.llb
+    SectionEnd
+    
+    Section "Shortcut" SEC0008
+        SectionIn 1 2 3 4
+        ${IfNot} ${FileExists} `$INSTDIR\Bindings`
+        CreateDirectory "$INSTDIR\Bindings"
+        ${EndIf}
+        !insertmacro CREATE_SMGROUP_SHORTCUT "Bindings" "$INSTDIR\Bindings"
+    SectionEnd
+SectionGroupEnd
+
+SectionGroup "Others" SECGRP0003
+    Section /o "Default Dashboard (WinForms)" SEC0009
+        SectionIn 3
+        SetOverwrite ifnewer
+        File DefaultDash.exe
+        !insertmacro CREATE_SMGROUP_SHORTCUT "Default Dashboard (WinForm)" "$INSTDIR\DefaultDash.exe"
+		!insertmacro NGEN "$INSTDIR\DefaultDash.exe"
+    SectionEnd
+
+    Section "Default Dashboard (WPF)" SEC0010
+        SectionIn 1 2 3
+        SetOverwrite ifnewer
+        File Default.exe
+		!insertmacro NGEN "$INSTDIR\Default.exe"
+        !insertmacro CREATE_SMGROUP_SHORTCUT "Default Dashboard" "$INSTDIR\Default.exe"
+    SectionEnd
+
+    Section "ZomB Eye" SEC0011
+        SectionIn 1 2 3
+        SetOverwrite ifnewer
+        File "ZomB Eye.exe"
+        !insertmacro CREATE_SMGROUP_SHORTCUT "ZomB Eye" "$INSTDIR\ZomB Eye.exe"
+		!insertmacro NGEN "$INSTDIR\ZomB Eye.exe"
+    SectionEnd
+
+    Section "Driver Station Plugin" SEC0012
+        SectionIn 1 2 3
+        SetOverwrite ifnewer
+		${IfNot} ${FileExists} `$INSTDIR\plugins`
+        CreateDirectory "$INSTDIR\plugins"
+        ${EndIf}
+        File "/oname=plugins\ZomB.DriverStation.dll" "ZomB.DriverStation.dll"
+		!insertmacro NGEN "$INSTDIR\plugins\ZomB.DriverStation.dll"
+    SectionEnd
+SectionGroupEnd
+
+Section -un.post UNSEC0005
+    DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\ZomB"
+    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\Uninstall.lnk"
+    Delete /REBOOTOK "$INSTDIR\Uninstall ZomB VERSION_NUMBER.exe" ;CONST VERSION
+    DeleteRegValue HKLM "${REGKEY}" StartMenuGroup
+    DeleteRegValue HKLM "${REGKEY}" Path
+    DeleteRegKey /IfEmpty HKLM "${REGKEY}\Components"
+    DeleteRegKey /IfEmpty HKLM "${REGKEY}"
+    RmDir /r /REBOOTOK $SMPROGRAMS\$StartMenuGroup
+SectionEnd
+
+# Uninstaller sections
+Section "-un.ZomB" UNSEC0000
+	ExecWait "$INSTDIR\NullGEN.exe -uninstall"
+    Delete /REBOOTOK "ZomB.dll"
+    Delete /REBOOTOK "32feetWidcomm.dll"
+    Delete /REBOOTOK "InTheHand.Net.Personal.dll"
+    Delete /REBOOTOK "SlimDX.dll"
+    Delete /REBOOTOK "libvlc.dll"
+    Delete /REBOOTOK "libvlccore.dll"
+    Delete /REBOOTOK "Vlc.DotNet.Core.dll"
+    Delete /REBOOTOK "Vlc.DotNet.Forms.dll"
+	Delete /REBOOTOK "plugins\ZomB.DriverStation.dll"
+    Delete /REBOOTOK "ffmpeg.exe"
+    Delete /REBOOTOK "LICENSE.txt"
+    Delete /REBOOTOK "CREDITS.txt"
+    Delete /REBOOTOK "Bindings\ZomBDashboard.h"
+    Delete /REBOOTOK "Bindings\ZomBDashboard.java"
+    Delete /REBOOTOK "Bindings\ZomBModes.java"
+    Delete /REBOOTOK "Bindings\ZomB.llb"
+    Delete /REBOOTOK "Bindings\ZomB.out"
+    Delete /REBOOTOK "Bindings\OutStaller.exe"
+    Delete /REBOOTOK "DefaultDash.exe"
+    Delete /REBOOTOK "Default.exe"
+    Delete /REBOOTOK "ZomB Eye.exe"
+    Delete /REBOOTOK "ViZ.exe"
+    Delete /REBOOTOK "Zaml.ico"
+    Delete /REBOOTOK "Dashboardexe.ico"
+    ${UnRegisterExtension} ".zaml" "Run Zaml File"
+	Call un.RefreshShellIcons
+    
+    ${If} ${IsDirEmpty} `$INSTDIR\Bindings`
+    RmDir "$INSTDIR\Bindings"
+    ${EndIf}
+	${If} ${IsDirEmpty} `$INSTDIR\plugins`
+    RmDir "$INSTDIR\plugins"
+    ${EndIf}
+	
+	!insertmacro UNGEN "$INSTDIR\Default.exe"
+	!insertmacro UNGEN "$INSTDIR\DefaultDash.exe"
+	!insertmacro UNGEN "$INSTDIR\Bindings\OutStaller.exe"
+	!insertmacro UNGEN "$INSTDIR\ZomB Eye.exe"
+	!insertmacro UNGEN "$INSTDIR\plugins\ZomB.DriverStation.dll"
+	!insertmacro UNGEN "$INSTDIR\ViZ.exe"
+    
+    !insertmacro DELETE_SMGROUP_SHORTCUT "Bindings"
+	!insertmacro DELETE_SMGROUP_SHORTCUT "Install bindings to robot"
+    !insertmacro DELETE_SMGROUP_SHORTCUT "Visual ZomB"
+    !insertmacro DELETE_SMGROUP_SHORTCUT "Default Dashboard (WinForm)"
+    !insertmacro DELETE_SMGROUP_SHORTCUT "Default Dashboard"
+    !insertmacro DELETE_SMGROUP_SHORTCUT "ZomB Eye"
+    RmDir /r /REBOOTOK $SMPROGRAMS\$StartMenuGroup
+SectionEnd
+
+# Installer functions
+Function .onInit
+    InitPluginsDir
+    Push $0
+    ReadRegStr $0 HKLM "${REGKEY}" Path
+    ClearErrors
+    StrCmp $0 "" +2
+    StrCpy $ZomBLibInstall 1
+    Pop $0
+    ReadRegStr $vlcVers HKLM "Software\VideoLAN\VLC\" "Version"
+    ${If} $vlcVers == "${VLCVERSION}"
+        SectionSetFlags ${SEC0003} 16
+        SectionSetText ${SEC0003} "VLC (Already Installed)"
+        SectionSetSize ${SEC0003} 0
+    ${Else}
+        SectionSetFlags ${SEC0003} 1
+        SectionSetSize ${SEC0003} 78746
+    ${EndIf}
+FunctionEnd
+
+# Uninstaller functions
+Function un.onInit
+    ReadRegStr $INSTDIR HKLM "${REGKEY}" Path
+    !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuGroup
+    SetOutPath $INSTDIR    
+FunctionEnd
+
+# Section Descriptions
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+!insertmacro MUI_DESCRIPTION_TEXT ${SECGRP0001} "Mostly video stuff, you need to install for video saving and playing to work"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0002} "Advanced video encoding library for saving videos"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0003} "Epic video player that can play anything (used for video playback)"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0004} "ZomB Dashboard designer to quickly create dashboards"
+!insertmacro MUI_DESCRIPTION_TEXT ${SECGRP0002} "Robot side bindings to the ZomB protocol"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0005} "C++ robot bindings"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0006} "Java robot bindings"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0007} "LabVIEW robot bindings"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0008} "Shortcut to the bindings folder (helpful)"
+!insertmacro MUI_DESCRIPTION_TEXT ${SECGRP0003} "Other programs"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0009} "Old default dashboard"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0010} "New default dashboard"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0011} "Pit display with BlueFinger and saved video playing capabilities (requires VLC)"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0012} "Enables ZomB to act as the driver station"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0013} "Enables the bindings to actually do stuff (required)"
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
