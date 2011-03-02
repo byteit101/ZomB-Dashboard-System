@@ -1,19 +1,14 @@
 @rem Test harness, double click and go
 @rem File system must look like this:
 @rem somefolder/
-@rem somefolder/releasefiles/
-@rem somefolder/trunk/
+@rem somefolder/trunk/releasefiles/
 @rem run from releasefiles or somefolder
 @echo off
 :BEGINBUILD
-IF EXIST releasefiles GOTO TESTTrunk
+IF EXIST trunk GOTO TESTTrunk
 CD ..\
 GOTO BEGINBUILD
 :TESTTrunk
-IF EXIST trunk GOTO SETVARS
-CD ..\
-GOTO TESTTrunk
-:SETVARS
 @rem get all our vars that hudson normally provides
 SET dll=N
 SET /P dll=Build the ZomB.dll [y/N]: 
@@ -43,6 +38,6 @@ SET BUILD_NUMBER=50
 SET /P BUILD_NUMBER=Build number [50]:
 
 @echo on
-@call releasefiles\Build.bat
+@call trunk\releasefiles\Build.bat
 @echo Done!
 @PAUSE
