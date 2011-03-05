@@ -1,6 +1,6 @@
 ﻿/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
- * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * Copyright (C) 2011, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,15 +19,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System451.Communication.Dashboard.Net.Video;
-using System.IO;
 using System451.Communication.Dashboard.Utils;
-using System.Net;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -97,7 +97,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             Directory.CreateDirectory(BTZomBFingerFactory.DefaultSaveLocation);
             vss = new VideoStreamSaver(this);
-            vss.FPS = 15;
+            vss.FPS = (float)RecordingFPS;
             vss.StartSave(BTZomBFingerFactory.DefaultSaveLocation + "\\Capture" + (DateTime.Now.Ticks.ToString("x")) + ".webm");
             mi.Visibility = Visibility.Collapsed;
             smi.Visibility = Visibility.Visible;
@@ -151,7 +151,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 videoSource = ((VideoSource == DefaultVideoSource.WPILibTcpStream) ?
                     (IDashboardVideoDataSource)new WPILibTcpVideoSource(TeamNumber)
                     : ((VideoSource == DefaultVideoSource.Webcam) ?
-                        (IDashboardVideoDataSource)new WebCamVideoSource() : 
+                        (IDashboardVideoDataSource)new WebCamVideoSource() :
                         ((VideoSource == DefaultVideoSource.MJPEGStream) ?
                         (IDashboardVideoDataSource)new MJPEGVideoSource(IPAddress.Parse(VideoSourceArgs)) : null)));
                 videoSource.NewImageRecieved += new NewImageDataRecievedEventHandler(videoSource_NewImageRecieved);
@@ -180,7 +180,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             try
             {
-                Dispatcher.Invoke(new JFunction((incoming)=>
+                Dispatcher.Invoke(new JFunction((incoming) =>
                 {
                     PART_img.Source = incoming;
                     if (this.dataUpdatedEvent != null)
@@ -222,8 +222,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
         // Using a DependencyProperty as the backing store for ShowReset.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowResetProperty =
             DependencyProperty.Register("ShowReset", typeof(bool), typeof(CameraView), new UIPropertyMetadata(true, ResetVischanged));
-        
-        
+
+
         [Design.ZomBDesignable(DisplayName = "Show FPS"), Category("Appearance"), Description("Should we show the FPS label?")]
         public bool ShowFPS
         {
@@ -246,7 +246,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         // Using a DependencyProperty as the backing store for VideoSource.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty VideoSourceProperty =
             DependencyProperty.Register("VideoSource", typeof(DefaultVideoSource), typeof(CameraView), new UIPropertyMetadata(DefaultVideoSource.WPILibTcpStream, sTeamUpdated));
-        
+
         [Design.ZomBDesignable(DisplayName = "Source args"), Category("Behavior"), Description("IP Address of the camera in MJPEG mode")]
         public string VideoSourceArgs
         {
@@ -257,6 +257,17 @@ namespace System451.Communication.Dashboard.WPF.Controls
         // Using a DependencyProperty as the backing store for VideoSource.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty VideoSourceArgsProperty =
             DependencyProperty.Register("VideoSourceArgs", typeof(string), typeof(CameraView), new UIPropertyMetadata("", sTeamUpdated));
+
+        [Design.ZomBDesignable(DisplayName = "Recording FPS"), Category("Behavior"), Description("The FPS rate of the revorded video")]
+        public double RecordingFPS
+        {
+            get { return (double)GetValue(RecordingFPSProperty); }
+            set { SetValue(RecordingFPSProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for VideoSource.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty RecordingFPSProperty =
+            DependencyProperty.Register("RecordingFPS", typeof(double), typeof(CameraView), new UIPropertyMetadata(15.0));
 
         #region IZomBControlGroup Members
 
@@ -411,7 +422,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         public void SetTargets(IEnumerable<IZomBControl> p)
         {
-            while (targets.Count!=0)
+            while (targets.Count != 0)
             {
                 RemoveTarget(targets[0] as CameraTarget);
             }
