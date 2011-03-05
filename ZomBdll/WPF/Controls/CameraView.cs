@@ -35,9 +35,11 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// Interaction logic for CameraView.xaml
     /// </summary>
     [Design.ZomBControl("Camera View Control", Description = "This shows you what the camera sees, and any targets its reporting", IconName = "CameraViewIcon")]
+    [Design.ZomBDesignableProperty("Foreground")]
     [TemplatePart(Name = "PART_img", Type = typeof(Image))]
     [TemplatePart(Name = "PART_refresh", Type = typeof(UIElement))]
     [TemplatePart(Name = "PART_targets", Type = typeof(Panel))]
+    [TemplatePart(Name = "PART_fps", Type = typeof(Label))]
     public class CameraView : ZomBGLControl, IZomBControlGroup, ISavableZomBData
     {
         Image PART_img;
@@ -49,6 +51,10 @@ namespace System451.Communication.Dashboard.WPF.Controls
         MenuItem mi;
         MenuItem smi;
         ContextMenu enu;
+        Label fpslabel;
+        int lastTick;
+        double lastFrameRate;
+        int frameRate;
 
         static CameraView()
         {
@@ -110,6 +116,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
             (base.GetTemplateChild("PART_targets") as Panel).Children.Add(tars);
             PART_refresh.PreviewMouseLeftButtonUp += new System.Windows.Input.MouseButtonEventHandler(PART_refresh_PreviewMouseLeftButtonUp);
             PART_refresh.Visibility = ((ShowReset) ? Visibility.Visible : Visibility.Collapsed);
+            fpslabel = base.GetTemplateChild("PART_fps") as Label;
+            fpslabel.Visibility = ((ShowFPS) ? Visibility.Visible : Visibility.Collapsed);
         }
 
         void PART_refresh_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -159,6 +167,13 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 am.PART_refresh.Visibility = (((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed);
         }
 
+        static void ResetfpsVischanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            CameraView am = (o as CameraView);
+            if (am.fpslabel != null)
+                am.fpslabel.Visibility = (((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed);
+        }
+
         private delegate void JFunction(BitmapFrame frame);
 
         private void videoSource_NewImageRecieved(object sender, NewImageDataRecievedEventArgs e)
@@ -173,12 +188,28 @@ namespace System451.Communication.Dashboard.WPF.Controls
                         laststream = e.NewDataStream;
                         dataUpdatedEvent(this, new EventArgs());
                     }
+                    if (fpslabel != null && ShowFPS)
+                        fpslabel.Content = Math.Round(FPS(), 2);
+                    else
+                        FPS();
                 }), JpegBitmapDecoder.Create(e.NewDataStream, BitmapCreateOptions.None, BitmapCacheOption.None).Frames[0]);
             }
             catch (System.Exception x)
             {
                 System.Windows.Forms.MessageBox.Show(x.ToString());
             }
+        }
+
+        private double FPS()
+        {
+            if (System.Environment.TickCount - lastTick >= 1000)
+            {
+                lastFrameRate = frameRate * 1000.0 / (double)(System.Environment.TickCount - lastTick);
+                frameRate = 0;
+                lastTick = System.Environment.TickCount;
+            }
+            frameRate++;
+            return lastFrameRate;
         }
 
         [Design.ZomBDesignable(DisplayName = "Show Reset"), Category("Appearance"), Description("Should we show the reset button?")]
@@ -191,6 +222,18 @@ namespace System451.Communication.Dashboard.WPF.Controls
         // Using a DependencyProperty as the backing store for ShowReset.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowResetProperty =
             DependencyProperty.Register("ShowReset", typeof(bool), typeof(CameraView), new UIPropertyMetadata(true, ResetVischanged));
+        
+        
+        [Design.ZomBDesignable(DisplayName = "Show FPS"), Category("Appearance"), Description("Should we show the FPS label?")]
+        public bool ShowFPS
+        {
+            get { return (bool)GetValue(ShowFPSProperty); }
+            set { SetValue(ShowFPSProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ShowFPS.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ShowFPSProperty =
+            DependencyProperty.Register("ShowFPS", typeof(bool), typeof(CameraView), new UIPropertyMetadata(false, ResetfpsVischanged));
 
 
         [Design.ZomBDesignable(DisplayName = "Source"), Category("Behavior"), Description("What are we looking at?")]

@@ -79,7 +79,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             pt = getpos();
             pt.Offset(-win.Left, -win.Top);
-            System.Diagnostics.Debug.WriteLine("cap: " + pt.ToString());
             bool b = win.CaptureMouse();
             win.PreviewMouseLeftButtonUp += win_PreviewMouseLeftButtonUp;
             win.PreviewMouseMove += win_PreviewMouseMove;
@@ -94,12 +93,10 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             if (ignore)
             {
-                System.Diagnostics.Debug.WriteLine("movex");
                 return;
             }
             ignore = true;
             Point po = getpos();
-            System.Diagnostics.Debug.WriteLine("move: "+po.ToString());
             win.Left = po.X - pt.X;
             win.Top = po.Y - pt.Y;
             ignore = false;

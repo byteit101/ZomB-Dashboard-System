@@ -20,6 +20,7 @@
                             </Viewbox>
                             <Border Background="Transparent" Canvas.Top="0" Canvas.Left="0" Width="{TemplateBinding ActualWidth}" Height="{TemplateBinding ActualHeight}" />
                             <Button Name="PART_refresh" Canvas.Left="0" Canvas.Bottom="0" Width="10" Height="10" />
+                            <Label Name="PART_fps" Canvas.Top="0" Canvas.Left="0" Content="0.00" Foreground="{TemplateBinding Foreground}" />
                         </Canvas>
                     </Border>
                 </ControlTemplate>
