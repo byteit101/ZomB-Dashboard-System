@@ -27,6 +27,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     [Design.ZomBDesignableProperty("Width", Dynamic = true, Category = "Layout")]
     [Design.ZomBDesignableProperty("Height", Dynamic = true, Category = "Layout")]
     [Design.ZomBDesignableProperty("Content", Category = "Appearance")]
+    [Design.ZomBDesignableProperty("FontSize")]
     [Design.ZomBControl("ZomBButton", Description = "Useful Button", IconName = "ZomBButtonIcon")]
     public partial class ZomBButton : Button
     {

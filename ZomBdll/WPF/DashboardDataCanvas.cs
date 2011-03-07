@@ -20,6 +20,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System451.Communication.Dashboard.Net;
+using System;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -187,7 +188,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 {
                     DashboardDataHub.Add((IZomBControl)item);
                 }
-
                 if (item is IZomBControlGroup)
                 {
                     DashboardDataHub.Add((IZomBControlGroup)item);
@@ -195,6 +195,10 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 if (item is IZomBMonitor)
                 {
                     DashboardDataHub.Add((IZomBMonitor)item);
+                }
+                if (item is IZTrigger)
+                {
+                    this.AddTriggerHandler((IZTrigger)item);
                 }
 
                 try
@@ -208,6 +212,31 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 }
                 catch { }
             }
+        }
+
+        private void AddTriggerHandler(IZTrigger item)
+        {
+            item.Triggered += delegate
+            {
+                string[] trigs = item.TriggerListeners.Split(';');
+                foreach (var trig in trigs)
+                {
+                    string[] nv = trig.Split(':');
+                    if (nv.Length == 2)
+                        CallTrigger(nv[0], nv[1]);
+                }
+            };
+        }
+
+        private void CallTrigger(string name, string methodname)
+        {
+            object unsuspectingVictim = this.FindName(name);
+            if (unsuspectingVictim == null)
+                return;
+            var meth = unsuspectingVictim.GetType().GetMethod(methodname, new Type[]{});
+            if (meth == null)
+                return;
+            meth.Invoke(unsuspectingVictim, null);
         }
 
         #region IZomBController Members

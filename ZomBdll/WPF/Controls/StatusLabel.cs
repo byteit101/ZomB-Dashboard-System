@@ -25,7 +25,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// </summary>
     [Design.ZomBControl("Status Label", Description = "This shows a raw value for a control, and is a nice label", IconName = "StatusLabelIcon")]
     [Design.ZomBDesignableProperty("Foreground")]
-    [Design.ZomBDesignableProperty("StringValue", DisplayName="Text")]
+    [Design.ZomBDesignableProperty("StringValue", DisplayName = "Text")]
+    [Design.ZomBDesignableProperty("FontSize")]
     public class StatusLabel : ZomBGLControl
     {
         static StatusLabel()

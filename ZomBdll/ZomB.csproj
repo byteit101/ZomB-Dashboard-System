@@ -213,6 +213,9 @@
     <Compile Include="WPF\Controls\AlertControl.cs" />
     <Compile Include="WPF\Controls\BluFinger.cs" />
     <Compile Include="WPF\Controls\CameraView.cs" />
+    <Compile Include="WPF\Controls\CommandButton.xaml.cs">
+      <DependentUpon>CommandButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\Controls\Designer\ZomBUrlCollectionDesignerWindow.xaml.cs">
       <DependentUpon>ZomBUrlCollectionDesignerWindow.xaml</DependentUpon>
     </Compile>
@@ -257,6 +260,7 @@
     <Compile Include="WPF\DashboardDataPanel.cs" />
     <Compile Include="WPF\Design\AutoPoint.cs" />
     <Compile Include="WPF\Design\IDesigner.cs" />
+    <Compile Include="WPF\Design\IZTrigger.cs" />
     <Compile Include="WPF\Design\Reflector.cs" />
     <Compile Include="WPF\Design\ViZBindingParser.cs" />
     <Compile Include="WPF\Design\ZControl.cs" />
@@ -411,6 +415,10 @@
     <Page Include="WPF\Controls\CameraView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controls\CommandButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

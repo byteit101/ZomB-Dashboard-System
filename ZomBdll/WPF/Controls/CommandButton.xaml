@@ -1,0 +1,6 @@
+﻿<Button x:Class="System451.Communication.Dashboard.WPF.Controls.CommandButton"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="30" Width="85" Click="Button_Click" FontSize="16">
+    GO!
+</Button>

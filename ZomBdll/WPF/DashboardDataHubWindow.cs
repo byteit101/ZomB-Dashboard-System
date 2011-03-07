@@ -101,8 +101,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 this.WindowStartupLocation = WindowStartupLocation.Manual;
                 this.Left = 0;
                 this.Top = 0;
-                this.Width = 1024;
-                this.Height = 400;
             }
             GC.KeepAlive(mutex);
             this.Closing += delegate
@@ -253,38 +251,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
         private static void InvalidPacketActionChanged(DependencyObject dpo, DependencyPropertyChangedEventArgs e)
         {
             dpo.SetValue(InvalidPacketActionProperty, e.NewValue);
-        }
-
-        private void DashboardDataHubForm_Load(object sender, EventArgs e)
-        {
-            /*if (Environment.UserName == "Driver" || DesignMode)
-            {
-                this.FormBorderStyle = FormBorderStyle.None;
-                if (!DesignMode)
-                {
-                    this.StartPosition = FormStartPosition.Manual;
-                }
-                else
-                {
-                    this.StartPosition = FormStartPosition.WindowsDefaultLocation;
-                }
-                this.ControlBox = false;
-                this.ClientSize = DefaultSize;
-            }
-            else
-            {
-                if (EnableResize)
-                    this.FormBorderStyle = FormBorderStyle.Sizable;
-                else
-                    this.FormBorderStyle = FormBorderStyle.FixedSingle;
-                this.StartPosition = FormStartPosition.WindowsDefaultLocation;
-                this.ControlBox = true;
-            }*/
-            ReloadControls();
-            //if (AutoStart && (!DesignMode))
-            //{
-            //    Start();
-            //}
         }
 
         private void AddControls(DependencyObject controlCollection)
