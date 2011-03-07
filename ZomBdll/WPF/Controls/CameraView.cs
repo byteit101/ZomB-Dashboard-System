@@ -28,6 +28,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System451.Communication.Dashboard.Net.Video;
 using System451.Communication.Dashboard.Utils;
+using System.Windows.Input;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -55,6 +56,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
         int lastTick;
         double lastFrameRate;
         int frameRate;
+        bool started = false;
+        static Random rand = new Random();
 
         static CameraView()
         {
@@ -88,19 +91,36 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         void smi_Click(object sender, RoutedEventArgs e)
         {
-            vss.EndSave();
-            smi.Visibility = Visibility.Collapsed;
-            mi.Visibility = Visibility.Visible;
+            StopSave();
+        }
+
+        public void StopSave()
+        {
+            if (started)
+            {
+                vss.EndSave();
+                smi.Visibility = Visibility.Collapsed;
+                mi.Visibility = Visibility.Visible;
+                started = false;
+            }
         }
 
         void mi_Click(object sender, RoutedEventArgs e)
         {
+            StartSave();
+        }
+
+        public void StartSave()
+        {
+            if (started)
+                return;
             Directory.CreateDirectory(BTZomBFingerFactory.DefaultSaveLocation);
             vss = new VideoStreamSaver(this);
             vss.FPS = (float)RecordingFPS;
-            vss.StartSave(BTZomBFingerFactory.DefaultSaveLocation + "\\Capture" + (DateTime.Now.Ticks.ToString("x")) + ".webm");
+            vss.StartSave(BTZomBFingerFactory.DefaultSaveLocation + "\\Capture" + (DateTime.Now.Ticks.ToString("x")) + ((long)Math.Round(rand.NextTSDouble() * 999)).ToString("x") + ".webm");
             mi.Visibility = Visibility.Collapsed;
             smi.Visibility = Visibility.Visible;
+            started = true;
         }
 
         public override void UpdateControl(string value)
@@ -346,6 +366,20 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 t.tars.SetTargets(t.Targets);
         }
     }
+
+    public static class TSRandom
+    {
+        public static double NextTSDouble(this Random rn)
+        {
+            double nxt;
+            lock (rn)
+            {
+                nxt = rn.NextDouble();
+            }
+            return nxt;
+        }
+    }
+
     [Design.Designer(typeof(Designers.CameraTargetCollectionDesigner))]
     public class CameraTargetCollection : Collection<CameraTarget>
     {
