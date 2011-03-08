@@ -137,7 +137,7 @@ namespace System451.Communication.Dashboard.ViZ
             }
             designerProps.Add(new Label());
             (designerProps[4] as Label).Content = "Source:";
-            ZomBUrlSources = "zomb://." + Settings.Default.LastTeamNumber + "/TCP;zomb://." + Settings.Default.LastTeamNumber + "/TCP2";
+            ZomBUrlSources = "zomb://." + Settings.Default.LastTeamNumber + "/DBPkt;zomb://." + Settings.Default.LastTeamNumber + "/TCP2";
             var dsnr = new ZomBUrlCollectionDesigner();
             dsnr.Initialize(this, this.GetType().GetProperty("ZomBUrlSources", BindingFlags.NonPublic | BindingFlags.Instance));
             designerProps.Add(dsnr.GetProperyField());
@@ -962,6 +962,7 @@ namespace System451.Communication.Dashboard.ViZ
                 aadict.Clear();
                 peeps.Clear();
                 AutoAddPanel.Children.Clear();
+                AutoAddPanel.Children.Clear();
             }
         }
 
@@ -1102,6 +1103,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         internal void CommandBinding_Play_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            StopListening_Click(sender, e);
             RunApp();
         }
 

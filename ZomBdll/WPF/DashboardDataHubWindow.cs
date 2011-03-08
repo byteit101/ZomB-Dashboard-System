@@ -22,6 +22,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using Microsoft.Win32;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -95,7 +96,14 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 }
             };
 
-            if (Environment.UserName == "Driver")
+            bool driveroveride = false;
+            try
+            {
+                driveroveride = (int)Registry.LocalMachine.OpenSubKey(@"Software\ZomB").GetValue("DriverDisable", 0) == 1;
+            }
+            catch { }
+
+            if (Environment.UserName == "Driver" && !driveroveride)
             {
                 this.WindowStyle = WindowStyle.None;
                 this.WindowStartupLocation = WindowStartupLocation.Manual;

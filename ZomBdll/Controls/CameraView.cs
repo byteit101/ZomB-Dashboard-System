@@ -141,9 +141,6 @@ namespace System451.Communication.Dashboard
                     if (this.dataUpdatedEvent != null)
                         dataUpdatedEvent(this, new EventArgs());
                     this.Invalidate();
-
-                    //ZomBSaver takes care of this now
-                    //File.WriteAllBytes(@"C:\Program Files\FRC Dashboard\img\ZomEye"+(calls++)+".jpg", Receiver.ImageData);
                 }
             }
 
