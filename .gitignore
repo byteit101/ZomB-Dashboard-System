@@ -1,0 +1,6 @@
+bin/
+obj/
+Thumbs.db
+/releasefiles/Installer/testbuildfiles/*
+*.suo
+/.hgignore

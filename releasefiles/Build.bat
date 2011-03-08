@@ -7,21 +7,25 @@ exit %errorlevel%
 :okay
 
 @rem Copy Default Dash
+del "trunk\releasefiles\Default Dashboard\.gitignore"
 copy "trunk\Apps\DefaultDash\bin\Release\*.dll" "trunk\releasefiles\Default Dashboard\"
 copy "trunk\Apps\DefaultDash\bin\Release\*.exe" "trunk\releasefiles\Default Dashboard\"
 copy "trunk\Apps\DefaultDash\bin\Release\*.txt" "trunk\releasefiles\Default Dashboard\"
 
 @rem Copy ZomB Eye
+del "trunk\releasefiles\ZomB Eye\.gitignore"
 copy "trunk\Apps\ZomBeye\bin\Release\*.dll" "trunk\releasefiles\ZomB Eye\"
 copy "trunk\Apps\ZomBeye\bin\Release\*.exe" "trunk\releasefiles\ZomB Eye\"
 copy "trunk\Apps\ZomBeye\bin\Release\*.txt" "trunk\releasefiles\ZomB Eye\"
 
 @rem Copy ViZ
+del "trunk\releasefiles\Visual ZomB\.gitignore"
 copy "trunk\Apps\VisualZomB\bin\Release\*.dll" "trunk\releasefiles\Visual ZomB\"
 copy "trunk\Apps\VisualZomB\bin\Release\*.exe" "trunk\releasefiles\Visual ZomB\"
 copy "trunk\Apps\VisualZomB\bin\Release\*.txt" "trunk\releasefiles\Visual ZomB\"
 
 @rem Copy ZomB.dll and Prerequisites
+del "trunk\releasefiles\ZomB dll's\.gitignore"
 copy "trunk\ZomBdll\bin\Release\*.dll" "trunk\releasefiles\ZomB dll's"
 copy "trunk\ZomBdll\bin\Release\*.txt" "trunk\releasefiles\ZomB dll's"
 

@@ -1,6 +1,6 @@
 ﻿/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
- * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * Copyright (C) 2011, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,10 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System451.Communication.Dashboard.WPF.Design;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -28,8 +30,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
     [TemplatePart(Name = "PART_Rect", Type = typeof(Rectangle)), Design.ZomBControl("Alert Control", Description = "This is a square version of the OnOffControl, and shows a true/false value", IconName = "AlertControlIcon")]
     [Design.ZomBDesignableProperty("Foreground")]
     [Design.ZomBDesignableProperty("Background")]
-    [Design.ZomBDesignableProperty("BoolValue", DisplayName="Value")]
-    public class AlertControl : ZomBGLControl, IZomBDataControl
+    [Design.ZomBDesignableProperty("BoolValue", DisplayName = "Value")]
+    public class AlertControl : ZomBGLControl, IZomBDataControl, IZTrigger
     {
         Rectangle PART_Rect;
         static AlertControl()
@@ -57,7 +59,14 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 b.Source = s;
                 s.PART_Rect.SetBinding(Rectangle.FillProperty, b);
             }
+            if (s.BoolValue && s.Triggered != null)
+                s.Triggered();
         }
+
+        [ZomBDesignable(DisplayName = "Triggers"), Category("Behavior")]
+        public string TriggerListeners { get; set; }
+
+        public event Utils.VoidFunction Triggered;
 
         public override void OnApplyTemplate()
         {
@@ -97,7 +106,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         void AlertControl_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             BoolValue = !BoolValue;
-            if (DataUpdated!=null)
+            if (DataUpdated != null)
                 DataUpdated(this, new ZomBDataControlUpdatedEventArgs(ControlName, BoolValue.ToString()));
         }
 

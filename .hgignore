@@ -1,0 +1,6 @@
+glob:bin/
+glob:obj/
+glob:Thumbs.db
+glob:releasefiles/Installer/testbuildfiles
+glob:*.suo
+glob:.gitignore
