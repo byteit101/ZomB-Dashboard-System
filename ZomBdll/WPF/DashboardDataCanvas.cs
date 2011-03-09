@@ -218,7 +218,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             item.Triggered += delegate
             {
-                string[] trigs = item.TriggerListeners.Split(';');
+                string[] trigs = item.TriggerListeners.Split();
                 foreach (var trig in trigs)
                 {
                     string[] nv = trig.Split(':');

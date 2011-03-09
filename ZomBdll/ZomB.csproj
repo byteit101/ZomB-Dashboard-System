@@ -216,6 +216,10 @@
     <Compile Include="WPF\Controls\CommandButton.xaml.cs">
       <DependentUpon>CommandButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\Controls\Designer\TriggerListenersDesigner.cs" />
+    <Compile Include="WPF\Controls\Designer\TriggerListenersDesignerWindow.xaml.cs">
+      <DependentUpon>TriggerListenersDesignerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\Controls\Designer\ZomBUrlCollectionDesignerWindow.xaml.cs">
       <DependentUpon>ZomBUrlCollectionDesignerWindow.xaml</DependentUpon>
     </Compile>
@@ -419,6 +423,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="WPF\Controls\CommandButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Controls\Designer\TriggerListenersDesignerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

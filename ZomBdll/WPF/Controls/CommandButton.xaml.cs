@@ -44,7 +44,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         }
 
         [ZomBDesignable(DisplayName = "Triggers"), Category("Behavior")]
-        public string TriggerListeners { get; set; }
+        public TriggerListeners TriggerListeners { get; set; }
 
         public event Utils.VoidFunction Triggered;
     }

@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System451.Communication.Dashboard.Utils;
+using System451.Communication.Dashboard.WPF.Controls.Designers;
 
 namespace System451.Communication.Dashboard
 {
@@ -31,11 +32,37 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// Use the format name:function;name2:function
         /// </summary>
-        string TriggerListeners { get; set; }
+        TriggerListeners TriggerListeners { get; set; }
 
         /// <summary>
         /// Called when the trigger is tripped
         /// </summary>
         event VoidFunction Triggered;
+    }
+
+    [WPF.Design.Designer(typeof(TriggerListenersDesigner))]
+    public class TriggerListeners
+    {
+        public string Listeners { get; set; }
+
+        public static implicit operator string(TriggerListeners triggerListen)
+        {
+            return triggerListen.Listeners;
+        }
+
+        public static implicit operator TriggerListeners(string triggerListen)
+        {
+            return new TriggerListeners { Listeners = triggerListen };
+        }
+
+        public override string ToString()
+        {
+            return Listeners;
+        }
+
+        public string[] Split()
+        {
+            return Listeners.Split(';');
+        }
     }
 }
