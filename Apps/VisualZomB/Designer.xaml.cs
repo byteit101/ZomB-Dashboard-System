@@ -341,7 +341,7 @@ namespace System451.Communication.Dashboard.ViZ
         private void AddControl(ZomBControlAttribute info, Point point, AutoPoint aup)
         {
             FrameworkElement fe = Reflector.Inflate(info.Type) as FrameworkElement;
-            fe.Name = aup.Name.Replace(" ", "Z");
+            fe.Name = aup.Name.Replace(" ", "Z") + Guid.NewGuid().ToString("N").Substring(0, 5);
             if (fe is ZomBGLControl)
                 (fe as ZomBGLControl).ControlName = aup.Name;
             AddControl(fe, point);

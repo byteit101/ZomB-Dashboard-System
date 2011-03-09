@@ -66,6 +66,7 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
         private void AddTrigger(string name, string calls)
         {
             var sp = new Grid();
+            sp.Margin = new Thickness(8, 8, 8, 0);
             sp.ColumnDefinitions.Add(new ColumnDefinition());
             sp.ColumnDefinitions.Add(new ColumnDefinition());
             sp.ColumnDefinitions.Add(new ColumnDefinition());
@@ -80,9 +81,10 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             sp.Children.Add(cb);
             var mcb = new ComboBox();
             Grid.SetColumn(mcb, 1);
+            mcb.Margin = new Thickness(8, 0, 8, 0);
             sp.Children.Add(mcb);
             var btn = new Button();
-            btn.Content = "-";
+            btn.Content = " - ";
             Grid.SetColumn(btn, 2);
             btn.Click += new RoutedEventHandler(btn_Click);
             sp.Children.Add(btn);
