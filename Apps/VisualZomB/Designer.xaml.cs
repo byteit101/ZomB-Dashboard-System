@@ -968,7 +968,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void bc(object sender, RoutedEventArgs e)
         {
-            AddAutoStub("Go");
+            AddAutoStub(Guid.NewGuid().ToString().Substring(0,5));
         }
 
         Dictionary<string, AutoPoint> aadict = new Dictionary<string, AutoPoint>();
@@ -978,14 +978,16 @@ namespace System451.Communication.Dashboard.ViZ
             if (!aadict.ContainsKey(name))
             {
                 aadict.Add(name, new AutoPoint { Name = name, Toolbox = GetAAToolBoxClone() });
-                AutoAddPanel.Children.Add(aadict[name]);
+                var autop = aadict[name];
+                DockPanel.SetDock(autop, Dock.Top);
+                AutoAddPanel.Children.Add(autop);
             }
         }
 
         private ListBox GetAAToolBoxClone()
         {
             var lb = DeepClonetb();
-            lb.ItemsSource = listBox1.ItemsSource;
+            lb.ItemsSource = from ZomBControlAttribute item in listBox1.ItemsSource where item.Type.IsSubclassOf(typeof(ZomBGLControl)) select item;
             lb.PreviewMouseLeftButtonDown += listBox2_PreviewMouseLeftButtonDown;
             lb.PreviewMouseUp += listBox2_PreviewMouseUp;
             lb.PreviewMouseMove += listBox2_PreviewMouseMove;

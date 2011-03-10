@@ -116,7 +116,11 @@
             </Image>
             <Path Name="ResizeGrip" MouseLeftButtonDown="ResizeGrip_MouseDown" MouseMove="ResizeGrip_MouseMove" MouseLeftButtonUp="ResizeGrip_MouseUp"
                   Cursor="SizeNWSE" Canvas.Bottom="0" Canvas.Right="0" Fill="Transparent" Data="M 17,0 H 20 V 20 H 0 V 17 H 12 L 17,12 z"></Path>
-            <DockPanel Name="AutoAddPanel" Canvas.Top="0" Canvas.Left="0" LastChildFill="False" />
+            <DockPanel Name="AutoAddPanel" Canvas.Top="1" Canvas.Left="1" LastChildFill="False">
+                <DockPanel.Clip>
+                    <RectangleGeometry Rect="0,0,9001,9001"></RectangleGeometry>
+                </DockPanel.Clip>
+            </DockPanel>
             <!--<Button Canvas.Bottom="0" Click="bc">Add</Button>-->
         </Canvas>
     </ScrollViewer>

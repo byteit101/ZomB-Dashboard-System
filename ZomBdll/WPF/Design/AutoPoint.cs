@@ -37,7 +37,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public AutoPoint()
         {
             this.Width = 16;
-            this.Height = 16;
+            this.Height = 17;
+            this.ClipToBounds = false;
             this.MouseLeftButtonUp += delegate
             {
                 if (pup != null)
