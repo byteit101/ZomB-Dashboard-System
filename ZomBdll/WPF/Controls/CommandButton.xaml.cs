@@ -35,6 +35,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public CommandButton()
         {
             InitializeComponent();
+            this.TriggerListeners = new TriggerListeners();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

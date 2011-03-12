@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System451.Communication.Dashboard.Utils;
 using System451.Communication.Dashboard.WPF.Controls.Designers;
+using System.ComponentModel;
 
 namespace System451.Communication.Dashboard
 {
@@ -41,6 +42,7 @@ namespace System451.Communication.Dashboard
     }
 
     [WPF.Design.Designer(typeof(TriggerListenersDesigner))]
+    [TypeConverter(typeof(TriggerListenersConverter))]
     public class TriggerListeners
     {
         public string Listeners { get; set; }
@@ -63,6 +65,32 @@ namespace System451.Communication.Dashboard
         public string[] Split()
         {
             return Listeners.Split(';');
+        }
+    }
+
+    public class TriggerListenersConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            if (sourceType == typeof(string))
+                return true;
+            return base.CanConvertFrom(context, sourceType);
+        }
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            if (destinationType == typeof(string))
+                return true;
+            return base.CanConvertTo(context, destinationType);
+        }
+        public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        {
+            return (TriggerListeners)value.ToString();
+        }
+        public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+        {
+            if (destinationType == typeof(string))
+                return value.ToString();
+            return base.ConvertTo(context, culture, value, destinationType);
         }
     }
 }

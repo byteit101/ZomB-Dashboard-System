@@ -95,7 +95,7 @@ namespace System451.Communication.Dashboard.WPF.Design
                 else
                 {
                     LinearGradientBrush lb = (Property.GetValue(Object, null) as LinearGradientBrush);
-                    StringBuilder s = new StringBuilder("<LinearGradientBrush StartPoint=\"0,0\" EndPoint=\"");
+                    StringBuilder s = new StringBuilder("<LinearGradientBrush StartPoint=\""+lb.StartPoint.ToString()+"\" EndPoint=\"");
                     s.Append(lb.EndPoint.ToString());
                     s.Append("\">");
                     foreach (var item in lb.GradientStops)

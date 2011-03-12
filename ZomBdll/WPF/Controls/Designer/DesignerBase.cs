@@ -65,7 +65,14 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designers
 
         public virtual string GetValue()
         {
-            return Property.GetValue(Object, null).ToString();
+            try
+            {
+                return Property.GetValue(Object, null).ToString();
+            }
+            catch
+            {
+                return "";
+            }
         }
 
         #endregion

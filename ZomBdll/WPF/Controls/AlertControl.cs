@@ -48,6 +48,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.SnapsToDevicePixels = true;
             this.Width = 50;
             this.Height = 50;
+            this.TriggerListeners = new TriggerListeners();
         }
 
         private static void boolchange(DependencyObject sender, DependencyPropertyChangedEventArgs e)
