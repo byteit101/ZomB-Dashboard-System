@@ -20,6 +20,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows;
 using System451.Communication.Dashboard.Utils;
+using System.Text;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -88,7 +89,41 @@ namespace System451.Communication.Dashboard.ViZ
                 }
             }
             else
-                new Designer().Show();
+#if !DEBUG
+                try
+                {
+#endif
+                    new Designer().Show();
+#if !DEBUG
+                }
+                catch (Exception ex)
+                {
+                    string full = getFullException(ex);
+                    System.Windows.Forms.MessageBox.Show(full);
+                }
+#endif
+        }
+
+        internal static void PrcException(Exception ex)
+        {
+            string full = getFullException(ex);
+            new ErrorDialog { Message = full }.ShowDialog();
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(File.Open("C:\\ZomB.log", FileMode.Append)))
+                {
+                    sw.Write(full+"\r\n\r\n");
+                }
+            }
+            catch { }
+        }
+
+        internal static string getFullException(Exception ex)
+        {
+            StringBuilder sb = new StringBuilder(ex.ToString());
+            if (ex.InnerException != null)
+                sb.Append("\r\nWith Inner:\r\n"+getFullException(ex.InnerException));
+            return sb.ToString();
         }
 
         internal static void LoadPlugins()

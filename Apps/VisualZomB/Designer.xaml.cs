@@ -254,7 +254,10 @@ namespace System451.Communication.Dashboard.ViZ
 
                 }
             }
-            catch { }//System.Diagnostics.Debug.Print("FAIL!"); }
+            catch (Exception ex)
+            {
+                App.PrcException(ex);
+            }
         }
 
         private void listBox1_PreviewMouseUp(object sender, MouseButtonEventArgs e)
@@ -1128,55 +1131,69 @@ namespace System451.Communication.Dashboard.ViZ
 
         public void LoadFile(string fileName)
         {
-            StoppedDDHCVS cvs = XamlReader.Load(new MemoryStream(UTF8Encoding.UTF8.GetBytes(new StreamReader(new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
-                .ReadToEnd().Replace("ZomB:DashboardDataCanvas ",
-                "ViZ:StoppedDDHCVS xmlns:ViZ=\"clr-namespace:System451.Communication.Dashboard.ViZ;assembly=ViZ\" ")
-                .Replace("/ZomB:DashboardDataCanvas",
-                "/ViZ:StoppedDDHCVS")))) as StoppedDDHCVS;
-            if (cvs == null)
-                return;
-            List<UIElement> lc = new List<UIElement>(cvs.Children.Count);
-
-            //canvas size
-            var ofv = new Point(cvs.Width, cvs.Height) - new Point(ZDash.ActualWidth, ZDash.ActualHeight);
-            var newInnerSize = (Size)(new Point(ZDash.ActualWidth, ZDash.ActualHeight) + ofv);
-            var newOuterSize = (Size)(new Point(this.ActualWidth, this.ActualHeight) + ofv);
-            this.Width = newOuterSize.Width;
-            this.Height = newOuterSize.Height;
-            LayoutCvs.Width = (ZDChrome.Width = ZDash.Width = newInnerSize.Width) + 4;
-            LayoutCvs.Height = (ZDChrome.Height = ZDash.Height = newInnerSize.Height) + 4;
-
-            (designerProps[3] as ComboBox).SelectedIndex = ((int)cvs.InvalidPacketAction) - 1;//this hinges on the values
-            ((designerProps[5] as FrameworkElement).Tag as ZomBUrlCollectionDesigner).Set((cvs.DefaultSources));
-            (designerProps[7] as TextBox).Text = cvs.Team.ToString();
-
-            foreach (UIElement item in cvs.Children)
+            try
             {
-                if (item.GetType().GetCustomAttributes(typeof(ZomBControlAttribute), true).Length > 0)
+                StoppedDDHCVS cvs = XamlReader.Load(new MemoryStream(UTF8Encoding.UTF8.GetBytes(new StreamReader(new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    .ReadToEnd().Replace("ZomB:DashboardDataCanvas ",
+                    "ViZ:StoppedDDHCVS xmlns:ViZ=\"clr-namespace:System451.Communication.Dashboard.ViZ;assembly=ViZ\" ")
+                    .Replace("/ZomB:DashboardDataCanvas",
+                    "/ViZ:StoppedDDHCVS")))) as StoppedDDHCVS;
+                if (cvs == null)
+                    return;
+                List<UIElement> lc = new List<UIElement>(cvs.Children.Count);
+
+                //canvas size
+                var ofv = new Point(cvs.Width, cvs.Height) - new Point(ZDash.ActualWidth, ZDash.ActualHeight);
+                var newInnerSize = (Size)(new Point(ZDash.ActualWidth, ZDash.ActualHeight) + ofv);
+                var newOuterSize = (Size)(new Point(this.ActualWidth, this.ActualHeight) + ofv);
+                this.Width = newOuterSize.Width;
+                this.Height = newOuterSize.Height;
+                LayoutCvs.Width = (ZDChrome.Width = ZDash.Width = newInnerSize.Width) + 4;
+                LayoutCvs.Height = (ZDChrome.Height = ZDash.Height = newInnerSize.Height) + 4;
+
+                (designerProps[3] as ComboBox).SelectedIndex = ((int)cvs.InvalidPacketAction) - 1;//this hinges on the values
+                ((designerProps[5] as FrameworkElement).Tag as ZomBUrlCollectionDesigner).Set((cvs.DefaultSources));
+                (designerProps[7] as TextBox).Text = cvs.Team.ToString();
+
+                foreach (UIElement item in cvs.Children)
                 {
-                    lc.Add(item);
+                    if (item.GetType().GetCustomAttributes(typeof(ZomBControlAttribute), true).Length > 0)
+                    {
+                        lc.Add(item);
+                    }
                 }
+                ZDash.Children.Clear();
+                foreach (var item in lc)
+                {
+                    cvs.Children.Remove(item);
+                    AddControl((FrameworkElement)item);
+                }
+                Deselect();
             }
-            ZDash.Children.Clear();
-            foreach (var item in lc)
+            catch (Exception ex)
             {
-                cvs.Children.Remove(item);
-                AddControl((FrameworkElement)item);
+                App.PrcException(ex);
             }
-            Deselect();
         }
 
         private void SaveApp()
         {
-            var dlg = new System.Windows.Forms.SaveFileDialog();
-            dlg.DefaultExt = ".zaml";
-            dlg.AddExtension = true;
-            dlg.SupportMultiDottedExtensions = true;
-            dlg.Filter = "ZomB App Markup Files (*.zaml)|*.zaml|All Files|*.*";
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            try
             {
-                string zaml = Export();
-                File.WriteAllText(dlg.FileName, zaml);
+                var dlg = new System.Windows.Forms.SaveFileDialog();
+                dlg.DefaultExt = ".zaml";
+                dlg.AddExtension = true;
+                dlg.SupportMultiDottedExtensions = true;
+                dlg.Filter = "ZomB App Markup Files (*.zaml)|*.zaml|All Files|*.*";
+                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    string zaml = Export();
+                    File.WriteAllText(dlg.FileName, zaml);
+                }
+            }
+            catch (Exception ex)
+            {
+                App.PrcException(ex);
             }
         }
 
@@ -1190,7 +1207,7 @@ namespace System451.Communication.Dashboard.ViZ
 
             pw.Status = "Generating Zaml...";
             string zaml = Export();
-
+            try
             {
 
                 pw.Status = "Initializing process...";
@@ -1216,6 +1233,10 @@ namespace System451.Communication.Dashboard.ViZ
                     ZDesigner.SetDesigner(this);
                 }
                 catch { }
+            }
+            catch (Exception ex)
+            {
+                App.PrcException(ex);
             }
         }
 
