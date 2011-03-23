@@ -64,7 +64,7 @@ namespace System451.Communication.Dashboard
 
         public string[] Split()
         {
-            return Listeners.Split(';');
+            return (Listeners??"").Split(';');
         }
     }
 

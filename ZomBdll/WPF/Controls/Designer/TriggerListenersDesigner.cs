@@ -43,6 +43,7 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designers
             btn.Click += delegate
             {
                 t.Content = new TriggerListenersDesignerWindow().UpdateTLs((t.Content??"").ToString());
+                Set(new TriggerListeners { Listeners = t.Content.ToString() });
             };
             DockPanel.SetDock(btn, Dock.Right);
             pan.ToolTip = t.Content;
