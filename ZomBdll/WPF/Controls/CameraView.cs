@@ -28,7 +28,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System451.Communication.Dashboard.Net.Video;
 using System451.Communication.Dashboard.Utils;
-using System.Windows.Input;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -168,12 +167,15 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 return;
             try
             {
+                var iparea = VideoSourceArgs.Contains('?') ? VideoSourceArgs.Substring(0, VideoSourceArgs.IndexOf('?')) : VideoSourceArgs;
+                var fps = VideoSourceArgs.Contains('?') ? int.Parse(VideoSourceArgs.Substring(VideoSourceArgs.IndexOf('?') + 1)) : 15;
+
                 videoSource = ((VideoSource == DefaultVideoSource.WPILibTcpStream) ?
                     (IDashboardVideoDataSource)new WPILibTcpVideoSource(TeamNumber)
                     : ((VideoSource == DefaultVideoSource.Webcam) ?
                         (IDashboardVideoDataSource)new WebCamVideoSource() :
                         ((VideoSource == DefaultVideoSource.MJPEGStream) ?
-                        (IDashboardVideoDataSource)new MJPEGVideoSource(IPAddress.Parse(VideoSourceArgs)) : null)));
+                        (IDashboardVideoDataSource)new MJPEGVideoSource(IPAddress.Parse(iparea), fps) : null)));
                 videoSource.NewImageRecieved += new NewImageDataRecievedEventHandler(videoSource_NewImageRecieved);
                 videoSource.Start();
             }

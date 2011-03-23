@@ -16,13 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
 using System.IO;
+using System.Net;
+using System.Text;
+using System.Threading;
 
 namespace System451.Communication.Dashboard.Net.Video
 {
@@ -43,9 +41,10 @@ namespace System451.Communication.Dashboard.Net.Video
         /// Create a new instance of MJPEGVideoSource
         /// </summary>
         /// <param name="address">IP address of the camera</param>
-        public MJPEGVideoSource(IPAddress address)
+        /// <param name="fps">FPS rate of the camera (0 default)</param>
+        public MJPEGVideoSource(IPAddress address, int fps)
         {
-            Init(address);
+            Init(address, fps);
         }
 
         ~MJPEGVideoSource()
@@ -56,12 +55,14 @@ namespace System451.Communication.Dashboard.Net.Video
         public bool Running { get; protected set; }
         public int Port { get; protected set; }
         public IPAddress IP { get; protected set; }
+        public int FPS { get; protected set; }
 
-        private void Init(IPAddress address)
+        private void Init(IPAddress address, int fps)
         {
             Running = false;
             IP = address;
             Port = 80;//web!
+            FPS = fps;
         }
 
         /// <summary>
@@ -150,11 +151,11 @@ namespace System451.Communication.Dashboard.Net.Video
                 //<JPEG image data> 
                 //--myboundary
 
-//                User-Agent: HTTPStreamClient\n\
-//Connection: Keep-Alive\n\
-//Cache-Control: no-cache\n\
-//Authorization: Basic RlJDOkZSQw==\n\n";
-                HttpWebRequest hrq = (HttpWebRequest)HttpWebRequest.Create("http://" + IP.ToString() + "/axis-cgi/mjpg/video.cgi");
+                //                User-Agent: HTTPStreamClient\n\
+                //Connection: Keep-Alive\n\
+                //Cache-Control: no-cache\n\
+                //Authorization: Basic RlJDOkZSQw==\n\n";
+                HttpWebRequest hrq = (HttpWebRequest)HttpWebRequest.Create("http://" + IP.ToString() + "/axis-cgi/mjpg/video.cgi?fps=" + FPS.ToString());
                 hrq.UserAgent = "ZomB/0.8.1.0 (Streaming Client)";
                 hrq.Credentials = new NetworkCredential("frc", "FRC");
                 Stream ns;
@@ -208,7 +209,7 @@ namespace System451.Communication.Dashboard.Net.Video
                                 int red = 0;
                                 while (red < image_size)
                                 {
-                                    int tred = sr.Read(buf, red, image_size-red);
+                                    int tred = sr.Read(buf, red, image_size - red);
                                     if (tred < 1)
                                         break;
                                     red += tred;
@@ -223,7 +224,6 @@ namespace System451.Communication.Dashboard.Net.Video
                                 CurImg = Bitmap.FromStream(new MemoryStream(bbuf));
                                 if (NewImageRecieved != null)
                                     NewImageRecieved(this, new NewImageDataRecievedEventArgs(CurImg, new MemoryStream(bbuf)));
-                    
                             }
                             else
                                 er("Unknown size");
