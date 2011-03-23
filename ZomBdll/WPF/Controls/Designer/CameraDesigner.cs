@@ -19,6 +19,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System451.Communication.Dashboard.WPF.Controls.Designer;
+using System451.Communication.Dashboard.WPF.Design;
 
 namespace System451.Communication.Dashboard.WPF.Controls.Designers
 {
@@ -55,9 +56,20 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designers
                 var ict = item as CameraTarget;
                 sb.Append("<ZomB:CameraTarget ControlName=\"");
                 sb.Append(ict.ControlName);
-                sb.Append("\" Fill=\"");
-                sb.Append(ict.Fill);
-                sb.Append("\"><ZomB:CameraTarget.Border><Pen Brush=\"");
+                var ctfdesigner = new BrushDesigner();
+                ctfdesigner.Initialize(ict, ict.GetType().GetProperty("Fill"));
+                if (ctfdesigner.IsExpanded())
+                {
+                    sb.Append("\"><ZomB:CameraTarget.Fill>");
+                    sb.Append(ctfdesigner.GetValue());
+                    sb.Append("</ZomB:CameraTarget.Fill><ZomB:CameraTarget.Border><Pen Brush=\"");
+                }
+                else
+                {
+                    sb.Append("\" Fill=\"");
+                    sb.Append(ctfdesigner.GetValue());
+                    sb.Append("\"><ZomB:CameraTarget.Border><Pen Brush=\"");
+                }
                 sb.Append(ict.Border.Brush);
                 sb.Append("\" Thickness=\"");
                 sb.Append(ict.Border.Thickness);
