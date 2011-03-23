@@ -51,7 +51,7 @@ InstallDir $PROGRAMFILES\ZomB
 CRCCheck on
 XPStyle on
 ShowInstDetails show
-VIProductVersion 1.3.0.0 ;CONST VERSION
+VIProductVersion 1.4.0.0
 VIAddVersionKey ProductName "ZomB Dashboard System"
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"
@@ -197,7 +197,7 @@ Section "-ZomB Core" SEC0000
     !insertmacro MUI_STARTMENU_WRITE_END
 
     SetOutPath $INSTDIR
-    SetOverwrite ifnewer
+    SetOverwrite on
     File ZomB.dll
     File /nonfatal LICENSE.txt
     File /nonfatal CREDITS.txt
@@ -222,12 +222,12 @@ SectionEnd
 SectionGroup "Dependencies" SECGRP0001
     Section "FFmpeg" SEC0002
         SectionIn 1 2 3
-        SetOverwrite ifnewer
-        File ffmpeg.exe
+        SetOverwrite on
+		File "/oname=$WINDIR\ffmpeg.exe" ffmpeg.exe
     SectionEnd
     Section "VLC" SEC0003
         SectionIn 2 3
-        SetOverwrite ifnewer
+        SetOverwrite on
         StrCmp $vlcVers "${VLCVERSION}" 0 +2
             Return
         NSISdl::download "http://downloads.sourceforge.net/project/vlc/${VLCVERSION}/win32/vlc-${VLCVERSION}-win32.exe" "vlc-${VLCVERSION}-win32.exe"
@@ -242,7 +242,7 @@ SectionGroupEnd
 
 Section "Visual ZomB" SEC0004
     SectionIn 1 2 3 4 RO
-    SetOverwrite ifnewer
+    SetOverwrite on
     File ViZ.exe
 	File Zaml.ico
 	File Dashboardexe.ico
@@ -255,7 +255,7 @@ SectionEnd
 SectionGroup "Bindings" SECGRP0002
 	Section "Robot Binding (required)" SEC0013
         SectionIn 1 2 3 4 RO
-        SetOverwrite ifnewer
+        SetOverwrite on
         ${IfNot} ${FileExists} `$INSTDIR\Bindings`
         CreateDirectory "$INSTDIR\Bindings"
         ${EndIf}
@@ -270,7 +270,7 @@ SectionGroup "Bindings" SECGRP0002
 	
     Section "C++ Bindings" SEC0005
         SectionIn 1 2 3 4
-        SetOverwrite ifnewer
+        SetOverwrite on
         ${IfNot} ${FileExists} `$INSTDIR\Bindings`
         CreateDirectory "$INSTDIR\Bindings"
         ${EndIf}
@@ -279,7 +279,7 @@ SectionGroup "Bindings" SECGRP0002
 	
     Section "Java Bindings" SEC0006
         SectionIn 1 2 3 4
-        SetOverwrite ifnewer
+        SetOverwrite on
         ${IfNot} ${FileExists} `$INSTDIR\Bindings`
         CreateDirectory "$INSTDIR\Bindings"
         ${EndIf}
@@ -289,7 +289,7 @@ SectionGroup "Bindings" SECGRP0002
 	
     Section "LabVIEW Bindings" SEC0007
         SectionIn 1 2 3 4
-        SetOverwrite ifnewer
+        SetOverwrite on
         ${IfNot} ${FileExists} `$INSTDIR\Bindings`
         CreateDirectory "$INSTDIR\Bindings"
         ${EndIf}
@@ -308,7 +308,7 @@ SectionGroupEnd
 SectionGroup "Others" SECGRP0003
     Section /o "Default Dashboard (WinForms)" SEC0009
         SectionIn 3
-        SetOverwrite ifnewer
+        SetOverwrite on
         File DefaultDash.exe
         !insertmacro CREATE_SMGROUP_SHORTCUT "Default Dashboard (WinForm)" "$INSTDIR\DefaultDash.exe"
 		!insertmacro NGEN "$INSTDIR\DefaultDash.exe"
@@ -316,7 +316,7 @@ SectionGroup "Others" SECGRP0003
 
     Section "Default Dashboard (WPF)" SEC0010
         SectionIn 1 2 3
-        SetOverwrite ifnewer
+        SetOverwrite on
         File Default.exe
 		!insertmacro NGEN "$INSTDIR\Default.exe"
         !insertmacro CREATE_SMGROUP_SHORTCUT "Default Dashboard" "$INSTDIR\Default.exe"
@@ -324,7 +324,7 @@ SectionGroup "Others" SECGRP0003
 
     Section "ZomB Eye" SEC0011
         SectionIn 1 2 3
-        SetOverwrite ifnewer
+        SetOverwrite on
         File "ZomB Eye.exe"
         !insertmacro CREATE_SMGROUP_SHORTCUT "ZomB Eye" "$INSTDIR\ZomB Eye.exe"
 		!insertmacro NGEN "$INSTDIR\ZomB Eye.exe"
@@ -332,7 +332,7 @@ SectionGroup "Others" SECGRP0003
 
     Section "Driver Station Plugin" SEC0012
         SectionIn 1 2 3
-        SetOverwrite ifnewer
+        SetOverwrite on
 		${IfNot} ${FileExists} `$INSTDIR\plugins`
         CreateDirectory "$INSTDIR\plugins"
         ${EndIf}
