@@ -117,8 +117,18 @@ namespace System451.Communication.Dashboard.ViZ
             listBox1.PreviewMouseUp += listBox1_PreviewMouseUp;
             listBox1.PreviewMouseMove += listBox1_PreviewMouseMove;
             propHolder = tbx.PropertyBox;
-            this.Top = (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height <= 600) ? -1 : (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height - (this.Height + (Settings.Default.EmbeddedTbx ? 0 : tbx.Height))) / 2.0;
-            this.Left = Math.Max(-1.0, (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width / 2.0) - this.Width / 2.0);
+
+            double nsysheight = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
+            double nsyswidth = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
+            
+            using (System.Drawing.Graphics g = System.Drawing.Graphics.FromHwnd(IntPtr.Zero))
+            {
+                nsyswidth *= (g.DpiX / 96.0);
+                nsysheight *= (g.DpiY / 96.0);
+            }
+            this.Top = (nsysheight <= 600) ? -1 : (nsysheight - (this.Height + (Settings.Default.EmbeddedTbx ? 0 : tbx.Height))) / 2.0;
+            this.Left = Math.Max(-1.0, (nsyswidth / 2.0) - this.Width / 2.0);
+            
             DoubleAnimation VizLogoani = new DoubleAnimation(1, 0, new Duration(new TimeSpan(0, 0, 2)));
             VizLogoani.BeginTime = new TimeSpan(0, 0, 1);
             VizLogoani.Completed += delegate { LayoutCvs.Children.Remove(ViZLogo); };
