@@ -70,5 +70,17 @@ namespace System451.Communication.Dashboard.ViZ.Properties {
                 this["CopyDLLs"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EmbeddedTbx {
+            get {
+                return ((bool)(this["EmbeddedTbx"]));
+            }
+            set {
+                this["EmbeddedTbx"] = value;
+            }
+        }
     }
 }

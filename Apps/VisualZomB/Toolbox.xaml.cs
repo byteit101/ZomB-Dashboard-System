@@ -17,6 +17,7 @@
  */
 using System.Windows;
 using System.Windows.Input;
+using System451.Communication.Dashboard.ViZ.Properties;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -28,6 +29,7 @@ namespace System451.Communication.Dashboard.ViZ
         public Toolbox()
         {
             InitializeComponent();
+            DockCheck.IsChecked = Settings.Default.EmbeddedTbx;
         }
 
         private void PropScroller_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -54,6 +56,18 @@ namespace System451.Communication.Dashboard.ViZ
         private void CommandBinding_Play_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             Designer.getDesigner().CommandBinding_Play_Executed(sender, e);
+        }
+
+        private void DockCheck_Checked(object sender, RoutedEventArgs e)
+        {
+            Settings.Default.EmbeddedTbx = DockCheck.IsChecked;
+            Settings.Default.Save();
+        }
+
+        private void DockCheck_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Settings.Default.EmbeddedTbx = DockCheck.IsChecked;
+            Settings.Default.Save();
         }
     }
 }

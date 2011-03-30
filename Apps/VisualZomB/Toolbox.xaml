@@ -14,7 +14,9 @@
         <KeyBinding Key="F6" Command="SaveAs" />
         <KeyBinding Modifiers="Ctrl" Key="S" Command="Save" />
         <KeyBinding Modifiers="Ctrl" Key="O" Command="Open" />
-    </Window.InputBindings><Window.Resources>
+        <KeyBinding Modifiers="Ctrl" Key="N" Command="New" />
+    </Window.InputBindings>
+    <Window.Resources>
         <Style TargetType="{x:Type ListBoxItem}">
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
@@ -23,7 +25,7 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    <Grid>
+    <Grid Name="TbxGrid" x:FieldModifier="internal" Grid.Row="2">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="195" />
             <ColumnDefinition Width="*" />
@@ -47,6 +49,11 @@
                     <WrapPanel />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Dock toolbox to main window" Checked="DockCheck_Checked" Unchecked="DockCheck_Unchecked" Name="DockCheck" IsCheckable="True" />
+                </ContextMenu>
+            </ListBox.ContextMenu>
         </ListBox>
         <ScrollViewer PreviewMouseWheel="PropScroller_PreviewMouseWheel" Margin="2" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Name="PropScroller">
             <ZomB:FlowPropertyGrid Orientation="Horizontal" Name="PropertyBox" x:FieldModifier="public" HorizontalAlignment="Left" VerticalAlignment="Top"

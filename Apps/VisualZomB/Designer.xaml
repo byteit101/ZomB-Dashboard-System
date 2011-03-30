@@ -24,7 +24,22 @@
         <KeyBinding Modifiers="Ctrl" Key="O" Command="Open" />
         <KeyBinding Modifiers="Ctrl" Key="N" Command="New" />
     </Window.InputBindings>
-    <ScrollViewer Name="Scrlview" Background="Transparent" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+    <Window.Resources>
+        <Style TargetType="{x:Type ListBoxItem}">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="LightBlue" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid Name="ViZGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="0" Name="SplitterDefinition" />
+            <RowDefinition Height="0" Name="ToolboxDefinition" />
+        </Grid.RowDefinitions>
+        <ScrollViewer Name="Scrlview" Background="Transparent" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <Canvas Name="LayoutCvs" Width="1028" Height="404" MinHeight="154" MinWidth="204">
             <loc:DropShadowChrome x:Name="ZDChrome" Canvas.Top="1" Canvas.Left="1" Width="1024" Height="400" MinHeight="150" MinWidth="200">
                 <Canvas Width="1024" Height="400" MinHeight="150" MinWidth="200" Background="White" Name="ZDash" AllowDrop="True" Drop="ZDash_Drop" 
@@ -129,4 +144,7 @@
             <!--<Button Canvas.Bottom="0" Click="bc">Add</Button>-->
         </Canvas>
     </ScrollViewer>
+        <GridSplitter Grid.Row="1" ShowsPreview="True" HorizontalAlignment="Stretch" Height="5" />
+        
+    </Grid>
 </Window>

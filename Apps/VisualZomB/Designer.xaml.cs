@@ -93,22 +93,31 @@ namespace System451.Communication.Dashboard.ViZ
             //initialize ns's
             LoadNSs();
 
+            tbx = new Toolbox();
             if (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width > 1080)
             {
                 //chromify, we have space
                 this.AllowsTransparency = false;
                 Scrlview.Background = Brushes.LightGray;
+                ViZGrid.Background = Brushes.White;
                 this.WindowStyle = WindowStyle.SingleBorderWindow;
                 this.Width = 1080;
                 this.Height = 470;
+                if (Settings.Default.EmbeddedTbx)
+                {
+                    tbx.Content = null;
+                    ViZGrid.Children.Add(tbx.TbxGrid);
+                    this.Height += 230;
+                    ToolboxDefinition.Height = new GridLength(230);
+                    SplitterDefinition.Height = GridLength.Auto;
+                }
             }
-            tbx = new Toolbox();
             listBox1 = tbx.ToolListBox;
             listBox1.PreviewMouseLeftButtonDown += listBox1_PreviewMouseLeftButtonDown;
             listBox1.PreviewMouseUp += listBox1_PreviewMouseUp;
             listBox1.PreviewMouseMove += listBox1_PreviewMouseMove;
             propHolder = tbx.PropertyBox;
-            this.Top = (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height <= 600) ? -1 : (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height - (this.Height + tbx.Height)) / 2.0;
+            this.Top = (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height <= 600) ? -1 : (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height - (this.Height + (Settings.Default.EmbeddedTbx ? 0 : tbx.Height))) / 2.0;
             this.Left = Math.Max(-1.0, (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width / 2.0) - this.Width / 2.0);
             DoubleAnimation VizLogoani = new DoubleAnimation(1, 0, new Duration(new TimeSpan(0, 0, 2)));
             VizLogoani.BeginTime = new TimeSpan(0, 0, 1);
@@ -159,6 +168,11 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 Settings.Default.LastTeamNumber = (designerProps[7] as TextBox).Text;
                 Settings.Default.Save();
+                try
+                {
+                    tbx.Close();
+                }
+                catch { }
             };
         }
 
@@ -187,10 +201,13 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            tbx.Top = this.Top + this.ActualHeight - 2.0;
-            tbx.Left = this.Left + (this.ActualWidth / 2.0) - (tbx.Width / 2.0);
-            tbx.Show();
-            tbx.Owner = this;
+            if (!Settings.Default.EmbeddedTbx)
+            {
+                tbx.Top = this.Top + this.ActualHeight - 2.0;
+                tbx.Left = this.Left + (this.ActualWidth / 2.0) - (tbx.Width / 2.0);
+                tbx.Show();
+                tbx.Owner = this;
+            }
             tbx.Closed += new EventHandler(tbx_Closed);
             listBox1.ItemsSource = Reflector.GetZomBDesignableInfos(Reflector.GetZomBDesignableClasses());
         }
@@ -206,7 +223,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            tbx.Close();
+            this.Close();
         }
 
         private void Rectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
