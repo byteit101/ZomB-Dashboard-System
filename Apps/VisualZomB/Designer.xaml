@@ -9,6 +9,7 @@
         <CommandBinding Command="Play" Executed="CommandBinding_Play_Executed" />
         <CommandBinding Command="Save" Executed="CommandBinding_Save_Executed" />
         <CommandBinding Command="Open" Executed="CommandBinding_Open_Executed" />
+        <CommandBinding Command="New" Executed="CommandBinding_New_Executed" />
         <CommandBinding Command="SaveAs" Executed="CommandBinding_Deploy_Executed" />
         <CommandBinding Command="MoveLeft" Executed="CommandBinding_MoveTop_Executed" />
         <CommandBinding Command="MoveUp" Executed="CommandBinding_MoveUp_Executed" />
@@ -21,6 +22,7 @@
         <KeyBinding Key="F6" Command="SaveAs" />
         <KeyBinding Modifiers="Ctrl" Key="S" Command="Save" />
         <KeyBinding Modifiers="Ctrl" Key="O" Command="Open" />
+        <KeyBinding Modifiers="Ctrl" Key="N" Command="New" />
     </Window.InputBindings>
     <ScrollViewer Name="Scrlview" Background="Transparent" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <Canvas Name="LayoutCvs" Width="1028" Height="404" MinHeight="154" MinWidth="204">
@@ -66,15 +68,18 @@
                                     <Grid SnapsToDevicePixels="true">
                                         <ContentPresenter SnapsToDevicePixels="True" ContentSource="Header" />
                                         <Popup x:Name="PART_Popup" AllowsTransparency="true" HorizontalOffset="-2" IsOpen="{Binding Path=IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" VerticalOffset="-3" Focusable="false">
-                                            <ContentControl  IsTabStop="false" Template="{DynamicResource {ComponentResourceKey ResourceId=SubmenuContent, TypeInTargetAssembly={x:Type FrameworkElement}}}">
-                                                <ItemsPresenter Margin="2" SnapsToDevicePixels="True"/>
-                                            </ContentControl>
+                                            <loc:DropShadowChrome Margin="2" Background="Transparent">
+                                                <ContentControl IsTabStop="false" Template="{DynamicResource {ComponentResourceKey ResourceId=SubmenuContent, TypeInTargetAssembly={x:Type FrameworkElement}}}" BorderThickness="0">
+                                                    <ItemsPresenter Margin="2" SnapsToDevicePixels="True"/>
+                                                </ContentControl>
+                                            </loc:DropShadowChrome>
                                         </Popup>
                                     </Grid>
                                 </ControlTemplate>
                             </MenuItem.Template>
+                            <MenuItem Header="New" Command="New"/>
                             <MenuItem Header="Open..." Command="Open"/>
-                            <MenuItem Header="Save..." Command="Save"/>
+                            <MenuItem Header="Save As..." Command="Save"/>
                             <MenuItem Header="AutoListen" Click="AutoListen_Click" Name="AAListen"/>
                             <MenuItem Header="Stop Listening" Click="StopListening_Click" Name="AAdeListen" Visibility="Collapsed" />
                             <MenuItem Header="Deploy..." Command="SaveAs"/>

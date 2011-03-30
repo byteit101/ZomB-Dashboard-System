@@ -23,19 +23,32 @@ namespace System451.Communication.Dashboard.ViZ
 {
     class DropShadowChrome : Decorator
     {
-        private static SolidColorBrush shadow;
-
-        static DropShadowChrome()
+        public SolidColorBrush Background
         {
-            shadow = new SolidColorBrush(Color.FromArgb(128, 0, 0, 0));
+            get { return (SolidColorBrush)GetValue(BackgroundProperty); }
+            set { SetValue(BackgroundProperty, value); }
         }
+
+        // Using a DependencyProperty as the backing store for Background.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty BackgroundProperty =
+            DependencyProperty.Register("Background", typeof(SolidColorBrush), typeof(DropShadowChrome), new UIPropertyMetadata(Brushes.Black));
+        
+        public SolidColorBrush Shadow
+        {
+            get { return (SolidColorBrush)GetValue(ShadowProperty); }
+            set { SetValue(ShadowProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Background.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ShadowProperty =
+            DependencyProperty.Register("Shadow", typeof(SolidColorBrush), typeof(DropShadowChrome), new UIPropertyMetadata(new SolidColorBrush(Color.FromArgb(128, 0, 0, 0))));
 
         protected override void OnRender(DrawingContext drawingContext)
         {
             Rect rect = new Rect(-1, -1, this.ActualWidth + 2.0, this.ActualHeight + 2.0);
-            drawingContext.DrawRectangle(Brushes.Black, null, rect);
+            drawingContext.DrawRectangle(Background, null, rect);
             rect = new Rect(1.0, 1.0, this.ActualWidth + 2.0, this.ActualHeight + 2.0);
-            drawingContext.DrawRectangle(shadow, null, rect);
+            drawingContext.DrawRectangle(Shadow, null, rect);
         }
     }
 }

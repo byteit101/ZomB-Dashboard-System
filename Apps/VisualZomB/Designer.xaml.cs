@@ -1112,6 +1112,13 @@ namespace System451.Communication.Dashboard.ViZ
             RunApp();
         }
 
+        private void CommandBinding_New_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Deselect();
+            ZDash.Children.Clear();
+            Deselect();
+        }
+
         internal void CommandBinding_Save_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             SaveApp();
