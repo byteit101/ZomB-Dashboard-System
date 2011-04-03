@@ -191,7 +191,7 @@ namespace System451.Communication.Dashboard.Net
                     Output = UTF8Encoding.UTF8.GetString(buffer);
 
                     //Find segment of data
-                    if (Output.Contains("@@ZomB:|") && Output.Contains("|:ZomB@@"))
+                    if (Output.Contains("@@ZomB:|") && Output.Contains("|:ZomB@@") && !Output.Contains("@@ZomB:|:ZomB@@"))
                     {
                         Output = Output.Substring(Output.IndexOf("@@ZomB:|") + 8, (Output.IndexOf("|:ZomB@@") - (Output.IndexOf("@@ZomB:|") + 8)));
                         if (Output != "")

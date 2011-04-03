@@ -80,6 +80,14 @@ namespace System451.Communication.Dashboard.WPF.Design
 
         public override string GetValue()
         {
+            if (comb == null)
+            {
+                ComboBox cb = new ComboBox();
+                cb.IsTextSearchEnabled = true;
+                cb.IsEditable = true;
+                comb = cb;
+                UpdateCombo();
+            }
             if (!IsExpanded())
                 return comb.Text;
             else
@@ -95,7 +103,7 @@ namespace System451.Communication.Dashboard.WPF.Design
                 else
                 {
                     LinearGradientBrush lb = (Property.GetValue(Object, null) as LinearGradientBrush);
-                    StringBuilder s = new StringBuilder("<LinearGradientBrush StartPoint=\""+lb.StartPoint.ToString()+"\" EndPoint=\"");
+                    StringBuilder s = new StringBuilder("<LinearGradientBrush StartPoint=\"" + lb.StartPoint.ToString() + "\" EndPoint=\"");
                     s.Append(lb.EndPoint.ToString());
                     s.Append("\">");
                     foreach (var item in lb.GradientStops)

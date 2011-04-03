@@ -141,6 +141,11 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         void PART_refresh_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            Refresh();
+        }
+		
+		public void Refresh()
+		{
             if (ZDesigner.IsRunMode)
             {
                 videoSource.Stop();

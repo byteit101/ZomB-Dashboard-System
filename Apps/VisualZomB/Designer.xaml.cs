@@ -94,7 +94,7 @@ namespace System451.Communication.Dashboard.ViZ
             LoadNSs();
 
             tbx = new Toolbox();
-            if (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width > 1080)
+            if (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width > 1080 || Settings.Default.EmbeddedTbx)
             {
                 //chromify, we have space
                 this.AllowsTransparency = false;
