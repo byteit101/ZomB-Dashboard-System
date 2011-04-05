@@ -17,13 +17,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.thecatattack.system451.communication.dashboard;
+package org.thecatattack.System451.Communication.Dashboard;
 
 import com.sun.cldc.jna.*;
+import edu.wpi.first.wpilibj.Dashboard;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
 
 public class ZomBDashboard
 {
+    private Dashboard db = null;
+    private double lasttime = GetClock();
+    private String prints = "@@ZomB:|";
     private static ZomBDashboard instance;
     private static final Function addfnc = NativeLibrary.getDefaultInstance().getFunction("ZomBDashboardAdd");
     private static final Function Hasspacefnc = NativeLibrary.getDefaultInstance().getFunction("ZomBDashboardHasSpace");
@@ -36,7 +42,10 @@ public class ZomBDashboard
 
     private ZomBDashboard(ZomBModes mode, boolean use1180, String ip)
     {
-        NativeLibrary.getDefaultInstance().getFunction("ZomBDashboardInit").call3(mode.V, Pointer.createStringBuffer(ip), use1180?1:0);
+        if (mode != ZomBModes.DBPacket)
+            NativeLibrary.getDefaultInstance().getFunction("ZomBDashboardInit").call3(mode.V, Pointer.createStringBuffer(ip), use1180?1:0);
+        else
+            db = DriverStation.getInstance().getDashboardPackerHigh();
     }
 
     public static synchronized ZomBDashboard getInstance(ZomBModes mode, boolean use1180, String ip)
@@ -71,7 +80,18 @@ public class ZomBDashboard
     //main
     public boolean add(String name, String value)
     {
-        return addfnc.call2(Pointer.createStringBuffer(name), Pointer.createStringBuffer(value))==1?true:false;
+        if (db != null)
+        {
+            String s= esc(name) + "=" + esc(value) + "|";
+            if (s.length() <= getSpace())
+            {
+                prints+=s;
+                return true;
+            }
+            return false;
+        }
+        else
+            return addfnc.call2(Pointer.createStringBuffer(name), Pointer.createStringBuffer(value))==1?true:false;
     }
 
     public boolean add(String name, int value)
@@ -100,6 +120,63 @@ public class ZomBDashboard
                 + String.valueOf(value.boundingRectHeight / (double) value.imageHeight) + "+"
                 + String.valueOf(value.boundingRectLeft / (double) value.imageWidth) + ","
                 + String.valueOf(value.boundingRectTop / (double) value.imageHeight));
+    }
+
+    private String esc(String name)
+    {
+        if (name.indexOf("%")!=-1)
+        {
+            String s = "";
+            for (int i = 0; i < name.length(); i++)
+            {
+                char nxt = name.charAt(i);
+                if (nxt == '%')
+                    s+="%%";
+                else
+                    s+=nxt;
+            }
+            name = s;
+        }
+        if (name.indexOf("|")!=-1)
+        {
+            String s = "";
+            for (int i = 0; i < name.length(); i++)
+            {
+                char nxt = name.charAt(i);
+                if (nxt == '|')
+                    s+="%p";
+                else
+                    s+=nxt;
+            }
+            name = s;
+        }
+        if (name.indexOf("=")!=-1)
+        {
+            String s = "";
+            for (int i = 0; i < name.length(); i++)
+            {
+                char nxt = name.charAt(i);
+                if (nxt == '=')
+                    s+="%e";
+                else
+                    s+=nxt;
+            }
+            name = s;
+        }
+        if (name.indexOf(":")!=-1)
+        {
+            String s = "";
+            for (int i = 0; i < name.length(); i++)
+            {
+                char nxt = name.charAt(i);
+                if (nxt == ':')
+                    s+="%c";
+                else
+                    s+=nxt;
+            }
+            name = s;
+        }
+        return name;
     }
 
     //main
@@ -159,7 +236,6 @@ public class ZomBDashboard
         Pointer p = new Pointer(50);//50 should be enough for now
         getstringfnc.call2(ptr, p);
         String str = p.getString(0);
-        System.out.println("String:'"+str+"'");
         ptr.free();
         return str;
     }
@@ -196,31 +272,60 @@ public class ZomBDashboard
 
     public boolean hasSpace()
     {
+        if (db != null)
+            return DriverStation.USER_CONTROL_DATA_SIZE - prints.length() > 11;//11 for safety
         return Hasspacefnc.call0()==1?true:false;
+    }
+
+    private int getSpace()
+    {
+        return DriverStation.USER_CONTROL_DATA_SIZE - prints.length() - 11;
     }
 
     public boolean isConnected()
     {
+        if (db != null)
+            return true;
         return IsConnectedfnc.call0()==1?true:false;
     }
 
     public boolean isAnyConnected()
     {
+        if (db != null)
+            return true;
         return IsanyConnectedfnc.call0()==1?true:false;
     }
 
     public boolean canSend()
     {
+        if (db != null)
+            return (lasttime + 0.02 <= GetClock());
         return cansendfnc.call0()==1?true:false;
     }
 
     public void resetCounter()
     {
-        resetfnc.call0();
+        lasttime=GetClock();
+        if (db == null)
+            resetfnc.call0();
     }
 
     public boolean send()
     {
-        return sendfnc.call0()==1?true:false;
+        resetCounter();
+        if (db != null)
+        {
+            db.addString(prints + ":ZomB@@");
+            db.commit();
+            prints = "@@ZomB:|";
+            return true;
+        }
+        else
+            return sendfnc.call0()==1?true:false;
+    }
+
+    protected double GetClock()
+    {
+        return Timer.getUsClock() / 1000000f;
     }
 }
