@@ -87,6 +87,7 @@
     <Compile Include="Controls\XShake.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="NetAndDataProcessing\DashboardData\SmartDataSource.cs" />
     <Compile Include="NetAndDataProcessing\UDPProxy.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\IDataSender.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\TCPDataSender.cs" />
