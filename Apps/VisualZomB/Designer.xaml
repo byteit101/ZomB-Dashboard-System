@@ -6,11 +6,12 @@
     AllowsTransparency="True" Background="Transparent" WindowStyle="None" Title="ZomB Designer" Height="404" Width="1028" MinHeight="154" MinWidth="204" SnapsToDevicePixels="True" Loaded="Window_Loaded" WindowStartupLocation="Manual"
         Icon="pack://application:,,,/ZomB;component/Resources/ZomB.ico">
     <Window.CommandBindings>
-        <CommandBinding Command="Play" Executed="CommandBinding_Play_Executed" />
+        <CommandBinding Command="loc:Designer.Run" Executed="CommandBinding_Play_Executed" />
         <CommandBinding Command="Save" Executed="CommandBinding_Save_Executed" />
         <CommandBinding Command="Open" Executed="CommandBinding_Open_Executed" />
         <CommandBinding Command="New" Executed="CommandBinding_New_Executed" />
-        <CommandBinding Command="SaveAs" Executed="CommandBinding_Deploy_Executed" />
+        <CommandBinding Command="loc:Designer.SaveAs" Executed="CommandBinding_SaveAs_Executed" />
+        <CommandBinding Command="loc:Designer.Deploy"  Executed="CommandBinding_Deploy_Executed" />
         <CommandBinding Command="MoveLeft" Executed="CommandBinding_MoveTop_Executed" />
         <CommandBinding Command="MoveUp" Executed="CommandBinding_MoveUp_Executed" />
         <CommandBinding Command="MoveDown" Executed="CommandBinding_MoveDown_Executed" />
@@ -18,9 +19,10 @@
         <CommandBinding Command="Delete" Executed="CommandBinding_Delete_Executed" />
     </Window.CommandBindings>
     <Window.InputBindings>
-        <KeyBinding Key="F5" Command="Play" />
-        <KeyBinding Key="F6" Command="SaveAs" />
+        <KeyBinding Key="F5" Command="loc:Designer.Run" />
+        <KeyBinding Key="F6" Command="loc:Designer.Deploy" />
         <KeyBinding Modifiers="Ctrl" Key="S" Command="Save" />
+        <KeyBinding Modifiers="Ctrl+Alt" Key="S" Command="loc:Designer.SaveAs" />
         <KeyBinding Modifiers="Ctrl" Key="O" Command="Open" />
         <KeyBinding Modifiers="Ctrl" Key="N" Command="New" />
     </Window.InputBindings>
@@ -94,11 +96,14 @@
                             </MenuItem.Template>
                             <MenuItem Header="New" Command="New"/>
                             <MenuItem Header="Open..." Command="Open"/>
-                            <MenuItem Header="Save As..." Command="Save"/>
+                            <MenuItem Header="Save" Command="Save"/>
+                            <MenuItem Header="Save As..." Command="loc:Designer.SaveAs"/>
+                            <Separator />
+                            <MenuItem Header="Run" Command="loc:Designer.Run"/>
+                            <MenuItem Header="Deploy..." Command="loc:Designer.Deploy"/>
+                            <Separator />
                             <MenuItem Header="AutoListen" Click="AutoListen_Click" Name="AAListen"/>
                             <MenuItem Header="Stop Listening" Click="StopListening_Click" Name="AAdeListen" Visibility="Collapsed" />
-                            <MenuItem Header="Deploy..." Command="SaveAs"/>
-                            <MenuItem Header="Run" Command="Play"/>
                             <MenuItem Header="About..." Click="MenuItem_Click"/>
                         </MenuItem>
                     </Menu>

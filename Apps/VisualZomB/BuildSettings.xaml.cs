@@ -62,7 +62,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void iconBrowse_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new SaveFileDialog();
+            var dlg = new OpenFileDialog();
             dlg.FileName = iconLocation.Text;
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {

@@ -26,16 +26,16 @@ SET Installer=Y
 SET /P Installer=Build the Installer [Y/n]: 
 IF /i %Installer% EQU Y (SET Installer=true) ELSE SET Installer=false
 
-SET InstallerBuildVersion=0.6.1.
-SET /P InstallerBuildVersion=Version (Becomes Install ZomB (Version).exe) [0.6.1.]:
+SET InstallerBuildVersion=0.8.1.
+SET /P InstallerBuildVersion=Version (Becomes Install ZomB (Version).exe) [0.8.1.]:
 
 SET InstallerBuildSVN=true
 
-SET SVN_REVISION=310
-SET /P SVN_REVISION=SVN Revision (don't set too high) [310]:
+SET SVN_REVISION=406
+SET /P SVN_REVISION=SVN Revision (don't set too high) [406]:
 
-SET BUILD_NUMBER=50
-SET /P BUILD_NUMBER=Build number [50]:
+SET BUILD_NUMBER=70
+SET /P BUILD_NUMBER=Build number [70]:
 
 @echo on
 @call trunk\releasefiles\Build.bat

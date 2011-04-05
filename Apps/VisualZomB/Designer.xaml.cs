@@ -1080,6 +1080,12 @@ namespace System451.Communication.Dashboard.ViZ
 
         #region Menu
 
+        public static readonly RoutedUICommand Deploy = new RoutedUICommand(
+            "Deploy",
+            "Deploy",
+            typeof(Designer),
+            new InputGestureCollection { new KeyGesture(Key.F6) });
+
         internal void CommandBinding_Deploy_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             new BuildSettings(Export()).ShowDialog();
@@ -1133,6 +1139,19 @@ namespace System451.Communication.Dashboard.ViZ
 
         #region Save and Run
 
+        public static readonly RoutedUICommand Run = new RoutedUICommand(
+            "Run",
+            "Run",
+            typeof(Designer),
+            new InputGestureCollection { new KeyGesture(Key.F5) });
+
+        public static readonly RoutedUICommand SaveAs = new RoutedUICommand(
+            "SaveAs",
+            "SaveAs",
+            typeof(Designer),
+            new InputGestureCollection { new KeyGesture(Key.S, ModifierKeys.Alt|ModifierKeys.Control) });
+
+
         internal void CommandBinding_Play_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             StopListening_Click(sender, e);
@@ -1144,11 +1163,17 @@ namespace System451.Communication.Dashboard.ViZ
             Deselect();
             ZDash.Children.Clear();
             Deselect();
+            lastSave = "";
         }
 
         internal void CommandBinding_Save_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             SaveApp();
+        }
+
+        internal void CommandBinding_SaveAs_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SaveAppAs();
         }
 
         internal void CommandBinding_Open_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -1159,6 +1184,7 @@ namespace System451.Communication.Dashboard.ViZ
             dlg.Filter = "ZomB App Markup Files (*.zaml)|*.zaml;*.xaml|All Files|*.*";
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                lastSave = dlg.FileName;
                 LoadFile(dlg.FileName);
             }
         }
@@ -1210,7 +1236,7 @@ namespace System451.Communication.Dashboard.ViZ
             }
         }
 
-        private void SaveApp()
+        private void SaveAppAs()
         {
             try
             {
@@ -1221,9 +1247,28 @@ namespace System451.Communication.Dashboard.ViZ
                 dlg.Filter = "ZomB App Markup Files (*.zaml)|*.zaml|All Files|*.*";
                 if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    string zaml = Export();
-                    File.WriteAllText(dlg.FileName, zaml);
+                    lastSave = dlg.FileName;
+                    SaveApp();
                 }
+            }
+            catch (Exception ex)
+            {
+                App.PrcException(ex);
+            }
+        }
+
+        private string lastSave = "";
+        private void SaveApp()
+        {
+            try
+            {
+                if (lastSave != "")
+                {
+                    string zaml = Export();
+                    File.WriteAllText(lastSave, zaml);
+                }
+                else
+                    SaveAppAs();
             }
             catch (Exception ex)
             {
