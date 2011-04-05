@@ -237,7 +237,7 @@ namespace System451.Communication.Dashboard.Net
                                     }
                                     else
                                     {
-                                        nametable.Add(id, new SmartInfo { Name = Encoding.UTF8.GetString(name), Type = type });
+                                        nametable[id] = new SmartInfo { Name = Encoding.UTF8.GetString(name), Type = type };
                                     }
                                     break;
                                 }
@@ -246,10 +246,7 @@ namespace System451.Communication.Dashboard.Net
                                     int id = binladen.ReadByte();
                                     var info = nametable[id];
                                     string value = info.Parse(binladen);
-                                    if (!kys.ContainsKey(info.Name))
-                                        kys.Add(info.Name, value);
-                                    else
-                                        kys[info.Name] = value;
+                                    kys[info.Name] = value;
                                     break;
                                 }
                             default:

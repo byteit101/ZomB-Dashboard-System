@@ -180,6 +180,8 @@ namespace System451.Communication.Dashboard.Net
                     return typeof(DataSaver);
                 case "File":
                     return typeof(DataPlayerSource);
+                case "Smart":
+                    return typeof(SmartDataSource);
             }
             foreach (var item in AppDomain.CurrentDomain.GetAssemblies())
             {
