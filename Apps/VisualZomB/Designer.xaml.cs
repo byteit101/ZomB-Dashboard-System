@@ -123,8 +123,8 @@ namespace System451.Communication.Dashboard.ViZ
             
             using (System.Drawing.Graphics g = System.Drawing.Graphics.FromHwnd(IntPtr.Zero))
             {
-                nsyswidth *= (g.DpiX / 96.0);
-                nsysheight *= (g.DpiY / 96.0);
+                nsyswidth *= (96.0 / g.DpiX);
+                nsysheight *= (96.0 / g.DpiY);
             }
             this.Top = (nsysheight <= 600) ? -1 : (nsysheight - (this.Height + (Settings.Default.EmbeddedTbx ? 0 : tbx.Height))) / 2.0;
             this.Left = Math.Max(-1.0, (nsyswidth / 2.0) - this.Width / 2.0);
