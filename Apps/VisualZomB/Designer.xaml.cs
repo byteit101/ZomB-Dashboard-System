@@ -205,7 +205,10 @@ namespace System451.Communication.Dashboard.ViZ
             if (Environment.OSVersion.Version.Major >= 6)
             {
                 if (Utils.AeroGlass.GlassifyWindow(this))
+                {
+                    ViZGrid.Background = Brushes.Transparent;
                     Scrlview.Background = Brushes.Transparent;
+                }
             }
         }
 
@@ -271,12 +274,15 @@ namespace System451.Communication.Dashboard.ViZ
 
                     //System.Diagnostics.Debug.Print("Moving...");
                     // Find the data behind the ListViewItem
-                    ZomBControlAttribute contact = (ZomBControlAttribute)listBox1.ItemContainerGenerator.
-                        ItemFromContainer(listViewItem);
-                    //System.Diagnostics.Debug.Print("Found...");
-                    // Initialize the drag & drop operation
-                    DataObject dragData = new DataObject("ZomBControl", contact);
-                    DragDrop.DoDragDrop(listViewItem, dragData, DragDropEffects.Copy);
+                    if (listViewItem != null)
+                    {
+                        ZomBControlAttribute contact = (ZomBControlAttribute)listBox1.ItemContainerGenerator.
+                            ItemFromContainer(listViewItem);
+                        //System.Diagnostics.Debug.Print("Found...");
+                        // Initialize the drag & drop operation
+                        DataObject dragData = new DataObject("ZomBControl", contact);
+                        DragDrop.DoDragDrop(listViewItem, dragData, DragDropEffects.Copy);
+                    }
                     lbdragging = false;
 
                 }

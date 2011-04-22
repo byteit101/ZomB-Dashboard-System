@@ -25,7 +25,7 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    <Grid Name="TbxGrid" x:FieldModifier="internal" Grid.Row="2">
+    <Grid Name="TbxGrid" x:FieldModifier="internal" Grid.Row="2" Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="195" />
             <ColumnDefinition Width="*" />
@@ -55,9 +55,11 @@
                 </ContextMenu>
             </ListBox.ContextMenu>
         </ListBox>
-        <ScrollViewer PreviewMouseWheel="PropScroller_PreviewMouseWheel" Margin="2" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Name="PropScroller">
-            <ZomB:FlowPropertyGrid Orientation="Horizontal" Name="PropertyBox" x:FieldModifier="public" HorizontalAlignment="Left" VerticalAlignment="Top"
+        <Border BorderBrush="Gray" BorderThickness="0,1,1,1" Grid.Column="1">
+            <ScrollViewer PreviewMouseWheel="PropScroller_PreviewMouseWheel" Margin="2"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Name="PropScroller">
+                <ZomB:FlowPropertyGrid Orientation="Horizontal" Name="PropertyBox" x:FieldModifier="public" HorizontalAlignment="Left" VerticalAlignment="Top"
                                    RightCollumnWidth="110" LeftCollumnWidth="120" CollumnPadding="3" SnapsToDevicePixels="True" />
-        </ScrollViewer>
+            </ScrollViewer>
+        </Border>
     </Grid>
 </Window>
