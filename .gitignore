@@ -4,3 +4,6 @@ Thumbs.db
 /releasefiles/Installer/testbuildfiles/*
 *.suo
 /.hgignore
+*.svn/*
+.hg/*
+*.user

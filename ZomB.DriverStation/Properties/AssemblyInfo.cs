@@ -51,6 +51,6 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.8.1.0")]
-[assembly: AssemblyFileVersion("0.8.1.0")]
+[assembly: AssemblyVersion(System451.Communication.Dashboard.ZVersionMgr.ShortNumber)]
+[assembly: AssemblyFileVersion(System451.Communication.Dashboard.ZVersionMgr.ShortNumber)]
 [assembly: System451.Communication.Dashboard.WPF.Design.ZomBZamlNamespace("System451.Communication.Dashboard.Net.DriverStation", "ZomBDS")]

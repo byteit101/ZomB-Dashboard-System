@@ -4,3 +4,6 @@ glob:Thumbs.db
 glob:releasefiles/Installer/testbuildfiles
 glob:*.suo
 glob:.gitignore
+glob:*.svn/*
+glob:.git/*
+glob:*.user

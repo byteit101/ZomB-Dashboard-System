@@ -1,0 +1,28 @@
+--- trunk/ZomBdll/ZVersionMgr.cs
++++ trunk/ZomBdll/ZVersionMgr.cs
+@@ -27,7 +27,7 @@
+         /*
+          * AUTOCONFIG VARS
+          */
+-        public const string FullNumber = "0.8.3.svn";
+-        public const string ShortNumber = "0.8.3.0";
++        public const string FullNumber = "FULL_VERSION";
++        public const string ShortNumber = "SHORT_VERSION";
+ 
+         /*
+          * MANUAL CONFIG VARS
+
+--- trunk/Apps/NullGEN/Program.cs
++++ trunk/Apps/NullGEN/Program.cs
+@@ -80,9 +80,9 @@
+             pub.GacRemove("Vlc.DotNet.Core");
+             pub.GacRemove("Vlc.DotNet.Forms");
+             pub.GacRemove("ZomB");
+-            var p = NGenu("ViZ, Version=0.8.3.0, Culture=neutral, PublicKeyToken=c7d9dbcb0b13713a");
++            var p = NGenu("ViZ, Version=SHORT_VERSION, Culture=neutral, PublicKeyToken=c7d9dbcb0b13713a");
+             p.WaitForExit();
+-            var q = NGenu("ZomB, Version=0.8.3.0, Culture=neutral, PublicKeyToken=5880636763ded5de");
++            var q = NGenu("ZomB, Version=SHORT_VERSION, Culture=neutral, PublicKeyToken=5880636763ded5de");
+             q.WaitForExit();
+         }
+     } 

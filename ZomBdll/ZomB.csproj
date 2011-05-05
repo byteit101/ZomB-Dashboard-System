@@ -274,6 +274,7 @@
     <Compile Include="WPF\ProgressDialog.xaml.cs">
       <DependentUpon>ProgressDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ZVersionMgr.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\DirectionMeter.resx">

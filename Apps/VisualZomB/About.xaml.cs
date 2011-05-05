@@ -21,6 +21,8 @@ namespace System451.Communication.Dashboard.ViZ
         public About()
         {
             InitializeComponent();
+            ReleaseBlock.Text = ZVersionMgr.ReleaseDateString;
+            VersionBlock.Text = "Version " + ZVersionMgr.FullNumber + " - " + ZVersionMgr.CodeName;
         }
     }
 }

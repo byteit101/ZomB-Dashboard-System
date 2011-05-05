@@ -1,5 +1,20 @@
 @rem This needs to be run in a folder that has both trunk and releasefiles
 copy trunk\releasefiles\source\zomb.sln trunk\ZomB.sln /Y
+
+@rem switch to installer dir, patch version
+cd trunk\releasefiles\Installer\
+
+IF %InstallerBuildSVN% EQU true (
+call BatSub.bat FULL_VERSION %InstallerBuildVersion%%SVN_REVISION% version.diff > tversion.diff
+call BatSub.bat SHORT_VERSION "%InstallerBuildVersion%0" tversion.diff > zversion.diff
+) ELSE (
+call BatSub.bat FULL_VERSION %InstallerBuildVersion% version.diff > tversion.diff
+call BatSub.bat SHORT_VERSION %InstallerBuildVersion% tversion.diff > zversion.diff
+)
+cd ..\..\..\
+patch -p0 < trunk\releasefiles\Installer\zversion.diff
+
+@rem build
 "C:\WINDOWS\Microsoft.NET\Framework\v3.5\msbuild.exe" trunk\zomb.sln /p:Configuration=Release
 if %errorlevel% EQU 0 goto okay
 exit %errorlevel%

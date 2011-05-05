@@ -49,8 +49,8 @@
             </Rectangle.Fill>
         </Rectangle>
         <DockPanel Grid.ColumnSpan="2" Grid.Row="1">
-            <TextBlock DockPanel.Dock="Top" FontSize="28" TextAlignment="Center" Name="VersionBlock" FontFamily="Verdana">Version 0.8.2 - Champion ZomB</TextBlock>
-            <TextBlock DockPanel.Dock="Top" FontSize="18" TextAlignment="Center" FontFamily="Verdana">Released 4/22/2011</TextBlock>
+            <TextBlock DockPanel.Dock="Top" FontSize="28" TextAlignment="Center" Name="VersionBlock" FontFamily="Verdana">Version 0.8.3.svn - Summer Fun</TextBlock>
+            <TextBlock DockPanel.Dock="Top" FontSize="18" TextAlignment="Center" Name="ReleaseBlock" FontFamily="Verdana">Not a major release - Summer 2011</TextBlock>
         </DockPanel>
         <Image Grid.Row="2" Margin="10">
             <Image.Source>

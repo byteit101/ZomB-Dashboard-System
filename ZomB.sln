@@ -1,15 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "trunk", "trunk", "{7D770CB8-9854-4263-8ACF-CF5BAE61840C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{B1155A5C-D8E9-4FCE-B8FB-D25CD7AAD0B0}"
-EndProject
+# Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZomBeye", "Apps\ZomBeye\ZomBeye.csproj", "{D315A372-3B08-40CE-A91D-7F5E01EE7566}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultDash", "Apps\DefaultDash\DefaultDash.csproj", "{BC0AD73F-CC8F-4097-818B-7A54AEA1011C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ZomBdll", "ZomBdll", "{C570AA47-2C31-4301-B7E0-85DB63716545}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZomB", "ZomBdll\ZomB.csproj", "{B40501FE-DF11-452B-BAD6-30DE836902C6}"
 EndProject
@@ -20,10 +14,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZomB.DriverStation", "ZomB.DriverStation\ZomB.DriverStation.csproj", "{49B23038-A658-43B3-8620-EBC62E873201}"
 EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -56,6 +46,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B1155A5C-D8E9-4FCE-B8FB-D25CD7AAD0B0} = {7D770CB8-9854-4263-8ACF-CF5BAE61840C}
