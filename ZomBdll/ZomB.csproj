@@ -88,6 +88,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="NetAndDataProcessing\DashboardData\SmartDataSource.cs" />
+    <Compile Include="NetAndDataProcessing\Socket\TsUdpClient.cs" />
+    <Compile Include="NetAndDataProcessing\Socket\TsTcpClient.cs" />
     <Compile Include="NetAndDataProcessing\UDPProxy.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\IDataSender.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\TCPDataSender.cs" />
