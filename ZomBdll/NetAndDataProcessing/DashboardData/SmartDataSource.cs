@@ -222,7 +222,8 @@ namespace System451.Communication.Dashboard.Net
                     //loop all controls
                     while (totallength > (Output.Position - 27))
                     {
-                        switch (binladen.ReadByte())
+                        byte b = binladen.ReadByte();
+                        switch (b)
                         {
                             case 0://Announce
                                 {
@@ -245,9 +246,17 @@ namespace System451.Communication.Dashboard.Net
                             case 1://Update
                                 {
                                     int id = binladen.ReadByte();
-                                    var info = nametable[id];
-                                    string value = info.Parse(binladen);
-                                    kys[info.Name] = value;
+                                    if (nametable.ContainsKey(id))
+                                    {
+                                        var info = nametable[id];
+                                        string value = info.Parse(binladen);
+                                        kys[info.Name] = value;
+                                    }
+                                    else
+                                    {
+                                        b = binladen.ReadByte();//get length
+                                        binladen.Read(new byte[b], 0, b);//skip it
+                                    }
                                     break;
                                 }
                             case 2://GUI Announce, not impl
@@ -256,7 +265,7 @@ namespace System451.Communication.Dashboard.Net
                                     break;
                                 }
                             default:
-                                DoError(new Exception("Bin not a 1 or zero, exiting"));
+                                throw new Exception("Bin ("+b+") not a 1 or zero, exiting");
 
                                 break;
                         }
@@ -452,7 +461,9 @@ namespace System451.Communication.Dashboard.Net
                 case SmartDataTypes.Short:
                 case SmartDataTypes.Float:
                 case SmartDataTypes.Double:
+                case SmartDataTypes.String:
                 case SmartDataTypes.Bool:
+                case SmartDataTypes.UTF8String:
                     binreader.ReadByte();
                     break;
                 default:
@@ -463,6 +474,7 @@ namespace System451.Communication.Dashboard.Net
                 case SmartDataTypes.Byte:
                     return binreader.ReadByte().ToString();
                 case SmartDataTypes.Char:
+                    binreader.ReadByte();//I don't know why, just do it (always '\0')
                     return binreader.ReadChar().ToString();
                 case SmartDataTypes.Int:
                     return binreader.ReadInt32().ToString();
@@ -479,7 +491,7 @@ namespace System451.Communication.Dashboard.Net
                 case SmartDataTypes.Bool:
                     return binreader.ReadByte().ToString();
                 case SmartDataTypes.UTF8String:
-                    return binreader.ReadString();
+                    return binreader.ReadUTFString();
                 default:
                     return "";
             }
