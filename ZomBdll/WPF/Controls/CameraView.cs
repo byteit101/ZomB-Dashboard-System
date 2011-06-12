@@ -28,6 +28,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System451.Communication.Dashboard.Net.Video;
 using System451.Communication.Dashboard.Utils;
+using System.Threading;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -96,7 +97,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
         }
         public void Dispose()
         {
-            System.Diagnostics.Debug.WriteLine(" ** DISPOSE");
             if (videoSource != null)
                 videoSource.Dispose();
             if (vss != null)
@@ -159,9 +159,9 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             Refresh();
         }
-		
-		public void Refresh()
-		{
+
+        public void Refresh()
+        {
             if (ZDesigner.IsRunMode)
             {
                 videoSource.Stop();
@@ -215,6 +215,13 @@ namespace System451.Communication.Dashboard.WPF.Controls
             CameraView am = (o as CameraView);
             if (am.fpslabel != null)
                 am.fpslabel.Visibility = (((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed);
+        }
+
+        static void FPSChange(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            CameraView am = (o as CameraView);
+            if (am.vss != null)
+                am.vss.FPS = (float)((double)e.NewValue);//Stupid type safety unboxing
         }
 
         private delegate void JFunction(BitmapFrame frame);
@@ -310,7 +317,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         // Using a DependencyProperty as the backing store for VideoSource.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty RecordingFPSProperty =
-            DependencyProperty.Register("RecordingFPS", typeof(double), typeof(CameraView), new UIPropertyMetadata(15.0));
+            DependencyProperty.Register("RecordingFPS", typeof(double), typeof(CameraView), new UIPropertyMetadata(15.0, FPSChange));
 
         #region IZomBControlGroup Members
 

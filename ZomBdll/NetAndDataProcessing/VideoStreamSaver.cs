@@ -25,7 +25,6 @@ using System.Text;
 using System.Threading;
 using System.Windows.Media.Imaging;
 using System451.Communication.Dashboard.Net.Video;
-using System.Diagnostics;
 
 namespace System451.Communication.Dashboard
 {
@@ -43,6 +42,7 @@ namespace System451.Communication.Dashboard
 
             Thread saber;
             bool? saving = false;
+            bool capture = true;
             VideoEncoder srm = null;
 
             /// <summary>
@@ -69,7 +69,6 @@ namespace System451.Communication.Dashboard
 
             public void Dispose()
             {
-                Debug.WriteLine(" ++ DISPOSE");
                 EndSave();
                 Thread.Sleep(1);
                 try
@@ -120,13 +119,12 @@ namespace System451.Communication.Dashboard
 
             void source_DataUpdated(object sender, EventArgs e)
             {
-                if (saving != null)
+                if (capture)
                 {
                     lock (pubicQueue)
                     {
                         pubicQueue.Enqueue(source.DataValue);
                     }
-                    Debug.WriteLine("    Added Pq");
                 }
             }
 
@@ -171,14 +169,11 @@ namespace System451.Communication.Dashboard
                             {
                                 imageQueue.Enqueue(pubicQueue.Dequeue());
                             }
-                            Debug.WriteLine("    *Added +iQ");
                         }
                         Thread.Sleep(50);
 
                         if (saving == true)
                         {
-                            if (!wassaving)
-                                Debug.WriteLine("Begin Saving with #" + imageQueue.Count + " objects");
                             if (srm == null)
                                 srm = new VideoEncoder(filename, FPS);
                             Thread.Sleep(50);
@@ -192,13 +187,17 @@ namespace System451.Communication.Dashboard
                         {
                             if (wassaving)
                                 break;
-                            while (imageQueue.Count > FPS * 2.0)//We can have two seconds of stuff
+                            //Debug.WriteLine("Trimming with #" + imageQueue.Count + " objects to FPS of "+FPS);
+                            while (imageQueue.Count > (FPS * 2.0))//We can have two seconds of stuff
                             {
                                 imageQueue.Dequeue();
                             }
                         }
                         Thread.Sleep(75);
                     }
+
+                    Thread.Sleep(2500);//Wait for a few extra frames, perhapes the ones now!
+                    capture = false;
 
                     //close out
                     while (pubicQueue.Count > 0)

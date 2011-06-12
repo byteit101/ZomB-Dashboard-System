@@ -300,8 +300,11 @@ namespace System451.Communication.Dashboard.Libs.WebCam_Capture
 				{
 					// get from the clipboard
 					tempObj = Clipboard.GetDataObject();
-					tempImg = (System.Drawing.Bitmap) tempObj.GetData(System.Windows.Forms.DataFormats.Bitmap);
-
+                    do
+                    {
+                        tempImg = (System.Drawing.Bitmap)tempObj.GetData(System.Windows.Forms.DataFormats.Bitmap);
+                        System.Diagnostics.Debug.WriteLineIf(tempImg == null,"!Imageacq FAIL!");
+                    } while (tempImg == null);
 					/*
 					* For some reason, the API is not resizing the video
 					* feed to the width and height provided when the video
