@@ -209,18 +209,18 @@ namespace System451.Communication.Dashboard.Net
 
                     //Get a stream
                     MemoryStream Output = new MemoryStream(buffer);
-                    Output.Seek(26, SeekOrigin.Begin);
-                    BinaryReader binladen = new BinaryReader(Output);
+                    Output.Seek(27, SeekOrigin.Begin);
+                    EBinaryReader binladen = new EBinaryReader(Output);
 
                     //get length
                     int totallength = (binladen.ReadUInt16() << 16);
                     totallength += binladen.ReadUInt16();
 
                     //clear last loop's controls
-                    kys.Clear();
+                    kys = new Dictionary<string, string>();
 
                     //loop all controls
-                    while (totallength > 0)
+                    while (totallength > (Output.Position - 27))
                     {
                         switch (binladen.ReadByte())
                         {
@@ -234,6 +234,7 @@ namespace System451.Communication.Dashboard.Net
                                     if (peeking)
                                     {
                                         dp.Invoke(cb, Encoding.UTF8.GetString(name));
+                                        nametable[id] = new SmartInfo { Name = Encoding.UTF8.GetString(name), Type = type };
                                     }
                                     else
                                     {
@@ -249,19 +250,29 @@ namespace System451.Communication.Dashboard.Net
                                     kys[info.Name] = value;
                                     break;
                                 }
+                            case 2://GUI Announce, not impl
+                                {
+                                    System.Windows.Forms.MessageBox.Show("Dashboard selection via Protocol has not been implemented in ZomB, try WPF tabs instead");
+                                    break;
+                                }
                             default:
                                 DoError(new Exception("Bin not a 1 or zero, exiting"));
 
                                 break;
                         }
                     }
-                    //Fire events
-                    if (DataRecieved != null)
-                        DataRecieved(this, new EventArgs());
-                    if (NewStatusRecieved != null)
-                        NewStatusRecieved(this, new NewStatusRecievedEventArgs(cStat));
-                    if (NewDataRecieved != null)
-                        NewDataRecieved(this, new NewDataRecievedEventArgs(kys));
+
+                    if (kys.Count > 0)//Empty keys in empty packet, "Smart" Dashboard can be dumb
+                        //All in favor of chaging the name to DumbDashboard say "aye!" "sqrt(-1)!"
+                    {
+                        //Fire events
+                        if (DataRecieved != null)
+                            DataRecieved(this, new EventArgs());
+                        if (NewStatusRecieved != null)
+                            NewStatusRecieved(this, new NewStatusRecievedEventArgs(cStat));
+                        if (NewDataRecieved != null)
+                            NewDataRecieved(this, new NewDataRecievedEventArgs(kys));
+                    }
 
                     if (nume > 0)
                         nume--;
@@ -359,7 +370,12 @@ namespace System451.Communication.Dashboard.Net
         internal void DoError(Exception ex)
         {
             if (OnError == null)
-                ddh.DoError(ex);
+            {
+                if (ddh == null)
+                    System.Windows.Forms.MessageBox.Show(ex.ToString());
+                else
+                    ddh.DoError(ex);
+            }
             else
                 OnError(this, new ErrorEventArgs(ex));
         }
@@ -425,7 +441,7 @@ namespace System451.Communication.Dashboard.Net
         public SmartDataTypes Type { get; set; }
         public string Name { get; set; }
 
-        public string Parse(BinaryReader binreader)
+        public string Parse(EBinaryReader binreader)
         {
             switch (Type)
             {
