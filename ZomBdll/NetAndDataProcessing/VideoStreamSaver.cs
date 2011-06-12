@@ -25,6 +25,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Media.Imaging;
 using System451.Communication.Dashboard.Net.Video;
+using System.Diagnostics;
 
 namespace System451.Communication.Dashboard
 {
@@ -33,35 +34,50 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// Saves a video from a data source
         /// </summary>
-        public class VideoStreamSaver : IZomBDataSaver
+        public class VideoStreamSaver : IZomBDataSaver, IDisposable
         {
-            Queue<string> pubicQueue { get; set; }
-            Queue<string> privateQueue { get; set; }
+            Queue<MemoryStream> pubicQueue { get; set; }
             Queue<MemoryStream> imageQueue { get; set; }
 
             ISavableZomBData source;
 
             Thread saber;
-            bool saving;
+            bool? saving = false;
             VideoEncoder srm = null;
 
             /// <summary>
             /// Create a new VideoStreamSaver from the specified data source
             /// </summary>
             /// <param name="DataSource">The data source we monitor</param>
-            public VideoStreamSaver(ISavableZomBData DataSource)
+            public VideoStreamSaver(ISavableZomBData DataSource, string file)
             {
-                (this as IZomBDataSaver).Add(DataSource);
-                pubicQueue = new Queue<string>();
-                privateQueue = new Queue<string>();
+                (this as IZomBDataSaver).Add(DataSource, file);
+                pubicQueue = new Queue<MemoryStream>();
                 imageQueue = new Queue<MemoryStream>();
                 saber = new Thread(aviSaverbg);
                 saber.IsBackground = true;
                 FPS = 15;
+                saber = new Thread(aviSaverbg);
+                saber.IsBackground = true;
+                saber.Start(file);
             }
 
             ~VideoStreamSaver()
             {
+                Dispose();
+            }
+
+            public void Dispose()
+            {
+                Debug.WriteLine(" ++ DISPOSE");
+                EndSave();
+                Thread.Sleep(1);
+                try
+                {
+                    saber.Abort();
+                }
+                catch { }
+                Thread.Sleep(1);
                 if (srm != null)
                 {
                     try
@@ -70,6 +86,18 @@ namespace System451.Communication.Dashboard
                     }
                     catch { }
                 }
+                saber = null;
+                srm = null;
+                if (source != null)
+                {
+                    try
+                    {
+                        source.DataUpdated -= source_DataUpdated;
+                    }
+                    catch { }
+                    source = null;
+                }
+
             }
 
             #region IZomBDataSaver Members
@@ -79,36 +107,38 @@ namespace System451.Communication.Dashboard
             /// </summary>
             public float FPS { get; set; }
 
-            void IZomBDataSaver.Add(ISavableZomBData DataSource)
+            void IZomBDataSaver.Add(ISavableZomBData DataSource, string file)
             {
                 if (source == null)
                 {
                     source = DataSource;
                     source.DataUpdated += new EventHandler(source_DataUpdated);
                 }
+                else
+                    throw new InvalidOperationException("VideoStreamSaver can only have one data source");
             }
 
             void source_DataUpdated(object sender, EventArgs e)
             {
-                if (saving)
+                if (saving != null)
+                {
                     lock (pubicQueue)
                     {
                         pubicQueue.Enqueue(source.DataValue);
                     }
+                    Debug.WriteLine("    Added Pq");
+                }
             }
 
             /// <summary>
             /// Start saving to the specified file
             /// </summary>
             /// <param name="file">File to save to. Type inferred from extension</param>
-            public void StartSave(string file)
+            public void StartSave()
             {
-                if (!saving)
-                {
-                    saber = new Thread(aviSaverbg);
-                    saber.IsBackground = true;
-                    saber.Start(file);
-                }
+                if (saving == null)
+                    throw new ObjectDisposedException("Create a new video saver!");
+                saving = true;
             }
 
             /// <summary>
@@ -116,7 +146,7 @@ namespace System451.Communication.Dashboard
             /// </summary>
             public void EndSave()
             {
-                saving = false;
+                saving = null;
             }
 
             private void aviSaverbg(object file)
@@ -126,13 +156,12 @@ namespace System451.Communication.Dashboard
 
                     string filename = file.ToString();
                     pubicQueue.Clear();
-                    privateQueue.Clear();
                     imageQueue.Clear();
-                    saving = true;
-                    while (saving)
+                    bool wassaving = false;
+                    while (true)
                     {
-                        Thread.Sleep(750);
-                        while (pubicQueue.Count < 1 && saving)
+                        Thread.Sleep(100);
+                        while (pubicQueue.Count < 1 && saving == true)
                         {
                             Thread.Sleep(50);
                         }
@@ -140,23 +169,35 @@ namespace System451.Communication.Dashboard
                         {
                             lock (pubicQueue)
                             {
-                                privateQueue.Enqueue(pubicQueue.Dequeue());
+                                imageQueue.Enqueue(pubicQueue.Dequeue());
+                            }
+                            Debug.WriteLine("    *Added +iQ");
+                        }
+                        Thread.Sleep(50);
+
+                        if (saving == true)
+                        {
+                            if (!wassaving)
+                                Debug.WriteLine("Begin Saving with #" + imageQueue.Count + " objects");
+                            if (srm == null)
+                                srm = new VideoEncoder(filename, FPS);
+                            Thread.Sleep(50);
+                            while (imageQueue.Count > 0)
+                            {
+                                srm.Add(imageQueue.Dequeue());
+                            }
+                            wassaving = true;
+                        }
+                        else
+                        {
+                            if (wassaving)
+                                break;
+                            while (imageQueue.Count > FPS * 2.0)//We can have two seconds of stuff
+                            {
+                                imageQueue.Dequeue();
                             }
                         }
-                        Thread.Sleep(50);
-                        while (privateQueue.Count > 0)
-                        {
-                            //We should honor them, but lets not, as we should have a imageconverter
-                            imageQueue.Enqueue(new MemoryStream(Convert.FromBase64String(privateQueue.Dequeue())));
-                        }
-                        if (srm == null)
-                            srm = new VideoEncoder(filename, FPS);
-                        Thread.Sleep(50);
-                        while (imageQueue.Count > 0)
-                        {
-                            srm.Add(imageQueue.Dequeue());
-                        }
-                        Thread.Sleep(500);
+                        Thread.Sleep(75);
                     }
 
                     //close out
@@ -164,13 +205,8 @@ namespace System451.Communication.Dashboard
                     {
                         lock (pubicQueue)
                         {
-                            privateQueue.Enqueue(pubicQueue.Dequeue());
+                            imageQueue.Enqueue(pubicQueue.Dequeue());
                         }
-                    }
-                    while (privateQueue.Count > 0)
-                    {
-                        //We should honor them, but lets not, as we should have a imageconverter
-                        imageQueue.Enqueue(new MemoryStream(Convert.FromBase64String(privateQueue.Dequeue())));
                     }
                     if (srm != null)
                     {
@@ -182,7 +218,11 @@ namespace System451.Communication.Dashboard
                 }
                 finally
                 {
-                    srm.Close();
+                    try
+                    {
+                        srm.Close();
+                    }
+                    catch { }
                 }
             }
 
@@ -198,6 +238,7 @@ namespace System451.Communication.Dashboard
         public class BitmapConverter : TypeConverter
         {
             public BitmapConverter() { }
+            [Obsolete("Use raw Memory streams")]
             public string ConvertToString(Image value)
             {
                 MemoryStream imageStream = new MemoryStream();
@@ -206,6 +247,15 @@ namespace System451.Communication.Dashboard
                 value.Save(imageStream, VideoEncoder.GetEncoder(ImageFormat.Jpeg), pams);
                 return Convert.ToBase64String(imageStream.ToArray());
             }
+            public static MemoryStream ConvertToMS(Image value)
+            {
+                MemoryStream imageStream = new MemoryStream();
+                EncoderParameters pams = new EncoderParameters(1);
+                pams.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 100L);
+                value.Save(imageStream, VideoEncoder.GetEncoder(ImageFormat.Jpeg), pams);
+                return imageStream;
+            }
+            [Obsolete("Use raw Memory streams")]
             new public Image ConvertFromString(string value)
             {
                 byte[] imgs = Convert.FromBase64String(value);

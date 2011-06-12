@@ -22,7 +22,7 @@ using System.Text;
 using System.Net.Sockets;
 using System.Collections.ObjectModel;
 
-namespace System451.Communication.Dashboard.Net.Socket
+namespace System451.Communication.Dashboard.Net.Sockets
 {
     public class TsUdpClient
     {

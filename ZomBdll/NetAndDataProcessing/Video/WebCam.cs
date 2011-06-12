@@ -51,14 +51,9 @@ namespace System451.Communication.Dashboard.Net.Video
 
         #region ISavableZomBData Members
 
-        TypeConverter ISavableZomBData.GetTypeConverter()
+        MemoryStream ISavableZomBData.DataValue
         {
-            return new BitmapConverter();
-        }
-
-        string ISavableZomBData.DataValue
-        {
-            get { return (new BitmapConverter()).ConvertToString(latest); }
+            get { return (BitmapConverter.ConvertToMS(latest)); }
         }
         private EventHandler dataUpdatedEvent;
 
@@ -95,6 +90,11 @@ namespace System451.Communication.Dashboard.Net.Video
 
 
         ~WebCamVideoSource()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
         {
             wcc.Stop();
         }

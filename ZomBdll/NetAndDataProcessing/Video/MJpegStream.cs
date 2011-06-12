@@ -49,6 +49,11 @@ namespace System451.Communication.Dashboard.Net.Video
 
         ~MJPEGVideoSource()
         {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
             Stop();
         }
 

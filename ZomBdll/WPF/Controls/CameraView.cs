@@ -40,7 +40,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     [TemplatePart(Name = "PART_refresh", Type = typeof(UIElement))]
     [TemplatePart(Name = "PART_targets", Type = typeof(Panel))]
     [TemplatePart(Name = "PART_fps", Type = typeof(Label))]
-    public class CameraView : ZomBGLControl, IZomBControlGroup, ISavableZomBData
+    public class CameraView : ZomBGLControl, IZomBControlGroup, ISavableZomBData, IDisposable
     {
         Image PART_img;
         IDashboardVideoDataSource videoSource;
@@ -86,6 +86,23 @@ namespace System451.Communication.Dashboard.WPF.Controls
             smi.Click += new RoutedEventHandler(smi_Click);
             enu.Items.Add(smi);
             this.ContextMenu = enu;
+            Directory.CreateDirectory(BTZomBFingerFactory.DefaultSaveLocation);
+            vss = new VideoStreamSaver(this, BTZomBFingerFactory.DefaultSaveLocation + "\\Capture" + (DateTime.Now.Ticks.ToString("x")) + ((long)Math.Round(rand.NextTSDouble() * 999)).ToString("x") + ".webm");
+            vss.FPS = (float)RecordingFPS;
+        }
+        ~CameraView()
+        {
+            Dispose();
+        }
+        public void Dispose()
+        {
+            System.Diagnostics.Debug.WriteLine(" ** DISPOSE");
+            if (videoSource != null)
+                videoSource.Dispose();
+            if (vss != null)
+                vss.Dispose();
+            vss = null;
+            videoSource = null;
         }
 
         void smi_Click(object sender, RoutedEventArgs e)
@@ -101,6 +118,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 smi.Visibility = Visibility.Collapsed;
                 mi.Visibility = Visibility.Visible;
                 started = false;
+                vss = new VideoStreamSaver(this, BTZomBFingerFactory.DefaultSaveLocation + "\\Capture" + (DateTime.Now.Ticks.ToString("x")) + ((long)Math.Round(rand.NextTSDouble() * 999)).ToString("x") + ".webm");
+                vss.FPS = (float)RecordingFPS;
             }
         }
 
@@ -113,10 +132,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             if (started)
                 return;
-            Directory.CreateDirectory(BTZomBFingerFactory.DefaultSaveLocation);
-            vss = new VideoStreamSaver(this);
-            vss.FPS = (float)RecordingFPS;
-            vss.StartSave(BTZomBFingerFactory.DefaultSaveLocation + "\\Capture" + (DateTime.Now.Ticks.ToString("x")) + ((long)Math.Round(rand.NextTSDouble() * 999)).ToString("x") + ".webm");
+            vss.StartSave();
             mi.Visibility = Visibility.Collapsed;
             smi.Visibility = Visibility.Visible;
             started = true;
@@ -314,17 +330,11 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         #region ISavableZomBData Members
 
-        TypeConverter ISavableZomBData.GetTypeConverter()
-        {
-            return new Net.Video.BitmapConverter();
-        }
-
-        string ISavableZomBData.DataValue
+        MemoryStream ISavableZomBData.DataValue
         {
             get
             {
-                //TODO: figure out a better way to do this
-                return Convert.ToBase64String((laststream as MemoryStream).ToArray());//I know this is a memory stream :-)
+                return laststream as MemoryStream;//I know this is a memory stream :-)
             }
         }
         private EventHandler dataUpdatedEvent;

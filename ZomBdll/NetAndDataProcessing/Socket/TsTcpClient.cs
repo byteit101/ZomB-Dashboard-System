@@ -23,7 +23,7 @@ using System.Net.Sockets;
 using System.Collections.ObjectModel;
 using System.Net;
 
-namespace System451.Communication.Dashboard.Net.Socket
+namespace System451.Communication.Dashboard.Net.Sockets
 {
     public class TsTcpClient
     {
@@ -47,16 +47,16 @@ namespace System451.Communication.Dashboard.Net.Socket
         /// </summary>
         /// <param name="port">What TCP port it should default to</param>
         /// <returns>Thread Safe TcpClient with specifed port</returns>
-        public static TsTcpClient GetTcpClient(int port)
+        public static TsTcpClient GetTcpClient(IPEndPoint port)
         {
-            if (sockets[port] == null)
+            if (sockets[port.Port] == null)
             {
-                var tmp = new TsUdpClient(port);
-                sockets[port] = tmp;
+                var tmp = new TsTcpClient(port);
+                sockets[port.Port] = tmp;
                 return tmp;
             }
             else
-                return sockets[port];
+                return sockets[port.Port];
         }
 
         TcpClient sock;

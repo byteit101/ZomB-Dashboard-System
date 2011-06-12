@@ -69,6 +69,11 @@ namespace System451.Communication.Dashboard.Net.Video
         }
         ~WPILibTcpVideoSource()
         {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
             Stop();
         }
 
@@ -256,7 +261,7 @@ namespace System451.Communication.Dashboard.Net.Video
     /// <summary>
     /// Represents an abstract data source that carries video
     /// </summary>
-    public interface IDashboardVideoDataSource
+    public interface IDashboardVideoDataSource: IDisposable
     {
         /// <summary>
         /// Gets the current Image

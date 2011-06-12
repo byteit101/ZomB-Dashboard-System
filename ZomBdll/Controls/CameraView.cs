@@ -22,6 +22,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System451.Communication.Dashboard.Net;
 using System451.Communication.Dashboard.Net.Video;
+using System.IO;
 
 namespace System451.Communication.Dashboard
 {
@@ -138,6 +139,7 @@ namespace System451.Communication.Dashboard
                 {
 
                     this.view = e.NewData;
+                    this.viewstream = e.NewDataStream;
                     if (this.dataUpdatedEvent != null)
                         dataUpdatedEvent(this, new EventArgs());
                     this.Invalidate();
@@ -240,6 +242,7 @@ namespace System451.Communication.Dashboard
             // ticks every 1750ms
             // checks if the video has timeed out
             // also (re)starts the video stream
+            //TODO: FIXME!
             private void timer1_Tick(object sender, EventArgs e)
             {
 
@@ -259,16 +262,12 @@ namespace System451.Communication.Dashboard
 
             #region ISavableZomBData Members
 
-            TypeConverter ISavableZomBData.GetTypeConverter()
+            MemoryStream ISavableZomBData.DataValue
             {
-                return new Net.Video.BitmapConverter();
-            }
-
-            string ISavableZomBData.DataValue
-            {
-                get { return (new Net.Video.BitmapConverter()).ConvertToString(this.view); }
+                get { return this.viewstream as MemoryStream; }
             }
             private EventHandler dataUpdatedEvent;
+            private System.IO.Stream viewstream;
 
             event EventHandler ISavableZomBData.DataUpdated
             {

@@ -17,21 +17,16 @@
  */
 using System;
 using System.ComponentModel;
+using System.IO;
 
 namespace System451.Communication.Dashboard
 {
     public interface ISavableZomBData
     {
         /// <summary>
-        /// Gets the TypeConverter for this data type
+        /// Gets the value of the data as a MemoryStream
         /// </summary>
-        /// <returns>Appropriate TypeConverter</returns>
-        TypeConverter GetTypeConverter();
-
-        /// <summary>
-        /// Gets the Value of the data as a string
-        /// </summary>
-        string DataValue { get; }
+        MemoryStream DataValue { get; }
 
         /// <summary>
         /// Notifies the Saver when new data is present
@@ -42,8 +37,8 @@ namespace System451.Communication.Dashboard
 
     public interface IZomBDataSaver
     {
-        void Add(ISavableZomBData DataSource);
-        void StartSave(string file);
+        void Add(ISavableZomBData DataSource, string file);
+        void StartSave();
         void EndSave();
     }
 }
