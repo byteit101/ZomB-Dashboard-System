@@ -9,7 +9,10 @@ RequestExecutionLevel highest
 !define VERSION "VERSION_NUMBER" ;CONST VERSION
 !define COMPANY "Team 451 and Patrick Plenefisch"
 !define URL http://thecatattack.org/ZomB
-!define VLCVERSION "1.1.7"
+!define VLCVERSION "1.1.10"
+!define VLCVERSION2 "1.1.11"
+!define VLCVERSION3 "1.1.12"
+!define VLCVERSION4 "1.1.13"
 
 # MUI Symbol Definitions
 !define MUI_ICON "Installer.ico"
@@ -51,7 +54,7 @@ InstallDir $PROGRAMFILES\ZomB
 CRCCheck on
 XPStyle on
 ShowInstDetails show
-VIProductVersion 1.4.0.0
+VIProductVersion 1.5.0.0
 VIAddVersionKey ProductName "ZomB Dashboard System"
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"
@@ -229,6 +232,12 @@ SectionGroup "Dependencies" SECGRP0001
         SectionIn 2 3
         SetOverwrite on
         StrCmp $vlcVers "${VLCVERSION}" 0 +2
+            Return
+		StrCmp $vlcVers "${VLCVERSION2}" 0 +2
+            Return
+		StrCmp $vlcVers "${VLCVERSION3}" 0 +2
+            Return
+		StrCmp $vlcVers "${VLCVERSION4}" 0 +2
             Return
         NSISdl::download "http://downloads.sourceforge.net/project/vlc/${VLCVERSION}/win32/vlc-${VLCVERSION}-win32.exe" "vlc-${VLCVERSION}-win32.exe"
         Pop $R0
@@ -414,8 +423,21 @@ Function .onInit
     StrCmp $0 "" +2
     StrCpy $ZomBLibInstall 1
     Pop $0
+	#TODO, remove redundacy
     ReadRegStr $vlcVers HKLM "Software\VideoLAN\VLC\" "Version"
     ${If} $vlcVers == "${VLCVERSION}"
+        SectionSetFlags ${SEC0003} 16
+        SectionSetText ${SEC0003} "VLC (Already Installed)"
+        SectionSetSize ${SEC0003} 0
+    ${ElseIf} $vlcVers == "${VLCVERSION2}"
+        SectionSetFlags ${SEC0003} 16
+        SectionSetText ${SEC0003} "VLC (Already Installed)"
+        SectionSetSize ${SEC0003} 0
+    ${ElseIf} $vlcVers == "${VLCVERSION3}"
+        SectionSetFlags ${SEC0003} 16
+        SectionSetText ${SEC0003} "VLC (Already Installed)"
+        SectionSetSize ${SEC0003} 0
+    ${ElseIf} $vlcVers == "${VLCVERSION4}"
         SectionSetFlags ${SEC0003} 16
         SectionSetText ${SEC0003} "VLC (Already Installed)"
         SectionSetSize ${SEC0003} 0

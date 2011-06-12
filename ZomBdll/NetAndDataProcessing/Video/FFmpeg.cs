@@ -22,7 +22,7 @@ namespace System451.Communication.Dashboard.Net.Video
 {
     public static class FFmpeg
     {
-        //Note: to update ffmpeg, find a build at http://ffmpeg.arrozcru.org/
+        //Note: to update ffmpeg, find a build at http://ffmpeg.zeranoe.com/builds/ (Use Win32 Static)
 
         public static Stream GetEncoderStream(string fileName, float fps)
         {
