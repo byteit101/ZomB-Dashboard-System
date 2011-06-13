@@ -1512,6 +1512,16 @@ namespace System451.Communication.Dashboard.ViZ
             catch { return 0; }
         }
 
+        void ISurfaceDesigner.Highlight(string name)
+        {
+            var th = getDesigner().ZDash.Children;
+            var rs = (from SurfaceControl child in th where child.Control.Name == name select child);
+            if (rs.Count() > 0)
+                Highlight((Control)rs.First());
+            else
+                this.Highlight((Control)null);
+        }
+
         #endregion
 
         Control lastlight = null;

@@ -60,7 +60,7 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
                 ret += ((item as Grid).Children[0] as ComboBox).Text + ":";
                 ret += ((item as Grid).Children[1] as ComboBox).Text + ";";
             }
-            return ret.Replace(":;","");
+            return ret.Replace(":;", "");
         }
 
         private void AddTrigger(string name, string calls)
@@ -77,6 +77,8 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             cb.ItemsSource = elmnames;
             cb.SelectedIndex = elmnames.ToList().IndexOf(name);
             cb.SelectionChanged += new SelectionChangedEventHandler(cb_SelectionChanged);
+            cb.MouseMove += new MouseEventHandler(cb_MouseMove);
+            cb.MouseLeave += new MouseEventHandler(cb_MouseLeave);
             Grid.SetColumn(cb, 0);
             sp.Children.Add(cb);
             var mcb = new ComboBox();
@@ -89,6 +91,33 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             btn.Click += new RoutedEventHandler(btn_Click);
             sp.Children.Add(btn);
             Stacker.Children.Add(sp);
+        }
+
+        void cb_MouseLeave(object sender, MouseEventArgs e)
+        {
+            ZDesigner.Highlight(null);
+        }
+
+        void cb_MouseMove(object sender, MouseEventArgs e)
+        {
+            var pare = FindAnchestor<ComboBoxItem>((DependencyObject)e.OriginalSource);
+            if (pare != null)
+            {
+                var result = (sender as ComboBox).ItemContainerGenerator.ItemFromContainer(pare).ToString();
+                ZDesigner.Highlight(result);
+            }
+            else
+            {
+                if (FindAnchestor<ComboBox>((DependencyObject)e.OriginalSource) != null)
+                {
+                    var result = ((sender as ComboBox).SelectedItem as string);
+                    ZDesigner.Highlight(result);
+                }
+                else
+                {
+                    ZDesigner.Highlight(null);
+                }
+            }
         }
 
         void btn_Click(object sender, RoutedEventArgs e)

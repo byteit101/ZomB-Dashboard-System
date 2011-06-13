@@ -83,6 +83,11 @@ namespace System451.Communication.Dashboard
                 return GetDesigner().GetTeamNumber();
             }
         }
+
+        public static void Highlight(string name)
+        {
+            GetDesigner().Highlight(name);
+        }
     }
 
     public interface ISurfaceDesigner
@@ -92,5 +97,6 @@ namespace System451.Communication.Dashboard
         bool ChildrenContain(UIElement element);
         UIElement GetChildByName(string name);
         int GetTeamNumber();
+        void Highlight(string name);
     }
 }
