@@ -1513,6 +1513,23 @@ namespace System451.Communication.Dashboard.ViZ
         }
 
         #endregion
+
+        Control lastlight = null;
+
+        public void Highlight(Control result)
+        {
+            if (lastlight != null)
+            {
+                lastlight.BorderBrush = null;
+                lastlight.BorderThickness = new Thickness(0);
+            }
+            lastlight = result;
+            if (lastlight != null)
+            {
+                lastlight.BorderBrush = Brushes.Red;
+                lastlight.BorderThickness = new Thickness(4);
+            }
+        }
     }
     public static class ExtensionsBit
     {

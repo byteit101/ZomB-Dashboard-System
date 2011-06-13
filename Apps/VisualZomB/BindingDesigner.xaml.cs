@@ -43,6 +43,8 @@ namespace System451.Communication.Dashboard.ViZ
             InitializeComponent();
             obj = o;
             prop = p;
+            elmbox.MouseMove += new System.Windows.Input.MouseEventHandler(elmbox_MouseMove);
+            elmbox.MouseLeave += new System.Windows.Input.MouseEventHandler(elmbox_MouseLeave);
             elmbox.ItemsSource = from object i in itms where (i as SurfaceControl).Control.Name != "" select i;
             var name = "";
             if (o is IZomBControl && !string.IsNullOrEmpty((o as IZomBControl).ControlName))
@@ -83,6 +85,33 @@ namespace System451.Communication.Dashboard.ViZ
                 //TODO: add converter info and reload
             }
             inited = true;
+        }
+
+        void elmbox_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            Designer.getDesigner().Highlight(null);
+        }
+
+        void elmbox_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var pare = Designer.FindAnchestor<ComboBoxItem>((DependencyObject)e.OriginalSource);
+            if (pare != null)
+            {
+                var result = (SurfaceControl)elmbox.ItemContainerGenerator.ItemFromContainer(pare);
+                Designer.getDesigner().Highlight(result);
+            }
+            else
+            {
+                if (Designer.FindAnchestor<ComboBox>((DependencyObject)e.OriginalSource) != null)
+                {
+                    var result = (SurfaceControl)(elmbox.SelectedItem);
+                    Designer.getDesigner().Highlight(result);
+                }
+                else
+                {
+                    Designer.getDesigner().Highlight(null);
+                }
+            }
         }
 
         private void elmbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
