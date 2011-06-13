@@ -100,6 +100,11 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
                     DBPacketBtn.IsChecked = true;
                     nameBox.IsReadOnly = true;
                 }
+                else if (nameBox.Text.EndsWith("/Smart"))
+                {
+                    SmartBtn.IsChecked = true;
+                    nameBox.IsReadOnly = true;
+                }
                 else
                 {
                     GeneralCustardBtn.IsChecked = true;
@@ -150,6 +155,20 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             {
                 nameBox.IsReadOnly = true;
                 nameBox.Text = "zomb://." + Team + "/DBPkt";
+            }
+            else if (sender == SmartBtn)
+            {
+                nameBox.IsReadOnly = true;
+                nameBox.Text = "zomb://." + Team + "/Smart";
+            }
+        }
+
+        private void nameBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (nameBox.IsReadOnly)
+            {
+                GeneralCustardBtn.IsChecked = true;
+                GeneralCustardBtn_Checked(GeneralCustardBtn, null);
             }
         }
     }

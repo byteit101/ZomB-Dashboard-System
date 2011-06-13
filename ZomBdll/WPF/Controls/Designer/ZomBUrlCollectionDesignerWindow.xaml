@@ -36,10 +36,21 @@
                 <ToggleButton Name="DBPacketBtn" Margin="0,0,3,0" Checked="GeneralCustardBtn_Checked">DBPacket</ToggleButton>
                 <ToggleButton Name="TCPBtn" Margin="0,0,3,0" Checked="GeneralCustardBtn_Checked">TCP</ToggleButton>
                 <ToggleButton Name="TCP2Btn" Margin="0,0,3,0" Checked="GeneralCustardBtn_Checked">RemoteData</ToggleButton>
+                <ToggleButton Name="SmartBtn" Margin="0,0,3,0" Checked="GeneralCustardBtn_Checked">Smart</ToggleButton>
                 <ToggleButton Name="GeneralCustardBtn" Checked="GeneralCustardBtn_Checked">Custom</ToggleButton>
             </StackPanel>
             <Label Content="URL:" Grid.Row="1" />
-            <TextBox Grid.Column="1" Grid.Row="1" Margin="2" Name="nameBox" TextChanged="nameBox_TextChanged" />
+            <TextBox Grid.Column="1" Grid.Row="1" Margin="2" Name="nameBox" TextChanged="nameBox_TextChanged" IsReadOnly="True" KeyDown="nameBox_KeyDown">
+                <TextBox.Style>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Style.Triggers>
+                            <Trigger Property="TextBox.IsReadOnly" Value="True">
+                                <Setter Property="TextBox.Background" Value="LightGray" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
         </Grid>
     </Grid>
 </Window>
