@@ -17,6 +17,7 @@
  */
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace System451.Communication.Dashboard.Net.DriverStation
 {
@@ -32,6 +33,55 @@ namespace System451.Communication.Dashboard.Net.DriverStation
                 xsourcebox.Items.Add("Virtual " + (item as FrameworkElement).Name);
             }
             xsourcebox.SelectedIndex = 0;
+            xsourcebox.MouseLeave += new System.Windows.Input.MouseEventHandler(xsourcebox_MouseLeave);
+            xsourcebox.MouseMove += new System.Windows.Input.MouseEventHandler(xsourcebox_MouseMove);
+        }
+
+        void xsourcebox_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var pare = FindAnchestor<ComboBoxItem>((DependencyObject)e.OriginalSource);
+            if (pare != null)
+            {
+                var result = (sender as ComboBox).ItemContainerGenerator.ItemFromContainer(pare).ToString();
+                if (result.Contains("Virtual "))
+                    ZDesigner.Highlight(result.Substring(8));
+                else
+                    ZDesigner.Highlight(null);
+            }
+            else
+            {
+                if (FindAnchestor<ComboBox>((DependencyObject)e.OriginalSource) != null)
+                {
+                    var result = ((sender as ComboBox).SelectedItem as string);
+                    if (result.Contains("Virtual "))
+                        ZDesigner.Highlight(result.Substring(8));
+                    else
+                        ZDesigner.Highlight(null);
+                }
+                else
+                {
+                    ZDesigner.Highlight(null);
+                }
+            }
+        }
+
+        public static T FindAnchestor<T>(DependencyObject current) where T : DependencyObject
+        {
+            do
+            {
+                if (current is T)
+                {
+                    return (T)current;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            }
+            while (current != null);
+            return null;
+        }
+
+        void xsourcebox_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            ZDesigner.Highlight(null);
         }
 
         public void SetConfig(string p)
