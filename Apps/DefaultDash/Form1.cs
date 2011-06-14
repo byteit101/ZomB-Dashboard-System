@@ -37,7 +37,7 @@ namespace DefaultDash
             pictureBox2.Image = Resources.ZomBs;
             //Get ready to save images
             Directory.CreateDirectory(BTZomBFingerFactory.DefaultSaveLocation);
-            vss = new VideoStreamSaver(this.cameraView1);
+            vss = new VideoStreamSaver(this.cameraView1, BTZomBFingerFactory.DefaultSaveLocation + "\\Capture" + (DateTime.Now.Ticks.ToString("x")) + ".webm");
             vss.FPS = 15;
         }
 
@@ -75,7 +75,7 @@ namespace DefaultDash
         private void startBothToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //Start Saving
-            vss.StartSave(BTZomBFingerFactory.DefaultSaveLocation + "\\Capture" + (DateTime.Now.Ticks.ToString("x")) + ".webm");
+            vss.StartSave();
         }
 
         private void robotToolStripMenuItem_Click(object sender, EventArgs e)
