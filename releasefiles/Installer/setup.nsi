@@ -97,6 +97,33 @@ BrandingText "ZomB Dashboard System ${VERSION}"
 	ExecWait '"$R0\ngen.exe" uninstall "${NAME}" /silent'
 !macroend
 
+!macro IfKeyExists ROOT MAIN_KEY KEY
+  Push $R0
+  Push $R1
+  Push $R2
+ 
+  # XXX bug if ${ROOT}, ${MAIN_KEY} or ${KEY} use $R0 or $R1
+ 
+  StrCpy $R1 "0" # loop index
+  StrCpy $R2 "0" # not found
+ 
+  ${Do}
+    EnumRegKey $R0 ${ROOT} "${MAIN_KEY}" "$R1"
+    ${If} '$R0' == '${KEY}'
+      StrCpy $R2 "1" # found
+      ${Break}
+    ${EndIf}
+    IntOp $R1 $R1 + 1
+  ${LoopWhile} '$R0' != ""
+ 
+  ClearErrors
+ 
+  Exch 2
+  Pop $R0
+  Pop $R1
+  Exch $R2
+!macroend
+
 # Functions
 Function CreateSMGroupShortcut
     Exch $R0 ;PATH
@@ -247,6 +274,27 @@ SectionGroup "Dependencies" SECGRP0001
             MessageBox MB_OK "VLC Download failed: $R0"
         ${EndIf}
     SectionEnd
+	Section "SlimDX" SEC0014
+		SectionIn 2 3
+        SetOverwrite on
+		!insertmacro IfKeyExists "HKLM" "SOFTWARE\Classes\Installer\Assemblies\Global" 'SlimDX,version="2.0.11.43",culture="neutral",publicKeyToken="B1B0C32FD1FFE4F9",processorArchitecture="x86"'
+		Pop $R0
+		${If} $R0 == 0
+			!insertmacro IfKeyExists "HKLM" "SOFTWARE\Classes\Installer\Assemblies\Global" 'SlimDX,version="2.0.11.43",culture="neutral",publicKeyToken="B1B0C32FD1FFE4F9",processorArchitecture="x64"'
+			Pop $R0
+			${If} $R0 == 0
+				NSISdl::download "http://slimdx.googlecode.com/files/SlimDX%20Runtime%20for%20.NET%202.0%20%28March%202011%29.msi" "SlimDX Runtime for .NET 2.0 (March 2011).msi"
+				Pop $R0
+				${If} $R0 == "success"
+					ExecWait "SlimDX Runtime for .NET 2.0 (March 2011).msi /S" $0
+				${Else}
+					MessageBox MB_OK "VLC Download failed: $R0"
+				${EndIf}
+			${EndIf}
+		${EndIf}
+		#http://slimdx.googlecode.com/files/SlimDX%20Runtime%20for%20.NET%202.0%20%28March%202011%29.msi
+		#SlimDX,version="2.0.11.43",culture="neutral",publicKeyToken="B1B0C32FD1FFE4F9",processorArchitecture="x86"
+	SectionEnd
 SectionGroupEnd
 
 Section "Visual ZomB" SEC0004
@@ -255,6 +303,8 @@ Section "Visual ZomB" SEC0004
     File ViZ.exe
 	File Zaml.ico
 	File Dashboardexe.ico
+	File EnableDriver.reg
+	File DisableDriver.reg
     ExecWait "$INSTDIR\ViZ.exe -extract-install" $0
     ${registerExtension} "$INSTDIR\ViZ.exe" ".zaml" "Run Zaml File"
 	Call RefreshShellIcons
@@ -445,6 +495,22 @@ Function .onInit
         SectionSetFlags ${SEC0003} 1
         SectionSetSize ${SEC0003} 78746
     ${EndIf}
+	
+	SectionSetFlags ${SEC0014} 16
+	SectionSetText ${SEC0014} "SlimDX (Already Installed)"
+	SectionSetSize ${SEC0014} 0
+			
+	!insertmacro IfKeyExists "HKLM" "SOFTWARE\Classes\Installer\Assemblies\Global" 'SlimDX,version="2.0.11.43",culture="neutral",publicKeyToken="B1B0C32FD1FFE4F9",processorArchitecture="x86"'
+	Pop $R0
+	${If} $R0 == 0
+		!insertmacro IfKeyExists "HKLM" "SOFTWARE\Classes\Installer\Assemblies\Global" 'SlimDX,version="2.0.11.43",culture="neutral",publicKeyToken="B1B0C32FD1FFE4F9",processorArchitecture="x64"'
+		Pop $R0
+		${If} $R0 == 0
+			SectionSetFlags ${SEC0014} 1
+			SectionSetText ${SEC0014} "SlimDX"
+			SectionSetSize ${SEC0014} 11470
+		${EndIf}
+	${EndIf}
 FunctionEnd
 
 # Uninstaller functions
@@ -471,4 +537,5 @@ FunctionEnd
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC0011} "Pit display with BlueFinger and saved video playing capabilities (requires VLC)"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC0012} "Enables ZomB to act as the driver station"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC0013} "Enables the bindings to actually do stuff (required)"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0014} "SlimDX runtime for shaking and joystick support (required)"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
