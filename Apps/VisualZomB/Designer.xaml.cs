@@ -112,6 +112,10 @@ namespace System451.Communication.Dashboard.ViZ
                     SplitterDefinition.Height = GridLength.Auto;
                 }
             }
+            else if (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width <= 1080)
+            {
+                Canvas.SetTop(MenuGrid, 0);
+            }
             listBox1 = tbx.ToolListBox;
             listBox1.PreviewMouseLeftButtonDown += listBox1_PreviewMouseLeftButtonDown;
             listBox1.PreviewMouseUp += listBox1_PreviewMouseUp;

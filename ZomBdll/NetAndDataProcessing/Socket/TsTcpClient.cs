@@ -25,21 +25,21 @@ using System.Net;
 
 namespace System451.Communication.Dashboard.Net.Sockets
 {
-    public class TsTcpClient
+    public class TcpPool
     {
-        static Dictionary<int, TsTcpClient> sockets = new Dictionary<int, TsTcpClient>();
+        static Dictionary<int, TcpClient> sockets = new Dictionary<int, TcpClient>();
 
         /// <summary>
         /// Gets a shared TcpClient. Throws if none exist.
         /// </summary>
-        /// <exception cref="System.InvalidOperationException">You need to create a TsTcpClient previous to this invocation</exception>
-        /// <returns>Thread Safe UdpClient with specifed port</returns>
-        public static TsTcpClient GetTcpClient()
+        /// <exception cref="System.InvalidOperationException">You need to create a TcpClient previous to this invocation</exception>
+        /// <returns>TcpClient with specifed port</returns>
+        public static TcpClient GetTcpClient()
         {
             if (sockets.Count > 0)
                 return sockets.First().Value;
             else
-                throw new InvalidOperationException("No unnamed Thread Safe TcpClient objects avalible. Add one or add a port number to the call");
+                throw new InvalidOperationException("No unnamed TcpClient objects avalible. Add one or add a port number to the call");
         }
 
         /// <summary>
@@ -47,11 +47,11 @@ namespace System451.Communication.Dashboard.Net.Sockets
         /// </summary>
         /// <param name="port">What TCP port it should default to</param>
         /// <returns>Thread Safe TcpClient with specifed port</returns>
-        public static TsTcpClient GetTcpClient(IPEndPoint port)
+        public static TcpClient GetTcpClient(IPEndPoint port)
         {
             if (sockets[port.Port] == null)
             {
-                var tmp = new TsTcpClient(port);
+                var tmp = new TcpClient(port);
                 sockets[port.Port] = tmp;
                 return tmp;
             }
@@ -59,13 +59,6 @@ namespace System451.Communication.Dashboard.Net.Sockets
                 return sockets[port.Port];
         }
 
-        TcpClient sock;
-
-        private TsTcpClient(IPEndPoint port)
-        {
-            sock = new TcpClient(port);
-        }
-
-        //FIXME!
+        //TODO: figure out the threading model and C++ support
     }
 }
