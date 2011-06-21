@@ -124,7 +124,7 @@ namespace System451.Communication.Dashboard.ViZ
 
             double nsysheight = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
             double nsyswidth = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
-            
+
             using (System.Drawing.Graphics g = System.Drawing.Graphics.FromHwnd(IntPtr.Zero))
             {
                 nsyswidth *= (96.0 / g.DpiX);
@@ -132,7 +132,7 @@ namespace System451.Communication.Dashboard.ViZ
             }
             this.Top = (nsysheight <= 600) ? -1 : (nsysheight - (this.Height + (Settings.Default.EmbeddedTbx ? 0 : tbx.Height))) / 2.0;
             this.Left = Math.Max(-1.0, (nsyswidth / 2.0) - this.Width / 2.0);
-            
+
             DoubleAnimation VizLogoani = new DoubleAnimation(1, 0, new Duration(new TimeSpan(0, 0, 2)));
             VizLogoani.BeginTime = new TimeSpan(0, 0, 1);
             VizLogoani.Completed += delegate { LayoutCvs.Children.Remove(ViZLogo); };
@@ -1008,7 +1008,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void bc(object sender, RoutedEventArgs e)
         {
-            AddAutoStub(Guid.NewGuid().ToString().Substring(0,5));
+            AddAutoStub(Guid.NewGuid().ToString().Substring(0, 5));
         }
 
         Dictionary<string, AutoPoint> aadict = new Dictionary<string, AutoPoint>();
@@ -1159,7 +1159,7 @@ namespace System451.Communication.Dashboard.ViZ
             "SaveAs",
             "SaveAs",
             typeof(Designer),
-            new InputGestureCollection { new KeyGesture(Key.S, ModifierKeys.Alt|ModifierKeys.Control) });
+            new InputGestureCollection { new KeyGesture(Key.S, ModifierKeys.Alt | ModifierKeys.Control) });
 
 
         internal void CommandBinding_Play_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -1543,6 +1543,65 @@ namespace System451.Communication.Dashboard.ViZ
                 lastlight.BorderBrush = Brushes.Red;
                 lastlight.BorderThickness = new Thickness(4);
             }
+        }
+
+        public void SaveAsProfile(int profileNumber)
+        {
+            //team#|Ignore/continue|urls
+            // invalid packets: 3 source: 5 team: 7 (designerProps[2] as Label)
+            string profileString = "";
+            profileString += (designerProps[7] as TextBox).Text;
+            profileString += "|";
+            profileString += (designerProps[3] as ComboBox).Text;
+            profileString += "|";
+            profileString += ZomBUrlSources;
+            switch (profileNumber)
+            {
+                case 1:
+                    Settings.Default.Profile1 = profileString;
+                    Settings.Default.Save();
+                    break;
+                case 2:
+                    Settings.Default.Profile2 = profileString;
+                    Settings.Default.Save();
+                    break;
+                case 3:
+                    Settings.Default.Profile3 = profileString;
+                    Settings.Default.Save();
+                    break;
+                default:
+                    System.Windows.Forms.MessageBox.Show("Invalid profile number");
+                    break;
+            }
+        }
+
+        public void LoadProfile(int profileNumber)
+        {
+            string profileString = "";
+            switch (profileNumber)
+            {
+                case 1:
+                    profileString = Settings.Default.Profile1;
+                    break;
+                case 2:
+                    profileString = Settings.Default.Profile2;
+                    break;
+                case 3:
+                    profileString = Settings.Default.Profile3;
+                    break;
+                default:
+                    System.Windows.Forms.MessageBox.Show("Invalid profile number");
+                    break;
+            }
+            string teamnumberp, sourcep, invalidactionp;
+            teamnumberp = profileString.Substring(0, profileString.IndexOf('|'));
+            profileString = profileString.Substring(profileString.IndexOf('|') + 1);
+            invalidactionp = profileString.Substring(0, profileString.IndexOf('|'));
+            sourcep = profileString.Substring(profileString.IndexOf('|') + 1);
+            (designerProps[7] as TextBox).Text = teamnumberp;
+            (designerProps[3] as ComboBox).Text = invalidactionp;
+            ZomBUrlSources = sourcep;
+            ((designerProps[5] as FrameworkElement).Tag as ZomBUrlCollectionDesigner).Set(ZomBUrlSources);
         }
     }
     public static class ExtensionsBit

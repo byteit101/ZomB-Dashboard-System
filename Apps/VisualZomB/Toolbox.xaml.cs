@@ -69,5 +69,35 @@ namespace System451.Communication.Dashboard.ViZ
             Settings.Default.EmbeddedTbx = DockCheck.IsChecked;
             Settings.Default.Save();
         }
+
+        private void SaveProfile1_Click(object sender, RoutedEventArgs e)
+        {
+            Designer.getDesigner().SaveAsProfile(1);
+        }
+
+        private void SaveProfile2_Click(object sender, RoutedEventArgs e)
+        {
+            Designer.getDesigner().SaveAsProfile(2);
+        }
+
+        private void SaveProfile3_Click(object sender, RoutedEventArgs e)
+        {
+            Designer.getDesigner().SaveAsProfile(3);
+        }
+
+        private void LoadProfile1_Click(object sender, RoutedEventArgs e)
+        {
+            Designer.getDesigner().LoadProfile(1);
+        }
+
+        private void LoadProfile2_Click(object sender, RoutedEventArgs e)
+        {
+            Designer.getDesigner().LoadProfile(2);
+        }
+
+        private void LoadProfile3_Click(object sender, RoutedEventArgs e)
+        {
+            Designer.getDesigner().LoadProfile(3);
+        }
     }
 }

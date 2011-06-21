@@ -56,6 +56,22 @@
             </ListBox.ContextMenu>
         </ListBox>
         <Border BorderBrush="Gray" BorderThickness="0,1,1,1" Grid.Column="1">
+            <Border.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Save Profile" >
+                        <MenuItem Header="Profile 1" Click="SaveProfile1_Click" />
+                        <MenuItem Header="Profile 2" Click="SaveProfile2_Click" />
+                        <MenuItem Header="Profile 3" Click="SaveProfile3_Click" />
+                    </MenuItem>
+                 
+                    <MenuItem Header="Load Profile">
+                        <MenuItem Header="Profile 1" Click="LoadProfile1_Click" />
+                        <MenuItem Header="Profile 2" Click="LoadProfile2_Click" />
+                        <MenuItem Header="Profile 3" Click="LoadProfile3_Click" />
+                    </MenuItem>
+                    
+                </ContextMenu>
+            </Border.ContextMenu>
             <ScrollViewer PreviewMouseWheel="PropScroller_PreviewMouseWheel" Margin="2"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Name="PropScroller">
                 <ZomB:FlowPropertyGrid Orientation="Horizontal" Name="PropertyBox" x:FieldModifier="public" HorizontalAlignment="Left" VerticalAlignment="Top"
                                    RightCollumnWidth="110" LeftCollumnWidth="120" CollumnPadding="3" SnapsToDevicePixels="True" />
