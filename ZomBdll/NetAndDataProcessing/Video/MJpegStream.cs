@@ -179,6 +179,8 @@ namespace System451.Communication.Dashboard.Net.Video
                     else
                     {
                         string boundrywaters = resp.ContentType.Substring(resp.ContentType.IndexOf("boundary=") + 9);
+                        if (boundrywaters.Substring(0, 2) == "--")
+                            boundrywaters = boundrywaters.Substring(2);
                         Running = true;
                         int image_size = 0;
                         char[] buf;
