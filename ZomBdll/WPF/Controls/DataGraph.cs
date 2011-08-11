@@ -83,6 +83,32 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 return;
             var pf = new PathFigure();
             int x = 0;
+            if (AutoSize)
+            {
+                double max, min;
+                max = min = vals.Peek();
+                foreach (var y in vals)
+                {
+                    if (y > max)
+                        max = y;
+                    else if (y < min)
+                        min = y;
+                }
+                if (max == min)
+                {
+                    ++max;
+                    --min;
+                }
+                else
+                {
+                    var dist=(max - min) * (5 / 4);
+                    var oldmax = max;
+                    max = dist + min;
+                    min = oldmax - dist;
+                }
+                Max = max;
+                Min = min;
+            }
             foreach (var y in vals)
             {
                 if (x == 0)
@@ -103,6 +129,17 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             return 20 - (((y - Min) / (Max - Min)) * 20.0);
         }
+
+        [Design.ZomBDesignable(), Description("Auto adjusts Max and Min of the graph to fit."), Category("Behavior")]
+        public bool AutoSize
+        {
+            get { return (bool)GetValue(AutoSizeProperty); }
+            set { SetValue(AutoSizeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for AutoSize.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty AutoSizeProperty =
+            DependencyProperty.Register("AutoSize", typeof(bool), typeof(DataGraph), new UIPropertyMetadata(false));
 
         [Design.ZomBDesignable(), Description("The maximum value we are going to get."), Category("Behavior")]
         public double Max
