@@ -1,6 +1,6 @@
 ﻿/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
- * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * Copyright (C) 2011, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
+using System451.Communication.Dashboard.WPF.Controls.Designer.PrimitiveControls;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
@@ -35,6 +36,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
     public class DataGraph : ZomBGLControl, IValueConverter
     {
         GeometryDrawing PathGeo;
+        GraphScale scale;
         Queue<double> vals = new Queue<double>(300);
         static DataGraph()
         {
@@ -57,6 +59,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             base.OnApplyTemplate();
             PathGeo = base.GetTemplateChild("PART_PathGeo") as GeometryDrawing;
+            scale = base.GetTemplateChild("PART_scale") as GraphScale;
             this.Regenerate();//Zombie planaria!
         }
 
@@ -165,12 +168,16 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         static void MaxUpdated(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            (o as DataGraph).Regenerate();
+            var self = (o as DataGraph);
+            self.scale.MaxY = self.Max;
+            self.Regenerate();
         }
 
         static void MinUpdated(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            (o as DataGraph).Regenerate();
+            var self = (o as DataGraph);
+            self.scale.MinY = self.Min;
+            self.Regenerate();
         }
 
         #region IValueConverter Members

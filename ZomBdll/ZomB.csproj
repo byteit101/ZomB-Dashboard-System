@@ -222,6 +222,7 @@
     <Compile Include="WPF\Controls\CommandButton.xaml.cs">
       <DependentUpon>CommandButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\Controls\Designer\PrimitiveControls\GraphScale.cs" />
     <Compile Include="WPF\Controls\Designer\TriggerListenersDesigner.cs" />
     <Compile Include="WPF\Controls\Designer\TriggerListenersDesignerWindow.xaml.cs">
       <DependentUpon>TriggerListenersDesignerWindow.xaml</DependentUpon>
