@@ -39,6 +39,25 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer.PrimitiveContr
             DependencyProperty.Register("Foreground", typeof(SolidColorBrush), typeof(GraphScale), new UIPropertyMetadata(Brushes.Black));
 
 
+        public double MaxX
+        {
+            get { return (double)GetValue(MaxXProperty); }
+            set { SetValue(MaxXProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for MaxX.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MaxXProperty =
+            DependencyProperty.Register("MaxX", typeof(double), typeof(GraphScale), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsRender));
+
+        public double MinX
+        {
+            get { return (double)GetValue(MinXProperty); }
+            set { SetValue(MinXProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for MinX.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MinXProperty =
+            DependencyProperty.Register("MinX", typeof(double), typeof(GraphScale), new FrameworkPropertyMetadata(-300.0, FrameworkPropertyMetadataOptions.AffectsRender));
 
         public double MaxY
         {
@@ -114,6 +133,23 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer.PrimitiveContr
                 
                 drawingContext.DrawText(localtext, new Point(-localtext.Width - 5, virty-(localtext.Height/2.0)));
                 drawingContext.DrawLine(linepen, new Point(-2, virty), new Point(-4, virty));
+            }
+
+            drawingContext.DrawLine(linepen, new Point(0, ActualHeight + 2.0), new Point(ActualWidth, ActualHeight + 2.0));
+            drawingContext.DrawLine(linepen, new Point(0, ActualHeight + 2), new Point(0, ActualHeight + 4));
+            drawingContext.DrawLine(linepen, new Point(ActualWidth, ActualHeight + 2), new Point(ActualWidth, ActualHeight + 4));
+            var TextX = new FormattedText(MinX.ToString(), CultureInfo.CurrentUICulture, System.Windows.FlowDirection.LeftToRight, tface, emz, Foreground);
+            drawingContext.DrawText(TextX, new Point(TextX.Width / -2, ActualHeight + 5));
+            TextX = new FormattedText(MaxX.ToString(), CultureInfo.CurrentUICulture, System.Windows.FlowDirection.LeftToRight, tface, emz, Foreground);
+            drawingContext.DrawText(TextX, new Point(ActualWidth + TextX.Width / -2, ActualHeight + 5));
+
+            for (int i = 1; i < Math.Floor(ActualWidth/80.0); i++)
+            {
+                var realx = Math.Round(MinX + ((i * 80.0 * (MaxX - MinX) / ActualWidth)) * ActualWidth / (Math.Floor(ActualWidth / 80.0) * 80.0));
+                var virtx = (((realx - MinX) * (Math.Floor(ActualWidth / 80.0) * 80.0)) / ActualWidth) * ActualWidth / (MaxX - MinX)* ActualWidth / (Math.Floor(ActualWidth / 80.0) * 80.0);
+                drawingContext.DrawLine(linepen, new Point(virtx, ActualHeight + 2), new Point(virtx, ActualHeight + 4));
+                TextX = new FormattedText(realx.ToString(), CultureInfo.CurrentUICulture, System.Windows.FlowDirection.LeftToRight, tface, emz, Foreground);
+                drawingContext.DrawText(TextX, new Point(virtx - TextX.Width / 2, ActualHeight + 5));
             }
         }
 

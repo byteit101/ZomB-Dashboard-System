@@ -77,6 +77,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
             DataGraph am = this;
             am.vals.Dequeue();
             am.vals.Enqueue(nv);
+            this.scale.MinX++;
+            this.scale.MaxX++;
             am.Regenerate();
         }
 
