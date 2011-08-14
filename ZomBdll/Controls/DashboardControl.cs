@@ -78,6 +78,7 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// Does this control watch multiple values, or just one.
         /// </summary>
+        [Obsolete("Use Monitor instead")]
         bool IsMultiWatch { get; }
 
         /// <summary>
@@ -90,7 +91,7 @@ namespace System451.Communication.Dashboard
         /// Updates the control with new data
         /// </summary>
         /// <param name="value">The new value of the control. If IsMultiWatch is true, this is a pipe seperated list of values</param>
-        void UpdateControl(string value);
+        void UpdateControl(ZomBDataObject value);
 
         /// <summary>
         /// Notifies when this control is added to a DashboardDataHub
@@ -140,7 +141,7 @@ namespace System451.Communication.Dashboard
         /// Updates the control. This needs to be implemented.
         /// </summary>
         /// <exception cref="System.NotImplementedException">Always throws NotImplementedException</exception>
-        virtual public void UpdateControl(string value)
+        virtual public void UpdateControl(ZomBDataObject value)
         {
             throw new NotImplementedException();
         }
@@ -214,7 +215,7 @@ namespace System451.Communication.Dashboard
         /// Create a new ZomBControlUpdatedEventArgs
         /// </summary>
         /// <param name="value">The new value of the control. If IsMultiWatch is true, this is a pipe seperated list of values</param>
-        public ZomBControlUpdatedEventArgs(string value)
+        public ZomBControlUpdatedEventArgs(ZomBDataObject value)
         {
             this.Value = value;
         }
@@ -222,7 +223,7 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// The new value of the control. If IsMultiWatch is true, this is a pipe seperated list of values
         /// </summary>
-        public string Value
+        public ZomBDataObject Value
         {
             get;
             private set;
@@ -275,7 +276,7 @@ namespace System451.Communication.Dashboard
         /// Updates the control with new data
         /// </summary>
         /// <param name="value">The new value of the control. If IsMultiWatch is true, this is a pipe seperated list of values</param>
-        public override void UpdateControl(string value)
+        public override void UpdateControl(ZomBDataObject value)
         {
             if (ControlUpdated != null)
                 ControlUpdated(this, new ZomBControlUpdatedEventArgs(value));
@@ -320,7 +321,7 @@ namespace System451.Communication.Dashboard
         /// Updates with the new data from the robot
         /// </summary>
         /// <param name="data">A keyed collection of the name/value pairs of robot data</param>
-        void UpdateData(Dictionary<string, string> data);
+        void UpdateData(Dictionary<string, ZomBDataObject> data);
     }
 
     /// <summary>

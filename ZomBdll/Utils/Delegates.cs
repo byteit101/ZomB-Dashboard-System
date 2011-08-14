@@ -24,6 +24,7 @@ namespace System451.Communication.Dashboard
     {
         public delegate void VoidFunction();
         public delegate void StringFunction(string value);
+        public delegate void ZomBDataFunction(ZomBDataObject value);
         public delegate void BytesFunction(byte[] value);
     }
 }

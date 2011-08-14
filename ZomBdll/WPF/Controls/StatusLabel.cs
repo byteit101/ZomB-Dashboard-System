@@ -42,7 +42,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.StringValue = "Label";
         }
 
-        public override void UpdateControl(string value)
+        public override void UpdateControl(ZomBDataObject value)
         {
             StringValue = value;
         }

@@ -562,8 +562,8 @@ namespace System451.Communication.Dashboard.Controls {
 
         #region IZomBControl Members
 
-        delegate void UpdaterDelegate(string value);
-        public override void UpdateControl(string value)
+        delegate void UpdaterDelegate(ZomBDataObject value);
+        public override void UpdateControl(ZomBDataObject value)
         {
             if (this.InvokeRequired)
             {

@@ -37,7 +37,7 @@ namespace System451.Communication.Dashboard.Net
         DashboardDataHub ddh;
 
         FRCDSStatus cStat = new FRCDSStatus();
-        Dictionary<string, string> kys = new Dictionary<string, string>();
+        Dictionary<string, ZomBDataObject> kys = new Dictionary<string, ZomBDataObject>();
 
         public DashboardPacketDataSource(IZomBController ddh)
         {
@@ -156,7 +156,7 @@ namespace System451.Communication.Dashboard.Net
 
         #region IDashboardDataDataSource Members
 
-        public Dictionary<string, string> GetData()
+        public Dictionary<string, ZomBDataObject> GetData()
         {
             return kys;
         }
@@ -215,7 +215,7 @@ namespace System451.Communication.Dashboard.Net
                             }
 
                             //Get the items in a dictionary
-                            Dictionary<string, string> vals = SplitParams(Output);
+                            Dictionary<string, ZomBDataObject> vals = SplitParams(Output);
                             if (peeking)
                             {
                                 foreach (var keys in vals)
@@ -333,18 +333,18 @@ namespace System451.Communication.Dashboard.Net
         /// </summary>
         /// <param name="Output"></param>
         /// <returns></returns>
-        private Dictionary<string, string> SplitParams(string Output)
+        private Dictionary<string, ZomBDataObject> SplitParams(string Output)
         {
             //Split the main string
             string[] s = Output.Split('|');
-            Dictionary<string, string> k = new Dictionary<string, string>(s.Length);
+            Dictionary<string, ZomBDataObject> k = new Dictionary<string, ZomBDataObject>(s.Length);
             foreach (string item in s)
             {
                 //split and add each item to the Dictionary
                 string ky, val;
                 ky = item.Split('=')[0];
                 val = item.Split('=')[1];
-                k[ky] = val;//Latter will overwrite
+                k[ky] = new ZomBDataObject(val, ZomBDataTypeHint.Unknown);//Latter will overwrite
             }
             return k;
         }

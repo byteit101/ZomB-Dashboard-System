@@ -41,7 +41,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         public void UpdateStatus(FRCDSStatus status) { }
 
-        public void UpdateData(Dictionary<string, string> data)
+        public void UpdateData(Dictionary<string, ZomBDataObject> data)
         {
             while (communists.Count>0)
             {

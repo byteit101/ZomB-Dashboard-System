@@ -36,7 +36,7 @@ namespace System451.Communication.Dashboard.Net
         DashboardDataHub ddh;
 
         FRCDSStatus cStat = new FRCDSStatus();
-        Dictionary<string, string> kys = new Dictionary<string, string>();
+        Dictionary<string, ZomBDataObject> kys = new Dictionary<string, ZomBDataObject>();
         Dictionary<int, SmartInfo> nametable = new Dictionary<int, SmartInfo>();
 
         public SmartDataSource(IZomBController ddh)
@@ -156,7 +156,7 @@ namespace System451.Communication.Dashboard.Net
 
         #region IDashboardDataDataSource Members
 
-        public Dictionary<string, string> GetData()
+        public Dictionary<string, ZomBDataObject> GetData()
         {
             return kys;
         }
@@ -217,7 +217,7 @@ namespace System451.Communication.Dashboard.Net
                     totallength += binladen.ReadUInt16();
 
                     //clear last loop's controls
-                    kys = new Dictionary<string, string>();
+                    kys = new Dictionary<string, ZomBDataObject>();
 
                     //loop all controls
                     while (totallength > (Output.Position - 27))
@@ -250,7 +250,7 @@ namespace System451.Communication.Dashboard.Net
                                     {
                                         var info = nametable[id];
                                         string value = info.Parse(binladen);
-                                        kys[info.Name] = value;
+                                        kys[info.Name] = new ZomBDataObject(value, info.ZomBTypeHint);
                                     }
                                     else
                                     {
@@ -449,6 +449,32 @@ namespace System451.Communication.Dashboard.Net
     {
         public SmartDataTypes Type { get; set; }
         public string Name { get; set; }
+
+        public ZomBDataTypeHint ZomBTypeHint
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case SmartDataTypes.Byte:
+                    case SmartDataTypes.Int:
+                    case SmartDataTypes.Long:
+                    case SmartDataTypes.Short:
+                        return ZomBDataTypeHint.Integer;
+                    case SmartDataTypes.Float:
+                    case SmartDataTypes.Double:
+                        return ZomBDataTypeHint.Double;
+                    case SmartDataTypes.Bool:
+                        return ZomBDataTypeHint.Boolean;
+                    case SmartDataTypes.Char:
+                    case SmartDataTypes.String:
+                    case SmartDataTypes.UTF8String:
+                        return ZomBDataTypeHint.String;
+                    default:
+                        return ZomBDataTypeHint.Unknown;
+                }
+            }
+        }
 
         public string Parse(EBinaryReader binreader)
         {

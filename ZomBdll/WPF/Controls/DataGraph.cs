@@ -63,11 +63,14 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.Regenerate();//Zombie planaria!
         }
 
-        public override void UpdateControl(string value)
+        public override void UpdateControl(ZomBDataObject value)
         {
             try
             {
-                newDdb(double.Parse(value));
+                if (value.Value is int || value.Value is double || value.Value is float)
+                    newDdb((double)value.Value);
+                else
+                    newDdb(double.Parse(value.ToString()));
             }
             catch { }
         }

@@ -226,16 +226,24 @@ namespace System451.Communication.Dashboard.WPF.Controls
         /// <summary>
         /// Updates the control
         /// </summary>
-        virtual public void UpdateControl(string value)
+        virtual public void UpdateControl(ZomBDataObject value)
         {
-            StringValue = value;
+            StringValue = value.ToString();
             int o;
-            int.TryParse(value, out o);
+            if (value.Value is int || value.Value is double || value.Value is float)
+                o = (int)value.Value;
+            else
+                int.TryParse(value.ToString(), out o);
             IntValue = o;
             double d;
-            double.TryParse(value, out d);
+            if (value.Value is int || value.Value is double || value.Value is float)
+                d = (double)value.Value;
+            else
+                double.TryParse(value.ToString(), out d);
             DoubleValue = d;
-            BoolValue = (IntValue != 0 || value.ToLower() == "true" || value.ToLower() == "yes");
+            BoolValue = (IntValue != 0 || value.ToString().ToLower() == "true" || value.ToString().ToLower() == "yes");
+            if (value.Value is bool)
+                BoolValue = (bool)value.Value;
         }
 
         /// <summary>

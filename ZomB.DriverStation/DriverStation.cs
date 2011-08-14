@@ -311,7 +311,7 @@ namespace System451.Communication.Dashboard.Net.DriverStation
 
         string IZomBControl.ControlName { get { return null; } }
 
-        void IZomBControl.UpdateControl(string value) { }
+        void IZomBControl.UpdateControl(ZomBDataObject value) { }
 
         void IZomBControl.ControlAdded(object sender, ZomBControlAddedEventArgs e)
         {

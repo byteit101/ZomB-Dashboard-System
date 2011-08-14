@@ -35,7 +35,7 @@ namespace System451.Communication.Dashboard.Net
         bool isrunning;
         Thread backThread;
 
-        Dictionary<string, string> kys = new Dictionary<string, string>();
+        Dictionary<string, ZomBDataObject> kys = new Dictionary<string, ZomBDataObject>();
 
         public TCPDataSource(int team)
         {
@@ -177,7 +177,7 @@ namespace System451.Communication.Dashboard.Net
 
         #region IDashboardDataDataSource Members
 
-        public Dictionary<string, string> GetData()
+        public Dictionary<string, ZomBDataObject> GetData()
         {
             return kys;
         }
@@ -282,7 +282,7 @@ namespace System451.Communication.Dashboard.Net
                                     DataRecieved(this, new EventArgs());
                                 if (NewDataRecieved != null)
                                     NewDataRecieved(this, new NewDataRecievedEventArgs(kys));
-                                kys = new Dictionary<string, string>();
+                                kys = new Dictionary<string, ZomBDataObject>();
                             }
                             if (last == 0x00)
                                 continue;
@@ -329,9 +329,9 @@ namespace System451.Communication.Dashboard.Net
                             //otherwise
                             //Add the value
                             if (kys.ContainsKey(nom))
-                                kys[nom] = val;
+                                kys[nom] = new ZomBDataObject(val, ZomBDataTypeHint.Unknown);
                             else
-                                kys.Add(nom, val);
+                                kys.Add(nom, new ZomBDataObject(val, ZomBDataTypeHint.Unknown));
                         }
 
                         //Decrease error

@@ -101,7 +101,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             get { return "BluFinger"; }
         }
 
-        public void UpdateControl(string value)
+        public void UpdateControl(ZomBDataObject value)
         {
             
         }

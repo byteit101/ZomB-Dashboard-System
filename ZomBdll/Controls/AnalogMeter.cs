@@ -67,11 +67,11 @@ namespace System451.Communication.Dashboard.Controls
 
         #region IDashboardControl Members
 
-        public override void UpdateControl(string value)
+        public override void UpdateControl(ZomBDataObject value)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new Utils.StringFunction(UpdateControl), value);
+                this.Invoke(new Utils.ZomBDataFunction(UpdateControl), value);
             }
             else
             {

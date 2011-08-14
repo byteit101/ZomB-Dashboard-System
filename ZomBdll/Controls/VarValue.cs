@@ -22,7 +22,7 @@ namespace System451.Communication.Dashboard.Controls
 {
     public partial class VarValue : UserControl, IZomBControl
     {
-        Dictionary<string, string> vrs = new Dictionary<string, string>();
+        Dictionary<string, ZomBDataObject> vrs = new Dictionary<string, ZomBDataObject>();
 
         public VarValue()
         {
@@ -38,21 +38,22 @@ namespace System451.Communication.Dashboard.Controls
             }
         }
 
-        public void UpdateControl(string value)
+        public void UpdateControl(ZomBDataObject valuea)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new Utils.StringFunction(UpdateControl), value);
+                this.Invoke(new Utils.ZomBDataFunction(UpdateControl), valuea);
             }
             else
             {
+                string value = valuea.ToString();
                 if (value != "")
                 {
                     if (value.Contains("="))
                         vrs[value.Substring(0, value.IndexOf("="))] = value.Substring(value.IndexOf("=") + 1);
                 }
                 label1.Text = label2.Text = "";
-                foreach (KeyValuePair<string, string> kv in vrs)
+                foreach (KeyValuePair<string, ZomBDataObject> kv in vrs)
                 {
                     label1.Text += kv.Key + "\r\n";
                     label2.Text += kv.Value + "\r\n";
@@ -74,7 +75,7 @@ namespace System451.Communication.Dashboard.Controls
             get { return true; }
         }
 
-        void IZomBControl.UpdateControl(string value)
+        void IZomBControl.UpdateControl(ZomBDataObject value)
         {
             //this needs to be tested, but should work
             string Output = value;

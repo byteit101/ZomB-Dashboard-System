@@ -68,7 +68,7 @@ namespace System451.Communication.Dashboard.Net
     /// </summary>
     public interface IDashboardDataDataSource : IDashboardDataSource
     {
-        Dictionary<string, string> GetData();
+        Dictionary<string, ZomBDataObject> GetData();
         IDashboardDataSource ParentDataSource { get; }
         event NewDataRecievedEventHandler NewDataRecieved;
     }
@@ -357,10 +357,10 @@ namespace System451.Communication.Dashboard.Net
 
     public class NewDataRecievedEventArgs : EventArgs
     {
-        public NewDataRecievedEventArgs(Dictionary<string, string> data)
+        public NewDataRecievedEventArgs(Dictionary<string, ZomBDataObject> data)
         {
             NewData = data;
         }
-        public Dictionary<string, string> NewData { get; set; }
+        public Dictionary<string, ZomBDataObject> NewData { get; set; }
     }
 }

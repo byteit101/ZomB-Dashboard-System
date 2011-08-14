@@ -51,17 +51,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.Height = 50;
         }
 
-        public override void UpdateControl(string value)
-        {
-            StringValue = value;
-            int o;
-            int.TryParse(value, out o);
-            IntValue = o;
-            double d;
-            double.TryParse(value, out d);
-            DoubleValue = d;
-        }
-
         static void MaxUpdated(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             AnalogMeter am = (o as AnalogMeter);

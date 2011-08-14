@@ -70,8 +70,9 @@ namespace System451.Communication.Dashboard.Controls
             }
         }
 
-        public override void UpdateControl(string value)
+        public override void UpdateControl(ZomBDataObject valuea)
         {
+            string value = valuea;
             if (pad != null)
             {
                 float l, r;

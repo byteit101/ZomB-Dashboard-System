@@ -138,7 +138,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             started = true;
         }
 
-        public override void UpdateControl(string value)
+        public override void UpdateControl(ZomBDataObject value)
         {
 
         }
@@ -571,7 +571,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         public string ControlName { get; set; }
 
-        public void UpdateControl(string value)
+        public void UpdateControl(ZomBDataObject value)
         {
             Target = RectParse(value);
         }

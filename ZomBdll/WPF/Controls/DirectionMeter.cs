@@ -51,17 +51,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
             this.Height = 100;
         }
 
-        public override void UpdateControl(string value)
-        {
-            StringValue = value;
-            int o;
-            int.TryParse(value, out o);
-            IntValue = o;
-            double d;
-            double.TryParse(value, out d);
-            DoubleValue = d;
-        }
-
         [Design.ZomBDesignable(), Description("The maximum value we are going to get."), Category("Behavior")]
         public double Max
         {

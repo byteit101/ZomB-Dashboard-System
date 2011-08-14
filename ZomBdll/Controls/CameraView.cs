@@ -362,7 +362,7 @@ namespace System451.Communication.Dashboard
             set;
         }
 
-        public void UpdateControl(string value)
+        public void UpdateControl(ZomBDataObject value)
         {
             Target = RectParse(value);
 

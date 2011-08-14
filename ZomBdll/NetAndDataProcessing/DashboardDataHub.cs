@@ -543,13 +543,13 @@ namespace System451.Communication.Dashboard
         /// <param name="control">Le ZomB control</param>
         /// <param name="vals">El dictionario</param>
         /// <remarks>I must be tired</remarks>
-        private static void ProcessControl(IZomBControl control, Dictionary<string, string> vals)
+        private static void ProcessControl(IZomBControl control, Dictionary<string, ZomBDataObject> vals)
         {
             try
             {
-                string val = "";
+                ZomBDataObject val = new ZomBDataObject();
                 //if we are watching multiple values
-                if (control.IsMultiWatch)
+                /*if (control.IsMultiWatch)
                 {
                     if (control.ControlName == "*")
                     {
@@ -572,7 +572,7 @@ namespace System451.Communication.Dashboard
                     }
                     val = val.Substring(1);//remove first |
                 }
-                else
+                else*/
                     val = vals[control.ControlName];//get the value it wants
 
                 control.UpdateControl(val);
@@ -805,6 +805,125 @@ namespace System451.Communication.Dashboard
         void restartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DashboardDataHub.RestartZomB();
+        }
+    }
+
+    public enum ZomBDataTypeHint : uint
+    {
+        /// <summary>
+        /// Unknown Type
+        /// </summary>
+        Unknown = 0x0000,
+        /// <summary>
+        /// A string
+        /// </summary>
+        String = 0x0001,
+        /// <summary>
+        /// Plain ol' int's
+        /// </summary>
+        Integer = 0x0002,
+        /// <summary>
+        /// Floating point numbers
+        /// </summary>
+        Double = 0x0004,
+        /// <summary>
+        /// Shortcut for int and doubles
+        /// </summary>
+        Number = 0x0006,
+        /// <summary>
+        /// True or false
+        /// </summary>
+        Boolean = 0x0008,
+        /// <summary>
+        /// Feedback (shakers)
+        /// </summary>
+        Feedback = 0x0010,
+        /// <summary>
+        /// Camera Targets
+        /// </summary>
+        CameraTarget = 0x0020,
+        /// <summary>
+        /// Dictionary&lt;string, ZomBDataObject&gt;
+        /// </summary>
+        Lookup = 0x0040,
+        /// <summary>
+        /// Generic fallback
+        /// </summary>
+        GenericObject = 0x0080,
+        /// <summary>
+        /// User-Defined Object. May be replaced by Well-Known Object rather soon.
+        /// </summary>
+        UserObject8 = 0x0100,
+        /// <summary>
+        /// User-Defined Object. May be replaced by Well-Known Object rather soon.
+        /// </summary>
+        UserObject7 = 0x0200,
+        /// <summary>
+        /// User-Defined Object. May be replaced by Well-Known Object rather soon.
+        /// </summary>
+        UserObject6 = 0x0400,
+        /// <summary>
+        /// User-Defined Object. May be replaced by Well-Known Object rather soon.
+        /// </summary>
+        UserObject5 = 0x0800,
+        /// <summary>
+        /// User-Defined Object. May be replaced by Well-Known Object after a great while.
+        /// </summary>
+        UserObject4 = 0x1000,
+        /// <summary>
+        /// User-Defined Object. May be replaced by Well-Known Object after a great while.
+        /// </summary>
+        UserObject3 = 0x2000,
+        /// <summary>
+        /// User-Defined Object. Will not replaced by Well-Known Object in the next year at least.
+        /// </summary>
+        UserObject2 = 0x4000,
+        /// <summary>
+        /// User-Defined Object. Will not replaced by Well-Known Object in the next year at least.
+        /// </summary>
+        UserObject1 = 0x8000,
+    }
+
+    public struct ZomBDataObject
+    {
+        public ZomBDataObject(string value, ZomBDataTypeHint hint)
+        {
+            Value = value;
+            TypeHint = hint;
+        }
+
+        public ZomBDataTypeHint TypeHint { get; set; }
+        public object Value { get; set; }
+
+        public static implicit operator ZomBDataObject(string value)
+        {
+            return new ZomBDataObject { TypeHint = ZomBDataTypeHint.String, Value = value };
+        }
+        public static implicit operator ZomBDataObject(int value)
+        {
+            return new ZomBDataObject { TypeHint = ZomBDataTypeHint.Integer, Value = value };
+        }
+        public static implicit operator ZomBDataObject(double value)
+        {
+            return new ZomBDataObject { TypeHint = ZomBDataTypeHint.Double, Value = value };
+        }
+        public static implicit operator ZomBDataObject(bool value)
+        {
+            return new ZomBDataObject { TypeHint = ZomBDataTypeHint.Boolean, Value = value };
+        }
+        public static implicit operator ZomBDataObject(Dictionary<string, ZomBDataObject> value)
+        {
+            return new ZomBDataObject { TypeHint = ZomBDataTypeHint.Lookup, Value = value };
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+
+        public static implicit operator string(ZomBDataObject value)
+        {
+            return value.Value.ToString();
         }
     }
 }

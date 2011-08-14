@@ -73,10 +73,10 @@ namespace System451.Communication.Dashboard.WPF.Controls
         }
 
 
-        public override void UpdateControl(string value)
+        public override void UpdateControl(ZomBDataObject value)
         {
             base.UpdateControl(value);
-            Value = (SpikePositions)Enum.Parse(typeof(SpikePositions), value);
+            Value = (SpikePositions)Enum.Parse(typeof(SpikePositions), value.ToString());
         }
 
         public SpikePositions Value
