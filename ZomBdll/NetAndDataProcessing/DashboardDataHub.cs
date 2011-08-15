@@ -886,7 +886,7 @@ namespace System451.Communication.Dashboard
 
     public struct ZomBDataObject
     {
-        public ZomBDataObject(string value, ZomBDataTypeHint hint)
+        public ZomBDataObject(object value, ZomBDataTypeHint hint) : this()
         {
             Value = value;
             TypeHint = hint;

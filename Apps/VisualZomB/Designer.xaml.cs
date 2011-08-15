@@ -453,18 +453,18 @@ namespace System451.Communication.Dashboard.ViZ
                         Vector mv = e.GetPosition(ZDash) - dndopoint;
                         var sc = (origSrc as SurfaceControl);
                         if (cdm.Flagged(CurrentDragMove.Width))
-                            sc.Width = opoint.X + mv.X;
+                            sc.Width = Math.Max(0, opoint.X + mv.X);
                         if (cdm.Flagged(CurrentDragMove.Height))
-                            sc.Height = opoint.Y + mv.Y;
+                            sc.Height = Math.Max(0, opoint.Y + mv.Y);
                         if (cdm.Flagged(CurrentDragMove.X))
                         {
                             Canvas.SetLeft(sc, oxpoint.X + mv.X);
-                            sc.Width = opoint.X - mv.X;
+                            sc.Width = Math.Max(0, opoint.X - mv.X);
                         }
                         if (cdm.Flagged(CurrentDragMove.Y))
                         {
                             Canvas.SetTop(sc, oxpoint.Y + mv.Y);
-                            sc.Height = opoint.Y - mv.Y;
+                            sc.Height = Math.Max(0, opoint.Y - mv.Y);
                         }
                         ShowSnaps(((SnapGridDirections)cdm), x => { sc.Width = Canvas.GetLeft(sc) + sc.Width - x; Canvas.SetLeft(sc, x); }, y => { sc.Height = Canvas.GetTop(sc) + sc.Height - y; Canvas.SetTop(sc, y); }, r => curObj.Width = r - SnapGridHelper.Left(curObj), b => curObj.Height = b - SnapGridHelper.Top(curObj));
 
