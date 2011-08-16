@@ -92,7 +92,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 }
             }
             catch { }
-            /*Dictionary<string, ZomBDataObject> dic = new Dictionary<string, ZomBDataObject>();
+            /*ZomBDataLookup dic = new ZomBDataLookup();
             var parms = parameter.ToString().Split(';');
             var spliter = new Regex(@"([A-Za-z]*)=\(([^\)]*)\)");
             foreach (var item in parms)

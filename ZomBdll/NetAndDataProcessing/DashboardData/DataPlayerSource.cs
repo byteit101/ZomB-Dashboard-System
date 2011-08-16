@@ -29,7 +29,7 @@ namespace System451.Communication.Dashboard.Net
     [DataSource("File")]
     public class DataPlayerSource : IDashboardDataSource, IDashboardStatusDataSource, IDashboardDataDataSource
     {
-        Dictionary<string, ZomBDataObject> vls = new Dictionary<string, ZomBDataObject>();
+        ZomBDataLookup vls = new ZomBDataLookup();
         FRCDSStatus sts = new FRCDSStatus();
         Thread workthread;
         BinaryReader redbit;
@@ -133,11 +133,11 @@ namespace System451.Communication.Dashboard.Net
         /// </summary>
         /// <param name="Output"></param>
         /// <returns></returns>
-        private Dictionary<string, ZomBDataObject> SplitParams(string Output)
+        private ZomBDataLookup SplitParams(string Output)
         {
             //Split the main string
             string[] s = Output.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-            Dictionary<string, ZomBDataObject> k = new Dictionary<string, ZomBDataObject>(s.Length);
+            ZomBDataLookup k = new ZomBDataLookup(s.Length);
             foreach (string item in s)
             {
                 //split and add each item to the Dictionary
@@ -213,7 +213,7 @@ namespace System451.Communication.Dashboard.Net
 
         #region IDashboardDataDataSource Members
 
-        Dictionary<string, ZomBDataObject> IDashboardDataDataSource.GetData()
+        ZomBDataLookup IDashboardDataDataSource.GetData()
         {
             return vls;
         }

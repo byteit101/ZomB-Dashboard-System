@@ -334,7 +334,7 @@ namespace System451.Communication.Dashboard.Utils
             battery = status.Battery;
         }
 
-        void IZomBMonitor.UpdateData(Dictionary<string, ZomBDataObject> data)
+        void IZomBMonitor.UpdateData(ZomBDataLookup data)
         {
             //Nothing important happens here
         }

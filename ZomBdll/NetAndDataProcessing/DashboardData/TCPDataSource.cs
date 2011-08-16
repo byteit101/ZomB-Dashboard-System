@@ -35,7 +35,7 @@ namespace System451.Communication.Dashboard.Net
         bool isrunning;
         Thread backThread;
 
-        Dictionary<string, ZomBDataObject> kys = new Dictionary<string, ZomBDataObject>();
+        ZomBDataLookup kys = new ZomBDataLookup();
 
         public TCPDataSource(int team)
         {
@@ -177,7 +177,7 @@ namespace System451.Communication.Dashboard.Net
 
         #region IDashboardDataDataSource Members
 
-        public Dictionary<string, ZomBDataObject> GetData()
+        public ZomBDataLookup GetData()
         {
             return kys;
         }
@@ -282,7 +282,7 @@ namespace System451.Communication.Dashboard.Net
                                     DataRecieved(this, new EventArgs());
                                 if (NewDataRecieved != null)
                                     NewDataRecieved(this, new NewDataRecievedEventArgs(kys));
-                                kys = new Dictionary<string, ZomBDataObject>();
+                                kys = new ZomBDataLookup();
                             }
                             if (last == 0x00)
                                 continue;

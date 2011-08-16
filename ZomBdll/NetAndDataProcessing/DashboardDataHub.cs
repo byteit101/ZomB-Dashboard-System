@@ -543,7 +543,7 @@ namespace System451.Communication.Dashboard
         /// <param name="control">Le ZomB control</param>
         /// <param name="vals">El dictionario</param>
         /// <remarks>I must be tired</remarks>
-        private static void ProcessControl(IZomBControl control, Dictionary<string, ZomBDataObject> vals)
+        private static void ProcessControl(IZomBControl control, ZomBDataLookup vals)
         {
             try
             {
@@ -911,7 +911,7 @@ namespace System451.Communication.Dashboard
         {
             return new ZomBDataObject { TypeHint = ZomBDataTypeHint.Boolean, Value = value };
         }
-        public static implicit operator ZomBDataObject(Dictionary<string, ZomBDataObject> value)
+        public static implicit operator ZomBDataObject(ZomBDataLookup value)
         {
             return new ZomBDataObject { TypeHint = ZomBDataTypeHint.Lookup, Value = value };
         }
@@ -924,6 +924,78 @@ namespace System451.Communication.Dashboard
         public static implicit operator string(ZomBDataObject value)
         {
             return value.Value.ToString();
+        }
+    }
+
+    public class ZomBDataLookup : Dictionary<string, ZomBDataObject>
+    {
+        public ZomBDataLookup()
+            : base()
+        {
+
+        }
+
+        public ZomBDataLookup(int capacity)
+            : base(capacity)
+        {
+
+        }
+
+        public new ZomBDataObject this[string key]
+        {
+            get
+            {
+                if (key.Contains(".") || key.Contains("\\"))
+                {
+                    var segments = GetNameSegments(key);
+                    ZomBDataObject zdo = base[segments[0]];
+                    for (int i = 1; i < segments.Length; i++)
+                    {
+                        zdo = ((ZomBDataLookup)zdo.Value)[segments[i]];
+                    }
+                    return zdo;
+                }
+                else
+                    return base[key];
+            }
+            set
+            {
+                if (key.Contains(".") || key.Contains("\\"))
+                {
+                    var segments = GetNameSegments(key);
+                    ZomBDataObject zdo = base[segments[0]];
+                    for (int i = 1; i < segments.Length; i++)
+                    {
+                        zdo = ((ZomBDataLookup)zdo.Value)[segments[i]];
+                    }
+                    zdo = value;
+                }
+                else
+                    base[key] = value;
+            }
+        }
+
+        public static string[] GetNameSegments(string fullname)
+        {
+            string[] returns = fullname.Split('.');
+            List<string> returns2 = new List<string>();
+            for (int i = 0; i < returns.Length; i++)
+            {
+                if (returns[i].EndsWith("\\"))
+                {
+                    returns[i] = returns[i].Substring(0, returns[i].Length - 1);
+                    if (!returns[i].EndsWith("\\") && i < (returns.Length - 1))
+                    {
+                        returns2.Add(returns[i] + "." + returns[i + 1]);
+                        i++;
+                    }
+                    else
+                        returns2.Add(returns[i]);
+                }
+                else
+                    returns2.Add(returns[i]);
+            }
+            return returns2.ToArray();
         }
     }
 }

@@ -36,7 +36,7 @@ namespace System451.Communication.Dashboard.Net
         DashboardDataHub ddh;
 
         FRCDSStatus cStat = new FRCDSStatus();
-        Dictionary<string, ZomBDataObject> kys = new Dictionary<string, ZomBDataObject>();
+        ZomBDataLookup kys = new ZomBDataLookup();
         Dictionary<int, SmartInfo> nametable = new Dictionary<int, SmartInfo>();
 
         public SmartDataSource(IZomBController ddh)
@@ -156,7 +156,7 @@ namespace System451.Communication.Dashboard.Net
 
         #region IDashboardDataDataSource Members
 
-        public Dictionary<string, ZomBDataObject> GetData()
+        public ZomBDataLookup GetData()
         {
             return kys;
         }
@@ -217,7 +217,7 @@ namespace System451.Communication.Dashboard.Net
                     totallength += binladen.ReadUInt16();
 
                     //clear last loop's controls
-                    kys = new Dictionary<string, ZomBDataObject>();
+                    kys = new ZomBDataLookup();
 
                     //loop all controls
                     while (totallength > (Output.Position - 27))

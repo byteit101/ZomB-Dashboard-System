@@ -37,7 +37,7 @@ namespace System451.Communication.Dashboard.Net
         DashboardDataHub ddh;
 
         FRCDSStatus cStat = new FRCDSStatus();
-        Dictionary<string, ZomBDataObject> kys = new Dictionary<string, ZomBDataObject>();
+        ZomBDataLookup kys = new ZomBDataLookup();
 
         public DashboardPacketDataSource(IZomBController ddh)
         {
@@ -156,7 +156,7 @@ namespace System451.Communication.Dashboard.Net
 
         #region IDashboardDataDataSource Members
 
-        public Dictionary<string, ZomBDataObject> GetData()
+        public ZomBDataLookup GetData()
         {
             return kys;
         }
@@ -215,7 +215,7 @@ namespace System451.Communication.Dashboard.Net
                             }
 
                             //Get the items in a dictionary
-                            Dictionary<string, ZomBDataObject> vals = SplitParams(Output);
+                            ZomBDataLookup vals = SplitParams(Output);
                             if (peeking)
                             {
                                 foreach (var keys in vals)
@@ -333,11 +333,11 @@ namespace System451.Communication.Dashboard.Net
         /// </summary>
         /// <param name="Output"></param>
         /// <returns></returns>
-        private Dictionary<string, ZomBDataObject> SplitParams(string Output)
+        private ZomBDataLookup SplitParams(string Output)
         {
             //Split the main string
             string[] s = Output.Split('|');
-            Dictionary<string, ZomBDataObject> k = new Dictionary<string, ZomBDataObject>(s.Length);
+            ZomBDataLookup k = new ZomBDataLookup(s.Length);
             foreach (string item in s)
             {
                 //split and add each item to the Dictionary

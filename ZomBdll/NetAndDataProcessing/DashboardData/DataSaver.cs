@@ -195,7 +195,7 @@ namespace System451.Communication.Dashboard
         /// IZomBMonitor: Updates the data
         /// </summary>
         /// <param name="data">The new data</param>
-        public void UpdateData(Dictionary<string, ZomBDataObject> data)
+        public void UpdateData(ZomBDataLookup data)
         {
             //TODO: Test
             if (saving)

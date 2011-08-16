@@ -22,7 +22,7 @@ namespace System451.Communication.Dashboard.Controls
 {
     public partial class VarValue : UserControl, IZomBControl
     {
-        Dictionary<string, ZomBDataObject> vrs = new Dictionary<string, ZomBDataObject>();
+        ZomBDataLookup vrs = new ZomBDataLookup();
 
         public VarValue()
         {

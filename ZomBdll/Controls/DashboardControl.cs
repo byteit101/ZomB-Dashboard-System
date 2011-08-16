@@ -321,7 +321,7 @@ namespace System451.Communication.Dashboard
         /// Updates with the new data from the robot
         /// </summary>
         /// <param name="data">A keyed collection of the name/value pairs of robot data</param>
-        void UpdateData(Dictionary<string, ZomBDataObject> data);
+        void UpdateData(ZomBDataLookup data);
     }
 
     /// <summary>
