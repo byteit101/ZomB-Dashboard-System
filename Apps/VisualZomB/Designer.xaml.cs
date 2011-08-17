@@ -975,11 +975,11 @@ namespace System451.Communication.Dashboard.ViZ
                         throw new Exception();//wee!
                     foreach (var item in peeps)
                     {
-                        item.BeginNamePeek(AddAutoStub);
+                        item.BeginNamePeek(AddAutoStubPeek);
                     }
                     aaing = true;
-                    AAListen.Visibility = System.Windows.Visibility.Collapsed;
-                    AAdeListen.Visibility = System.Windows.Visibility.Visible;
+                    AutoPlay.Visibility = AAListen.Visibility = System.Windows.Visibility.Collapsed;
+                    StopAutoPlay.Visibility = AAdeListen.Visibility = System.Windows.Visibility.Visible;
                 }
                 catch
                 {
@@ -997,8 +997,8 @@ namespace System451.Communication.Dashboard.ViZ
                     item.EndNamePeek();
                 }
                 aaing = false;
-                AAListen.Visibility = System.Windows.Visibility.Visible;
-                AAdeListen.Visibility = System.Windows.Visibility.Collapsed;
+                AutoPlay.Visibility = AAListen.Visibility = System.Windows.Visibility.Visible;
+                StopAutoPlay.Visibility = AAdeListen.Visibility = System.Windows.Visibility.Collapsed;
                 aadict.Clear();
                 peeps.Clear();
                 AutoAddPanel.Children.Clear();
@@ -1012,6 +1012,12 @@ namespace System451.Communication.Dashboard.ViZ
         }
 
         Dictionary<string, AutoPoint> aadict = new Dictionary<string, AutoPoint>();
+
+        private void AddAutoStubPeek(string name)
+        {
+            if (aaing)
+                AddAutoStub(name);
+        }
 
         private void AddAutoStub(string name)
         {

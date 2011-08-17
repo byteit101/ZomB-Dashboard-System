@@ -44,11 +44,12 @@
         <ScrollViewer Name="Scrlview" Background="Transparent" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <Canvas Name="LayoutCvs" Width="1028" Height="404" MinHeight="154" MinWidth="204">
                 <loc:DropShadowChrome x:Name="ZDChrome" Canvas.Top="1" Canvas.Left="1" Width="1024" Height="400" MinHeight="150" MinWidth="200">
-                    <Canvas Width="1024" Height="400" MinHeight="150" MinWidth="200" Background="White" Name="ZDash" AllowDrop="True" Drop="ZDash_Drop" 
-                    DragEnter="ZDash_DragEnter" PreviewMouseLeftButtonDown="ZDash_MouseLeftButtonDown"
+                    <Canvas Width="1024" Height="400" MinHeight="150" MinWidth="200" Background="White" Name="ZDash"
+                        AllowDrop="True" Drop="ZDash_Drop" 
+                        DragEnter="ZDash_DragEnter" PreviewMouseLeftButtonDown="ZDash_MouseLeftButtonDown"
                         PreviewMouseRightButtonDown="ZDash_PreviewMouseRightButtonDown"
                         PreviewMouseLeftButtonUp="ScrollViewer_MouseLeftButtonUp" PreviewMouseMove="ScrollViewer_MouseMove"
-                    Focusable="True" FocusManager.IsFocusScope="True">
+                        Focusable="True" FocusManager.IsFocusScope="True">
                     </Canvas>
                 </loc:DropShadowChrome>
                 <Image Name="ViZLogo" Opacity="1" Stretch="Fill" Margin="32,90" Width="960" Height="220" AllowDrop="True" Drop="ZDash_Drop" DragEnter="ZDash_DragEnter">
@@ -62,12 +63,86 @@
                 </Image>
                 <Path Name="ResizeGrip" MouseLeftButtonDown="ResizeGrip_MouseDown" MouseMove="ResizeGrip_MouseMove" MouseLeftButtonUp="ResizeGrip_MouseUp"
                   Cursor="SizeNWSE" Canvas.Bottom="0" Canvas.Right="0" Fill="Transparent" Data="M 17,0 H 20 V 20 H 0 V 17 H 12 L 17,12 z"></Path>
-                <DockPanel Name="AutoAddPanel" Canvas.Top="1" Canvas.Left="1" LastChildFill="False">
-                    <DockPanel.Clip>
-                        <RectangleGeometry Rect="0,0,9001,9001"></RectangleGeometry>
-                    </DockPanel.Clip>
-                </DockPanel>
-                <!--<Button Canvas.Bottom="0" Click="bc">Add</Button>-->
+                <Grid Name="AutoAddPanelLeft" Canvas.Top="1" Canvas.Left="1" Width="{Binding Path=Width, ElementName=ZDChrome}" Height="{Binding Path=Height, ElementName=ZDChrome}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Button Name="AutoPlay" Width="24" Height="24" HorizontalAlignment="Left" Click="AutoListen_Click">
+                        <Button.ToolTip>
+                            Search for incoming controls
+                        </Button.ToolTip>
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Opacity" Value="0.1" />
+                                <Setter Property="Control.Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Canvas Width="24" Height="24">
+                                                <Path Fill="Transparent" Data="M 2,2 2,22 22,22 22,2 z" />
+                                                <Path Fill="Black" Data="M 8.5 0 C 3.8055798 0 0 3.8055801 0 8.5 C 0 13.19442 3.8055798 17 8.5 17 C 10.340388 17 12.046073 16.43154 13.4375 15.4375 L 22 24 L 24 22 L 15.4375 13.4375 C 16.43154 12.046074 17 10.340388 17 8.5 C 17 3.8055801 13.19442 0 8.5 0 z M 8.5 2.5 C 11.813709 2.5 14.5 5.1862915 14.5 8.5 C 14.5 11.813708 11.813709 14.5 8.5 14.5 C 5.1862915 14.5 2.5 11.813708 2.5 8.5 C 2.5 5.1862915 5.1862915 2.5 8.5 2.5 z " />
+                                            </Canvas>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Opacity" Value="1" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Name="StopAutoPlay" Width="24" Height="24" HorizontalAlignment="Left" Visibility="Collapsed" Click="StopListening_Click">
+                        <Button.ToolTip>
+                            Clear incoming controls
+                        </Button.ToolTip>
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Opacity" Value="0.1" />
+                                <Setter Property="Control.Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Canvas Width="24" Height="24">
+                                                <Path Fill="Black" Data="M 2,2 2,22 22,22 22,2 z" />
+                                            </Canvas>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Opacity" Value="1" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <!--<ScrollViewer VerticalScrollBarVisibility="Auto" Name="Re" CanContentScroll="True" Height="Auto" Grid.Row="1">
+                        <ScrollViewer.Template>
+                            <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                                <Grid x:Name="Grid" Background="{TemplateBinding Background}" ClipToBounds="False">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Rectangle x:Name="Corner" Grid.Column="0" Fill="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Grid.Row="1"/>
+                                    <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" CanContentScroll="{TemplateBinding CanContentScroll}" CanHorizontallyScroll="False" CanVerticallyScroll="False" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Grid.Column="1" Margin="{TemplateBinding Padding}" Grid.Row="0" ClipToBounds="False" />
+                                    <ScrollBar x:Name="PART_VerticalScrollBar" AutomationProperties.AutomationId="VerticalScrollBar" Cursor="Arrow" Grid.Column="0" Maximum="{TemplateBinding ScrollableHeight}" Minimum="0" Grid.Row="0" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </ScrollViewer.Template>-->
+                    <DockPanel Name="AutoAddPanel" LastChildFill="False" HorizontalAlignment="Left" Grid.Row="1">
+                        <DockPanel.Clip>
+                            <RectangleGeometry Rect="0,-10,9001,9001"></RectangleGeometry>
+                        </DockPanel.Clip>
+                    </DockPanel>
+                    <!--</ScrollViewer>-->
+                </Grid>
+                <Button Canvas.Bottom="0" Canvas.Right="10" Click="bc">Add</Button>
             </Canvas>
         </ScrollViewer>
         <Canvas>
