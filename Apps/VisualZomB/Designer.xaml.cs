@@ -36,6 +36,8 @@ using System451.Communication.Dashboard.ViZ.Properties;
 using System451.Communication.Dashboard.WPF.Controls;
 using System451.Communication.Dashboard.WPF.Controls.Designer;
 using System451.Communication.Dashboard.WPF.Design;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -58,6 +60,30 @@ namespace System451.Communication.Dashboard.ViZ
             Width = 0x4,
             Height = 0x8
         }
+
+
+        #region Win32 SystemMenu
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+
+        [DllImport("user32.dll")]
+        private static extern bool AppendMenu(IntPtr hMenu, int uFlags, int uIDNewItem, string lpNewItem);
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr CheckMenuItem(IntPtr hMenu, int uIDCheckItem, int uCheck);
+
+        const int WM_SYSCOMMAND = 0x112;
+        const int MF_SEPARATOR = 0x800;
+        const int MF_BYPOSITION = 0x400;
+        const int MF_CHECKED = 0x8;
+        const int MF_UNCHECKED = 0x0;
+        const int MF_STRING = 0x0;
+
+        const int AlwaysOnTopMenuID = 9066;
+        const int AboutMenuID = 9067;
+
+        #endregion
 
         Point dndopoint, opoint, oxpoint;
         object origSrc;
@@ -202,6 +228,8 @@ namespace System451.Communication.Dashboard.ViZ
             }
         }
 
+        IntPtr sysptr;
+
         protected override void OnSourceInitialized(EventArgs e)
         {
             base.OnSourceInitialized(e);
@@ -214,6 +242,40 @@ namespace System451.Communication.Dashboard.ViZ
                     Scrlview.Background = Brushes.Transparent;
                 }
             }
+
+            IntPtr handle = new WindowInteropHelper(this).Handle;
+            sysptr = GetSystemMenu(handle, false);
+
+            /// Create our new System Menu items just before the Close menu item
+            AppendMenu(sysptr, MF_SEPARATOR, 0, string.Empty); // <-- Add a menu seperator
+            AppendMenu(sysptr, 0, AlwaysOnTopMenuID, "Always on top");
+            AppendMenu(sysptr, 0, AboutMenuID, "About...");
+
+            // Attach our WndProc handler to this Window
+            HwndSource source = HwndSource.FromHwnd(handle);
+            source.AddHook(new HwndSourceHook(WndProc));
+        }
+
+        private static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            if (msg == WM_SYSCOMMAND)
+            {
+                switch (wParam.ToInt32())
+                {
+                    case AlwaysOnTopMenuID:
+                        var self = getDesigner();
+                        self.Topmost = !self.Topmost;
+                        CheckMenuItem(self.sysptr, AlwaysOnTopMenuID, self.Topmost ? MF_CHECKED : MF_UNCHECKED);
+                        handled = true;
+                        break;
+                    case AboutMenuID:
+                        getDesigner().MenuItem_Click(null, null);
+                        handled = true;
+                        break;
+                }
+            }
+
+            return IntPtr.Zero;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
