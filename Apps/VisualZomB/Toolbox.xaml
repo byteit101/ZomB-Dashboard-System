@@ -40,7 +40,23 @@
                                 <TextBlock Padding="10" TextWrapping="Wrap" Text="{Binding Path=Description}"></TextBlock>
                             </StackPanel>
                         </ListBoxItem.ToolTip>
-                        <Image Source="{Binding Path=Icon}" Width="32" Height="32" Margin="2" VerticalAlignment="Center" HorizontalAlignment="Center" SnapsToDevicePixels="True" />
+                        <Canvas Width="32" Height="32" Margin="2" SnapsToDevicePixels="True">
+                            <Image Width="32" Height="32" Source="{Binding Path=Icon}" VerticalAlignment="Center" HorizontalAlignment="Center" SnapsToDevicePixels="True" />
+
+                            <Path Data="M 32.84375 -5.0625 L 30.53125 -2.34375 L 26.96875 -2.71875 L 28.84375 0.34375 L 27.40625 3.59375 L 30.875 2.78125 L 33.53125 5.15625 L 33.8125 1.59375 L 36.90625 -0.1875 L 33.59375 -1.5625 L 32.84375 -5.0625 z ">
+                                <Path.Style>
+                                    <Style TargetType="{x:Type Path}">
+                                        <Setter Property="Fill" Value="Transparent" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Star}" Value="True">
+                                                <Setter Property="Fill" Value="#FFFFBB00" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Path.Style>
+                            </Path>
+                            
+                        </Canvas>
                     </ListBoxItem>
                 </DataTemplate>
             </ListBox.ItemTemplate>

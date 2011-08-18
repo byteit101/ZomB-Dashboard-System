@@ -142,7 +142,7 @@
                     </DockPanel>
                     <!--</ScrollViewer>-->
                 </Grid>
-                <Button Canvas.Bottom="0" Canvas.Right="10" Click="bc">Add</Button>
+                <!--<Button Canvas.Bottom="0" Canvas.Right="10" Click="bc">Add</Button>-->
             </Canvas>
         </ScrollViewer>
         <Canvas>

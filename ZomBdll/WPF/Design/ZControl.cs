@@ -28,6 +28,7 @@ namespace System451.Communication.Dashboard.WPF.Design
         public ZomBControlAttribute(string name)
         {
             Name = name;
+            Star = false;
         }
 
         public string Name { get; private set; }
@@ -35,6 +36,7 @@ namespace System451.Communication.Dashboard.WPF.Design
         public Type Type { get; internal set; }
         public ImageSource Icon { get; internal set; }
         public string IconName { get; set; }
+        public bool Star { get; set; }
     }
 
     [global::System.AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
