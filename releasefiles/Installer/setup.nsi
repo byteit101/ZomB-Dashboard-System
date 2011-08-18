@@ -438,7 +438,7 @@ Section "-un.ZomB" UNSEC0000
     Delete /REBOOTOK "ViZ.exe"
     Delete /REBOOTOK "Zaml.ico"
     Delete /REBOOTOK "Dashboardexe.ico"
-    ${UnRegisterExtension} ".zaml" "Run Zaml File"
+    ${UnRegisterExtension} ".zaml" "Zaml File"
 	Call un.RefreshShellIcons
     
     ${If} ${IsDirEmpty} `$INSTDIR\Bindings`

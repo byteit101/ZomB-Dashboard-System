@@ -128,10 +128,12 @@ NoBackup:
   StrCmp $0 "" 0 Skip
 Skip:
     WriteRegStr HKCR "$R0" "" "$R0"
-    WriteRegStr HKCR "$R0\shell" "" "open"
+    WriteRegStr HKCR "$R0\shell" "" "run"
     WriteRegStr HKCR "$R0\DefaultIcon" "" "$INSTDIR\Zaml.ico"
-  WriteRegStr HKCR "$R0\shell\open" "" "$R0"
-  WriteRegStr HKCR "$R0\shell\open\command" "" '"$R2" "%1"'
+  WriteRegStr HKCR "$R0\shell\run" "" "Run $R0"
+  WriteRegStr HKCR "$R0\shell\run\command" "" '"$R2" "%1"'
+  WriteRegStr HKCR "$R0\shell\open" "" "Edit $R0"
+  WriteRegStr HKCR "$R0\shell\open\command" "" '"$R2" -o "%1"'
  
   Pop $1
   Pop $0
