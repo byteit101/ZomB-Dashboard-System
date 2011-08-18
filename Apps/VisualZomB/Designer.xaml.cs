@@ -103,6 +103,7 @@ namespace System451.Communication.Dashboard.ViZ
         bool resizingform = false;
         Point orfPoing;
         Size orfSixe, wsize;
+        string preFile =  null;
 
         static Designer dsb = null;
 
@@ -289,6 +290,11 @@ namespace System451.Communication.Dashboard.ViZ
             }
             tbx.Closed += new EventHandler(tbx_Closed);
             listBox1.ItemsSource = Reflector.GetZomBDesignableInfos(Reflector.GetZomBDesignableClasses());
+            if (preFile != null)
+            {
+                LoadFile(preFile);
+                preFile = null;
+            }
         }
 
         void tbx_Closed(object sender, EventArgs e)
@@ -1265,6 +1271,11 @@ namespace System451.Communication.Dashboard.ViZ
                 lastSave = dlg.FileName;
                 LoadFile(dlg.FileName);
             }
+        }
+
+        public void PreLoadFile(string fileName)
+        {
+            this.preFile = fileName;
         }
 
         public void LoadFile(string fileName)

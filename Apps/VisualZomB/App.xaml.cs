@@ -40,6 +40,12 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 if (File.Exists(args[0]))
                     new Run(File.ReadAllText(args[0])).Show();
+                else if (args.Length > 1 && (args[0] == "-o" ||args[0] == "-open") && File.Exists(args[1]))
+                {
+                    var dsn = new Designer();
+                    dsn.PreLoadFile(args[1]);
+                    dsn.Show();
+                }
                 else
                 {
                     switch (args[0])
