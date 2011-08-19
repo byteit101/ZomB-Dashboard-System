@@ -36,8 +36,17 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer.PrimitiveContr
 
         // Using a DependencyProperty as the backing store for Foreground.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ForegroundProperty =
-            DependencyProperty.Register("Foreground", typeof(SolidColorBrush), typeof(GraphScale), new UIPropertyMetadata(Brushes.Black));
+            DependencyProperty.Register("Foreground", typeof(SolidColorBrush), typeof(GraphScale), new FrameworkPropertyMetadata(Brushes.Black, FrameworkPropertyMetadataOptions.AffectsRender));
 
+        public bool ShowScale
+        {
+            get { return (bool)GetValue(ShowScaleProperty); }
+            set { SetValue(ShowScaleProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ShowScale.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ShowScaleProperty =
+            DependencyProperty.Register("ShowScale", typeof(bool), typeof(GraphScale), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
 
         public double MaxX
         {
@@ -82,6 +91,8 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer.PrimitiveContr
         //Step function based off of the Perl Chart::Math::Axis library (http://search.cpan.org/~adamk/Chart-Math-Axis-1.06/)
         protected override void OnRender(DrawingContext drawingContext)
         {
+            if (!ShowScale)
+                return;
             var linepen = new Pen(Foreground, 1.0);
             var tface = new Typeface("Verdana");
             var emz = 12.0;
@@ -92,7 +103,7 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer.PrimitiveContr
             var workheight = this.ActualHeight - (height * 2);
             var numofmarkers = Math.Floor(this.ActualHeight / (height * 2.0));
             
-            var mag = Math.Max(GetMagnitude(MaxY), GetMagnitude(MinY));
+            var mag = Math.Min(299, Math.Max(GetMagnitude(MaxY), GetMagnitude(MinY)));
             var step = Math.Pow(10, mag + 1);
             var goodmax = (Math.Floor(MaxY / step) + 1) * step;
             var goodmin = (Math.Ceiling(MinY / step) - 1) * step;
@@ -109,9 +120,6 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer.PrimitiveContr
 
                 if (((nextgoodmax - nextgoodmin) / nextstep) > numofmarkers)
                     break;
-                if (li > 90)
-                {
-                }
                 step = nextstep;
                 goodmax = nextgoodmax;
                 goodmin = nextgoodmin;

@@ -148,6 +148,29 @@ namespace System451.Communication.Dashboard.WPF.Controls
         // Using a DependencyProperty as the backing store for AutoSize.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty AutoSizeProperty =
             DependencyProperty.Register("AutoSize", typeof(bool), typeof(DataGraph), new UIPropertyMetadata(false));
+        
+        [Design.ZomBDesignable(), Description("Show the scale?"), Category("Appearance")]
+        public bool ShowScale
+        {
+            get { return (bool)GetValue(ShowScaleProperty); }
+            set { SetValue(ShowScaleProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ShowScale.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ShowScaleProperty =
+            DependencyProperty.Register("ShowScale", typeof(bool), typeof(DataGraph), new UIPropertyMetadata(true));
+
+        [Design.ZomBDesignable(), Description("What color the scale should be"), Category("Appearance")]
+        public Brush ScaleColor
+        {
+            get { return (Brush)GetValue(ScaleColorProperty); }
+            set { SetValue(ScaleColorProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ScaleColor.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ScaleColorProperty =
+            DependencyProperty.Register("ScaleColor", typeof(Brush), typeof(DataGraph), new UIPropertyMetadata(Brushes.Black));
+
 
         [Design.ZomBDesignable(), Description("The maximum value we are going to get."), Category("Behavior")]
         public double Max
