@@ -45,7 +45,7 @@ namespace System451.Communication.Dashboard.Net
 
         internal DataPlayerSource(ZomBUrl url)
         {
-            FilePath = url.Path;
+            FilePath = url.Path.Substring(1);//remove first char
         }
 
         /// <summary>

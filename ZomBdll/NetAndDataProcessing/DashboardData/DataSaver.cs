@@ -48,12 +48,13 @@ namespace System451.Communication.Dashboard
 
         internal DataSaver(ZomBUrl url)
         {
-            if (url.Path == "")
+            var urlPath = url.Path.Substring(1);//remove first char
+            if (urlPath == "")
                 fpath = BTZomBFingerFactory.DefaultSaveLocation + "\\ZCapture" + (DateTime.Now.Ticks.ToString("x")) + ".zcap";
-            else if (!url.Path.Contains(":\\"))//not absoloute
-                fpath = BTZomBFingerFactory.DefaultSaveLocation + "\\" + url.Path;
+            else if (!urlPath.Contains(":\\"))//not absoloute
+                fpath = BTZomBFingerFactory.DefaultSaveLocation + "\\" + urlPath;
             else
-                fpath = url.Path;
+                fpath = urlPath;
         }
 
         ~DataSaver()

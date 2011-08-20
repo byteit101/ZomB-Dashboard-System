@@ -129,7 +129,7 @@ namespace System451.Communication.Dashboard.Net
                 throw new ArgumentNullException("zombUrl is null");
             if (!zombUrl.StartsWith("zomb://", StringComparison.CurrentCultureIgnoreCase))
                 throw new ArgumentException("Url is not a ZomB url");
-            var r = new Regex("^zomb://([\\.0-9a-zA-Z]+)(\\:([0-9]{3,5}))?/([a-zA-Z]+[0-9a-zA-Z]*)(/.*)?$", RegexOptions.IgnoreCase);
+            var r = new Regex("^zomb://([\\.0-9a-zA-Z]+)(\\:([0-9]{3,5}))?/([a-zA-Z]+[0-9a-zA-Z]*)([/|\\?].*)?$", RegexOptions.IgnoreCase);
             var res = r.Match(zombUrl);
             //no matches? let it throw!
             string to = res.Groups[1].Value;
@@ -138,8 +138,6 @@ namespace System451.Communication.Dashboard.Net
             try
             {
                 Path = res.Groups[5].Value;
-                if (Path.StartsWith("/"))
-                    Path = Path.Substring(1);
             }
             catch { }
             SourceType = FindSourceType();
@@ -247,7 +245,7 @@ namespace System451.Communication.Dashboard.Net
             string iadr = IPAddress.ToString();
             if (useTeamDot && iadr.StartsWith("10.") && iadr.EndsWith(".2"))
                 iadr = "." + (int.Parse(iadr.Substring(3).Replace(".", "")) / 10);
-            return "zomb://" + iadr + port + "/" + SourceName;
+            return "zomb://" + iadr + port + "/" + SourceName + (string.IsNullOrEmpty(Path) ? "" : Path);
         }
     }
 
@@ -288,8 +286,7 @@ namespace System451.Communication.Dashboard.Net
             {
                 if (useTeamDot == null)
                 {
-                    var str = item.ToString();
-                    res += str.Substring(str.LastIndexOf('/')) + ";";
+                    res += "/" + item.SourceName + ";";
                 }
                 else
                     res += item.ToString((bool)useTeamDot) + ";";
