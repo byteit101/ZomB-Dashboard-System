@@ -8,6 +8,11 @@
                 <ControlTemplate TargetType="{x:Type ZomB:AutoPoint}">
                     <Border Padding="{TemplateBinding Padding}">
                         <Canvas Name="svg2" Width="24" Height="24" ToolTip="{TemplateBinding Name}">
+                            <Canvas.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Copy Name" Name="PART_ctxMenu_Copy" />
+                                </ContextMenu>
+                            </Canvas.ContextMenu>
                             <Canvas.Resources>
                                 <LinearGradientBrush x:Key="linearGradient3757" MappingMode="RelativeToBoundingBox" StartPoint="0,0" EndPoint="1,1">
                                     <LinearGradientBrush.GradientStops>

@@ -25,9 +25,11 @@ using System.Windows.Controls.Primitives;
 namespace System451.Communication.Dashboard.WPF.Controls
 {
     [TemplatePart(Name = "PART_Pop", Type = typeof(Popup))]
+    [TemplatePart(Name = "PART_ctxMenu_Copy", Type = typeof(MenuItem))]
     public class AutoPoint : Control
     {
         Popup pup;
+        MenuItem copyitem;
         static AutoPoint()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(AutoPoint),
@@ -50,6 +52,11 @@ namespace System451.Communication.Dashboard.WPF.Controls
         {
             base.OnApplyTemplate();
             pup = base.GetTemplateChild("PART_Pop") as Popup;
+            copyitem = base.GetTemplateChild("PART_ctxMenu_Copy") as MenuItem;
+            copyitem.Click += delegate
+            {
+                Clipboard.SetText(this.Name);
+            };
         }
 
         new public string Name
