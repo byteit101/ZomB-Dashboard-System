@@ -214,6 +214,7 @@
     <Compile Include="Utils\Delegates.cs" />
     <Compile Include="Utils\InstallUtils.cs" />
     <Compile Include="Utils\RangeAndValue.cs" />
+    <Compile Include="Utils\Updater.cs" />
     <Compile Include="WPF\Controls\AnalogMeter.cs">
     </Compile>
     <Compile Include="WPF\Controls\AlertControl.cs" />

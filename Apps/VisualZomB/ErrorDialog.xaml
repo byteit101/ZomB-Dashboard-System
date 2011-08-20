@@ -9,10 +9,10 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="2" Name="stackPanel1" HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,5,0,0">
-            <Label Content="A copy of this report has been saved to C:\ZomB.log" Name="label1" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,5,10,5" />
+            <Label Content="{Binding Path=BottomMessage, RelativeSource={RelativeSource FindAncestor, AncestorType=my:ErrorDialog, AncestorLevel=1}}" Name="label1" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,5,10,5" />
             <Button Content="Close" Height="23" Name="button1" Width="75" Click="button1_Click" />
         </StackPanel>
-        <Label Content="Ack! ZomB encountered an error. Please let the developers know about this." Name="label2" VerticalAlignment="Top" />
+        <Label Content="{Binding Path=TopMessage, RelativeSource={RelativeSource FindAncestor, AncestorType=my:ErrorDialog, AncestorLevel=1}}" Name="label2" VerticalAlignment="Top" />
         <TextBox Grid.Row="1" Name="textBox1" IsReadOnly="True" Text="{Binding Path=Message, RelativeSource={RelativeSource FindAncestor, AncestorType=my:ErrorDialog, AncestorLevel=1}}" Background="LightGray" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
     </Grid>
 </Window>

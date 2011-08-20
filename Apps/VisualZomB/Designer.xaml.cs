@@ -38,6 +38,7 @@ using System451.Communication.Dashboard.WPF.Controls.Designer;
 using System451.Communication.Dashboard.WPF.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
+using System.Diagnostics;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -295,6 +296,58 @@ namespace System451.Communication.Dashboard.ViZ
                 LoadFile(preFile);
                 preFile = null;
             }
+            ThreadPool.QueueUserWorkItem(new WaitCallback(CheckForUpdates));
+        }
+
+        private void CheckForUpdates(object args)
+        {
+            Thread.Sleep(3141);//wait pi seconds before continuing
+            string url = null;
+            try
+            {
+                url = Updater.Check();
+            }
+            catch { }
+
+            if (url != null)//whoa! updates!
+            {
+                try
+                {
+                    string path = Updater.Download(url);
+                    string updatepath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + Path.DirectorySeparatorChar + "ZomB Update.exe";
+                    File.Copy(path, updatepath, true);
+                    if (TSAlert("An update for ZomB is avalible, and has been downloaded to your desktop.\r\nWould you like to update now?", true))
+                    {
+                        Process.Start(updatepath);
+                        TSClose();
+                    }
+                }
+                catch
+                {
+                    TSAlert("An update for ZomB is avalible, but automatic download failed. Please manually update ZomB:\r\n\r\n" + url, false);
+                }
+            }
+        }
+        private delegate bool alerter(string message, bool yesno);
+        private bool TSAlert(string message, bool yesno)
+        {
+            return (bool)this.Dispatcher.Invoke(new alerter(NTSAlert), message, yesno);
+        }
+
+        private void TSClose()
+        {
+            this.Dispatcher.Invoke(new Utils.VoidFunction(tbx.Close));
+        }
+
+        private bool NTSAlert(string message, bool yesno)
+        {
+            if (yesno)
+            {
+                return MessageBox.Show(message, "", MessageBoxButton.YesNo) ==  MessageBoxResult.Yes;
+            }
+            else
+                new ErrorDialog { Message = message, TopMessage = "", BottomMessage = "" }.ShowDialog();
+            return false;
         }
 
         void tbx_Closed(object sender, EventArgs e)
