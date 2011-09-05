@@ -23,7 +23,7 @@ using System.Text;
 
 namespace System451.Communication.Dashboard.Net
 {
-    [DataSource("TCP2")]
+    [DataSource("TCP2", "ZomB's TCP connections (RemoteData, ZomB->Robot)")]
     public class TCPDataSender: IDataSender
     {
         TcpListener cRIOConnection;

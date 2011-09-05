@@ -86,24 +86,53 @@ namespace System451.Communication.Dashboard.Net
         public DataSourceAttribute(string sourceName)
         {
             this.SourceName = sourceName;
+            this.Description = "";
             this.ConstructorFormat = "";
+            this.IgnoreClones = true;
         }
 
         /// <summary>
         /// Allows the ZomB URL parser to automaticaly find and instance a DataSource
         /// </summary>
         /// <param name="sourceName">The name of this source (ie DBPacket)</param>
-        /// <param name="constructorFormat">The format of the constructor, leave blank if it accepts empty constructor. Otherwise, use the format "_name,_required,[_optional,[o_ptional" for the constructor. All values are case-insensitive, shorthand is specified with the underscore.</param>
-        public DataSourceAttribute(string sourceName, string constructorFormat)
+        /// <param name="description">A quick description of what this source does</param>
+        public DataSourceAttribute(string sourceName, string description)
         {
             this.SourceName = sourceName;
+            this.Description = description;
+            this.ConstructorFormat = "";
+            this.IgnoreClones = true;
+        }
+
+        /// <summary>
+        /// Allows the ZomB URL parser to automaticaly find and instance a DataSource
+        /// </summary>
+        /// <param name="sourceName">The name of this source (ie DBPacket)</param>
+        /// <param name="description">A quick description of what this source does</param>
+        /// <param name="constructorFormat">The format of the constructor, leave blank if it accepts empty constructor. Otherwise, use the format "_name,_required,[_optional,[o_ptional" for the constructor. All values are case-insensitive, shorthand is specified with the underscore.</param>
+        public DataSourceAttribute(string sourceName, string description, string constructorFormat)
+        {
+            this.SourceName = sourceName;
+            this.Description = description;
             this.ConstructorFormat = constructorFormat;
+            this.IgnoreClones = true;
         }
 
         /// <summary>
         /// The name of this source (ie DBPacket)
         /// </summary>
         public string SourceName { get; private set; }
+
+        /// <summary>
+        /// A quick description of what this source does
+        /// </summary>
+        public string Description { get; private set; }
+
+        /// <summary>
+        /// Ignore double attributes to one class (default true).
+        /// Useful for name-based behaviors
+        /// </summary>
+        public bool IgnoreClones { get; set; }
 
         /// <summary>
         /// The format of the constructor, leave blank if it accepts empty constructor.
@@ -118,6 +147,36 @@ namespace System451.Communication.Dashboard.Net
         /// $ denotes the service must be passed in (path on server as string)
         /// </remarks>
         public string ConstructorFormat { get; private set; }
+    }
+
+    public class TypedDataSourceAttributeComparer :IComparable, IComparable<TypedDataSourceAttributeComparer>
+    {
+        public Type Type { get; set; }
+        public DataSourceAttribute DataSourceAttribute { get; set; }
+
+
+        #region IComparable Members
+
+        public int CompareTo(object obj)
+        {
+            return this.CompareTo((obj as TypedDataSourceAttributeComparer));
+        }
+
+        #endregion
+
+        #region IComparable<TypedDataSourceAttributeComparer> Members
+
+        public int CompareTo(TypedDataSourceAttributeComparer other)
+        {
+            int r = this.Type.Name.CompareTo(other.Type.Name);
+            if (r == 0)
+            {
+                return this.DataSourceAttribute.SourceName.CompareTo(other.DataSourceAttribute.SourceName);
+            }
+            return r;
+        }
+
+        #endregion
     }
 
     [TypeConverter(typeof(ZomBUrlConverter))]

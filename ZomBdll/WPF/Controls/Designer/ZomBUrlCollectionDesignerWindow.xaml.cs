@@ -25,6 +25,7 @@ using System.Windows.Controls.Primitives;
 using System451.Communication.Dashboard.Net;
 using System.Collections.Specialized;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace System451.Communication.Dashboard.WPF.Controls.Designer
 {
@@ -38,12 +39,44 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
         public ZomBUrlCollectionDesignerWindow(Collection<string> obj, int team)
         {
             Object = obj;
-            Team=team;
+            Team = team;
             lastid = Object.Count;
             InitializeComponent();
             if (Object.Count > 0)
             {
                 PopulateList();
+            }
+            FindUrls();
+        }
+
+        private void FindUrls()
+        {
+            var typers = new Collection<Type>();
+            var isrc = new System.Collections.Generic.SortedList<TypedDataSourceAttributeComparer, DataSourceAttribute>();
+            KnownTypes.ItemsSource = isrc;
+            foreach (var item in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (var itype in item.GetTypes())
+                {
+                    foreach (var cat in itype.GetCustomAttributes(typeof(DataSourceAttribute), false))
+                    {
+                        var xcat = (cat as DataSourceAttribute);
+                        if (xcat.IgnoreClones)
+                        {
+                            foreach (var cloneposs in typers)
+                            {
+                                if (cloneposs == itype)
+                                {
+                                    goto noadd;
+                                }
+                            }
+                        }
+                        isrc.Add(new TypedDataSourceAttributeComparer { DataSourceAttribute = xcat, Type = itype }, xcat);
+                        typers.Add(itype);
+                    noadd:
+                        continue;
+                    }
+                }
             }
         }
 
@@ -79,36 +112,18 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             try
             {
                 haltevents = true;
-                nameBox.Text = ListItems.SelectedItem as string;
-                if (nameBox.Text.EndsWith("/TCP"))
+                string nbtxt = nameBox.Text = ListItems.SelectedItem as string;
+                nbtxt = nbtxt.Substring(7);//zomb://
+                nbtxt = nbtxt.Substring(nbtxt.IndexOf("/"));
+                KnownTypes.UnselectAll();
+                foreach (var item in KnownTypes.ItemsSource)
                 {
-                    TCPBtn.IsChecked = true;
-                    nameBox.IsReadOnly = true;
-                }
-                else if (nameBox.Text.EndsWith("/TCP2"))
-                {
-                    TCP2Btn.IsChecked = true;
-                    nameBox.IsReadOnly = true;
-                }
-                else if (nameBox.Text.EndsWith("/DBPkt"))
-                {
-                    DBPacketBtn.IsChecked = true;
-                    nameBox.IsReadOnly = true;
-                }
-                else if (nameBox.Text.EndsWith("/DBPacket"))
-                {
-                    DBPacketBtn.IsChecked = true;
-                    nameBox.IsReadOnly = true;
-                }
-                else if (nameBox.Text.EndsWith("/Smart"))
-                {
-                    SmartBtn.IsChecked = true;
-                    nameBox.IsReadOnly = true;
-                }
-                else
-                {
-                    GeneralCustardBtn.IsChecked = true;
-                    nameBox.IsReadOnly = false;
+                    var kvpair = (KeyValuePair<TypedDataSourceAttributeComparer, DataSourceAttribute>)item;
+                    if (nbtxt == ("/" + kvpair.Value.SourceName) || nbtxt.StartsWith("/" + kvpair.Value.SourceName + "?") || nbtxt.StartsWith("/" + kvpair.Value.SourceName + "/"))
+                    {
+                        KnownTypes.SelectedItem = item;
+                        break;
+                    }
                 }
                 haltevents = false;
             }
@@ -123,53 +138,69 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
             {
                 haltevents = true;
                 int si = ListItems.SelectedIndex;
-                Object[Object.IndexOf(ListItems.SelectedItem as string)] = nameBox.Text;
+                Object[si] = nameBox.Text;
                 PopulateList();
                 ListItems.SelectedIndex = si;
                 haltevents = false;
             }
         }
 
-        private void GeneralCustardBtn_Checked(object sender, RoutedEventArgs e)
+        private void GeneralCustardBtn_Checked(object sender, SelectionChangedEventArgs e)
         {
-            foreach (var item in toglepanel.Children)
+            if (haltevents)
+                return;
+            try
             {
-                if (item != sender)
-                    (item as ToggleButton).IsChecked = false;
+                haltevents = true;
+                string nbtxt = nameBox.Text;
+                if (string.IsNullOrEmpty(nbtxt))
+                    return;
+                nbtxt = nbtxt.Substring(7);//zomb://
+                string nbtxtstart = "zomb://" + nbtxt.Substring(0, nbtxt.IndexOf("/") + 1);
+                nbtxt = nbtxt.Substring(nbtxt.IndexOf("/") + 1);
+                var newtxt = ((KeyValuePair<TypedDataSourceAttributeComparer, DataSourceAttribute>)KnownTypes.SelectedItem).Value.SourceName;
+                if (nbtxt.Contains('/'))
+                {
+                    nbtxt = newtxt + nbtxt.Substring(nbtxt.IndexOf("/"));
+                }
+                else if (nbtxt.Contains('?'))
+                {
+                    nbtxt = newtxt + nbtxt.Substring(nbtxt.IndexOf("?"));
+                }
+                else
+                {
+                    nbtxt = newtxt;
+                }
+                nameBox.Text = nbtxtstart + nbtxt;
+                haltevents = false;
+                nameBox_TextChanged(sender, null);
             }
-            if (sender == GeneralCustardBtn)
-            {
-                nameBox.IsReadOnly = false;
-            }
-            else if (sender == TCPBtn)
-            {
-                nameBox.IsReadOnly = true;
-                nameBox.Text = "zomb://." + Team + "/TCP";
-            }
-            else if (sender == TCP2Btn)
-            {
-                nameBox.IsReadOnly = true;
-                nameBox.Text = "zomb://." + Team + "/TCP2";
-            }
-            else if (sender == DBPacketBtn)
-            {
-                nameBox.IsReadOnly = true;
-                nameBox.Text = "zomb://." + Team + "/DBPkt";
-            }
-            else if (sender == SmartBtn)
-            {
-                nameBox.IsReadOnly = true;
-                nameBox.Text = "zomb://." + Team + "/Smart";
-            }
+            catch { haltevents = false; }
         }
 
         private void nameBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (nameBox.IsReadOnly)
+            if (haltevents)
+                return;
+            try
             {
-                GeneralCustardBtn.IsChecked = true;
-                GeneralCustardBtn_Checked(GeneralCustardBtn, null);
+                haltevents = true;
+                string nbtxt = nameBox.Text;
+                nbtxt = nbtxt.Substring(7);//zomb://
+                nbtxt = nbtxt.Substring(nbtxt.IndexOf("/"));
+                KnownTypes.UnselectAll();
+                foreach (var item in KnownTypes.ItemsSource)
+                {
+                    var kvpair = (KeyValuePair<TypedDataSourceAttributeComparer, DataSourceAttribute>)item;
+                    if (nbtxt == ("/" + kvpair.Value.SourceName) || nbtxt.StartsWith("/" + kvpair.Value.SourceName + "?") || nbtxt.StartsWith("/" + kvpair.Value.SourceName + "/"))
+                    {
+                        KnownTypes.SelectedItem = item;
+                        break;
+                    }
+                }
+                haltevents = false;
             }
+            catch { haltevents = false; }
         }
     }
 }

@@ -26,7 +26,7 @@ using System.Windows.Threading;
 
 namespace System451.Communication.Dashboard.Net
 {
-    [DataSource("TCP")]
+    [DataSource("TCP", "ZomB's TCP connections (Robot->ZomB)")]
     public class TCPDataSource : IDashboardDataSource, IDashboardDataDataSource, IDashboardPeekableDataSource
     {
         public const int DefaultPort = 9066;

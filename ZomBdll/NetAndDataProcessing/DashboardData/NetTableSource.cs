@@ -27,8 +27,8 @@ using System.Linq;
 
 namespace System451.Communication.Dashboard.Net
 {
-    [DataSource("NetTable")]
-    [DataSource("SmartNG")]
+    [DataSource("NetTable", "2012 SmartDashboard NetworkTable support (Expands SmartGroups)", IgnoreClones=false)]
+    [DataSource("SmartNG", "2012 SmartDashboard NetworkTable support", IgnoreClones = false)]
     public class NetTableSource : IDashboardDataSource, IDashboardDataDataSource, IDashboardPeekableDataSource, IDataSender
     {
         public const int NTPort = 1735;

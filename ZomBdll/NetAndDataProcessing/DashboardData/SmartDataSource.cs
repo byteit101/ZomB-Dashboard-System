@@ -26,7 +26,7 @@ using System.Windows.Threading;
 
 namespace System451.Communication.Dashboard.Net
 {
-    [DataSource("Smart")]
+    [DataSource("Smart", "2011 SmartDashboard Protocol. Depreciated.")]
     public class SmartDataSource : IDashboardDataSource, IDashboardStatusDataSource, IDashboardDataDataSource, IDashboardPeekableDataSource
     {
         public const int DBPacketPort = 1165;

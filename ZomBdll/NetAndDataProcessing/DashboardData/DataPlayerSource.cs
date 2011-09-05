@@ -26,7 +26,7 @@ namespace System451.Communication.Dashboard.Net
     /// <summary>
     /// DataPlayerSource "plays" the data saved by DataSaver
     /// </summary>
-    [DataSource("File")]
+    [DataSource("File", "Loads ZomB save files. Usage: zomb://.0/File/C:\\Path.to.file")]
     public class DataPlayerSource : IDashboardDataSource, IDashboardStatusDataSource, IDashboardDataDataSource
     {
         ZomBDataLookup vls = new ZomBDataLookup();

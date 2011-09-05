@@ -26,8 +26,8 @@ using System.Windows.Threading;
 
 namespace System451.Communication.Dashboard.Net
 {
-    [DataSource("DBPacket")]
-    [DataSource("DBPkt")]
+    [DataSource("DBPacket", "Original ZomB Dashboard Packet format. Requires ZomB plugin on robot.")]
+    [DataSource("DBPkt", "Original ZomB Dashboard Packet format. Requires ZomB plugin on robot.")]
     public class DashboardPacketDataSource : IDashboardDataSource, IDashboardStatusDataSource, IDashboardDataDataSource, IDashboardPeekableDataSource
     {
         public const int DBPacketPort = 1165;

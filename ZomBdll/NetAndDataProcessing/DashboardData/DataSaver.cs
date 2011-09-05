@@ -28,7 +28,7 @@ namespace System451.Communication.Dashboard
     /// <summary>
     /// DataSaver saves data from the DDH to a file that can be read by DataPlayerSource
     /// </summary>
-    [DataSource("DataSave")]
+    [DataSource("DataSave", "Saves ZomB save files. Usage: zomb://.0/DataSave/[C:\\Path.to.file]")]
     public class DataSaver : IZomBMonitor
     {
         Queue<byte[]> buffer = new Queue<byte[]>();
