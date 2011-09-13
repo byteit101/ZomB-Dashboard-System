@@ -48,6 +48,10 @@
     <AssemblyOriginatorKeyFile>ZomB.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ext\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="InTheHand.Net.Personal">
       <Private>False</Private>
     </Reference>
@@ -56,6 +60,10 @@
     </Reference>
     <Reference Include="PresentationFramework">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="SharpPG, Version=0.3.1.0, Culture=neutral, PublicKeyToken=6a9e832084c9d300, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ext\SharpPG.dll</HintPath>
     </Reference>
     <Reference Include="SlimDX">
       <Private>False</Private>
@@ -344,6 +352,8 @@
     <None Include="ext\libvlccore.dll" />
     <None Include="ext\Vlc.DotNet.Core.dll" />
     <None Include="ext\Vlc.DotNet.Forms.dll" />
+    <Content Include="ext\ICSharpCode.SharpZipLib.dll" />
+    <Content Include="ext\SharpPG.dll" />
     <Content Include="ext\WebCam_Capture\%40PSC_ReadMe_1339_10.txt" />
     <Content Include="ext\WebCam_Capture\CAMERA.ICO" />
     <Content Include="ext\x64\32feetWidcomm.dll" />

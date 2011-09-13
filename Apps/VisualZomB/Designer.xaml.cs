@@ -302,21 +302,21 @@ namespace System451.Communication.Dashboard.ViZ
         private void CheckForUpdates(object args)
         {
             Thread.Sleep(3141);//wait pi seconds before continuing
-            string url = null;
+            UpdateData url = new UpdateData();
             try
             {
                 url = Updater.Check();
             }
             catch { }
 
-            if (url != null)//whoa! updates!
+            if (url.UpdateAvailable == true)//whoa! updates!
             {
                 try
                 {
-                    string path = Updater.Download(url);
                     string updatepath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + Path.DirectorySeparatorChar + "ZomB Update.exe";
-                    File.Copy(path, updatepath, true);
-                    if (TSAlert("An update for ZomB is avalible, and has been downloaded to your desktop.\r\nWould you like to update now?", true))
+                    if (!Updater.Download(url, updatepath))
+                        TSAlert("An update for ZomB is avalible, but automatic download failed. Please manually update ZomB:\r\n\r\n" + url, false);
+                    if (TSAlert("An update for ZomB is avalible, and has been downloaded & verified to your desktop.\r\nWould you like to update now?", true))
                     {
                         Process.Start(updatepath);
                         TSClose();
