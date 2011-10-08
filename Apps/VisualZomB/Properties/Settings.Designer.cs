@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.Configuration;
 namespace System451.Communication.Dashboard.ViZ.Properties {
     
     
@@ -121,6 +122,7 @@ namespace System451.Communication.Dashboard.ViZ.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [SettingsSerializeAs(SettingsSerializeAs.Binary)]
         public global::System.Collections.Specialized.StringDictionary Profile {
             get {
                 return ((global::System.Collections.Specialized.StringDictionary)(this["Profile"]));

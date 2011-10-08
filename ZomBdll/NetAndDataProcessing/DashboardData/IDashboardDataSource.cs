@@ -239,6 +239,12 @@ namespace System451.Communication.Dashboard.Net
                     return typeof(DataPlayerSource);
                 case "Smart":
                     return typeof(SmartDataSource);
+                case "SmartNG":
+                    return typeof(NetTableSource);
+                case "NetTable":
+                    return typeof(NetTableSource);
+                case "Serial":
+                    return typeof(SerialDataSource);
             }
             foreach (var item in AppDomain.CurrentDomain.GetAssemblies())
             {

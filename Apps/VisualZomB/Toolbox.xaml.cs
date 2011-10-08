@@ -38,7 +38,7 @@ namespace System451.Communication.Dashboard.ViZ
             {
                 if (Settings.Default.Profile == null)
                     Settings.Default.Profile = new System.Collections.Specialized.StringDictionary();
-                foreach (KeyValuePair<string, string> item in Settings.Default.Profile)
+                foreach (System.Collections.DictionaryEntry item in Settings.Default.Profile)
                 {
                     var mi = new MenuItem();
                     mi.Header = item.Key;

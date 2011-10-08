@@ -78,6 +78,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider">
@@ -99,6 +100,7 @@
     </Compile>
     <Compile Include="NetAndDataProcessing\DashboardData\NetTableSource.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\EBinaryReader.cs" />
+    <Compile Include="NetAndDataProcessing\DashboardData\SerialDataSource.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\SmartDataSource.cs" />
     <Compile Include="NetAndDataProcessing\Socket\TsUdpClient.cs" />
     <Compile Include="NetAndDataProcessing\Socket\TsTcpClient.cs" />
