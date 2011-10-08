@@ -1677,54 +1677,31 @@ namespace System451.Communication.Dashboard.ViZ
             }
         }
 
-        public void SaveAsProfile(int profileNumber)
+        public void SaveAsProfile(string profileName)
         {
             //team#|Ignore/continue|urls
             // invalid packets: 3 source: 5 team: 7 (designerProps[2] as Label)
             string profileString = "";
-            profileString += (designerProps[7] as TextBox).Text;
-            profileString += "|";
-            profileString += (designerProps[3] as ComboBox).Text;
-            profileString += "|";
+            profileString += (designerProps[7] as TextBox).Text + "|";
+            profileString += (designerProps[3] as ComboBox).Text + "|";
             profileString += ZomBUrlSources;
-            switch (profileNumber)
-            {
-                case 1:
-                    Settings.Default.Profile1 = profileString;
-                    Settings.Default.Save();
-                    break;
-                case 2:
-                    Settings.Default.Profile2 = profileString;
-                    Settings.Default.Save();
-                    break;
-                case 3:
-                    Settings.Default.Profile3 = profileString;
-                    Settings.Default.Save();
-                    break;
-                default:
-                    System.Windows.Forms.MessageBox.Show("Invalid profile number");
-                    break;
+            if (Settings.Default.Profile == null)
+                Settings.Default.Profile = new System.Collections.Specialized.StringDictionary();
+            if (Settings.Default.Profile.ContainsKey(profileName))
+            { 
+                Settings.Default.Profile[profileName]=profileString;
             }
+            else
+            {
+                Settings.Default.Profile.Add(profileName, profileString);
+            }
+            Settings.Default.Save();
         }
 
-        public void LoadProfile(int profileNumber)
+        public void LoadProfile(string profileName)
         {
-            string profileString = "";
-            switch (profileNumber)
-            {
-                case 1:
-                    profileString = Settings.Default.Profile1;
-                    break;
-                case 2:
-                    profileString = Settings.Default.Profile2;
-                    break;
-                case 3:
-                    profileString = Settings.Default.Profile3;
-                    break;
-                default:
-                    System.Windows.Forms.MessageBox.Show("Invalid profile number");
-                    break;
-            }
+            string profileString = Settings.Default.Profile[profileName];
+        
             string teamnumberp, sourcep, invalidactionp;
             teamnumberp = profileString.Substring(0, profileString.IndexOf('|'));
             profileString = profileString.Substring(profileString.IndexOf('|') + 1);

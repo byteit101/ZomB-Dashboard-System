@@ -18,6 +18,8 @@
 using System.Windows;
 using System.Windows.Input;
 using System451.Communication.Dashboard.ViZ.Properties;
+using System.Windows.Controls;
+using System.Collections.Generic;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -30,8 +32,25 @@ namespace System451.Communication.Dashboard.ViZ
         {
             InitializeComponent();
             DockCheck.IsChecked = Settings.Default.EmbeddedTbx;
+            reload();
         }
-
+            public void reload()
+            {
+                if (Settings.Default.Profile == null)
+                    Settings.Default.Profile = new System.Collections.Specialized.StringDictionary();
+                foreach (KeyValuePair<string, string> item in Settings.Default.Profile)
+                {
+                    var mi = new MenuItem();
+                    mi.Header = item.Key;
+                    mi.Click += new RoutedEventHandler(SaveProfile1_Click);
+                    SaveProfileMenu.Items.Add(mi);
+                    mi = new MenuItem();
+                    mi.Header = item.Key;
+                    mi.Click += new RoutedEventHandler(LoadProfile1_Click);
+                    LoadProfileMenu.Items.Add(mi);
+                }
+            }
+        
         private void PropScroller_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             PropScroller.ScrollToHorizontalOffset(PropScroller.HorizontalOffset - e.Delta);
@@ -72,32 +91,26 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void SaveProfile1_Click(object sender, RoutedEventArgs e)
         {
-            Designer.getDesigner().SaveAsProfile(1);
-        }
-
-        private void SaveProfile2_Click(object sender, RoutedEventArgs e)
-        {
-            Designer.getDesigner().SaveAsProfile(2);
-        }
-
-        private void SaveProfile3_Click(object sender, RoutedEventArgs e)
-        {
-            Designer.getDesigner().SaveAsProfile(3);
+            Designer.getDesigner().SaveAsProfile(((MenuItem)sender).Header.ToString());
         }
 
         private void LoadProfile1_Click(object sender, RoutedEventArgs e)
         {
-            Designer.getDesigner().LoadProfile(1);
+            Designer.getDesigner().LoadProfile(((MenuItem)sender).Header.ToString());
         }
 
-        private void LoadProfile2_Click(object sender, RoutedEventArgs e)
+        private void NewProfile_Click(object sender, RoutedEventArgs e)
         {
-            Designer.getDesigner().LoadProfile(2);
-        }
-
-        private void LoadProfile3_Click(object sender, RoutedEventArgs e)
-        {
-            Designer.getDesigner().LoadProfile(3);
+            string name = System.Guid.NewGuid().ToString().Substring(0, 5);
+            Designer.getDesigner().SaveAsProfile(name);
+            var mi = new MenuItem();
+            mi.Header = name;
+            mi.Click += new RoutedEventHandler(SaveProfile1_Click);
+            SaveProfileMenu.Items.Add(mi);
+            mi = new MenuItem();
+            mi.Header = name;
+            mi.Click += new RoutedEventHandler(LoadProfile1_Click);
+            LoadProfileMenu.Items.Add(mi);
         }
     }
 }
