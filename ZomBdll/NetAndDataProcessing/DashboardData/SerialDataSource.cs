@@ -125,6 +125,8 @@ namespace System451.Communication.Dashboard.Net
                 catch
                 {
                 }
+                if (killer.IsOpen)
+                    killer.Close();
             }
         }
 
@@ -179,6 +181,7 @@ namespace System451.Communication.Dashboard.Net
         {
             //number of errors
             int nume = 0;
+            killer.Open();
             while (isrunning)
             {
                 try
@@ -187,24 +190,28 @@ namespace System451.Communication.Dashboard.Net
                     if (line[0] != ' ' && line[0] != ';' && line[0] != '/' && line[0] != '#')
                     {
                         //Get the items in a dictionary
-                        ZomBDataLookup vals = SplitParams(line);
-                        if (peeking)
+                        try
                         {
-                            foreach (var keys in vals)
+                            ZomBDataLookup vals = SplitParams(line);
+                            if (peeking)
                             {
-                                dp.Invoke(cb, keys.Key);
+                                foreach (var keys in vals)
+                                {
+                                    dp.Invoke(cb, keys.Key);
+                                }
+                            }
+                            else
+                            {
+                                kys = vals;
+
+                                //Fire events
+                                if (DataRecieved != null)
+                                    DataRecieved(this, new EventArgs());
+                                if (NewDataRecieved != null)
+                                    NewDataRecieved(this, new NewDataRecievedEventArgs(vals));
                             }
                         }
-                        else
-                        {
-                            kys = vals;
-
-                            //Fire events
-                            if (DataRecieved != null)
-                                DataRecieved(this, new EventArgs());
-                            if (NewDataRecieved != null)
-                                NewDataRecieved(this, new NewDataRecievedEventArgs(vals));
-                        }
+                        catch { }
                     }
                     if (nume > 0)
                         nume--;
@@ -212,6 +219,7 @@ namespace System451.Communication.Dashboard.Net
                 catch (ThreadAbortException)
                 {
                     isrunning = false;
+                    killer.Close();
                     return;
                 }
                 catch (Exception ex)
@@ -221,6 +229,7 @@ namespace System451.Communication.Dashboard.Net
                     if (nume > 10)
                     {
                         isrunning = false;
+                        killer.Close();
                         DoError(new Exception("10 consecutive errors were encountered, stopping DashboardDataHub"));
                         isrunning = false;
                         return;
