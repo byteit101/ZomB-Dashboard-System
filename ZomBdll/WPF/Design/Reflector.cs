@@ -31,6 +31,8 @@ namespace System451.Communication.Dashboard
             public static IEnumerable<Type> GetZomBDesignableClasses()
             {
                 bool tried = false;
+                Assembly lastasm = null;
+                Type lasttype = null;
             retry:
                 try
                 {
@@ -38,9 +40,12 @@ namespace System451.Communication.Dashboard
                     var asms = AppDomain.CurrentDomain.GetAssemblies();
                     foreach (var asm in asms)
                     {
+                        lastasm = asm;
+                        lasttype = null;
                         var types = asm.GetTypes();
                         foreach (var type in types)
                         {
+                            lasttype = type;
                             foreach (var atr in type.GetCustomAttributes(typeof(ZomBControlAttribute), false))
                             {
                                 retTypes.Add(type);
@@ -61,19 +66,8 @@ namespace System451.Communication.Dashboard
                     }
                     else
                     {
-                        //darn, need to restart
-                        if (System.Windows.Forms.MessageBox.Show("An exception occured while searching for controls. This may be caused by a failure to properly load modules. If this is the first time you get this error message, it is reccomended to restart. Would you like to restart?"
-                            , "Error", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Error, System.Windows.Forms.MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
-                        {
-                            Application.Restart();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Aborting: " + ex.ToString());
-                            Application.Exit();
-                        }
+                        throw new Exception("Looping Failed. Asm: "+(lastasm==null? "null":lastasm.ToString())+" Type: "+ (lasttype == null?"null":lasttype.ToString()),ex);
                     }
-                    return null;
                 }
             }
 

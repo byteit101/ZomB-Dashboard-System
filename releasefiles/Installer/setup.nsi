@@ -229,6 +229,8 @@ Section "-ZomB Core" SEC0000
     SetOutPath $INSTDIR
     SetOverwrite on
     File ZomB.dll
+    File SharpPG.dll
+	File ICSharpCode.SharpZipLib.dll
     File /nonfatal LICENSE.txt
     File /nonfatal CREDITS.txt
     File NullGEN.exe
@@ -277,18 +279,18 @@ SectionGroup "Dependencies" SECGRP0001
 	Section "SlimDX" SEC0014
 		SectionIn 2 3
         SetOverwrite on
-		!insertmacro IfKeyExists "HKLM" "SOFTWARE\Classes\Installer\Assemblies\Global" 'SlimDX,version="2.0.11.43",culture="neutral",publicKeyToken="B1B0C32FD1FFE4F9",processorArchitecture="x86"'
+		!insertmacro IfKeyExists "HKLM" "SOFTWARE\Classes\Installer\Assemblies\Global" 'SlimDX,version="2.0.12.43",culture="neutral",publicKeyToken="B1B0C32FD1FFE4F9",processorArchitecture="x86"'
 		Pop $R0
 		${If} $R0 == 0
-			!insertmacro IfKeyExists "HKLM" "SOFTWARE\Classes\Installer\Assemblies\Global" 'SlimDX,version="2.0.11.43",culture="neutral",publicKeyToken="B1B0C32FD1FFE4F9",processorArchitecture="x64"'
+			!insertmacro IfKeyExists "HKLM" "SOFTWARE\Classes\Installer\Assemblies\Global" 'SlimDX,version="2.0.12.43",culture="neutral",publicKeyToken="B1B0C32FD1FFE4F9",processorArchitecture="x64"'
 			Pop $R0
 			${If} $R0 == 0
-				NSISdl::download "http://slimdx.googlecode.com/files/SlimDX%20Runtime%20for%20.NET%202.0%20%28March%202011%29.msi" "SlimDX Runtime for .NET 2.0 (March 2011).msi"
+				NSISdl::download "http://slimdx.googlecode.com/files/SlimDX%20Runtime%20for%20.NET%202.0%20%28September%202011%29.msi" "SlimDX Runtime for .NET 2.0 (September 2011).msi"
 				Pop $R0
 				${If} $R0 == "success"
-					ExecWait "SlimDX Runtime for .NET 2.0 (March 2011).msi /S" $0
+					ExecWait "SlimDX Runtime for .NET 2.0 (September 2011).msi" $0
 				${Else}
-					MessageBox MB_OK "VLC Download failed: $R0"
+					MessageBox MB_OK "SlimDX Download failed: $R0"
 				${EndIf}
 			${EndIf}
 		${EndIf}
@@ -311,9 +313,9 @@ Section "Visual ZomB" SEC0004
     !insertmacro CREATE_SMGROUP_SHORTCUT "Visual ZomB" "$INSTDIR\ViZ.exe"
 SectionEnd
 
-SectionGroup "Bindings" SECGRP0002
-	Section "Robot Binding (required)" SEC0013
-        SectionIn 1 2 3 4 RO
+SectionGroup "Bindings (obsolete)" SECGRP0002
+	Section /o "Robot Binding (Non-Smart sources, obsolete)" SEC0013
+        SectionIn 3
         SetOverwrite on
         ${IfNot} ${FileExists} `$INSTDIR\Bindings`
         CreateDirectory "$INSTDIR\Bindings"
@@ -327,8 +329,8 @@ SectionGroup "Bindings" SECGRP0002
         !insertmacro CREATE_SMGROUP_SHORTCUT "Binding Help" "$INSTDIR\Bindings\Bindings Help.pdf"
     SectionEnd
 	
-    Section "C++ Bindings" SEC0005
-        SectionIn 1 2 3 4
+    Section /o "C++ Bindings" SEC0005
+        SectionIn 3
         SetOverwrite on
         ${IfNot} ${FileExists} `$INSTDIR\Bindings`
         CreateDirectory "$INSTDIR\Bindings"
@@ -336,8 +338,8 @@ SectionGroup "Bindings" SECGRP0002
         File "/oname=Bindings\ZomBDashboard.h" ZomBDashboard.h
     SectionEnd
 	
-    Section "Java Bindings" SEC0006
-        SectionIn 1 2 3 4
+    Section /o "Java Bindings" SEC0006
+        SectionIn 3
         SetOverwrite on
         ${IfNot} ${FileExists} `$INSTDIR\Bindings`
         CreateDirectory "$INSTDIR\Bindings"
@@ -346,8 +348,8 @@ SectionGroup "Bindings" SECGRP0002
         File "/oname=Bindings\ZomBModes.java" ZomBModes.java
     SectionEnd
 	
-    Section "LabVIEW Bindings" SEC0007
-        SectionIn 1 2 3 4
+    Section /o "LabVIEW Bindings" SEC0007
+        SectionIn 3
         SetOverwrite on
         ${IfNot} ${FileExists} `$INSTDIR\Bindings`
         CreateDirectory "$INSTDIR\Bindings"
@@ -355,8 +357,8 @@ SectionGroup "Bindings" SECGRP0002
         File "/oname=Bindings\ZomB.llb" ZomB.llb
     SectionEnd
     
-    Section "Shortcut" SEC0008
-        SectionIn 1 2 3 4
+    Section  /o "Shortcut" SEC0008
+        SectionIn 3
         ${IfNot} ${FileExists} `$INSTDIR\Bindings`
         CreateDirectory "$INSTDIR\Bindings"
         ${EndIf}
@@ -415,6 +417,8 @@ SectionEnd
 Section "-un.ZomB" UNSEC0000
 	ExecWait "$INSTDIR\NullGEN.exe -uninstall"
     Delete /REBOOTOK "ZomB.dll"
+    Delete /REBOOTOK "ICSharpCode.SharpZipLib.dll"
+    Delete /REBOOTOK "SharpPG.dll"
     Delete /REBOOTOK "32feetWidcomm.dll"
     Delete /REBOOTOK "InTheHand.Net.Personal.dll"
     Delete /REBOOTOK "SlimDX.dll"
@@ -500,10 +504,10 @@ Function .onInit
 	SectionSetText ${SEC0014} "SlimDX (Already Installed)"
 	SectionSetSize ${SEC0014} 0
 			
-	!insertmacro IfKeyExists "HKLM" "SOFTWARE\Classes\Installer\Assemblies\Global" 'SlimDX,version="2.0.11.43",culture="neutral",publicKeyToken="B1B0C32FD1FFE4F9",processorArchitecture="x86"'
+	!insertmacro IfKeyExists "HKLM" "SOFTWARE\Classes\Installer\Assemblies\Global" 'SlimDX,version="2.0.12.43",culture="neutral",publicKeyToken="B1B0C32FD1FFE4F9",processorArchitecture="x86"'
 	Pop $R0
 	${If} $R0 == 0
-		!insertmacro IfKeyExists "HKLM" "SOFTWARE\Classes\Installer\Assemblies\Global" 'SlimDX,version="2.0.11.43",culture="neutral",publicKeyToken="B1B0C32FD1FFE4F9",processorArchitecture="x64"'
+		!insertmacro IfKeyExists "HKLM" "SOFTWARE\Classes\Installer\Assemblies\Global" 'SlimDX,version="2.0.12.43",culture="neutral",publicKeyToken="B1B0C32FD1FFE4F9",processorArchitecture="x64"'
 		Pop $R0
 		${If} $R0 == 0
 			SectionSetFlags ${SEC0014} 1
@@ -526,16 +530,16 @@ FunctionEnd
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC0002} "Advanced video encoding library for saving videos"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC0003} "Epic video player that can play anything (used for video playback)"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC0004} "ZomB Dashboard designer to quickly create dashboards"
-!insertmacro MUI_DESCRIPTION_TEXT ${SECGRP0002} "Robot side bindings to the ZomB protocol"
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC0005} "C++ robot bindings"
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC0006} "Java robot bindings"
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC0007} "LabVIEW robot bindings"
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC0008} "Shortcut to the bindings folder (helpful)"
+!insertmacro MUI_DESCRIPTION_TEXT ${SECGRP0002} "Robot side bindings to the ZomB protocol (UDP and TCP, obsolete)"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0005} "C++ robot bindings (old, obsolete)"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0006} "Java robot bindings (old, obsolete)"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0007} "LabVIEW robot bindings (old, obsolete)"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0008} "Shortcut to the bindings folder (helpful, old, obsolete)"
 !insertmacro MUI_DESCRIPTION_TEXT ${SECGRP0003} "Other programs"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC0009} "Old default dashboard"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC0010} "New default dashboard"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC0011} "Pit display with BlueFinger and saved video playing capabilities (requires VLC)"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC0012} "Enables ZomB to act as the driver station"
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC0013} "Enables the bindings to actually do stuff (required)"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0013} "Enables the bindings to actually do stuff (old, obsolete)"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC0014} "SlimDX runtime for shaking and joystick support (required)"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END

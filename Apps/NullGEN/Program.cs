@@ -76,14 +76,22 @@ namespace NullGEN
         public static void Uninstall()
         {
             var pub = new Publish();
-            pub.GacRemove("InTheHand.Net.Personal");
-            pub.GacRemove("Vlc.DotNet.Core");
-            pub.GacRemove("Vlc.DotNet.Forms");
-            pub.GacRemove("ZomB");
+            pub.GacRemoveC("InTheHand.Net.Personal");
+            pub.GacRemoveC("Vlc.DotNet.Core");
+            pub.GacRemoveC("Vlc.DotNet.Forms");
+            pub.GacRemoveC("ZomB");
             var p = NGenu("ViZ, Version=0.8.3.0, Culture=neutral, PublicKeyToken=c7d9dbcb0b13713a");
             p.WaitForExit();
             var q = NGenu("ZomB, Version=0.8.3.0, Culture=neutral, PublicKeyToken=5880636763ded5de");
             q.WaitForExit();
+        }
+    }
+    static class PublishExtents
+    {
+        static internal void GacRemoveC(this Publish pub, string name)
+        {
+            string toout = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\ZomB").GetValue("Path", @"C:\Program Files\ZomB").ToString();
+            pub.GacRemove(toout+"\\"+name+".dll");
         }
     }
 }

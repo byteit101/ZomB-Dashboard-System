@@ -290,7 +290,15 @@ namespace System451.Communication.Dashboard.ViZ
                 tbx.Owner = this;
             }
             tbx.Closed += new EventHandler(tbx_Closed);
-            listBox1.ItemsSource = Reflector.GetZomBDesignableInfos(Reflector.GetZomBDesignableClasses());
+            try
+            {
+                listBox1.ItemsSource = Reflector.GetZomBDesignableInfos(Reflector.GetZomBDesignableClasses());
+            }
+            catch (Exception ex)
+            {
+                App.PrcException(ex);
+                return;
+            }
             if (preFile != null)
             {
                 LoadFile(preFile);
