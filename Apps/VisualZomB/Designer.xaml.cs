@@ -1706,6 +1706,12 @@ namespace System451.Communication.Dashboard.ViZ
             Settings.Default.Save();
         }
 
+        public void DeleteProfile(string profileName)
+        {
+            Settings.Default.Profile.Remove(profileName);
+            Settings.Default.Save();
+        }
+
         public void LoadProfile(string profileName)
         {
             string profileString = Settings.Default.Profile[profileName];

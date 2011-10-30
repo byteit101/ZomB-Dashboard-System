@@ -76,10 +76,12 @@
 
             <ContextMenu>
                 <MenuItem Header="Save Profile"  Name="SaveProfileMenu">
-                    <MenuItem Header="New" Click="NewProfile_Click" />
+                    <TextBox Name="newbox" MinWidth="100" KeyDown="NewProfile_Key" />
                 </MenuItem>
 
                 <MenuItem Header="Load Profile" Name="LoadProfileMenu">
+                </MenuItem>
+                <MenuItem Header="Delete Profile" Name="DeleteProfileMenu">
                 </MenuItem>
                 <MenuItem Header="Dock toolbox to main window" Checked="DockCheck_Checked" Unchecked="DockCheck_Unchecked" Name="DockCheck" IsCheckable="True" />
 

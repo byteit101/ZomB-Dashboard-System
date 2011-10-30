@@ -20,6 +20,7 @@ using System.Windows.Input;
 using System451.Communication.Dashboard.ViZ.Properties;
 using System.Windows.Controls;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -34,22 +35,27 @@ namespace System451.Communication.Dashboard.ViZ
             DockCheck.IsChecked = Settings.Default.EmbeddedTbx;
             reload();
         }
-            public void reload()
+
+        public void reload()
+        {
+            if (Settings.Default.Profile == null)
+                Settings.Default.Profile = new System.Collections.Specialized.StringDictionary();
+            foreach (System.Collections.DictionaryEntry item in Settings.Default.Profile)
             {
-                if (Settings.Default.Profile == null)
-                    Settings.Default.Profile = new System.Collections.Specialized.StringDictionary();
-                foreach (System.Collections.DictionaryEntry item in Settings.Default.Profile)
-                {
-                    var mi = new MenuItem();
-                    mi.Header = item.Key;
-                    mi.Click += new RoutedEventHandler(SaveProfile1_Click);
-                    SaveProfileMenu.Items.Add(mi);
-                    mi = new MenuItem();
-                    mi.Header = item.Key;
-                    mi.Click += new RoutedEventHandler(LoadProfile1_Click);
-                    LoadProfileMenu.Items.Add(mi);
-                }
+                var mi = new MenuItem();
+                mi.Header = item.Key;
+                mi.Click += new RoutedEventHandler(SaveProfile1_Click);
+                SaveProfileMenu.Items.Add(mi);
+                mi = new MenuItem();
+                mi.Header = item.Key;
+                mi.Click += new RoutedEventHandler(LoadProfile1_Click);
+                LoadProfileMenu.Items.Add(mi);
+                mi = new MenuItem();
+                mi.Header = item.Key;
+                mi.Click += new RoutedEventHandler(DeleteProfile1_Click);
+                DeleteProfileMenu.Items.Add(mi);
             }
+        }
         
         private void PropScroller_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -99,18 +105,36 @@ namespace System451.Communication.Dashboard.ViZ
             Designer.getDesigner().LoadProfile(((MenuItem)sender).Header.ToString());
         }
 
-        private void NewProfile_Click(object sender, RoutedEventArgs e)
+        private void DeleteProfile1_Click(object sender, RoutedEventArgs e)
         {
-            string name = System.Guid.NewGuid().ToString().Substring(0, 5);
-            Designer.getDesigner().SaveAsProfile(name);
-            var mi = new MenuItem();
-            mi.Header = name;
-            mi.Click += new RoutedEventHandler(SaveProfile1_Click);
-            SaveProfileMenu.Items.Add(mi);
-            mi = new MenuItem();
-            mi.Header = name;
-            mi.Click += new RoutedEventHandler(LoadProfile1_Click);
-            LoadProfileMenu.Items.Add(mi);
+            Designer.getDesigner().DeleteProfile(((MenuItem)sender).Header.ToString());
+            MenuItem spi = (from object f in SaveProfileMenu.Items where (f is MenuItem) &&  ((MenuItem)f).Header == ((MenuItem)sender).Header select (MenuItem)f).First();
+            SaveProfileMenu.Items.Remove(spi);
+            MenuItem lpi = (from object f in LoadProfileMenu.Items where ((MenuItem)f).Header == ((MenuItem)sender).Header select (MenuItem)f).First();
+            LoadProfileMenu.Items.Remove(lpi);
+            DeleteProfileMenu.Items.Remove(sender);
+        }
+
+        private void NewProfile_Key(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                string name = newbox.Text;
+                newbox.Text = "";
+                Designer.getDesigner().SaveAsProfile(name);
+                var mi = new MenuItem();
+                mi.Header = name;
+                mi.Click += new RoutedEventHandler(SaveProfile1_Click);
+                SaveProfileMenu.Items.Add(mi);
+                mi = new MenuItem();
+                mi.Header = name;
+                mi.Click += new RoutedEventHandler(LoadProfile1_Click);
+                LoadProfileMenu.Items.Add(mi);
+                mi = new MenuItem();
+                mi.Header = name;
+                mi.Click += new RoutedEventHandler(DeleteProfile1_Click);
+                DeleteProfileMenu.Items.Add(mi);
+            }
         }
     }
 }
