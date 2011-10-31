@@ -256,6 +256,13 @@ namespace System451.Communication.Dashboard.ViZ
             // Attach our WndProc handler to this Window
             HwndSource source = HwndSource.FromHwnd(handle);
             source.AddHook(new HwndSourceHook(WndProc));
+
+            //#ifdef Holloween
+            if (DateTime.Today.Day == 31 && DateTime.Today.Month == 10)
+            {
+                Scrlview.Background = Brushes.Maroon;
+            }
+            //#endif /*Holloween*/
         }
 
         private static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
