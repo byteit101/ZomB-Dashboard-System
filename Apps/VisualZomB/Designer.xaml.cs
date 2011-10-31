@@ -323,8 +323,8 @@ namespace System451.Communication.Dashboard.ViZ
                 {
                     string updatepath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + Path.DirectorySeparatorChar + "ZomB Update.exe";
                     if (!Updater.Download(url, updatepath))
-                        TSAlert("An update for ZomB is avalible, but automatic download failed. Please manually update ZomB:\r\n\r\n" + url, false);
-                    if (TSAlert("An update for ZomB is avalible, and has been downloaded & verified to your desktop.\r\nWould you like to update now?", true))
+                        TSAlert("An update for ZomB is avalible, but automatic download failed. Please manually update ZomB:\r\n\r\n" + url + "\r\n\r\nChanges:\r\n"+url.Changes, false);
+                    if (TSAlert("An update for ZomB is avalible, and has been downloaded & verified to your desktop.\r\nWould you like to update now?\r\nChanges:\r\n" + url.Changes, true))
                     {
                         Process.Start(updatepath);
                         TSClose();

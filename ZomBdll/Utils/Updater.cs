@@ -23,6 +23,7 @@ using System.Net;
 using System.IO;
 using System.Text.RegularExpressions;
 using SharpPG;
+using System.Collections;
 
 namespace System451.Communication.Dashboard.Utils
 {
@@ -30,7 +31,8 @@ namespace System451.Communication.Dashboard.Utils
     {
         const string beginSection = "-----BEGIN PGP SIGNED MESSAGE-----";
         const string endSection = "\n-----END PGP SIGNATURE-----";
-        public const string defaultUpdateUrl = "http://firstforge.wpi.edu/sf/wiki/do/viewPage/projects.zombdashboard/wiki/VersionNumbers";
+        //TODO: move back to firstforge once we have a stable release, and a stable version format. This is to keep confusion away.
+        public const string defaultUpdateUrl = "http://thecatattack.org/ZomBVersionNumbers";
         public const string ZomBDevelopersPubKey = @"-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v2.0.17 (MingW32)
 
@@ -97,16 +99,7 @@ PCEEo/ht1O0NhQPIbe2mudIz374=
                 if (!serres.IsValid)
                     return new UpdateData { UpdateAvailable = null };//TODO: look for other keys
                 entirety = serres.SignedData.Replace("\r\n", "\n");
-                entirety = entirety.Split('\n')[0];
-                var sigdata = serres.SignedData.Replace("\r\n", "\n").Substring(entirety.Length + 12);//\nsignature=\n
-                //entirety == "[00]0.[00]0.[00]0.[svn|[000]0][b0|a0|g0]=urltodownload" (svn == .0)
-                var versionside = entirety.Substring(0, entirety.IndexOf("="));
-                var urlside = entirety.Substring(entirety.IndexOf("=") + 1);
-                var current = VersionNumber.FromString(versionside);
-                var thisinstance = VersionNumber.FromString(ZVersionMgr.FullNumber);
-                if (current > thisinstance)
-                    return new UpdateData { UpdateAvailable = true, DownloadUrl = urlside, NewVersion = current, SigntureData = sigdata };
-                return new UpdateData { UpdateAvailable = false };
+                return UpdateData.JParse(entirety);
             }
         }
 
@@ -259,6 +252,29 @@ PCEEo/ht1O0NhQPIbe2mudIz374=
         public bool? UpdateAvailable { get; set; }
         public string DownloadUrl { get; set; }
         public string SigntureData { get; set; }
+        public string Changes { get; set; }
         public VersionNumber NewVersion { get; set; }
+
+        public static UpdateData JParse(string entirety)
+        {
+            bool success = false;
+            Hashtable ht = (Hashtable)JSON.JsonDecode(entirety, ref success);
+            if (!success)
+                return new UpdateData { UpdateAvailable = null };
+
+            //TODO: this is atrocious!
+            Hashtable uifo = (Hashtable)ht[ht["latest"]];
+            string dl, sig, vi, ch;
+            dl = uifo["url"].ToString();
+            sig = uifo["signature"].ToString() + "\n";
+            vi = uifo["version"].ToString();
+            ch = uifo["changes"].ToString();
+
+            var current = VersionNumber.FromString(vi);
+            var thisinstance = VersionNumber.FromString(ZVersionMgr.FullNumber);
+            if (current > thisinstance)
+                return new UpdateData { UpdateAvailable = true, DownloadUrl = dl, NewVersion = current, SigntureData = sig, Changes = ch };
+            return new UpdateData { UpdateAvailable = false };
+        }
     }
 }

@@ -98,6 +98,7 @@
     <Compile Include="Controls\XShake.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ext\JSON.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\NetTableSource.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\EBinaryReader.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\SerialDataSource.cs" />
