@@ -50,4 +50,21 @@
             </GeometryDrawing>
         </DrawingImage.Drawing>
     </DrawingImage>
+    <DrawingImage x:Key="ZomBNameAddIcon">
+        <DrawingImage.Drawing>
+            <GeometryDrawing Geometry="M 0 0 16 0 16 16 0 16 z">
+                <GeometryDrawing.Brush>
+                    <VisualBrush Viewbox="0 0 16 16" ViewboxUnits="Absolute">
+                        <VisualBrush.Visual>
+                            <Viewbox>
+                                <Canvas Width="16" Height="16">
+                                    <Path Data="M 6,0 6,6 0,6 0,10 6,10 6,16 10,16 10,10 16,10 16,6 10,6 10,0 z" Fill="CornflowerBlue" />
+                                </Canvas>
+                            </Viewbox>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </GeometryDrawing.Brush>
+            </GeometryDrawing>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>

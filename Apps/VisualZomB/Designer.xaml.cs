@@ -494,7 +494,27 @@ namespace System451.Communication.Dashboard.ViZ
                 ZomBControlAttribute info = (e.Data.GetData("ZomBControl2") as ZomBControlAttribute);
                 if (info != null)
                 {
-                    AddControl(info, e.GetPosition(ZDash), ap);
+                    if (info.Name == "ZomB Name")
+                    {
+                        //Add Dragger!
+                        var r = VisualTreeHelper.HitTest(ZDash, e.GetPosition(ZDash));
+                        if (r.VisualHit != ZDash)
+                        {
+                            SurfaceControl sc = FindAnchestor<SurfaceControl>(r.VisualHit);
+                            sc.Control.Name = ap.Name.Replace(" ", "Z").Replace("_", "__").Replace(".", "_") + Guid.NewGuid().ToString("N").Substring(0, 5);
+                            if (sc.Control is ZomBGLControl)
+                                (sc.Control as ZomBGLControl).ControlName = ap.Name;
+                            if (curObj != null)
+                            {
+                                var pco = curObj;
+                                Deselect();
+                                Select(pco);
+                            }
+                
+                        }
+                    }
+                    else
+                        AddControl(info, e.GetPosition(ZDash), ap);
                 }
             }
         }
@@ -1206,7 +1226,9 @@ namespace System451.Communication.Dashboard.ViZ
         private ListBox GetAAToolBoxClone()
         {
             var lb = DeepClonetb();
-            lb.ItemsSource = from ZomBControlAttribute item in listBox1.ItemsSource where item.Type.IsSubclassOf(typeof(ZomBGLControl)) select item.Clone();
+            var ls = (from ZomBControlAttribute item in listBox1.ItemsSource where item.Type.IsSubclassOf(typeof(ZomBGLControl)) select item.Clone()).ToList();
+            ls.Add(new ZomBControlAttribute("ZomB Name") { Description = "Drag this to a control and it will set the name to this AutoPoints name.", TypeHints = ZomBDataTypeHint.Unknown, IconName = "ZomBNameAddIcon", Icon = (ImageSource)System.Windows.Application.Current.FindResource("ZomBNameAddIcon" ?? "DefaultControlImage") });
+            lb.ItemsSource = ls;
             lb.PreviewMouseLeftButtonDown += listBox2_PreviewMouseLeftButtonDown;
             lb.PreviewMouseUp += listBox2_PreviewMouseUp;
             lb.PreviewMouseMove += listBox2_PreviewMouseMove;
