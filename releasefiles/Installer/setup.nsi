@@ -108,7 +108,7 @@ BrandingText "ZomB Dashboard System ${VERSION}"
   StrCpy $R2 "0" # not found
  
   ${Do}
-    EnumRegKey $R0 ${ROOT} "${MAIN_KEY}" "$R1"
+    EnumRegValue $R0 ${ROOT} "${MAIN_KEY}" "$R1"
     ${If} '$R0' == '${KEY}'
       StrCpy $R2 "1" # found
       ${Break}
