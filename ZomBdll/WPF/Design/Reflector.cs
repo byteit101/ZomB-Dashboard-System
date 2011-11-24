@@ -30,22 +30,15 @@ namespace System451.Communication.Dashboard
         {
             public static IEnumerable<Type> GetZomBDesignableClasses()
             {
-                bool tried = false;
-                Assembly lastasm = null;
-                Type lasttype = null;
-            retry:
                 try
                 {
                     var retTypes = new List<Type>();
                     var asms = AppDomain.CurrentDomain.GetAssemblies();
                     foreach (var asm in asms)
                     {
-                        lastasm = asm;
-                        lasttype = null;
                         var types = asm.GetTypes();
                         foreach (var type in types)
                         {
-                            lasttype = type;
                             foreach (var atr in type.GetCustomAttributes(typeof(ZomBControlAttribute), false))
                             {
                                 retTypes.Add(type);
@@ -57,17 +50,7 @@ namespace System451.Communication.Dashboard
                 }
                 catch (Exception ex)
                 {
-                    if (!tried)
-                    {
-                        //need to load modules
-                        Utils.AutoExtractor.Extract(System451.Communication.Dashboard.Utils.AutoExtractor.Files.All);
-                        tried = true;
-                        goto retry;
-                    }
-                    else
-                    {
-                        throw new Exception("Looping Failed. Asm: "+(lastasm==null? "null":lastasm.ToString())+" Type: "+ (lasttype == null?"null":lasttype.ToString()),ex);
-                    }
+                    throw new Exception("Error searching for Controls. This is most likely caused by a missing dependency. Is SlimDX installed?",ex);
                 }
             }
 
