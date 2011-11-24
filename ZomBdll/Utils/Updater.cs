@@ -258,17 +258,17 @@ PCEEo/ht1O0NhQPIbe2mudIz374=
         public static UpdateData JParse(string entirety)
         {
             bool success = false;
-            Hashtable ht = (Hashtable)JSON.JsonDecode(entirety, ref success);
+            JsonObject ht = JSON.JsonDecode(entirety, ref success);
             if (!success)
                 return new UpdateData { UpdateAvailable = null };
 
             //TODO: this is atrocious!
-            Hashtable uifo = (Hashtable)ht[ht["latest"]];
+            JsonObject uifo = ht[ht["latest"].Str];
             string dl, sig, vi, ch;
-            dl = uifo["url"].ToString();
-            sig = uifo["signature"].ToString() + "\n";
-            vi = uifo["version"].ToString();
-            ch = uifo["changes"].ToString();
+            dl = uifo["url"].Str;
+            sig = uifo["signature"].Str + "\n";
+            vi = uifo["version"].Str;
+            ch = uifo["changes"].Str;
 
             var current = VersionNumber.FromString(vi);
             var thisinstance = VersionNumber.FromString(ZVersionMgr.FullNumber);
