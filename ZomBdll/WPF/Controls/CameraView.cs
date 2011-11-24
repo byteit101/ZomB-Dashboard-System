@@ -35,7 +35,9 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for CameraView.xaml
     /// </summary>
-    [Design.ZomBControl("Camera View Control", Description = "This shows you what the camera sees, and any targets its reporting", IconName = "CameraViewIcon")]
+    [Design.ZomBControl("Camera View Control",
+        Description = "This shows you what the camera sees, and any targets its reporting",
+        IconName = "CameraViewIcon")]
     [Design.ZomBDesignableProperty("Foreground")]
     [TemplatePart(Name = "PART_img", Type = typeof(Image))]
     [TemplatePart(Name = "PART_refresh", Type = typeof(UIElement))]

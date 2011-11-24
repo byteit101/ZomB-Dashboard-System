@@ -29,7 +29,9 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
-    [Design.ZomBControl("Network Forwarder", Description = "This will forward stuff to a different computer", IconName = "NetForwardIcon")]
+    [Design.ZomBControl("Network Forwarder",
+        Description = "This will forward stuff to a different computer",
+        IconName = "NetForwardIcon")]
     [Design.ZomBDesignableProperty("Background")]
     [Design.ZomBDesignableProperty("Width", Dynamic = true, Category = "Layout")]
     [Design.ZomBDesignableProperty("Height", Dynamic = true, Category = "Layout")]

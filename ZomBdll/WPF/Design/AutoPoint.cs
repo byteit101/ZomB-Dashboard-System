@@ -69,14 +69,22 @@ namespace System451.Communication.Dashboard.WPF.Controls
         new public static readonly DependencyProperty NameProperty =
             DependencyProperty.Register("Name", typeof(string), typeof(AutoPoint), new UIPropertyMetadata(""));
 
-        public object Toolbox
+        public ListBox Toolbox
         {
-            get { return (object)GetValue(ToolboxProperty); }
+            get { return (ListBox)GetValue(ToolboxProperty); }
             set { SetValue(ToolboxProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Toolbox.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ToolboxProperty =
-            DependencyProperty.Register("Toolbox", typeof(object), typeof(AutoPoint), new UIPropertyMetadata());
+            DependencyProperty.Register("Toolbox", typeof(ListBox), typeof(AutoPoint), new UIPropertyMetadata());
+
+
+
+        public ZomBDataTypeHint TypeHint
+        {
+            get;
+            set;
+        }
     }
 }

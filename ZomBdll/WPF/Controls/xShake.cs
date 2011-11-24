@@ -27,7 +27,10 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
-    [Design.ZomBControl("X Shaker", Description = "This will send the shake command to a Direct X controller", IconName = "xShakeIcon")]
+    [Design.ZomBControl("X Shaker",
+        Description = "This will send the shake command to a Direct X controller",
+        IconName = "xShakeIcon",
+        TypeHints = ZomBDataTypeHint.Feedback)]
     [Design.ZomBDesignableProperty("Background")]
     public class xShake : ZomBGLControl
     {
@@ -62,7 +65,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         static void gameChange(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             if (ZDesigner.IsRunMode)
-            (sender as xShake).pad = new GamepadState((int)e.NewValue);
+                (sender as xShake).pad = new GamepadState((int)e.NewValue);
         }
 
         static object coerece(DependencyObject sender, object e)

@@ -882,6 +882,10 @@ namespace System451.Communication.Dashboard
         /// User-Defined Object. Will not replaced by Well-Known Object in the next year at least.
         /// </summary>
         UserObject1 = 0x8000,
+        /// <summary>
+        /// Can display all controls
+        /// </summary>
+        All = 0xFFFF
     }
 
     public struct ZomBDataObject

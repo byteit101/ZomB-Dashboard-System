@@ -27,7 +27,11 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
-    [TemplatePart(Name = "PART_Rect", Type = typeof(Ellipse)), Design.ZomBControl("On/Off Control", Description = "This is a true/false or yes/no control", IconName = "OnOffControlIcon")]
+    [TemplatePart(Name = "PART_Rect", Type = typeof(Ellipse))]
+    [Design.ZomBControl("On/Off Control",
+        Description = "This is a true/false or yes/no control",
+        IconName = "OnOffControlIcon",
+        TypeHints = ZomBDataTypeHint.Boolean)]
     [Design.ZomBDesignableProperty("Foreground")]
     [Design.ZomBDesignableProperty("Background")]
     [Design.ZomBDesignableProperty("BoolValue", DisplayName = "Value")]

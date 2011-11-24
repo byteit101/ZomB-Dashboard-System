@@ -23,7 +23,10 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for StatusLabel.xaml
     /// </summary>
-    [Design.ZomBControl("Status Label", Description = "This shows a raw value for a control, and is a nice label", IconName = "StatusLabelIcon")]
+    [Design.ZomBControl("Status Label",
+        Description = "This shows a raw value for a control, and is a nice label",
+        IconName = "StatusLabelIcon",
+        TypeHints = ZomBDataTypeHint.String | ZomBDataTypeHint.Number)]
     [Design.ZomBDesignableProperty("Foreground")]
     [Design.ZomBDesignableProperty("StringValue", DisplayName = "Text")]
     [Design.ZomBDesignableProperty("FontSize")]

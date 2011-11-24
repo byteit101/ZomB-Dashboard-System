@@ -231,7 +231,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             StringValue = value.ToString();
             int o;
             if (value.Value is int || value.Value is double || value.Value is float)
-                o = (int)value.Value;
+                o = (int)((double)value.Value);
             else
                 int.TryParse(value.ToString(), out o);
             IntValue = o;
@@ -242,6 +242,8 @@ namespace System451.Communication.Dashboard.WPF.Controls
                 double.TryParse(value.ToString(), out d);
             DoubleValue = d;
             BoolValue = (IntValue != 0 || value.ToString().ToLower() == "true" || value.ToString().ToLower() == "yes");
+            if (DoubleValue == 0 && (value.ToString().ToLower() == "true" || value.ToString().ToLower() == "yes"))
+                DoubleValue = IntValue = 1;
             if (value.Value is bool)
                 BoolValue = (bool)value.Value;
         }

@@ -29,7 +29,10 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// <summary>
     /// Interaction logic for ValueMeter.xaml
     /// </summary>
-    [Design.ZomBControl("Value Meter", Description = "This shows a -1 to 1 value and is useful for total parts things (like battery)", IconName = "ValueMeterIcon")]
+    [Design.ZomBControl("Value Meter",
+        Description = "This shows a -1 to 1 value and is useful for total parts things (like battery)",
+        IconName = "ValueMeterIcon",
+        TypeHints = ZomBDataTypeHint.Number)]
     [Design.ZomBDesignableProperty("Foreground")]
     [Design.ZomBDesignableProperty("Background")]
     [Design.ZomBDesignableProperty("BorderBrush")]

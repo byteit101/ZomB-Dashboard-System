@@ -47,7 +47,7 @@ namespace System451.Communication.Dashboard.Net
     /// <summary>
     /// Represents a source of Peekable Dashboard data
     /// </summary>
-    public interface IDashboardPeekableDataSource
+    public interface IDashboardPeekableDataSource : IDashboardDataDataSource
     {
         bool BeginNamePeek(StringFunction callback);
         void EndNamePeek();

@@ -1112,6 +1112,7 @@ namespace System451.Communication.Dashboard.ViZ
                     foreach (var item in peeps)
                     {
                         item.BeginNamePeek(AddAutoStubPeek);
+                        item.NewDataRecieved += AutoAddControlTypeHook;
                     }
                     aaing = true;
                     AutoPlay.Visibility = AAListen.Visibility = System.Windows.Visibility.Collapsed;
@@ -1131,6 +1132,7 @@ namespace System451.Communication.Dashboard.ViZ
                 foreach (var item in peeps)
                 {
                     item.EndNamePeek();
+                    item.NewDataRecieved -= AutoAddControlTypeHook;
                 }
                 aaing = false;
                 AutoPlay.Visibility = AAListen.Visibility = System.Windows.Visibility.Visible;
@@ -1155,6 +1157,41 @@ namespace System451.Communication.Dashboard.ViZ
                 AddAutoStub(name);
         }
 
+        private void AutoAddControlTypeHook(object sender, NewDataRecievedEventArgs e)
+        {
+            if (!aaing)
+                return;
+            foreach (var neweddata in e.NewData)
+            {
+                if (aadict.ContainsKey(neweddata.Key))
+                {
+                    var dk = aadict[neweddata.Key];
+                    lock (dk)
+                    {
+                        if (dk.TypeHint != neweddata.Value.TypeHint)
+                        {
+                            if (dk.TypeHint == ZomBDataTypeHint.All || neweddata.Value.TypeHint == ZomBDataTypeHint.Unknown || neweddata.Value.TypeHint == ZomBDataTypeHint.All)
+                                dk.TypeHint = 0;
+                            dk.TypeHint |= neweddata.Value.TypeHint;
+                            Dispatcher.Invoke(new Utils.StringFunction(AutoAddResortTyped), neweddata.Key);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void AutoAddResortTyped(string name)
+        {
+            var dk = aadict[name];
+            List<ZomBControlAttribute> ls = new List<ZomBControlAttribute>(dk.Toolbox.Items.Count);
+            foreach (ZomBControlAttribute titem in dk.Toolbox.ItemsSource)
+            {
+                titem.Star = ((dk.TypeHint & titem.TypeHints) != 0);
+                ls.Add(titem);
+            }
+            dk.Toolbox.ItemsSource = from ZomBControlAttribute item in ls orderby !item.Star, item.Name select item;
+        }
+
         private void AddAutoStub(string name)
         {
             if (!aadict.ContainsKey(name))
@@ -1169,7 +1206,7 @@ namespace System451.Communication.Dashboard.ViZ
         private ListBox GetAAToolBoxClone()
         {
             var lb = DeepClonetb();
-            lb.ItemsSource = from ZomBControlAttribute item in listBox1.ItemsSource where item.Type.IsSubclassOf(typeof(ZomBGLControl)) select item;
+            lb.ItemsSource = from ZomBControlAttribute item in listBox1.ItemsSource where item.Type.IsSubclassOf(typeof(ZomBGLControl)) select item.Clone();
             lb.PreviewMouseLeftButtonDown += listBox2_PreviewMouseLeftButtonDown;
             lb.PreviewMouseUp += listBox2_PreviewMouseUp;
             lb.PreviewMouseMove += listBox2_PreviewMouseMove;
@@ -1178,7 +1215,7 @@ namespace System451.Communication.Dashboard.ViZ
 
         private ListBox DeepClonetb()
         {
-            var s = "<ListBox xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" Grid.Column=\"0\" VerticalAlignment=\"Stretch\" ScrollViewer.HorizontalScrollBarVisibility=\"Disabled\"><ListBox.ItemTemplate><DataTemplate><ListBoxItem Padding=\"3\" HorizontalAlignment=\"Stretch\" ToolTipService.InitialShowDelay=\"1000\" ToolTipService.ShowDuration=\"10000\"><ListBoxItem.ToolTip><StackPanel Width=\"200\"><Label FontWeight=\"Bold\" Background=\"Blue\" Foreground=\"White\" HorizontalAlignment=\"Stretch\" HorizontalContentAlignment=\"Center\" Content=\"{Binding Path=Name}\"></Label><TextBlock Padding=\"10\" TextWrapping=\"Wrap\" Text=\"{Binding Path=Description}\"></TextBlock></StackPanel></ListBoxItem.ToolTip><Image Source=\"{Binding Path=Icon}\" Width=\"32\" Height=\"32\" Margin=\"2\" VerticalAlignment=\"Center\" HorizontalAlignment=\"Center\" SnapsToDevicePixels=\"True\" /></ListBoxItem></DataTemplate></ListBox.ItemTemplate><ListBox.ItemsPanel><ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate></ListBox.ItemsPanel></ListBox>";
+            var s = "<ListBox xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" Grid.Column=\"0\" VerticalAlignment=\"Stretch\" ScrollViewer.HorizontalScrollBarVisibility=\"Disabled\"><ListBox.ItemTemplate><DataTemplate><ListBoxItem Padding=\"3\" HorizontalAlignment=\"Stretch\" ToolTipService.InitialShowDelay=\"1000\" ToolTipService.ShowDuration=\"10000\"><ListBoxItem.ToolTip><StackPanel Width=\"200\"><Label FontWeight=\"Bold\" Background=\"Blue\" Foreground=\"White\" HorizontalAlignment=\"Stretch\" HorizontalContentAlignment=\"Center\" Content=\"{Binding Path=Name}\"></Label><TextBlock Padding=\"10\" TextWrapping=\"Wrap\" Text=\"{Binding Path=Description}\"></TextBlock></StackPanel></ListBoxItem.ToolTip><Canvas Width=\"32\" Height=\"32\" Margin=\"2\" SnapsToDevicePixels=\"True\"><Image Width=\"32\" Height=\"32\" Source=\"{Binding Path=Icon}\" VerticalAlignment=\"Center\" HorizontalAlignment=\"Center\" SnapsToDevicePixels=\"True\" /><Path Data=\"M 32.84375 -5.0625 L 30.53125 -2.34375 L 26.96875 -2.71875 L 28.84375 0.34375 L 27.40625 3.59375 L 30.875 2.78125 L 33.53125 5.15625 L 33.8125 1.59375 L 36.90625 -0.1875 L 33.59375 -1.5625 L 32.84375 -5.0625 z \"><Path.Style><Style TargetType=\"{x:Type Path}\"><Setter Property=\"Fill\" Value=\"Transparent\" /><Style.Triggers><DataTrigger Value=\"True\"><DataTrigger.Binding><Binding Path=\"Star\" x:Name=\"StarBnd\" /></DataTrigger.Binding><Setter Property=\"Fill\" Value=\"#FFFFBB00\" /></DataTrigger></Style.Triggers></Style></Path.Style></Path></Canvas></ListBoxItem></DataTemplate></ListBox.ItemTemplate><ListBox.ItemsPanel><ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate></ListBox.ItemsPanel></ListBox>";
             return (ListBox)XamlReader.Parse(s);
         }
 

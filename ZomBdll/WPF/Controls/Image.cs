@@ -19,7 +19,9 @@ using System.Windows.Controls;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
-    [Design.ZomBControl("Image ", Description = "This will disply an image", IconName = "ImageIcon")]
+    [Design.ZomBControl("Image ",
+        Description = "This will disply an image",
+        IconName = "ImageIcon")]
     [Design.ZomBDesignableProperty("Source", Category = "Appearance")]
     [Design.ZomBDesignableProperty("Width", Dynamic = true, Category = "Layout")]
     [Design.ZomBDesignableProperty("Height", Dynamic = true, Category = "Layout")]

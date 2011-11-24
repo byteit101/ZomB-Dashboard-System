@@ -23,7 +23,7 @@ using System.Windows.Media;
 
 namespace System451.Communication.Dashboard.WPF.Controls
 {
-    [Design.ZomBControl("Debug Grid", Description = "This displays variable values debugged with var()", IconName = "DebugGridIcon")]
+    [Design.ZomBControl("Debug Grid", Description = "This displays variable values debugged with var() or starting with dbg-", IconName = "DebugGridIcon")]
     [Design.ZomBDesignableProperty("Width", Dynamic = true, Category = "Layout")]
     [Design.ZomBDesignableProperty("Height", Dynamic = true, Category = "Layout")]
     [Design.ZomBDesignableProperty("Background", Category = "Appearance")]

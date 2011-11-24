@@ -27,7 +27,10 @@ namespace System451.Communication.Dashboard.WPF.Controls
     /// Interaction logic for AnalogMeter.xaml
     /// </summary>
     [TemplatePart(Name = "PART_Rect")]
-    [Design.ZomBControl("Spike Control", Description = "This is a tri-state control, forward, reverse, or off", IconName = "SpikeControlIcon")]
+    [Design.ZomBControl("Spike Control",
+        Description = "This is a tri-state control, forward, reverse, or off",
+        IconName = "SpikeControlIcon",
+        TypeHints = ZomBDataTypeHint.Number | ZomBDataTypeHint.Boolean)]
     [Design.ZomBDesignableProperty("Foreground")]
     [Design.ZomBDesignableProperty("Background")]
     [Design.ZomBDesignableProperty("BorderBrush")]
@@ -76,7 +79,21 @@ namespace System451.Communication.Dashboard.WPF.Controls
         public override void UpdateControl(ZomBDataObject value)
         {
             base.UpdateControl(value);
-            Value = (SpikePositions)Enum.Parse(typeof(SpikePositions), value.ToString());
+            try
+            {
+                if (0 != (value.TypeHint & (ZomBDataTypeHint.Number | ZomBDataTypeHint.Boolean)) || DoubleValue.ToString() == StringValue)
+                {
+                    if (DoubleValue == 0)
+                        Value = SpikePositions.Off;
+                    else if (DoubleValue > 0)
+                        Value = SpikePositions.Forward;
+                    else
+                        Value = SpikePositions.Reverse;
+                }
+                else
+                    Value = (SpikePositions)Enum.Parse(typeof(SpikePositions), StringValue);
+            }
+            catch { }
         }
 
         public SpikePositions Value

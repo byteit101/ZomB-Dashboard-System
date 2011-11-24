@@ -17,6 +17,7 @@
  */
 using System;
 using System.Windows.Media;
+using System.Windows;
 
 [assembly: System451.Communication.Dashboard.WPF.Design.ZomBZamlNamespace("System451.Communication.Dashboard.WPF.Controls", "ZomB")]
 
@@ -34,9 +35,15 @@ namespace System451.Communication.Dashboard.WPF.Design
         public string Name { get; private set; }
         public string Description { get; set; }
         public Type Type { get; internal set; }
+        public ZomBDataTypeHint TypeHints { get; set; }
         public ImageSource Icon { get; internal set; }
         public string IconName { get; set; }
         public bool Star { get; set; }
+
+        public ZomBControlAttribute Clone()
+        {
+            return (ZomBControlAttribute)MemberwiseClone();
+        }
     }
 
     [global::System.AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
