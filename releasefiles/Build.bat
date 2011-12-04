@@ -65,11 +65,13 @@ goto finish
 del trunk\Apps\DefaultDash\obj\ /F /S /Q
 del trunk\Apps\ZomBeye\obj\ /F /S /Q
 del trunk\Apps\VisualZomB\obj\ /F /S /Q
+del trunk\Apps\NullGEN\obj\ /F /S /Q
 del trunk\ZomBdll\obj\ /F /S /Q
 del trunk\ZomB.DriverStation\obj\ /F /S /Q
 del trunk\Apps\DefaultDash\bin\ /F /S /Q
 del trunk\Apps\ZomBeye\bin\ /F /S /Q
 del trunk\Apps\VisualZomB\bin\ /F /S /Q
+del trunk\Apps\NullGEN\bin\ /F /S /Q
 del trunk\ZomBdll\bin\ /F /S /Q
 del trunk\ZomB.DriverStation\bin\ /F /S /Q
 
@@ -83,6 +85,8 @@ xcopy trunk\ZomB.DriverStation\* trunk\releasefiles\source\ZomB.DriverStation\ /
 
 @rem De-SVN-ize
 FOR /F "tokens=*" %%G IN ('DIR /B /AD /S *.svn*') DO RMDIR /S /Q "%%G"
+DEL /S /Q thumbs.db
+DEL /S /Q *.orig
 
 @rem clean up and exit
 xcopy trunk\releasefiles /S /E /Y /H
