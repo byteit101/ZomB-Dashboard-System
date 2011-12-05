@@ -70,11 +70,6 @@ namespace System451.Communication.Dashboard.Controls
 
         #region IZomBControl Members
 
-        public bool IsMultiWatch
-        {
-            get { return true; }
-        }
-
         void IZomBControl.UpdateControl(ZomBDataObject value)
         {
             //this needs to be tested, but should work

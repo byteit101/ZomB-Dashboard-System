@@ -307,8 +307,6 @@ namespace System451.Communication.Dashboard.Net.DriverStation
 
         #region IZomBControl Members
 
-        bool IZomBControl.IsMultiWatch { get { return false; } }
-
         string IZomBControl.ControlName { get { return null; } }
 
         void IZomBControl.UpdateControl(ZomBDataObject value) { }

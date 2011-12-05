@@ -351,10 +351,6 @@ namespace System451.Communication.Dashboard
 
 
         #region IZomBControl Members
-        public bool IsMultiWatch
-        {
-            get { return false; }
-        }
 
         public string ControlName
         {

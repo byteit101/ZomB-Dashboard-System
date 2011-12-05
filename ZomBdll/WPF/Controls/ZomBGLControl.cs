@@ -182,15 +182,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
         #region IZomBControl Members
 
         /// <summary>
-        /// Gets the IsMultiWatch field. Default false.
-        /// </summary>
-        [Browsable(false)]
-        virtual public bool IsMultiWatch
-        {
-            get { return false; }
-        }
-
-        /// <summary>
         /// The control name
         /// </summary>
         [Browsable(false), Category("ZomB"), Description("What this control will get the value of from the packet Data")]

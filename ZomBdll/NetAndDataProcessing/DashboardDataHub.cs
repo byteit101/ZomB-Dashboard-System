@@ -548,36 +548,12 @@ namespace System451.Communication.Dashboard
             try
             {
                 ZomBDataObject val = new ZomBDataObject();
-                //if we are watching multiple values
-                /*if (control.IsMultiWatch)
+                if (vals.ContainsKey(control.ControlName))
                 {
-                    if (control.ControlName == "*")
-                    {
-                        StringBuilder sb = new StringBuilder();
-                        foreach (var item in vals)
-                        {
-                            sb.Append("|");
-                            sb.Append(item.Key);
-                            sb.Append("=");
-                            sb.Append(item.Value);
-                        }
-                        val = sb.ToString();
-                    }
-                    else
-                    {
-                        foreach (var item in control.ControlName.Split(';'))
-                        {
-                            val += "|" + vals[item.Trim()];
-                        }
-                    }
-                    val = val.Substring(1);//remove first |
-                }
-                else*/
                     val = vals[control.ControlName];//get the value it wants
-
-                control.UpdateControl(val);
+                    control.UpdateControl(val);
+                }
             }
-            //It should only get here if the key does not exist
             catch
             {
             }

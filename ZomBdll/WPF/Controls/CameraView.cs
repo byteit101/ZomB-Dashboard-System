@@ -566,11 +566,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
         }
         #region IZomBControl Members
 
-        public bool IsMultiWatch
-        {
-            get { return false; }
-        }
-
         public string ControlName { get; set; }
 
         public void UpdateControl(ZomBDataObject value)

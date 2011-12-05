@@ -76,21 +76,14 @@ namespace System451.Communication.Dashboard
     public interface IZomBControl
     {
         /// <summary>
-        /// Does this control watch multiple values, or just one.
-        /// </summary>
-        [Obsolete("Use Monitor instead")]
-        bool IsMultiWatch { get; }
-
-        /// <summary>
         /// The name of the control. This is the name you send values to.
-        /// If IsMultiWatch is true, this is a semicolin seperated list of names.
         /// </summary>
         string ControlName { get; }
 
         /// <summary>
         /// Updates the control with new data
         /// </summary>
-        /// <param name="value">The new value of the control. If IsMultiWatch is true, this is a pipe seperated list of values</param>
+        /// <param name="value">The new value of the control.</param>
         void UpdateControl(ZomBDataObject value);
 
         /// <summary>
@@ -117,15 +110,6 @@ namespace System451.Communication.Dashboard
         }
 
         #region IZomBControl Members
-
-        /// <summary>
-        /// Gets the IsMultiWatch field. Default false.
-        /// </summary>
-        [Browsable(false)]
-        virtual public bool IsMultiWatch
-        {
-            get { return false; }
-        }
 
         /// <summary>
         /// The control name. This needs to be implemented.
@@ -214,14 +198,14 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// Create a new ZomBControlUpdatedEventArgs
         /// </summary>
-        /// <param name="value">The new value of the control. If IsMultiWatch is true, this is a pipe seperated list of values</param>
+        /// <param name="value">The new value of the control.</param>
         public ZomBControlUpdatedEventArgs(ZomBDataObject value)
         {
             this.Value = value;
         }
 
         /// <summary>
-        /// The new value of the control. If IsMultiWatch is true, this is a pipe seperated list of values
+        /// The new value of the control.
         /// </summary>
         public ZomBDataObject Value
         {
@@ -264,7 +248,6 @@ namespace System451.Communication.Dashboard
 
         /// <summary>
         /// The name of the control. This is the name you send values to.
-        /// If IsMultiWatch is true, this is a semicolin seperated list of names.
         /// </summary>
         public override string ControlName
         {
@@ -275,7 +258,7 @@ namespace System451.Communication.Dashboard
         /// <summary>
         /// Updates the control with new data
         /// </summary>
-        /// <param name="value">The new value of the control. If IsMultiWatch is true, this is a pipe seperated list of values</param>
+        /// <param name="value">The new value of the control.</param>
         public override void UpdateControl(ZomBDataObject value)
         {
             if (ControlUpdated != null)
