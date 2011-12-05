@@ -47,6 +47,8 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
                 PopulateList();
             }
             FindUrls();
+            if (ListItems.Items.Count >0)
+                ListItems.SelectedIndex = 0;
         }
 
         private void FindUrls()
