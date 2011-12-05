@@ -124,7 +124,11 @@ PCEEo/ht1O0NhQPIbe2mudIz374=
             Download(updateData.DownloadUrl, saveas);
             File.WriteAllText(saveas + ".asc", updateData.SigntureData);
             bool returnv =  EncryptionHelper.VerifyFile(EncryptionHelper.PubKey(ZomBDevelopersPubKey), saveas + ".asc").IsValid;
-            File.Delete(saveas + ".asc");
+            try
+            {
+                File.Delete(saveas + ".asc");
+            }
+            catch { }
             return returnv;
         }
     }
