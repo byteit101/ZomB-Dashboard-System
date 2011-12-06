@@ -288,7 +288,17 @@ SectionGroup "Dependencies" SECGRP0001
 				NSISdl::download "http://slimdx.googlecode.com/files/SlimDX%20Runtime%20for%20.NET%202.0%20%28September%202011%29.msi" "SlimDX Runtime for .NET 2.0 (September 2011).msi"
 				Pop $R0
 				${If} $R0 == "success"
+					ClearErrors
 					ExecWait "SlimDX Runtime for .NET 2.0 (September 2011).msi" $0
+					IfErrors errors
+					StrCmp $0 0 done nonezeroexitcode
+					errors:
+					MessageBox MB_OK "Faild to run SlimDX installer!"
+					Abort
+					nonezeroexitcode:
+					MessageBox MB_OK "SlimDX installer failed, exit code is $0"
+					Abort
+					done:
 				${Else}
 					MessageBox MB_OK "SlimDX Download failed: $R0"
 				${EndIf}
