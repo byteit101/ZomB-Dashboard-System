@@ -153,13 +153,15 @@ namespace System451.Communication.Dashboard.WPF.Controls
                     DashboardDataHub.Add((IZomBControl)item);
                 }
 
-                if (item is IZomBControlGroup)
-                {
-                    DashboardDataHub.Add((IZomBControlGroup)item);
-                }
                 if (item is IZomBMonitor)
                 {
                     DashboardDataHub.Add((IZomBMonitor)item);
+                }
+
+                if (item is IZomBControlGroup)
+                {
+                    DashboardDataHub.Add((IZomBControlGroup)item);
+                    continue; //assume that the group manages all children
                 }
 
                 //If panel or has other controls, find those
