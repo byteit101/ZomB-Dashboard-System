@@ -53,32 +53,39 @@ namespace System451.Communication.Dashboard.WPF.Controls.Designer
 
         private void FindUrls()
         {
-            var typers = new Collection<Type>();
-            var isrc = new System.Collections.Generic.SortedList<TypedDataSourceAttributeComparer, DataSourceAttribute>();
-            KnownTypes.ItemsSource = isrc;
-            foreach (var item in AppDomain.CurrentDomain.GetAssemblies())
+            try
             {
-                foreach (var itype in item.GetTypes())
+                var typers = new Collection<Type>();
+                var isrc = new System.Collections.Generic.SortedList<TypedDataSourceAttributeComparer, DataSourceAttribute>();
+                KnownTypes.ItemsSource = isrc;
+                foreach (var item in AppDomain.CurrentDomain.GetAssemblies())
                 {
-                    foreach (var cat in itype.GetCustomAttributes(typeof(DataSourceAttribute), false))
+                    foreach (var itype in item.GetTypes())
                     {
-                        var xcat = (cat as DataSourceAttribute);
-                        if (xcat.IgnoreClones)
+                        foreach (var cat in itype.GetCustomAttributes(typeof(DataSourceAttribute), false))
                         {
-                            foreach (var cloneposs in typers)
+                            var xcat = (cat as DataSourceAttribute);
+                            if (xcat.IgnoreClones)
                             {
-                                if (cloneposs == itype)
+                                foreach (var cloneposs in typers)
                                 {
-                                    goto noadd;
+                                    if (cloneposs == itype)
+                                    {
+                                        goto noadd;
+                                    }
                                 }
                             }
+                            isrc.Add(new TypedDataSourceAttributeComparer { DataSourceAttribute = xcat, Type = itype }, xcat);
+                            typers.Add(itype);
+                        noadd:
+                            continue;
                         }
-                        isrc.Add(new TypedDataSourceAttributeComparer { DataSourceAttribute = xcat, Type = itype }, xcat);
-                        typers.Add(itype);
-                    noadd:
-                        continue;
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                ErrorDialog.PrcException(new Exception("Error searching for Sources. This is most likely caused by a missing dependency. Is SlimDX installed?", ex));
             }
         }
 

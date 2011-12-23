@@ -303,7 +303,7 @@ namespace System451.Communication.Dashboard.ViZ
             }
             catch (Exception ex)
             {
-                App.PrcException(ex);
+                ErrorDialog.PrcException(ex);
                 return;
             }
             if (preFile != null)
@@ -429,7 +429,7 @@ namespace System451.Communication.Dashboard.ViZ
             }
             catch (Exception ex)
             {
-                App.PrcException(ex);
+                ErrorDialog.PrcException(ex);
             }
         }
 
@@ -1448,7 +1448,7 @@ namespace System451.Communication.Dashboard.ViZ
             }
             catch (Exception ex)
             {
-                App.PrcException(ex);
+                ErrorDialog.PrcException(ex);
             }
         }
 
@@ -1469,7 +1469,7 @@ namespace System451.Communication.Dashboard.ViZ
             }
             catch (Exception ex)
             {
-                App.PrcException(ex);
+                ErrorDialog.PrcException(ex);
             }
         }
 
@@ -1488,7 +1488,7 @@ namespace System451.Communication.Dashboard.ViZ
             }
             catch (Exception ex)
             {
-                App.PrcException(ex);
+                ErrorDialog.PrcException(ex);
             }
         }
 
@@ -1531,7 +1531,7 @@ namespace System451.Communication.Dashboard.ViZ
             }
             catch (Exception ex)
             {
-                App.PrcException(ex);
+                ErrorDialog.PrcException(ex);
             }
         }
 

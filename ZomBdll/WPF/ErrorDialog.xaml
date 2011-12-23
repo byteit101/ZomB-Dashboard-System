@@ -1,7 +1,7 @@
-﻿<Window x:Class="System451.Communication.Dashboard.ViZ.ErrorDialog"
+﻿<Window x:Class="System451.Communication.Dashboard.ErrorDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Kaboom!" Height="488" Width="691" xmlns:my="clr-namespace:System451.Communication.Dashboard.ViZ" Topmost="True" WindowStartupLocation="CenterScreen" SnapsToDevicePixels="True">
+        Title="Kaboom!" Height="488" Width="691" xmlns:my="clr-namespace:System451.Communication.Dashboard" Topmost="True" WindowStartupLocation="CenterScreen" SnapsToDevicePixels="True">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

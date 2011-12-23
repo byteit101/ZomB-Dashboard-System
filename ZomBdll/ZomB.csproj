@@ -291,6 +291,9 @@
     <Compile Include="WPF\Design\ZControl.cs" />
     <Compile Include="WPF\Design\ZDesigner.cs" />
     <Compile Include="WPF\Design\ZomBDesignableAttribute.cs" />
+    <Compile Include="WPF\ErrorDialog.xaml.cs">
+      <DependentUpon>ErrorDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\ProgressDialog.xaml.cs">
       <DependentUpon>ProgressDialog.xaml</DependentUpon>
     </Compile>
@@ -559,6 +562,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="WPF\Design\AutoPoint.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\ErrorDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

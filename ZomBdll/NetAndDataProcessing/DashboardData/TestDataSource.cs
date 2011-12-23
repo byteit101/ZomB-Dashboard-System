@@ -59,7 +59,7 @@ namespace System451.Communication.Dashboard.Net
                     isrunning = true;
                     backThread.Start();
                 }
-                catch (Exception ex)
+                catch
                 {
                 }
             }
