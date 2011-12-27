@@ -1,6 +1,6 @@
 ﻿/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
- * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * Copyright (C) 2011, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,12 @@
  */
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Windows.Forms;
-using System.Windows.Media;
 using System.Reflection;
+using System.Text;
+using System.Windows.Markup;
+using System.Windows.Media;
 
 namespace System451.Communication.Dashboard
 {
@@ -50,7 +52,7 @@ namespace System451.Communication.Dashboard
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Error searching for Controls. This is most likely caused by a missing dependency. Is SlimDX installed?",ex);
+                    throw new Exception("Error searching for Controls. This is most likely caused by a missing dependency. Is SlimDX installed?", ex);
                 }
             }
 
@@ -59,9 +61,40 @@ namespace System451.Communication.Dashboard
                 return (from t in types
                         let info = (t.GetCustomAttributes(typeof(ZomBControlAttribute), false)[0] as ZomBControlAttribute)
                         where (((info.Type = t) != null) &&
-                        ((info.Icon = (ImageSource)System.Windows.Application.Current.FindResource(info.IconName ?? "DefaultControlImage")) != null))
+                        ((info.Icon = SafeFind(info.IconName ?? "DefaultControlImage")) != null))
                         orderby info.Name
                         select info);
+            }
+
+            public static ImageSource SafeFind(string iconname)
+            {
+                try
+                {
+                    return (ImageSource)System.Windows.Application.Current.FindResource(iconname);
+                }
+                catch
+                {
+                    try
+                    {
+                        return (ImageSource)System.Windows.Application.Current.FindResource("DefaultControlImage");
+                    }
+                    catch
+                    {
+                        return (DrawingImage)XamlReader.Load(new MemoryStream(UTF8Encoding.UTF8.GetBytes(@"<DrawingImage xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"">
+        <DrawingImage.Drawing>
+            <GeometryDrawing Geometry=""M 0 0 16 0 16 16 0 16 z"">
+                <GeometryDrawing.Brush>
+                    <VisualBrush Stretch=""Uniform"">
+                        <VisualBrush.Visual>
+                            <Label Background=""LightGray"" Foreground=""Red"">!?!?</Label>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </GeometryDrawing.Brush>
+            </GeometryDrawing>
+        </DrawingImage.Drawing>
+    </DrawingImage>")));
+                    }
+                }
             }
 
             public static object Inflate(Type t)
