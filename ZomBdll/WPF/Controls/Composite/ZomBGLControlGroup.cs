@@ -131,14 +131,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             if (this.Content == null)
             {
                 this.Content = GroupDescriptor.InflateControls();
-                if (double.IsNaN(this.Width))
-                    this.Width = (this.Content as FrameworkElement).Width;
-                else if (!double.IsNaN((this.Content as FrameworkElement).Width))
-                    (this.Content as FrameworkElement).Width = this.Width;
-                if (double.IsNaN(this.Height))
-                    this.Height = (this.Content as FrameworkElement).Height;
-                else if (!double.IsNaN((this.Content as FrameworkElement).Height))
-                    (this.Content as FrameworkElement).Height = this.Height;
+                Sizeify();
             }
             ResetControls();
         }
@@ -146,7 +139,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
         private void ResetControls()
         {
             remotes.Clear();
-            AddControls(this);
+            AddControls((DependencyObject)this.Content);
         }
 
         private void AddControls(DependencyObject controlCollection)
@@ -186,14 +179,28 @@ namespace System451.Communication.Dashboard.WPF.Controls
         private void Add(IZomBControl item)
         {
             var rcl = new ZomBRemoteControl();
-            rcl.Tag = item;
             var name = item.ControlName;
             if (this.ControlName != null && this.ControlName.Length > 0)
                 name = this.ControlName + "." + name;
+            if (item is IZomBDataControl)
+            {
+                rcl = new ZomBRemoteDataControl();
+                (rcl as ZomBRemoteDataControl).DataControlEnabledChanged += new EventHandler(ZomBGLControlGroup_DataControlEnabledChanged);
+                (item as IZomBDataControl).DataUpdated += delegate(object sender, ZomBDataControlUpdatedEventArgs e)
+                {
+                    (rcl as ZomBRemoteDataControl).SafeFireDataUpdated(name, e.Value);
+                };
+            }
+            rcl.Tag = item;
             rcl.ControlName = name;
             rcl.ControlUpdated += new ControlUpdatedDelegate(rcl_ControlUpdated);
             remotes.Add(rcl);
             (rcl as IZomBControl).ControlAdded(this, new ZomBControlAddedEventArgs(LocalDashboardDataHub));
+        }
+
+        void ZomBGLControlGroup_DataControlEnabledChanged(object sender, EventArgs e)
+        {
+            ((sender as ZomBRemoteDataControl).Tag as IZomBDataControl).DataControlEnabled = (sender as ZomBRemoteDataControl).DataControlEnabled;
         }
 
         void rcl_ControlUpdated(object sender, ZomBControlUpdatedEventArgs e)
@@ -260,15 +267,27 @@ namespace System451.Communication.Dashboard.WPF.Controls
             {
                 descpt = value;
                 this.Content = descpt.InflateControls();
-                if (double.IsNaN(this.Width))
-                    this.Width = (this.Content as FrameworkElement).Width;
-                else if (!double.IsNaN((this.Content as FrameworkElement).Width))
-                    (this.Content as FrameworkElement).Width = this.Width;
-                if (double.IsNaN(this.Height))
-                    this.Height = (this.Content as FrameworkElement).Height;
-                else if (!double.IsNaN((this.Content as FrameworkElement).Height))
-                    (this.Content as FrameworkElement).Height = this.Height;
+                Sizeify();
             }
+        }
+
+        private void Sizeify()
+        {
+            if (double.IsNaN(this.Width))
+                this.Width = (this.Content as FrameworkElement).Width;
+            Binding bind = new Binding();
+            bind.Mode = BindingMode.TwoWay;
+            bind.Source = this;
+            bind.Path = new PropertyPath(ZomBGLControlGroup.WidthProperty);
+            (this.Content as FrameworkElement).SetBinding(FrameworkElement.WidthProperty, bind);
+
+            if (double.IsNaN(this.Height))
+                this.Height = (this.Content as FrameworkElement).Height;
+            Binding bindh = new Binding();
+            bindh.Mode = BindingMode.TwoWay;
+            bindh.Source = this;
+            bindh.Path = new PropertyPath(ZomBGLControlGroup.HeightProperty);
+            (this.Content as FrameworkElement).SetBinding(FrameworkElement.HeightProperty, bindh);
         }
 
         public static Type GetDescriptorTypeByName(string name)

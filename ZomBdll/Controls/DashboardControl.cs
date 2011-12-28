@@ -262,12 +262,6 @@ namespace System451.Communication.Dashboard
             set;
         }
 
-        public object Tag
-        {
-            get;
-            set;
-        }
-
         /// <summary>
         /// Updates the control with new data
         /// </summary>
@@ -284,6 +278,55 @@ namespace System451.Communication.Dashboard
         /// Fires when the Control is updated via IZomBControl.UpdateControl
         /// </summary>
         public event ControlUpdatedDelegate ControlUpdated;
+
+        #endregion
+    }
+
+    /// <summary>
+    /// This is used to make simple having multiple ZomB controls on one physical control that have Data sending
+    /// </summary>
+    [DesignTimeVisible(false), Browsable(false)]
+    public class ZomBRemoteDataControl : ZomBRemoteControl, IZomBDataControl
+    {
+        bool dcEnabled = false;
+        /// <summary>
+        /// Creates a new ZomBRemoteDataControl
+        /// </summary>
+        public ZomBRemoteDataControl()
+        {
+
+        }
+
+        public event EventHandler DataControlEnabledChanged;
+
+        public void SafeFireDataUpdated(string newname, string newvalue)
+        {
+            if (DataUpdated != null)
+            {
+                DataUpdated(this, new ZomBDataControlUpdatedEventArgs(newname, newvalue));
+            }
+        }
+
+        #region IZomBDataControl Members
+
+        public event ZomBDataControlUpdatedEventHandler DataUpdated;
+
+        public bool DataControlEnabled
+        {
+            get
+            {
+                return dcEnabled;
+            }
+            set
+            {
+                if (dcEnabled != value)
+                {
+                    dcEnabled = value;
+                    if (DataControlEnabledChanged != null)
+                        DataControlEnabledChanged(this, new EventArgs());
+                }
+            }
+        }
 
         #endregion
     }

@@ -124,6 +124,8 @@ namespace System451.Communication.Dashboard
                 foreach (IZomBControl item in controlgroup.GetControls())
                 {
                     item.ControlAdded(this, new ZomBControlAddedEventArgs(this));
+                    if (item is IZomBDataControl)
+                        Add(item as IZomBDataControl);
                 }
             }
         }
@@ -554,6 +556,26 @@ namespace System451.Communication.Dashboard
                     val = vals[control.ControlName];//get the value it wants
                     control.UpdateControl(val);
                 }
+                else if (control.ControlName.Contains(".") || control.ControlName.Contains("\\"))
+                {
+                    var sects = ZomBDataLookup.GetNameSegments(control.ControlName);
+                    if (sects.Length > 0)
+                    {
+                        if (vals.ContainsKey(sects[0]))
+                            val = vals[sects[0]];
+                        else
+                            return;
+
+                        for (int i = 1; i < sects.Length; i++)
+                        {
+                            if ((val.Value as ZomBDataLookup).ContainsKey(sects[i]))
+                                val = (val.Value as ZomBDataLookup)[sects[i]];
+                            else
+                                return;
+                        }
+                        control.UpdateControl(val);
+                    }
+                }
             }
             catch
             {
@@ -944,12 +966,22 @@ namespace System451.Communication.Dashboard
                 if (key.Contains(".") || key.Contains("\\"))
                 {
                     var segments = GetNameSegments(key);
+                    if (!this.ContainsKey(segments[0]))
+                    {
+                        base[segments[0]] = new ZomBDataLookup();
+                    }
                     ZomBDataObject zdo = base[segments[0]];
+                    ZomBDataLookup zlk = ((ZomBDataLookup)zdo.Value);
                     for (int i = 1; i < segments.Length; i++)
                     {
-                        zdo = ((ZomBDataLookup)zdo.Value)[segments[i]];
+                        zlk = ((ZomBDataLookup)zdo.Value);
+                        if (!zlk.ContainsKey(segments[i]))
+                        {
+                            zlk[segments[i]] = new ZomBDataLookup();
+                        }
+                        zdo = zlk[segments[i]];
                     }
-                    zdo = value;
+                    zlk[segments[segments.Length-1]] = value;
                 }
                 else
                     base[key] = value;

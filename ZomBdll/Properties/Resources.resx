@@ -185,7 +185,7 @@
 	&lt;/StackPanel&gt;
 	&lt;StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Background="White"&gt;
 		&lt;Label&gt;I:&lt;/Label&gt;
-		&lt;ZomB:StatusLabel ControlName="I" /&gt;
+		&lt;ZomB:StatusLabel ControlName="i" /&gt;
 	&lt;/StackPanel&gt;
 	&lt;StackPanel Grid.Row="1" Grid.Column="4" Orientation="Horizontal" Background="White"&gt;
 		&lt;Label&gt;D:&lt;/Label&gt;

@@ -576,6 +576,10 @@ namespace System451.Communication.Dashboard.ViZ
             ZDash.Children.Add(sc);
             Canvas.SetTop(sc, point.Y);
             Canvas.SetLeft(sc, point.X);
+            if (fe.GetType() == typeof(ZomBGLControlGroup))
+            {
+                (fe as ZomBGLControlGroup).GroupDescriptor = (fe as ZomBGLControlGroup).GroupDescriptor;//re-load controls
+            }
             Select(sc);
         }
 

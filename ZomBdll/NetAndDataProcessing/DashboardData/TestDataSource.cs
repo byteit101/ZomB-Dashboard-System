@@ -140,6 +140,9 @@ namespace System451.Communication.Dashboard.Net
                 kys["bool"] = new ZomBDataObject(Math.Sin((i++) / 100.0) > 0, ZomBDataTypeHint.Boolean);
                 kys["str"] = new ZomBDataObject(Math.Round(Math.Sin((i++) / 100.0), 3).ToString(), ZomBDataTypeHint.String);
                 kys["floatrand"] = new ZomBDataObject(rand.NextDouble(), ZomBDataTypeHint.Double);
+                kys["group.Data.p"] = new ZomBDataObject((Math.Sin((i) / 100.0)+1)*2.0, ZomBDataTypeHint.Double);
+                kys["group.Data.i"] = new ZomBDataObject((Math.Sin((i+50) / 100.0)+1)*2.0, ZomBDataTypeHint.Double);
+                kys["group.Data.d"] = new ZomBDataObject((Math.Sin((i-50) / 100.0)+1)*2.0, ZomBDataTypeHint.Double);
                 Thread.Sleep(10);
                 if (peeking)
                 {
