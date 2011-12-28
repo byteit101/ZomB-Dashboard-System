@@ -120,6 +120,7 @@ namespace System451.Communication.Dashboard
             if (!zomBgroups.Contains(controlgroup))
             {
                 zomBgroups.Add(controlgroup);
+                controlgroup.ControlAdded(this, new ZomBControlAddedEventArgs(this));
                 foreach (IZomBControl item in controlgroup.GetControls())
                 {
                     item.ControlAdded(this, new ZomBControlAddedEventArgs(this));

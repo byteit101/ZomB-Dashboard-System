@@ -335,6 +335,11 @@ namespace System451.Communication.Dashboard.WPF.Controls
             }
         }
 
+        void IZomBControlGroup.ControlAdded(object sender, ZomBControlAddedEventArgs e)
+        {
+
+        }
+
         #endregion
 
         #region ISavableZomBData Members

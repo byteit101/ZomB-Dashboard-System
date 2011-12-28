@@ -288,6 +288,11 @@ namespace System451.Communication.Dashboard
                 return this.targs;
             }
 
+            void IZomBControlGroup.ControlAdded(object sender, ZomBControlAddedEventArgs e)
+            {
+
+            }
+
             #endregion
         }
     }

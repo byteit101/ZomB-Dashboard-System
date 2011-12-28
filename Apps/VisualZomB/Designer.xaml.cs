@@ -504,6 +504,8 @@ namespace System451.Communication.Dashboard.ViZ
                             sc.Control.Name = ap.Name.Replace(" ", "Z").Replace("_", "__").Replace(".", "_") + Guid.NewGuid().ToString("N").Substring(0, 5);
                             if (sc.Control is ZomBGLControl)
                                 (sc.Control as ZomBGLControl).ControlName = ap.Name;
+                            else if (sc.Control is ZomBGLControlGroup)
+                                (sc.Control as ZomBGLControlGroup).ControlName = ap.Name;
                             if (curObj != null)
                             {
                                 var pco = curObj;
@@ -540,6 +542,8 @@ namespace System451.Communication.Dashboard.ViZ
             fe.Name = aup.Name.Replace(" ", "Z").Replace("_", "__").Replace(".", "_") + Guid.NewGuid().ToString("N").Substring(0, 5);
             if (fe is ZomBGLControl)
                 (fe as ZomBGLControl).ControlName = aup.Name;
+            else if (fe is ZomBGLControlGroup)
+                (fe as ZomBGLControlGroup).ControlName = aup.Name;
             AddControl(fe, point);
         }
 
@@ -1226,7 +1230,7 @@ namespace System451.Communication.Dashboard.ViZ
         private ListBox GetAAToolBoxClone()
         {
             var lb = DeepClonetb();
-            var ls = (from ZomBControlAttribute item in listBox1.ItemsSource where item.Type.IsSubclassOf(typeof(ZomBGLControl)) select item.Clone()).ToList();
+            var ls = (from ZomBControlAttribute item in listBox1.ItemsSource where item.Type.IsSubclassOf(typeof(ZomBGLControl)) || item.Type.IsSubclassOf(typeof(IZomBCompositeDescriptor)) select item.Clone()).ToList();
             ls.Add(new ZomBControlAttribute("ZomB Name") { Description = "Drag this to a control and it will set the name to this AutoPoints name.", TypeHints = ZomBDataTypeHint.Unknown, IconName = "ZomBNameAddIcon", Icon = (ImageSource)System.Windows.Application.Current.FindResource("ZomBNameAddIcon" ?? "DefaultControlImage") });
             lb.ItemsSource = ls;
             lb.PreviewMouseLeftButtonDown += listBox2_PreviewMouseLeftButtonDown;
@@ -1433,7 +1437,8 @@ namespace System451.Communication.Dashboard.ViZ
 
                 foreach (UIElement item in cvs.Children)
                 {
-                    if (item.GetType().GetCustomAttributes(typeof(ZomBControlAttribute), true).Length > 0)
+                    var type = item.GetType();
+                    if (type.GetCustomAttributes(typeof(ZomBControlAttribute), true).Length > 0 || type == typeof(ZomBGLControlGroup))
                     {
                         lc.Add(item);
                     }

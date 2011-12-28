@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Markup;
 using System.Windows.Media;
+using System451.Communication.Dashboard.WPF.Controls;
 
 namespace System451.Communication.Dashboard
 {
@@ -99,7 +100,15 @@ namespace System451.Communication.Dashboard
 
             public static object Inflate(Type t)
             {
-                return t.GetConstructor(Type.EmptyTypes).Invoke(null);
+                var tmp = t.GetConstructor(Type.EmptyTypes).Invoke(null);
+                if (tmp is IZomBCompositeDescriptor)
+                {
+                    var zcg = new ZomBGLControlGroup();
+                    zcg.DescriptorName = (tmp as IZomBCompositeDescriptor).Name;
+                    zcg.GroupDescriptor = tmp as IZomBCompositeDescriptor;
+                    tmp = zcg;
+                }
+                return tmp;
             }
 
             public static T CreateInstanceOf<T>(this AppDomain appDomain) where T : class

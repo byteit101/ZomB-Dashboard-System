@@ -391,6 +391,11 @@ namespace System451.Communication.Dashboard.Controls
             return innerCollection;
         }
 
+        void IZomBControlGroup.ControlAdded(object sender, ZomBControlAddedEventArgs e)
+        {
+
+        }
+
         #endregion
     }
     namespace Design

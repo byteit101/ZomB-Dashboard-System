@@ -184,6 +184,13 @@ namespace System451.Communication.Dashboard
     {
 
         /// <summary>
+        /// Notifies when this control is added to a DashboardDataHub
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">The Arrrghs</param>
+        void ControlAdded(object sender, ZomBControlAddedEventArgs e);
+
+        /// <summary>
         /// Gets the controls in this group
         /// </summary>
         /// <returns>The controls as a collection</returns>
@@ -250,6 +257,12 @@ namespace System451.Communication.Dashboard
         /// The name of the control. This is the name you send values to.
         /// </summary>
         public override string ControlName
+        {
+            get;
+            set;
+        }
+
+        public object Tag
         {
             get;
             set;

@@ -236,6 +236,9 @@
     <Compile Include="WPF\Controls\CommandButton.xaml.cs">
       <DependentUpon>CommandButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\Controls\Composite\CompositeDescriptor.cs" />
+    <Compile Include="WPF\Controls\Composite\PID.cs" />
+    <Compile Include="WPF\Controls\Composite\ZomBGLControlGroup.cs" />
     <Compile Include="WPF\Controls\Designer\PrimitiveControls\GraphScale.cs" />
     <Compile Include="WPF\Controls\Designer\TriggerListenersDesigner.cs" />
     <Compile Include="WPF\Controls\Designer\TriggerListenersDesignerWindow.xaml.cs">
@@ -453,6 +456,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="WPF\Controls\Composite\PID.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="WPF\Controls\Designer\TriggerListenersDesignerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -574,6 +581,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
