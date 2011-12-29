@@ -20,6 +20,7 @@
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/NetForward.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/Image.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/BluFinger.xaml" />
+        <ResourceDictionary Source="/ZomB;component/WPF/Controls/StatusTextBox.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Design/AutoPoint.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/Composite/PID.xaml" />
     </ResourceDictionary.MergedDictionaries>

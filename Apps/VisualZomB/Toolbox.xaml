@@ -27,7 +27,7 @@
     </Window.Resources>
     <Grid Name="TbxGrid" x:FieldModifier="internal" Grid.Row="2" Background="White">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="195" />
+            <ColumnDefinition Width="240" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <ListBox Grid.Column="0" Name="ToolListBox" x:FieldModifier="public" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
