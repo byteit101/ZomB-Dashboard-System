@@ -1315,6 +1315,11 @@ namespace System451.Communication.Dashboard.ViZ
             new About().ShowDialog();
         }
 
+        private void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            new SettingsManager().ShowDialog();
+        }
+
         #endregion
 
         #region Other

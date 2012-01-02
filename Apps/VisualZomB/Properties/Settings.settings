@@ -17,15 +17,6 @@
     <Setting Name="EmbeddedTbx" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="Profile1" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="Profile2" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="Profile3" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="Profile" Type="System.Collections.Specialized.StringDictionary" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
