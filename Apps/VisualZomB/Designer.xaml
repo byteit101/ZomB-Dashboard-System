@@ -180,13 +180,13 @@
                                         <PathGeometry >
                                             <PathFigure StartPoint="0,0" IsClosed="True">
                                                 <BezierSegment Point1="0,10" Point2="0,20" Point3="24,20" />
-                                                <LineSegment Point="50,20" />
-                                                <LineSegment Point="50,0"/>
+                                                <LineSegment Point="55,20" />
+                                                <LineSegment Point="55,0"/>
                                             </PathFigure>
                                         </PathGeometry>
                                     </Border.Clip>
                                     <StackPanel Orientation="Horizontal" Margin="8,2,3,4">
-                                        <TextBlock Text="ZomB" VerticalAlignment="Center" Foreground="Black" Height="13" Width="29" />
+                                        <TextBlock Text="ZomB" FontFamily="Verdana" FontSize="12" VerticalAlignment="Center" Foreground="Black" Height="13" Width="35" />
                                         <Image Margin="3,0,0,0">
                                             <Image.Source>
                                                 <DrawingImage>
