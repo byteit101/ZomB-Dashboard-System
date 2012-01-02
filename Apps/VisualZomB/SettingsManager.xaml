@@ -12,7 +12,7 @@
             <TabItem Header="VisualZomB">
                 <StackPanel CanVerticallyScroll="True">
                     <Expander Header="General" IsExpanded="True">
-                        <ZomB:FlowPropertyGrid  Orientation="Vertical" CollumnPadding="3" SnapsToDevicePixels="True" >
+                        <ZomB:FlowPropertyGrid  Orientation="Vertical" CollumnPadding="3" SnapsToDevicePixels="True" BorderBrush="Transparent">
                             <Label HorizontalAlignment="Right" ToolTip="Your team number. Used for camera and some sources. This should be set on the first run. Set to 0  to re-first-run it.">Team Number:</Label>
                             <TextBox  HorizontalAlignment="Left" Name="VizGenTxtTeamNumber" Width="40" VerticalAlignment="Center"></TextBox>
                             <Label HorizontalAlignment="Right" ToolTip="Embed the Toolbox into the canvas? Disable on small screens">Embedded Toolbox:</Label>
@@ -20,7 +20,7 @@
                         </ZomB:FlowPropertyGrid>
                     </Expander>
                     <Expander Header="Build">
-                        <ZomB:FlowPropertyGrid  Orientation="Vertical" CollumnPadding="3" SnapsToDevicePixels="True" >
+                        <ZomB:FlowPropertyGrid  Orientation="Vertical" CollumnPadding="3" SnapsToDevicePixels="True" BorderBrush="Transparent">
                             <Label HorizontalAlignment="Right" ToolTip="Copy all ZomB dll's? Configurable in the Export dialog">Copy Dll's:</Label>
                             <CheckBox Name="VizBldChkCopyDll" VerticalAlignment="Center" HorizontalAlignment="Left" />
                             <Label HorizontalAlignment="Right" ToolTip="Where should we export it? Configurable in the Export dialog">Default Save Location:</Label>
@@ -34,7 +34,7 @@
             <TabItem Header="All ZomB">
                 <StackPanel CanVerticallyScroll="True">
                     <Expander Header="General" IsExpanded="True">
-                        <ZomB:FlowPropertyGrid  Orientation="Vertical" CollumnPadding="3" SnapsToDevicePixels="True" >
+                        <ZomB:FlowPropertyGrid  Orientation="Vertical" CollumnPadding="3" SnapsToDevicePixels="True" BorderBrush="Transparent">
                             <Label HorizontalAlignment="Right" ToolTip="When in the &quot;Driver&quot; account, should the titlebar vanish so the dashboard can fit? Enable on the classmate or other small screens.">Disable Titlebar:</Label>
                             <CheckBox Name="ZbGenChkTitlebar" VerticalAlignment="Center" HorizontalAlignment="Left" />
                             <Label HorizontalAlignment="Right" ToolTip="Prevents more than one instance of ZomB from opening. Enable for older driver station software versions.">Single Instance:</Label>

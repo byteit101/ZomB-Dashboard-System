@@ -150,6 +150,22 @@ namespace System451.Communication.Dashboard.WPF.Controls
             return new Size(numcols * (finalWidthr + finalWidthl), numrows * finalHeight);
         }
 
+        public Brush BorderBrush
+        {
+            get { return (Brush)this.GetValue(BorderBrushProperty); }
+            set { this.SetValue(BorderBrushProperty, value); }
+        }
+
+        public static readonly DependencyProperty BorderBrushProperty = Border.BorderBrushProperty.AddOwner(typeof(FlowPropertyGrid), new PropertyMetadata(Brushes.LightGray, UpdateBorder_Change));
+
+        private static void UpdateBorder_Change(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            var sen = (sender as FlowPropertyGrid);
+            var grid = (sender as FlowPropertyGrid).grid;
+            grid.GridColor = sen.BorderBrush;
+            grid.SetStats(grid.CfinalWidthl, grid.CfinalWidthr, grid.CCollumnPadding, grid.CfinalHeight, grid.Cnumcols, grid.Cnumrows);
+        }
+
         protected override System.Windows.Media.Visual GetVisualChild(int index)
         {
             if (index == 0)
@@ -166,14 +182,29 @@ namespace System451.Communication.Dashboard.WPF.Controls
 
         class FPGGrid : DrawingVisual
         {
+            internal Brush GridColor { get; set; }
+
+            public double CfinalWidthl, CfinalWidthr, CCollumnPadding, CfinalHeight, Cnumcols, Cnumrows;
+
+            internal FPGGrid()
+            {
+                GridColor = Brushes.LightGray;
+            }
+
             internal void SetStats(double finalWidthl, double finalWidthr, double CollumnPadding, double finalHeight, double numcols, double numrows)
             {
+                CfinalWidthl = finalWidthl;
+                CfinalWidthr = finalWidthr;
+                CCollumnPadding = CollumnPadding;
+                CfinalHeight = finalHeight;
+                Cnumcols = numcols;
+                Cnumrows = numrows;
                 using (DrawingContext dc = this.RenderOpen())
                 {
                     double colwidth=finalWidthl + finalWidthr;
                     double width = (colwidth + CollumnPadding) * numcols + 1;
                     double height = finalHeight * numrows + 1;
-                    Pen pn = new Pen(Brushes.LightGray,1);
+                    Pen pn = new Pen(GridColor, 1);
                     //horizontal
                     for (int i = 0; i <= numrows; i++)
                     {
