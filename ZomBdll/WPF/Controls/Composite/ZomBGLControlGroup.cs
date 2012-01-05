@@ -36,7 +36,6 @@ namespace System451.Communication.Dashboard.WPF.Controls
     {
         DashboardDataHub localDDH;
         IZomBCompositeDescriptor descpt;
-        string descptname = null;
         ZomBControlCollection remotes = new ZomBControlCollection();
 
         /// <summary>
@@ -181,7 +180,7 @@ namespace System451.Communication.Dashboard.WPF.Controls
             var rcl = new ZomBRemoteControl();
             var name = item.ControlName;
             if (this.ControlName != null && this.ControlName.Length > 0)
-                name = this.ControlName + "." + name;
+                name = this.ControlName + ".Data." + name;
             if (item is IZomBDataControl)
             {
                 rcl = new ZomBRemoteDataControl();

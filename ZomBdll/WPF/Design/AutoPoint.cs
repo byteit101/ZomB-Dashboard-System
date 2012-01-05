@@ -86,5 +86,11 @@ namespace System451.Communication.Dashboard.WPF.Controls
             get;
             set;
         }
+
+        public object TypeHintTag
+        {
+            get;
+            set;
+        }
     }
 }

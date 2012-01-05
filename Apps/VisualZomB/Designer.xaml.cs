@@ -1,6 +1,6 @@
 ﻿/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
- * Copyright (C) 2011, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * Copyright (C) 2012, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,15 +18,18 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -36,9 +39,6 @@ using System451.Communication.Dashboard.ViZ.Properties;
 using System451.Communication.Dashboard.WPF.Controls;
 using System451.Communication.Dashboard.WPF.Controls.Designer;
 using System451.Communication.Dashboard.WPF.Design;
-using System.Runtime.InteropServices;
-using System.Windows.Interop;
-using System.Diagnostics;
 
 namespace System451.Communication.Dashboard.ViZ
 {
@@ -104,7 +104,7 @@ namespace System451.Communication.Dashboard.ViZ
         bool resizingform = false;
         Point orfPoing;
         Size orfSixe, wsize;
-        string preFile =  null;
+        string preFile = null;
 
         static Designer dsb = null;
 
@@ -330,7 +330,7 @@ namespace System451.Communication.Dashboard.ViZ
                 {
                     string updatepath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + Path.DirectorySeparatorChar + "ZomB Update.exe";
                     if (!Updater.Download(url, updatepath))
-                        TSAlert("An update for ZomB is avalible, but automatic download failed. Please manually update ZomB:\r\n\r\n" + url.DownloadUrl + "\r\n\r\nChanges:\r\n"+url.Changes, false);
+                        TSAlert("An update for ZomB is avalible, but automatic download failed. Please manually update ZomB:\r\n\r\n" + url.DownloadUrl + "\r\n\r\nChanges:\r\n" + url.Changes, false);
                     if (TSAlert("An update for ZomB is avalible, and has been downloaded & verified to your desktop.\r\nWould you like to update now?\r\nChanges:\r\n" + url.Changes, true))
                     {
                         Process.Start(updatepath);
@@ -358,7 +358,7 @@ namespace System451.Communication.Dashboard.ViZ
         {
             if (yesno)
             {
-                return MessageBox.Show(message, "", MessageBoxButton.YesNo) ==  MessageBoxResult.Yes;
+                return MessageBox.Show(message, "", MessageBoxButton.YesNo) == MessageBoxResult.Yes;
             }
             else
                 new ErrorDialog { Message = message, TopMessage = "", BottomMessage = "" }.ShowDialog();
@@ -512,7 +512,7 @@ namespace System451.Communication.Dashboard.ViZ
                                 Deselect();
                                 Select(pco);
                             }
-                
+
                         }
                     }
                     else
@@ -1201,6 +1201,13 @@ namespace System451.Communication.Dashboard.ViZ
                             if (dk.TypeHint == ZomBDataTypeHint.All || neweddata.Value.TypeHint == ZomBDataTypeHint.Unknown || neweddata.Value.TypeHint == ZomBDataTypeHint.All)
                                 dk.TypeHint = 0;
                             dk.TypeHint |= neweddata.Value.TypeHint;
+                            if ((dk.TypeHint & ZomBDataTypeHint.Lookup) == ZomBDataTypeHint.Lookup)
+                            {
+                                if ((neweddata.Value.Value is ZomBDataLookup) && (neweddata.Value.Value as ZomBDataLookup).ContainsKey("~TYPE~"))
+                                {
+                                    dk.TypeHintTag = (neweddata.Value.Value as ZomBDataLookup)["~TYPE~"];
+                                }
+                            }
                             Dispatcher.Invoke(new Utils.StringFunction(AutoAddResortTyped), neweddata.Key);
                         }
                     }
@@ -1210,14 +1217,36 @@ namespace System451.Communication.Dashboard.ViZ
 
         private void AutoAddResortTyped(string name)
         {
-            var dk = aadict[name];
-            List<ZomBControlAttribute> ls = new List<ZomBControlAttribute>(dk.Toolbox.Items.Count);
-            foreach (ZomBControlAttribute titem in dk.Toolbox.ItemsSource)
+            try
             {
-                titem.Star = ((dk.TypeHint & titem.TypeHints) != 0);
-                ls.Add(titem);
+                var dk = aadict[name];
+                List<ZomBControlAttribute> ls = new List<ZomBControlAttribute>(dk.Toolbox.Items.Count);
+                foreach (ZomBControlAttribute titem in dk.Toolbox.ItemsSource)
+                {
+                    if ((dk.TypeHint & ZomBDataTypeHint.Lookup) == ZomBDataTypeHint.Lookup && dk.TypeHintTag != null && titem.Type != null)
+                    {
+                        titem.Star = false;
+                        foreach (var item in titem.Type.GetCustomAttributes(typeof(ZomBCompositeAttribute), false))
+                        {
+                            if ((item as ZomBCompositeAttribute).CompositeName.ToLower() == dk.TypeHintTag.ToString().ToLower())
+                            {
+                                titem.Star = true;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        titem.Star = (((dk.TypeHint & titem.TypeHints) != 0));
+                    }
+                    ls.Add(titem);
+                }
+                dk.Toolbox.ItemsSource = from ZomBControlAttribute item in ls orderby !item.Star, item.Name select item;
             }
-            dk.Toolbox.ItemsSource = from ZomBControlAttribute item in ls orderby !item.Star, item.Name select item;
+            catch (Exception e)
+            {
+                ErrorDialog.PrcException(e);
+            }
         }
 
         private void AddAutoStub(string name)
@@ -1234,7 +1263,10 @@ namespace System451.Communication.Dashboard.ViZ
         private ListBox GetAAToolBoxClone()
         {
             var lb = DeepClonetb();
-            var ls = (from ZomBControlAttribute item in listBox1.ItemsSource where item.Type.IsSubclassOf(typeof(ZomBGLControl)) || item.Type.IsSubclassOf(typeof(IZomBCompositeDescriptor)) select item.Clone()).ToList();
+            var ls = (from ZomBControlAttribute item in listBox1.ItemsSource
+                      where item.Type.IsSubclassOf(typeof(ZomBGLControl))
+                          || typeof(IZomBCompositeDescriptor).IsAssignableFrom(item.Type)
+                      select item.Clone()).ToList();
             ls.Add(new ZomBControlAttribute("ZomB Name") { Description = "Drag this to a control and it will set the name to this AutoPoints name.", TypeHints = ZomBDataTypeHint.Unknown, IconName = "ZomBNameAddIcon", Icon = (ImageSource)System.Windows.Application.Current.FindResource("ZomBNameAddIcon" ?? "DefaultControlImage") });
             lb.ItemsSource = ls;
             lb.PreviewMouseLeftButtonDown += listBox2_PreviewMouseLeftButtonDown;
@@ -1776,8 +1808,8 @@ namespace System451.Communication.Dashboard.ViZ
             if (Settings.Default.Profile == null)
                 Settings.Default.Profile = new System.Collections.Specialized.StringDictionary();
             if (Settings.Default.Profile.ContainsKey(profileName))
-            { 
-                Settings.Default.Profile[profileName]=profileString;
+            {
+                Settings.Default.Profile[profileName] = profileString;
             }
             else
             {
@@ -1795,7 +1827,7 @@ namespace System451.Communication.Dashboard.ViZ
         public void LoadProfile(string profileName)
         {
             string profileString = Settings.Default.Profile[profileName];
-        
+
             string teamnumberp, sourcep, invalidactionp;
             teamnumberp = profileString.Substring(0, profileString.IndexOf('|'));
             profileString = profileString.Substring(profileString.IndexOf('|') + 1);
