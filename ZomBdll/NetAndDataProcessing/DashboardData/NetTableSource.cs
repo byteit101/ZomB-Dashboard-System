@@ -188,9 +188,9 @@ namespace System451.Communication.Dashboard.Net
         }
 
         public event EventHandler DataRecieved;
-
+#pragma warning disable 67
         public event InvalidPacketRecievedEventHandler InvalidPacketRecieved;
-
+#pragma warning restore 67
         public event ErrorEventHandler OnError;
 
         #endregion
@@ -543,10 +543,10 @@ namespace System451.Communication.Dashboard.Net
                         if (!tables.ContainsKey(tableid))//gotta create it
                         {
                             throw new InvalidOperationException("Throw er in the debugger! Something odd happened!");
-                            dict = new ZomBDataLookup();
-                            tables.AddOrUpdate(tableid, dict);
-                            //tablesbyfield.AddOrUpdate(fid, dict);//TODO: fix this
-                            this.SillySendTableLink(tableid);
+                            //dict = new ZomBDataLookup();
+                            //tables.AddOrUpdate(tableid, dict);
+                            ////tablesbyfield.AddOrUpdate(fid, dict);//TODO: fix this
+                            //this.SillySendTableLink(tableid);
                         }
                         else //only gotta assign the fid
                         {
@@ -817,6 +817,13 @@ namespace System451.Communication.Dashboard.Net
                 }
                 catch (Exception ex)
                 {
+                    try
+                    {
+                        Qlock.Release();
+                    }
+                    catch
+                    {}
+                    Qlock.WaitOne(1);
                     nume++;
                     DoError(ex);
                     if (nume > 10)

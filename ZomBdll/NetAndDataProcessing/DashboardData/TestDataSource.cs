@@ -1,6 +1,6 @@
 ﻿/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
- * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * Copyright (C) 2012, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -103,10 +103,11 @@ namespace System451.Communication.Dashboard.Net
         }
 
         public event EventHandler DataRecieved;
-
+#pragma warning disable 67
         public event InvalidPacketRecievedEventHandler InvalidPacketRecieved;
 
         public event ErrorEventHandler OnError;
+#pragma warning restore 67
 
         #endregion
 
@@ -133,6 +134,7 @@ namespace System451.Communication.Dashboard.Net
         {
             int i = 0;
             Random rand = new Random();
+            kys["group.~TYPE~"] = "PIDController";
             while (isrunning)
             {
                 kys["float"] = new ZomBDataObject(Math.Sin((i++) / 100.0), ZomBDataTypeHint.Double);

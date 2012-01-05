@@ -35,9 +35,7 @@ namespace System451.Communication.Dashboard.Net
         SerialPort killer;
         bool isrunning;
         Thread backThread;
-        DashboardDataHub ddh;
 
-        FRCDSStatus cStat = new FRCDSStatus();
         ZomBDataLookup kys = new ZomBDataLookup();
 
         public SerialDataSource(ZomBUrl info)
@@ -151,9 +149,9 @@ namespace System451.Communication.Dashboard.Net
         }
 
         public event EventHandler DataRecieved;
-
+#pragma warning disable 67
         public event InvalidPacketRecievedEventHandler InvalidPacketRecieved;
-
+#pragma warning restore 67
         public event ErrorEventHandler OnError;
 
         #endregion
@@ -262,7 +260,7 @@ namespace System451.Communication.Dashboard.Net
         internal void DoError(Exception ex)
         {
             if (OnError == null)
-                ddh.DoError(ex);
+                throw new ArgumentNullException("No Error handler", ex);
             else
                 OnError(this, new ErrorEventArgs(ex));
         }

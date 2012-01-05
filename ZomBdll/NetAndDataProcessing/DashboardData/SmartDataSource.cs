@@ -266,8 +266,6 @@ namespace System451.Communication.Dashboard.Net
                                 }
                             default:
                                 throw new Exception("Bin ("+b+") not a 1 or zero, exiting");
-
-                                break;
                         }
                     }
 
