@@ -104,7 +104,7 @@ namespace System451.Communication.Dashboard.ViZ
                 }
                 catch (Exception ex)
                 {
-                    string full = getFullException(ex);
+                    string full = ErrorDialog.getFullException(ex);
                     System.Windows.Forms.MessageBox.Show(full);
                 }
 #endif
