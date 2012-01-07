@@ -1,6 +1,6 @@
 ﻿/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
- * Copyright (C) 2011, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * Copyright (C) 2012, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ namespace System451.Communication.Dashboard
          * MANUAL CONFIG VARS
          */
 
-        public const string CodeName = "Summer Fun";
-        public const string ReleaseDateString = "Not a major release - Summer 2011";
+        public const string CodeName = "Snowdrift";
+        public const string ReleaseDateString = "Beta 1 Released 1/6/12";
     }
 }

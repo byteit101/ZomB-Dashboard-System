@@ -136,5 +136,10 @@ namespace System451.Communication.Dashboard.ViZ
                 DeleteProfileMenu.Items.Add(mi);
             }
         }
+
+        private void MoreSettings_Click(object sender, RoutedEventArgs e)
+        {
+            new SettingsManager().ShowDialog();
+        }
     }
 }

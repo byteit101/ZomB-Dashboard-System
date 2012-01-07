@@ -83,7 +83,9 @@
                 </MenuItem>
                 <MenuItem Header="Delete Profile" Name="DeleteProfileMenu">
                 </MenuItem>
+                <Separator/>
                 <MenuItem Header="Dock toolbox to main window" Checked="DockCheck_Checked" Unchecked="DockCheck_Unchecked" Name="DockCheck" IsCheckable="True" />
+                <MenuItem Header="More Settings..."  Name="MoreSettings" Click="MoreSettings_Click" />
 
             </ContextMenu>
         </Grid.ContextMenu>
