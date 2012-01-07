@@ -87,6 +87,16 @@ namespace System451.Communication.Dashboard.ViZ
                                 System.Windows.Forms.MessageBox.Show("Invalid CLI arguments. Valid arguments:\r\n -extract  Extract all embedded dll's\r\n -build infile outfile   Build the infile into an exe at outfile\r\n [fileName]  Run this Zaml file");
                                 break;
                             }
+                        case "help":
+                        case "--help":
+                        case "-help":
+                        case "/help":
+                        case "/?":
+                        case "-h":
+                            this.ShutdownMode = System.Windows.ShutdownMode.OnExplicitShutdown;
+                            new ZomBWalkthrough.Form().ShowDialog();
+                            this.Shutdown();
+                            break;
                         default:
                             System.Windows.Forms.MessageBox.Show("Invalid CLI arguments. Valid arguments:\r\n -extract  Extract all embedded dll's\r\n -build infile outfile   Build the infile into an exe at outfile\r\n [fileName]  Run this Zaml file");
                             new Designer().Show();

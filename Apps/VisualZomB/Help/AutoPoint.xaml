@@ -1,0 +1,46 @@
+﻿<Page x:Class="ZomBWalkthrough.AutoPoint"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="384" d:DesignWidth="813"
+	Title="AutoPoint">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="32">AutoListen - AutoPoints</TextBlock>
+        <FlowDocumentScrollViewer Grid.Row="1" Grid.RowSpan="2">
+            <FlowDocument>
+                <Paragraph>
+                    <Floater Width="250">
+                        <BlockUIContainer>
+                            <Image Source="/ViZ;component/Help/AutoPoint.png"/>
+                        </BlockUIContainer>
+                    </Floater>AutoPoints are each of the auto-detected controls reperenstation on the left. When you 
+                    click one, it makes a guess at its type (if the source supports it, Smart sources do), and shows you a 
+                    toolbox of pre-named controls you can drag onto the surface.
+                </Paragraph>
+                <Paragraph>Stared controls are of the incoming type, and are usually the right choice to pick. 
+                The big blue + at the bottom is a special control. It can be dragged onto an existing control
+                to rename it. In the case above, that would be group. If you drag any control on from the AutoPoint above, it will
+                automatically have the name
+                    <Run FontStyle="Italic">group</Run> . To clear away AutoPoints, stop the AutoListening.
+                    <Figure Width="150" Margin="0" Padding="0" HorizontalAnchor="PageLeft" VerticalAnchor="PageBottom">
+                        <BlockUIContainer>
+                            <Rectangle Height="20" Fill="Transparent" />
+                        </BlockUIContainer>
+                    </Figure>
+                </Paragraph>
+            </FlowDocument>
+        </FlowDocumentScrollViewer>
+        <DockPanel Grid.Row="2" Name="stackPanel1" VerticalAlignment="Top" Margin="5" LastChildFill="False">
+            <Button Padding="4"  Margin="0,0,3,0" Width="75" DockPanel.Dock="Left" Click="Previous_Click">Previous</Button>
+            <Button Padding="4" Width="75" DockPanel.Dock="Left" Click="Next_Click">Next</Button>
+        </DockPanel>
+    </Grid>
+</Page>

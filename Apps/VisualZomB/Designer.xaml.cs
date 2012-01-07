@@ -114,7 +114,11 @@ namespace System451.Communication.Dashboard.ViZ
                 throw new InvalidOperationException("Only one ViZ designer can be active at a time in this App Domain");
             dsb = this;
             if (Settings.Default.LastTeamNumber == "0" || Settings.Default.LastTeamNumber == "" || Settings.Default.LastTeamNumber == null)
+            {
+                Process.Start(System.AppDomain.CurrentDomain.BaseDirectory+"\\ViZ.exe", "help");
+                Thread.Sleep(3141);
                 new FirstRun().ShowDialog();
+            }
             ZDesigner.SetDesigner(this);
             InitializeComponent();
 
@@ -1350,6 +1354,11 @@ namespace System451.Communication.Dashboard.ViZ
         private void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
             new SettingsManager().ShowDialog();
+        }
+
+        private void HelpMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(System.AppDomain.CurrentDomain.BaseDirectory + "\\ViZ.exe", "help");
         }
 
         #endregion

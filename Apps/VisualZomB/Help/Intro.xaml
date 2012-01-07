@@ -1,0 +1,34 @@
+﻿<Page x:Class="ZomBWalkthrough.Intro"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="700"
+      Title="Welcome to ZomB!">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="32">Welcome to ZomB!</TextBlock>
+        <FlowDocumentScrollViewer Grid.Row="1" Grid.RowSpan="2">
+            <FlowDocument>
+                <Paragraph>
+                    This walkthrough will familiarize you with this powerful tool. This tutorial is only launched on the first run; If you need to consult it later, you can find it under ZomB &gt; Help.</Paragraph>
+                <Paragraph>To continue, hit the next button below.
+                    <Figure Width="150" Margin="0" Padding="0" HorizontalAnchor="PageLeft" VerticalAnchor="PageBottom">
+                        <BlockUIContainer>
+                            <Rectangle Height="20" Fill="Transparent" />
+                        </BlockUIContainer>
+                    </Figure>
+                </Paragraph>
+            </FlowDocument>
+        </FlowDocumentScrollViewer>
+        <DockPanel Grid.Row="2" Name="stackPanel1" VerticalAlignment="Top" Margin="5" LastChildFill="False">
+            <Button Padding="4" Margin="0,0,3,0" Width="75" DockPanel.Dock="Left" Click="Close_click" IsEnabled="False">Previous</Button>
+            <Button Padding="4" Width="75" DockPanel.Dock="Left" Click="Button_Click">Next</Button>
+        </DockPanel>
+    </Grid>
+</Page>

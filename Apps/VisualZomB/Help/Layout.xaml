@@ -1,0 +1,58 @@
+﻿<Page x:Class="ZomBWalkthrough.Layout"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="480" d:DesignWidth="976"
+	Title="Layout">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="32">VisualZomB Layout</TextBlock>
+        <FlowDocumentScrollViewer Grid.Row="1" Grid.RowSpan="2">
+            <FlowDocument>
+                <Paragraph>
+                    <Floater  Width="400">
+                        <BlockUIContainer>
+                            <Image Source="/ViZ;component/Help/ZomBTop.png"/>
+                        </BlockUIContainer>
+                    </Floater> This is the main window of ZomB this is where you map out your dashboard. In the top left 
+                    hand corner is the AutoListen button. 
+                    AutoListen searches for controls and displays them for easy access.
+                </Paragraph>
+                <Paragraph>In the center of the top is the
+                    ZomB menu, containing your standard menu items (Save, Load, About, etc...). When the titlebar is removed
+                    on small screens, it also becomes a titlebar, enabling you to move and close Visual ZomB via the dotted 
+                    area and the x on the right, respectivly.</Paragraph>
+                <Paragraph>In the center is the canvas, which can be resized from the bottom right 
+                    and is where you design your dashboard layout.</Paragraph>
+                <Paragraph>
+                    <Floater Width="400" HorizontalAlignment="Left">
+                        <BlockUIContainer>
+                            <Image Source="/ViZ;component/Help/ZomBBottom.png"></Image>
+                        </BlockUIContainer>
+                    </Floater>
+                    The bottom section is divided into two parts: the Toolbox on the left, and the property editor on the right.
+                    The Toolbox contains all the possible controls you can use in ZomB. If you hover over the icon 
+                you can see it's name and a brief description. To add a control, simply drag it on to the canvas from the toolbox.</Paragraph>
+                <Paragraph>When a control on the canvas is selected, the property editor will display the editable properties 
+                    for the control. When nothing is selected, it displays properties for the entire dashboard.
+                    <Figure Width="150" Margin="0" Padding="0" HorizontalAnchor="PageLeft" VerticalAnchor="PageBottom">
+                        <BlockUIContainer>
+                            <Rectangle Height="20" Fill="Transparent" />
+                        </BlockUIContainer>
+                    </Figure>
+                </Paragraph>
+            </FlowDocument>
+        </FlowDocumentScrollViewer>
+        <DockPanel Grid.Row="2" Name="stackPanel1" VerticalAlignment="Top" Margin="5" LastChildFill="False">
+            <Button Padding="4" Width="75" Margin="0,0,3,0" DockPanel.Dock="Left" Click="Previous_Click">Previous</Button>
+            <Button Padding="4" Width="75" DockPanel.Dock="Left" Click="Next_Click">Next</Button>
+        </DockPanel>
+    </Grid>
+</Page>

@@ -260,6 +260,7 @@
                             <MenuItem Header="Auto_Listen" Click="AutoListen_Click" Name="AAListen"/>
                             <MenuItem Header="Sto_p Listening" Click="StopListening_Click" Name="AAdeListen" Visibility="Collapsed" />
                             <MenuItem Header="S_ettings..." Click="SettingsMenuItem_Click"/>
+                            <MenuItem Header="_Help..." Click="HelpMenuItem_Click"/>
                             <MenuItem Header="A_bout..." Click="MenuItem_Click"/>
                         </MenuItem>
                     </Menu>

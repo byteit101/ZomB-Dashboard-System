@@ -1,0 +1,47 @@
+﻿<Page x:Class="ZomBWalkthrough.Profiles"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="403" d:DesignWidth="631"
+	Title="Profiles">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="32">Profiles</TextBlock>
+        <FlowDocumentScrollViewer Grid.Row="1" Grid.RowSpan="2">
+            <FlowDocument>
+                <Paragraph>
+                    <Floater  Width="400">
+                        <BlockUIContainer>
+                            <Image Source="/ViZ;component/Help/Profiles.png"/>
+                        </BlockUIContainer>
+                    </Floater> Also in the properties section of ViZ (VisualZomB), if you right click on empty space, you will bring up 
+                    the profiles menu. Here you can save specific settings (Team number, sources, invalid packet action) with
+                    a name. I personally use one for each of the common sources I use, to avoid having to 
+                    set them up each time.
+                </Paragraph>
+                <Paragraph>To create a profile, simply go to the save profile sub-menu, click the text box, type a name and hit enter. 
+                    (NOTE: you must keep the cursor on the text box menu item to type). Loading or deleting a profile is similary
+                simple,
+                    go to the appropriate menu and select the item to delete or load.
+                    <Figure Width="150" Margin="0" Padding="0" HorizontalAnchor="PageLeft" VerticalAnchor="PageBottom">
+                        <BlockUIContainer>
+                            <Rectangle Height="20" Fill="Transparent" />
+                        </BlockUIContainer>
+                    </Figure>
+                </Paragraph>
+
+            </FlowDocument>
+        </FlowDocumentScrollViewer>
+        <DockPanel Grid.Row="2" Name="stackPanel1" VerticalAlignment="Top" Margin="5" LastChildFill="False">
+            <Button Padding="4"  Margin="0,0,3,0" Width="75" DockPanel.Dock="Left" Click="Previous_Click">Previous</Button>
+            <Button Padding="4" Width="75" DockPanel.Dock="Left" Click="Next_Click">Next</Button>
+        </DockPanel>
+    </Grid>
+</Page>

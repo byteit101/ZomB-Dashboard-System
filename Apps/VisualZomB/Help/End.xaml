@@ -1,0 +1,42 @@
+﻿<Page x:Class="ZomBWalkthrough.End"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="384" d:DesignWidth="813"
+	Title="The End">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="32">Now go explore...</TextBlock>
+        <FlowDocumentScrollViewer Grid.Row="1" Grid.RowSpan="2">
+            <FlowDocument>
+                <Paragraph>
+                    Now, go create cool dashboards, and more importantly, explore. ZomB has many features lurking around,
+                    such as rotating, moving, or skewing objects based on values. It has cool gradients, and image backgrounds.
+                    Create buttons that call functions (Start and Stop camera recording are the only supported functions at
+                    the moment), and so much more... (And for the XAML experts out there, you can have ZomB build any XAML file,
+                    so your spinning 3d cubes are not far away)
+                </Paragraph>
+                <Paragraph>
+                    If you ever become lost, find a bug, experience problems, or have an idea, please feel free to contact me,
+                    PM byteit101 on ChiefDelphi.com, or on FirstForge.wpi.edu.
+                    <Figure Width="150" Margin="0" Padding="0" HorizontalAnchor="PageLeft" VerticalAnchor="PageBottom">
+                        <BlockUIContainer>
+                            <Rectangle Height="20" Fill="Transparent" />
+                        </BlockUIContainer>
+                    </Figure>
+                </Paragraph>
+            </FlowDocument>
+        </FlowDocumentScrollViewer>
+        <DockPanel Grid.Row="2" Name="stackPanel1" VerticalAlignment="Top" Margin="5" LastChildFill="False">
+            <Button Padding="4"  Margin="0,0,3,0" Width="75" DockPanel.Dock="Left" Click="Previous_Click">Previous</Button>
+            <Button Padding="4" Width="75" DockPanel.Dock="Left" Click="Next_Click" IsEnabled="False">Next</Button>
+        </DockPanel>
+    </Grid>
+</Page>

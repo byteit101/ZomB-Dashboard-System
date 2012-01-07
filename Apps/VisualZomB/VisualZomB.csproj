@@ -96,6 +96,46 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Help\AutoListen.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Help\AutoPoint.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Help\End.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Help\Files.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Help\FirstRun.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Help\Form.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Help\Intro.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Help\Layout.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Help\Profiles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Help\Sources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SettingsManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -139,6 +179,36 @@
     <Compile Include="DropShadowChrome.cs" />
     <Compile Include="FirstRun.xaml.cs">
       <DependentUpon>FirstRun.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help\AutoListen.xaml.cs">
+      <DependentUpon>AutoListen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help\AutoPoint.xaml.cs">
+      <DependentUpon>AutoPoint.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help\End.xaml.cs">
+      <DependentUpon>End.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help\Files.xaml.cs">
+      <DependentUpon>Files.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help\FirstRun.xaml.cs">
+      <DependentUpon>FirstRun.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help\Form.xaml.cs">
+      <DependentUpon>Form.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help\Intro.xaml.cs">
+      <DependentUpon>Intro.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help\Layout.xaml.cs">
+      <DependentUpon>Layout.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help\Profiles.xaml.cs">
+      <DependentUpon>Profiles.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help\Sources.xaml.cs">
+      <DependentUpon>Sources.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -194,9 +264,7 @@
       <Name>ZomB</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Designer\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="ZomB.ico" />
   </ItemGroup>
@@ -210,6 +278,16 @@
     <None Include="Zaml.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Help\AutoListen.png" />
+    <Resource Include="Help\AutoListenStart.png" />
+    <Resource Include="Help\AutoPoint.png" />
+    <Resource Include="Help\Profiles.png" />
+    <Resource Include="Help\Sources.png" />
+    <Resource Include="Help\TeamNumberDialog.png" />
+    <Resource Include="Help\ZomBBottom.png" />
+    <Resource Include="Help\ZomBTop.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

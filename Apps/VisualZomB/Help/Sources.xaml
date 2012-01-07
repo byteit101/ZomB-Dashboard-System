@@ -1,0 +1,50 @@
+﻿<Page x:Class="ZomBWalkthrough.Sources"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="429" d:DesignWidth="929"
+	Title="Sources">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="32">ZomB Data Sources and Senders</TextBlock>
+        <FlowDocumentScrollViewer Grid.Row="1" Grid.RowSpan="2">
+            <FlowDocument>
+                <Paragraph>
+                    <Floater  Width="600">
+                        <BlockUIContainer>
+                            <Image Source="/ViZ;component/Help/Sources.png"/>
+                        </BlockUIContainer>
+                    </Floater>One of the most, perhaps the most, important dialog in ZomB is this dialog, the Sources dialog.
+                    To open it, click the
+                    <Button FontSize="10">...</Button> next to the Sources field in the properties window when nothing is selected.
+                </Paragraph>
+                <Paragraph>ZomB uses a highly extendable and configurable system for retrieving data from the robot: ZomB urls.
+                Each ZomB url starts with "zomb://", then the host (robot), the source name, and any source-specific configuration.
+                The host can be either a full hostname, an ip address, or one of ".teamnumber" to specify 10.team.number.2 
+                (the robot), or even just "." if you have specified your team number before. Some sources (ex: DataSave, Serial, etc..)
+                don't have a logical host, but you need to specify a dummy value anyway.</Paragraph>
+                <Paragraph>To add or remove a source, click the add or remove button in the top left. The selected source is
+                editable on the right by clicking the source name, or by editing the raw url. Url's are saved automatically,
+                just close the window and they are updated and saved.</Paragraph>
+                <Paragraph>To continue with this tutorial, use the Test source, and delete all others.
+                    <Figure Width="150" Margin="0" Padding="0" HorizontalAnchor="PageLeft" VerticalAnchor="PageBottom">
+                        <BlockUIContainer>
+                            <Rectangle Height="20" Fill="Transparent" />
+                        </BlockUIContainer>
+                    </Figure>
+                </Paragraph>
+            </FlowDocument>
+        </FlowDocumentScrollViewer>
+        <DockPanel Grid.Row="2" Name="stackPanel1" VerticalAlignment="Top" Margin="5" LastChildFill="False">
+            <Button Padding="4" Margin="0,0,3,0" Width="75" DockPanel.Dock="Left" Click="Previous_Click">Previous</Button>
+            <Button Padding="4" Width="75" DockPanel.Dock="Left" Click="Next_Click">Next</Button>
+        </DockPanel>
+    </Grid>
+</Page>
