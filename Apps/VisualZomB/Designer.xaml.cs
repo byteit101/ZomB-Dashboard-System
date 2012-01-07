@@ -188,7 +188,7 @@ namespace System451.Communication.Dashboard.ViZ
             }
             designerProps.Add(new Label());
             (designerProps[4] as Label).Content = "Source:";
-            ZomBUrlSources = "zomb://." + Settings.Default.LastTeamNumber + "/Smart";
+            ZomBUrlSources = "zomb://." + Settings.Default.LastTeamNumber + "/SmartNG";
             var dsnr = new ZomBUrlCollectionDesigner();
             dsnr.Initialize(this, this.GetType().GetProperty("ZomBUrlSources", BindingFlags.NonPublic | BindingFlags.Instance));
             designerProps.Add(dsnr.GetProperyField());
