@@ -58,7 +58,7 @@ SET SVN_REVISION=451
 SET /P SVN_REVISION=SVN Revision (don't set too high) [451]:
 
 SET BUILD_NUMBER=70
-SET /P BUILD_NUMBER=Build number [70]:
+SET InstallerBuildDisplay=0.8.3.0
 
 @echo on
 @call trunk\releasefiles\Build.bat

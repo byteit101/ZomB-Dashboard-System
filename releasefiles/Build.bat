@@ -8,7 +8,7 @@ IF %InstallerBuildSVN% EQU true (
 call BatSub.bat FULL_VERSION %InstallerBuildVersion%%SVN_REVISION% version.diff > tversion.diff
 call BatSub.bat SHORT_VERSION "%InstallerBuildVersion%0" tversion.diff > zversion.diff
 ) ELSE (
-call BatSub.bat FULL_VERSION %InstallerBuildVersion% version.diff > tversion.diff
+call BatSub.bat FULL_VERSION %InstallerBuildDisplay% version.diff > tversion.diff
 call BatSub.bat SHORT_VERSION %InstallerBuildVersion% tversion.diff > zversion.diff
 )
 cd ..\..\..\
