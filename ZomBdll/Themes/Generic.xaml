@@ -10,7 +10,6 @@
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/SpikeControl.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/AlertControl.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/SpeedMeter.xaml" />
-        <ResourceDictionary Source="/ZomB;component/WPF/Controls/xShake.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/TacoMeter.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/CameraView.xaml" />
         <ResourceDictionary Source="/ZomB;component/WPF/Controls/DataGraph.xaml" />

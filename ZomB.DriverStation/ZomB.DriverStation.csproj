@@ -85,6 +85,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ZomB.xShake\ZomB.xShake.csproj">
+      <Project>{1CAFAE4E-303C-437F-83A6-FD320101F25F}</Project>
+      <Name>ZomB.xShake</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ZomBdll\ZomB.csproj">
       <Project>{B40501FE-DF11-452B-BAD6-30DE836902C6}</Project>
       <Name>ZomB</Name>

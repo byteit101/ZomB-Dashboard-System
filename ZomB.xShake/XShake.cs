@@ -1,6 +1,6 @@
 ﻿/*
  * ZomB Dashboard System <http://firstforge.wpi.edu/sf/projects/zombdashboard>
- * Copyright (C) 2009-2010, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
+ * Copyright (C) 2012, Patrick Plenefisch and FIRST Robotics Team 451 "The Cat Attack"
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,13 +24,17 @@ using System.Windows.Forms.Design;
 using System451.Communication.Dashboard.Utils;
 using System451.Communication.Dashboard.Libs.Xbox360Controller;
 using SlimDX.XInput;
+internal class icofindsx
+{
+
+}
 
 namespace System451.Communication.Dashboard.Controls
 {
     /// <summary>
     /// A ZomB control that displays text at different locations
     /// </summary>
-    [ToolboxBitmap(typeof(icofinds), "System451.Communication.Dashboard.TBB.Vibrate.ico")]
+    [ToolboxBitmap(typeof(icofindsx), "System451.Communication.Dashboard.TBB.Vibrate.ico")]
     public class XShake : ZomBControl
     {
         int padNumber = 0;
