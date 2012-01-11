@@ -9,10 +9,10 @@ RequestExecutionLevel highest
 !define VERSION "VERSION_NUMBER" ;CONST VERSION
 !define COMPANY "Team 451 and Patrick Plenefisch"
 !define URL http://thecatattack.org/ZomB
-!define VLCVERSION "1.1.10"
-!define VLCVERSION2 "1.1.11"
-!define VLCVERSION3 "1.1.12"
-!define VLCVERSION4 "1.1.13"
+!define VLCVERSION "1.1.11"
+!define VLCVERSION2 "1.1.12"
+!define VLCVERSION3 "1.1.13"
+!define VLCVERSION4 "1.1.14"
 
 # MUI Symbol Definitions
 !define MUI_ICON "Installer.ico"
@@ -54,7 +54,7 @@ InstallDir $PROGRAMFILES\ZomB
 CRCCheck on
 XPStyle on
 ShowInstDetails show
-VIProductVersion 1.5.0.0
+VIProductVersion 1.9.0.0
 VIAddVersionKey ProductName "ZomB Dashboard System"
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"
@@ -276,8 +276,8 @@ SectionGroup "Dependencies" SECGRP0001
             MessageBox MB_OK "VLC Download failed: $R0"
         ${EndIf}
     SectionEnd
-	Section "SlimDX" SEC0014
-		SectionIn 2 3
+	Section /o "SlimDX (only for plugins)" SEC0014
+		SectionIn 3
         SetOverwrite on
 		!insertmacro IfKeyExists "HKLM" "SOFTWARE\Classes\Installer\Assemblies\Global" 'SlimDX,version="2.0.12.43",culture="neutral",publicKeyToken="B1B0C32FD1FFE4F9",processorArchitecture="x86"'
 		Pop $R0
@@ -301,6 +301,7 @@ SectionGroup "Dependencies" SECGRP0001
 					done:
 				${Else}
 					MessageBox MB_OK "SlimDX Download failed: $R0"
+					Abort
 				${EndIf}
 			${EndIf}
 		${EndIf}
@@ -339,7 +340,7 @@ SectionGroup "Bindings (obsolete)" SECGRP0002
         !insertmacro CREATE_SMGROUP_SHORTCUT "Binding Help" "$INSTDIR\Bindings\Bindings Help.pdf"
     SectionEnd
 	
-    Section /o "C++ Bindings" SEC0005
+    Section /o "C++ Bindings (obsolete)" SEC0005
         SectionIn 3
         SetOverwrite on
         ${IfNot} ${FileExists} `$INSTDIR\Bindings`
@@ -348,7 +349,7 @@ SectionGroup "Bindings (obsolete)" SECGRP0002
         File "/oname=Bindings\ZomBDashboard.h" ZomBDashboard.h
     SectionEnd
 	
-    Section /o "Java Bindings" SEC0006
+    Section /o "Java Bindings (obsolete)" SEC0006
         SectionIn 3
         SetOverwrite on
         ${IfNot} ${FileExists} `$INSTDIR\Bindings`
@@ -358,7 +359,7 @@ SectionGroup "Bindings (obsolete)" SECGRP0002
         File "/oname=Bindings\ZomBModes.java" ZomBModes.java
     SectionEnd
 	
-    Section /o "LabVIEW Bindings" SEC0007
+    Section /o "LabVIEW Bindings (obsolete)" SEC0007
         SectionIn 3
         SetOverwrite on
         ${IfNot} ${FileExists} `$INSTDIR\Bindings`
@@ -367,7 +368,7 @@ SectionGroup "Bindings (obsolete)" SECGRP0002
         File "/oname=Bindings\ZomB.llb" ZomB.llb
     SectionEnd
     
-    Section  /o "Shortcut" SEC0008
+    Section  /o "Shortcut (obsolete)" SEC0008
         SectionIn 3
         ${IfNot} ${FileExists} `$INSTDIR\Bindings`
         CreateDirectory "$INSTDIR\Bindings"
@@ -401,14 +402,24 @@ SectionGroup "Others" SECGRP0003
 		!insertmacro NGEN "$INSTDIR\ZomB Eye.exe"
     SectionEnd
 
-    Section "Driver Station Plugin" SEC0012
-        SectionIn 1 2 3
+    Section /o "Driver Station Plugin" SEC0012
+        SectionIn 3
         SetOverwrite on
 		${IfNot} ${FileExists} `$INSTDIR\plugins`
         CreateDirectory "$INSTDIR\plugins"
         ${EndIf}
         File "/oname=plugins\ZomB.DriverStation.dll" "ZomB.DriverStation.dll"
 		!insertmacro NGEN "$INSTDIR\plugins\ZomB.DriverStation.dll"
+    SectionEnd
+
+    Section /o "xShake Plugin" SEC0015
+        SectionIn 3
+        SetOverwrite on
+		${IfNot} ${FileExists} `$INSTDIR\plugins`
+        CreateDirectory "$INSTDIR\plugins"
+        ${EndIf}
+        File "/oname=plugins\ZomB.xShake.dll" "ZomB.xShake.dll"
+		!insertmacro NGEN "$INSTDIR\plugins\ZomB.xShake.dll"
     SectionEnd
 SectionGroupEnd
 
@@ -437,6 +448,7 @@ Section "-un.ZomB" UNSEC0000
     Delete /REBOOTOK "Vlc.DotNet.Core.dll"
     Delete /REBOOTOK "Vlc.DotNet.Forms.dll"
 	Delete /REBOOTOK "plugins\ZomB.DriverStation.dll"
+	Delete /REBOOTOK "plugins\ZomB.xShake.dll"
     Delete /REBOOTOK "ffmpeg.exe"
     Delete /REBOOTOK "LICENSE.txt"
     Delete /REBOOTOK "CREDITS.txt"
@@ -467,6 +479,7 @@ Section "-un.ZomB" UNSEC0000
 	!insertmacro UNGEN "$INSTDIR\Bindings\OutStaller.exe"
 	!insertmacro UNGEN "$INSTDIR\ZomB Eye.exe"
 	!insertmacro UNGEN "$INSTDIR\plugins\ZomB.DriverStation.dll"
+	!insertmacro UNGEN "$INSTDIR\plugins\ZomB.xShake.dll"
 	!insertmacro UNGEN "$INSTDIR\ViZ.exe"
     
     !insertmacro DELETE_SMGROUP_SHORTCUT "Bindings"
@@ -520,11 +533,22 @@ Function .onInit
 		!insertmacro IfKeyExists "HKLM" "SOFTWARE\Classes\Installer\Assemblies\Global" 'SlimDX,version="2.0.12.43",culture="neutral",publicKeyToken="B1B0C32FD1FFE4F9",processorArchitecture="x64"'
 		Pop $R0
 		${If} $R0 == 0
-			SectionSetFlags ${SEC0014} 1
-			SectionSetText ${SEC0014} "SlimDX"
+			SectionSetFlags ${SEC0014} 0
+			SectionSetText ${SEC0014} "SlimDX (only for plugins)"
 			SectionSetSize ${SEC0014} 11470
 		${EndIf}
 	${EndIf}
+	# 15 requires 12 requires 14
+FunctionEnd
+ 
+Function .onSelChange
+${If} ${SectionIsSelected} ${SEC0015}
+    !insertmacro SelectSection ${SEC0014}
+    !insertmacro SelectSection ${SEC0012}
+${EndIf}
+${If} ${SectionIsSelected} ${SEC0012}
+    !insertmacro SelectSection ${SEC0014}
+${EndIf}
 FunctionEnd
 
 # Uninstaller functions
@@ -549,7 +573,8 @@ FunctionEnd
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC0009} "Old default dashboard"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC0010} "New default dashboard"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC0011} "Pit display with BlueFinger and saved video playing capabilities (requires VLC)"
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC0012} "Enables ZomB to act as the driver station"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0012} "Enables ZomB to act as the driver station (requires SlimDX)"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC0013} "Enables the bindings to actually do stuff (old, obsolete)"
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC0014} "SlimDX runtime for shaking and joystick support (required)"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0014} "SlimDX runtime for shaking and joystick support (required for plugins)"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC0015} "Enables ZomB to vibrate Xbox and compatible joysticks (requires SlimDX)"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END

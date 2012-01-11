@@ -50,7 +50,7 @@ IF %InstallerBuildSVN% EQU true (
 call trunk\releasefiles\Installer\BuildInstaller.bat "%InstallerBuildVersion%%SVN_REVISION%"
 if %errorlevel% NEQ 0 exit %errorlevel%
 ) ELSE (
-call trunk\releasefiles\Installer\BuildInstaller.bat "%InstallerBuildVersion%"
+call trunk\releasefiles\Installer\BuildInstaller.bat "%InstallerBuildDisplay%"
 if %errorlevel% NEQ 0 exit %errorlevel%
 )
 copy "Install ZomB*.exe" ..\
@@ -68,12 +68,14 @@ del trunk\Apps\VisualZomB\obj\ /F /S /Q
 del trunk\Apps\NullGEN\obj\ /F /S /Q
 del trunk\ZomBdll\obj\ /F /S /Q
 del trunk\ZomB.DriverStation\obj\ /F /S /Q
+del trunk\ZomB.xShake\obj\ /F /S /Q
 del trunk\Apps\DefaultDash\bin\ /F /S /Q
 del trunk\Apps\ZomBeye\bin\ /F /S /Q
 del trunk\Apps\VisualZomB\bin\ /F /S /Q
 del trunk\Apps\NullGEN\bin\ /F /S /Q
 del trunk\ZomBdll\bin\ /F /S /Q
 del trunk\ZomB.DriverStation\bin\ /F /S /Q
+del trunk\ZomB.xShake\bin\ /F /S /Q
 
 @rem Copy
 mkdir trunk\releasefiles\source\Apps
@@ -82,6 +84,8 @@ mkdir trunk\releasefiles\source\ZomBdll
 xcopy trunk\ZomBdll\* trunk\releasefiles\source\ZomBdll\ /S
 mkdir trunk\releasefiles\source\ZomB.DriverStation
 xcopy trunk\ZomB.DriverStation\* trunk\releasefiles\source\ZomB.DriverStation\ /S
+mkdir trunk\releasefiles\source\ZomB.xShake
+xcopy trunk\ZomB.xShake\* trunk\releasefiles\source\ZomB.xShake\ /S
 
 @rem De-SVN-ize
 FOR /F "tokens=*" %%G IN ('DIR /B /AD /S *.svn*') DO RMDIR /S /Q "%%G"
