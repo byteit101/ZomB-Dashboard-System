@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ext\JSON.cs" />
+    <Compile Include="NetAndDataProcessing\DashboardData\CsvDataMonitor.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\TestDataSource.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\NetTableSource.cs" />
     <Compile Include="NetAndDataProcessing\DashboardData\EBinaryReader.cs" />
