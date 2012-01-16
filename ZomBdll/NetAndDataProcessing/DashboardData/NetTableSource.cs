@@ -687,6 +687,7 @@ namespace System451.Communication.Dashboard.Net
 
                     while (isrunning)
                     {
+                        stream.WriteByte(PING);
                         Qlock.Release();
                         int b = stream.ReadByte();
                         Qlock.WaitOne();
