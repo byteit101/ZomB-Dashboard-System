@@ -57,12 +57,17 @@ namespace System451.Communication.Dashboard.ViZ
             VizBldTxtSaveLocation.Text = Settings.Default.LastBuildLocation;
             VizBldTxtIconLocation.Text = Settings.Default.LastIconLocation;
 
-            ZbGenChkTitlebar.IsChecked = (int)Registry.LocalMachine.OpenSubKey(@"Software\ZomB").GetValue("DriverDisable", 0) == 0;
-            ZbGenChkSingleton.IsChecked = (int)Registry.LocalMachine.OpenSubKey(@"Software\ZomB").GetValue("Singleton", 0) == 1;
+            try
+            {
+                ZbGenChkTitlebar.IsChecked = (int)Registry.LocalMachine.OpenSubKey(@"Software\ZomB").GetValue("DriverDisable", 0) == 0;
+                ZbGenChkSingleton.IsChecked = (int)Registry.LocalMachine.OpenSubKey(@"Software\ZomB").GetValue("Singleton", 0) == 1;
+            }
+            catch { }
         }
 
         private void SaveSettings()
         {
+            var onced = false;
             Settings.Default.EmbeddedTbx = VizGenChkToolbox.IsChecked == true;
             Settings.Default.LastTeamNumber = VizGenTxtTeamNumber.Text;
 
@@ -71,8 +76,21 @@ namespace System451.Communication.Dashboard.ViZ
             Settings.Default.LastIconLocation = VizBldTxtIconLocation.Text;
             Settings.Default.Save();
 
-            Registry.LocalMachine.OpenSubKey(@"Software\ZomB",true).SetValue("DriverDisable", ZbGenChkTitlebar.IsChecked == true ? 0 : 1);
-            Registry.LocalMachine.OpenSubKey(@"Software\ZomB",true).SetValue("Singleton", ZbGenChkSingleton.IsChecked == true ? 1 : 0);
+        trynext:
+            try
+            {
+                Registry.LocalMachine.OpenSubKey(@"Software\ZomB", true).SetValue("DriverDisable", ZbGenChkTitlebar.IsChecked == true ? 0 : 1);
+                Registry.LocalMachine.OpenSubKey(@"Software\ZomB", true).SetValue("Singleton", ZbGenChkSingleton.IsChecked == true ? 1 : 0);
+            }
+            catch
+            {
+                if (!onced)
+                {
+                    Registry.LocalMachine.CreateSubKey(@"Software\ZomB");
+                    onced = true;
+                    goto trynext;
+                }
+            }
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)

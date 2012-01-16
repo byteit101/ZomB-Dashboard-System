@@ -249,7 +249,7 @@ namespace System451.Communication.Dashboard
                 }
                 catch
                 {
-                    for (; i <= 0; i--)
+                    for (; i >= 0; i--)
                     {
                         StopSrc(DataSrcs[i]);
                     }

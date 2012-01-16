@@ -286,7 +286,7 @@ namespace System451.Communication.Dashboard.Net
         /// <returns>instance of the proper (pinkies up) class</returns>
         public object Exec(IZomBController ctrlr)
         {
-            if (SourceType == null || Port == 0 || IPAddress == null)
+            if (SourceType == null || IPAddress == null)
                 throw new InvalidOperationException("ZomB URL is not valid, cannot continue");
             var ctor = SourceType.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public, null, new Type[] { typeof(ZomBUrl) }, null);
             if (ctor == null)

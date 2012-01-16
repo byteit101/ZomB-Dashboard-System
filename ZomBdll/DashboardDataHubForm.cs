@@ -37,8 +37,12 @@ namespace System451.Communication.Dashboard
         {
             //Check Singleton
             bool createdNew = true;
-            if ((int)Registry.LocalMachine.OpenSubKey(@"Software\ZomB").GetValue("Singleton", 0) == 1)
-            mutex = new Mutex(true, "ZomBSingletonMutex", out createdNew);
+            try
+            {
+                if ((int)Registry.LocalMachine.OpenSubKey(@"Software\ZomB").GetValue("Singleton", 0) == 1)
+                    mutex = new Mutex(true, "ZomBSingletonMutex", out createdNew);
+            }
+            catch { }
 
             if ((!createdNew) && (!DesignMode))
             {
