@@ -147,7 +147,7 @@
         </ScrollViewer>
         <Canvas>
             <Grid Canvas.Top="-1" Name="MenuGrid" Width="{Binding Path=ActualWidth, ElementName=ViZGrid}" >
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" SnapsToDevicePixels="True">
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" SnapsToDevicePixels="True" Height="24">
                     <StackPanel.Background>
                         <DrawingBrush>
                             <DrawingBrush.Drawing>
@@ -175,19 +175,19 @@
                     <Menu Margin="1,0,0,0" Background="Transparent" Foreground="Black" ToolTip="VisualZomB Menu" ToolTipService.InitialShowDelay="1000">
                         <MenuItem Name="MMenu" >
                             <MenuItem.Header>
-                                <Border Background="{Binding Path=Background, ElementName=MMenu}">
+                                <Border Background="{Binding Path=Background, ElementName=MMenu}" Height="23">
                                     <Border.Clip>
                                         <PathGeometry >
                                             <PathFigure StartPoint="0,0" IsClosed="True">
-                                                <BezierSegment Point1="0,10" Point2="0,20" Point3="24,20" />
-                                                <LineSegment Point="55,20" />
+                                                <BezierSegment Point1="0,10" Point2="0,23" Point3="24,23" />
+                                                <LineSegment Point="55,23" />
                                                 <LineSegment Point="55,0"/>
                                             </PathFigure>
                                         </PathGeometry>
                                     </Border.Clip>
-                                    <StackPanel Orientation="Horizontal" Margin="8,2,3,4">
+                                    <StackPanel Orientation="Horizontal" Margin="8,4,3,4">
                                         <TextBlock Text="ZomB" FontFamily="Verdana" FontSize="12" VerticalAlignment="Center" Foreground="Black" Height="13" Width="35" />
-                                        <Image Margin="3,0,0,0">
+                                        <Image Margin="3,0,0,0" Height="7">
                                             <Image.Source>
                                                 <DrawingImage>
                                                     <DrawingImage.Drawing>
@@ -277,7 +277,7 @@
                             </DrawingBrush>
                         </Rectangle.Fill>
                     </Rectangle>
-                    <Button Name="BBtn" Click="Button_Click" Background="Transparent" ToolTip="Close" ToolTipService.InitialShowDelay="1000">
+                    <Button Name="BBtn" Click="Button_Click" Background="Transparent" Height="18" ToolTip="Close" ToolTipService.InitialShowDelay="1000">
                         <Button.Content>
                             <Border Background="Transparent">
                                 <Border.Clip>
