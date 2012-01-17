@@ -161,18 +161,19 @@ namespace System451.Communication.Dashboard
             {
                 try
                 {
-                    foreach (var item in header)
+                    outs = new StreamWriter(FilePath, true);
+                    for (; qindx < header.Count; qindx++)
                     {
-                        outs.Write(item + ",");
+                        outs.Write(header[qindx] + ",");
                     }
-                    outs.WriteLine();
+                    System.Diagnostics.Debug.WriteLine(qindx);
                     for (int i = 0; i < dataq.Count - 1; i++)
                     {
+                        outs.WriteLine();
                         foreach (var item in dataq[i])
                         {
                             outs.Write((item ?? "") + ",");
                         }
-                        outs.WriteLine();
                     }
 
                     //save last for next merge
@@ -180,6 +181,9 @@ namespace System451.Communication.Dashboard
                     dataq.Clear();
                     dataq.Add(last);
                     savetime = GetTime();
+                    outs.Flush();
+                    outs.Close();
+                    outs = null;
                 }
                 catch { }
             }
@@ -192,10 +196,10 @@ namespace System451.Communication.Dashboard
         {
             if (!Running)
             {
-                outs = new StreamWriter(FilePath, true);
                 saving = true;
                 starttime = DateTime.Now;
                 lasttime = savetime = 0;
+                qindx = 0;
             }
         }
 
@@ -209,6 +213,7 @@ namespace System451.Communication.Dashboard
                 saving = false;
                 WriteBuffer();
                 WriteOff();
+                qindx = 0;
             }
         }
 
