@@ -31,6 +31,6 @@ namespace System451.Communication.Dashboard
          */
 
         public const string CodeName = "Snowdrift";
-        public const string ReleaseDateString = "Beta 2 Released 1/11/12";
+        public const string ReleaseDateString = "Released 1/18/12";
     }
 }
