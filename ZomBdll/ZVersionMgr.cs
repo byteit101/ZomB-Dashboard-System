@@ -30,7 +30,7 @@ namespace System451.Communication.Dashboard
          * MANUAL CONFIG VARS
          */
 
-        public const string CodeName = "Snowdrift";
-        public const string ReleaseDateString = "Released 1/18/12";
+        public const string CodeName = "The Grand Finale";
+        public const string ReleaseDateString = "Not a major release - Winter 2012";
     }
 }

@@ -262,10 +262,6 @@
     <None Include="ViZ.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ZomB.DriverStation\ZomB.DriverStation.csproj">
-      <Project>{49B23038-A658-43B3-8620-EBC62E873201}</Project>
-      <Name>ZomB.DriverStation</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\ZomBdll\ZomB.csproj">
       <Project>{B40501FE-DF11-452B-BAD6-30DE836902C6}</Project>
       <Name>ZomB</Name>
@@ -298,9 +294,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir plugins
-copy ..\..\..\..\ZomB.DriverStation\bin\$(ConfigurationName)\ZomB.driverStation.* plugins\
-copy ..\..\..\..\ZomB.xShake\bin\$(ConfigurationName)\ZomB.xShake.* plugins\</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
