@@ -80,9 +80,9 @@ namespace NullGEN
             pub.GacRemoveC("Vlc.DotNet.Core");
             pub.GacRemoveC("Vlc.DotNet.Forms");
             pub.GacRemoveC("ZomB");
-            var p = NGenu("ViZ, Version=0.8.3.0, Culture=neutral, PublicKeyToken=c7d9dbcb0b13713a");
+            var p = NGenu("ViZ, Version=0.9.1.0, Culture=neutral, PublicKeyToken=c7d9dbcb0b13713a");
             p.WaitForExit();
-            var q = NGenu("ZomB, Version=0.8.3.0, Culture=neutral, PublicKeyToken=5880636763ded5de");
+            var q = NGenu("ZomB, Version=0.9.1.0, Culture=neutral, PublicKeyToken=5880636763ded5de");
             q.WaitForExit();
         }
     }

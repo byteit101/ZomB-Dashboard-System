@@ -4,8 +4,8 @@
          /*
           * AUTOCONFIG VARS
           */
--        public const string FullNumber = "0.8.3.svn";
--        public const string ShortNumber = "0.8.3.0";
+-        public const string FullNumber = "0.9.1.svn";
+-        public const string ShortNumber = "0.9.1.0";
 +        public const string FullNumber = "FULL_VERSION";
 +        public const string ShortNumber = "SHORT_VERSION";
  
@@ -18,10 +18,10 @@
              pub.GacRemoveC("Vlc.DotNet.Core");
              pub.GacRemoveC("Vlc.DotNet.Forms");
              pub.GacRemoveC("ZomB");
--            var p = NGenu("ViZ, Version=0.8.3.0, Culture=neutral, PublicKeyToken=c7d9dbcb0b13713a");
+-            var p = NGenu("ViZ, Version=0.9.1.0, Culture=neutral, PublicKeyToken=c7d9dbcb0b13713a");
 +            var p = NGenu("ViZ, Version=SHORT_VERSION, Culture=neutral, PublicKeyToken=c7d9dbcb0b13713a");
              p.WaitForExit();
--            var q = NGenu("ZomB, Version=0.8.3.0, Culture=neutral, PublicKeyToken=5880636763ded5de");
+-            var q = NGenu("ZomB, Version=0.9.1.0, Culture=neutral, PublicKeyToken=5880636763ded5de");
 +            var q = NGenu("ZomB, Version=SHORT_VERSION, Culture=neutral, PublicKeyToken=5880636763ded5de");
              q.WaitForExit();
          }

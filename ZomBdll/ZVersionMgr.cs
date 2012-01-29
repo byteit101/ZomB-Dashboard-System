@@ -23,8 +23,8 @@ namespace System451.Communication.Dashboard
         /*
          * AUTOCONFIG VARS
          */
-        public const string FullNumber = "0.8.3.svn";
-        public const string ShortNumber = "0.8.3.0";
+        public const string FullNumber = "0.9.1.svn";
+        public const string ShortNumber = "0.9.1.0";
 
         /*
          * MANUAL CONFIG VARS
