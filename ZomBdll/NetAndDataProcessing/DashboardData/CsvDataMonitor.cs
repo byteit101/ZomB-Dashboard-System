@@ -16,20 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Text;
 using System451.Communication.Dashboard.Net;
 using System451.Communication.Dashboard.Utils;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
 
 namespace System451.Communication.Dashboard
 {
     /// <summary>
-    /// DataSaver saves data from the DDH to a file that can be read by DataPlayerSource
+    /// CsvDataSaver saves data from the DDH to a file that can be read by CsvDataSource
     /// </summary>
     [DataSource("CsvSaver", "Saves all data as a csv. Usage: zomb://.0/CsvSaver/[C:\\Path.to.file]")]
     public class CsvSaver : IZomBMonitor
@@ -44,7 +41,7 @@ namespace System451.Communication.Dashboard
         string fpath;
 
         /// <summary>
-        /// Creates a new DataSaver
+        /// Creates a new CsvDataSaver
         /// </summary>
         /// <param name="file">A file to save to</param>
         public CsvSaver(string file)
@@ -172,7 +169,7 @@ namespace System451.Communication.Dashboard
                         outs.WriteLine();
                         foreach (var item in dataq[i])
                         {
-                            outs.Write((item ?? "") + ",");
+                            outs.Write("\"" + (item ?? "") + "\",");
                         }
                     }
 
