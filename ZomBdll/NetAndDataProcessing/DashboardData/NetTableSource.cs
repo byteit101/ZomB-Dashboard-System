@@ -826,19 +826,25 @@ namespace System451.Communication.Dashboard.Net
                     {}
                     Qlock.WaitOne(1);
                     nume++;
-                    DoError(ex);
-                    if (nume > 10)
+                    try
+                    {
+                        cRIOConnection.Close();
+                    }
+                    catch { }
+                    try
+                    {
+                        cRIOConnection = null;
+                    }
+                    catch { }
+                    if (nume > 1)
                     {
                         isrunning = false;
-                        DoError(new Exception("10 consecutive errors were encountered, stopping NetTable"));
+                        DoError(new Exception(ex.Message + "\r\n2 consecutive errors were encountered, stopping NetTable", ex));
                         isrunning = false;
-                        try
-                        {
-                            cRIOConnection.Close();
-                        }
-                        catch { }
                         return;
                     }
+                    else
+                        DoError(ex);
                 }
             }
         }
