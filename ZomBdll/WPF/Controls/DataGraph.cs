@@ -63,6 +63,11 @@ namespace System451.Communication.Dashboard.WPF.Controls
             base.OnApplyTemplate();
             PathGeo = base.GetTemplateChild("PART_PathGeo") as GeometryDrawing;
             scale = base.GetTemplateChild("PART_scale") as GraphScale;
+            if (Max != 1 || Min != -1)
+            {
+                this.scale.MinY = this.Min;
+                this.scale.MaxY = this.Max;
+            }
             this.Regenerate();//Zombie planaria!
         }
 
@@ -200,15 +205,21 @@ namespace System451.Communication.Dashboard.WPF.Controls
         static void MaxUpdated(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             var self = (o as DataGraph);
-            self.scale.MaxY = self.Max;
-            self.Regenerate();
+            if (self.scale != null)
+            {
+                self.scale.MaxY = self.Max;
+                self.Regenerate();
+            }
         }
 
         static void MinUpdated(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             var self = (o as DataGraph);
-            self.scale.MinY = self.Min;
-            self.Regenerate();
+            if (self.scale != null)
+            {
+                self.scale.MinY = self.Min;
+                self.Regenerate();
+            }
         }
 
         #region IValueConverter Members
