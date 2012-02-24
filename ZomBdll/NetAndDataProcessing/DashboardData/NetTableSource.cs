@@ -676,11 +676,22 @@ namespace System451.Communication.Dashboard.Net
             {
                 try
                 {
-                    cRIOConnection = new TcpClient(Hostname, port);
-                    NetworkStream stream = cRIOConnection.GetStream();
-                    this.nstream = stream;
-                    stream.WriteByte(PING);
-                    cRIOConnection.NoDelay = true;
+                    NetworkStream stream = null;
+                    while (isrunning)
+                    {
+                        try
+                        {
+                            cRIOConnection = new TcpClient(Hostname, port);
+                            stream = cRIOConnection.GetStream();
+                            this.nstream = stream;
+                            stream.WriteByte(PING);
+                            cRIOConnection.NoDelay = true;
+                        }
+                        catch { }
+                        break;
+                    }
+                    if (!isrunning)
+                        return;
 
                     //Request Tables
                     stream.Write(SMART_REQUEST, 0, SMART_REQUEST.Length);
@@ -813,7 +824,18 @@ namespace System451.Communication.Dashboard.Net
                 catch (ThreadAbortException)
                 {
                     isrunning = false;
-                    cRIOConnection.Close();
+
+                    //TODO: there has to be a better way to do this
+                    try
+                    {
+                        cRIOConnection.Close();
+                    }
+                    catch { }
+                    try
+                    {
+                        cRIOConnection = null;
+                    }
+                    catch { }
                     return;
                 }
                 catch (Exception ex)
